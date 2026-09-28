@@ -59,13 +59,13 @@
     "docs/UPGRADING.md": "255057aa2507f214f3b00aeda24d837cea79d88f0a569343a9e4b1524b948d4a",
     "manager.py": "209d409a90ad4826358f24268b135c42a0a7a25e7e23901867bbd65212ee68d5",
     "profiles/chat.md": "48615398f4d4349f3ce26d7e73f54a43e856ed07bc3a1fc2ac8f4e52fc6fe796",
-    "profiles/directory.md": "2f3fd6524330370070c47f32cfc1f3899893c45979f90010b8ea88f98e0d907e",
+    "profiles/directory.md": "bd2a9201ce50d2900e3758e9754995c976ddcb88b5ebce6454d37edc02a48e40",
     "profiles/drive.md": "4283dc3c2070f124e26545ee56f762174b266b8b387cedb9908894c59471ff52",
     "profiles/project.md": "fffacc9399a3a0b91b3a5b3d05cde9f268179e6050d8e85dac239a958c78a9b5",
     "scripts/project_memory.py": "4e427cf2284520e9d6297bc43ba50d50be5f5e6a660915376aa1222164176f1f",
     "scripts/quality-check.sh": "e3a8b8e80b074572cad1e8e386d379e00958f9327e2e0959da1849ac6fef73eb",
     "scripts/release.py": "977f97f985202a3fa6f87de4e17ecce3ab0273141381938bc1f0899f44bd02b8",
-    "scripts/systemx.py": "7d1f4d1017bd294b5d9e75f343d3c3ccd72924a3b65ffd22ca037acc1644f003",
+    "scripts/systemx.py": "c61e1ae694a569dfbe480c8e6cd73c27079402ed9f961207a94a56d32eff0eea",
     "scripts/validate.sh": "87f8e32c4984c9e8f7bea6c50a2779ea09a515f821cd771754ab550b0471708a",
     "templates/AGENT-ENTRYPOINT.md": "e2f4b3fce8886ed43e709dd92eddfe75d8e7016e2572467e26c740a87563214a",
     "templates/AGENT-MEMORY.md": "025dd33eb72989cbb5aa6ca9d34e2848c5a5bec12c424a5ce8abf0df244af5d8",
@@ -80,6 +80,6 @@
     "templates/WORKER-REPORT.md": "5ebefb42f51ede3f8b4d537616cd320c21d9f5b098f2b15c0445cce28d97ad4f",
     "tests/test_manager.py": "00ac6fdd78e196d27921db8b360e9c2c9569057280aba8a9a3d77f516fb281c5",
     "tests/test_project_memory.py": "7fd49cc234c30be606648f4c10ea73ac2bf7b8e27068e3247bbf46d284056485",
-    "tests/test_systemx.py": "61d7fd6bc5a8f6b6d61f91c929572f99aace7d9eeadda042cdcfc55728e183a7"
+    "tests/test_systemx.py": "34357d09014b2f7821b47514ad826c36573291590c6c61674c206956c2496f91"
   }
 }

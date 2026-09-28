@@ -168,7 +168,7 @@ def validate_template(distribution=False):
         files = []
     markdown_count = 0
     for path in files:
-        relative = str(path.relative_to(SYSTEMX))
+        relative = path.relative_to(SYSTEMX).as_posix()
         if path.suffix == ".json":
             try:
                 data = read_json(path)

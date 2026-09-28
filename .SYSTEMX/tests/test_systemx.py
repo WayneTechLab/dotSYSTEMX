@@ -211,6 +211,14 @@ class SystemxTests(unittest.TestCase):
         (self.systemx / "LICENSE").unlink()
         self.assertIn("Missing required file: LICENSE", self.run_cli("validate").stderr)
 
+    def test_nested_example_configuration_is_validated_on_every_platform(self):
+        example = self.systemx / "config/project.example.json"
+        example.write_text('{"schemaVersion": 1}')
+        result = self.run_cli("validate")
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("config/project.example.json", result.stderr)
+        self.assertIn("must contain exactly", result.stderr)
+
     def test_symlink_and_outside_project_link_are_rejected(self):
         target = Path(self.temp.name) / "outside.md"
         target.write_text("Outside fixture")

@@ -28,6 +28,6 @@ bash "$HOME/Projects/Example/.SYSTEMX/SYSTEMX.sh" status
 
 Python 3.9+ is required for commands. Documentation works without it. SYSTEMX
 does not install Python, elevate privileges, change execution policy, add login
-items, or create OS schedulers. Select the installed interpreter explicitly if
-your terminal uses a different Python environment. Read [installation](../docs/INSTALLATION.md)
+items, or create OS schedulers. In Bash, set `SYSTEMX_PYTHON` to the intended
+Python executable if your terminal uses a different environment. Read [installation](../docs/INSTALLATION.md)
 for update policy and [the library guide](../docs/LIBRARY.md) for Git-based setup.
