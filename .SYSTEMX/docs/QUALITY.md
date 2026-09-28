@@ -3,13 +3,18 @@
 ## Two separate checks
 
 `bash .SYSTEMX/SYSTEMX.sh validate` checks the operations folder: required files,
-readable JSON, config structure, local Markdown file links, and references to
-removed components. It does not check external URLs, Markdown anchors, JSON
+readable JSON, config structure, local Markdown file links, and record
+consistency. It does not check external URLs, Markdown anchors, JSON
 Schema semantics, credentials, dependencies, or application behavior.
 It also validates task/agent records, dependencies, transition history, milestone
 references, completion evidence fields, and generated work-view consistency.
 Recorded evidence and reviewer names are not independently authenticated.
 Current-focus references and the generated `CURRENT.md` are also checked.
+
+`validate --template` adds the [public distribution checks](../FORMAT.md#public-distribution-versus-adopted-project):
+only the standard file inventory, reviewed blank seed hashes, empty tasks/focus
+and commands, and Agent 0 only. Unlike ordinary validation, it checks normally
+ignored folders for extra files. This is a publication check, not a secret scanner.
 
 `bash .SYSTEMX/SYSTEMX.sh check` first validates the folder, then runs the
 project's configured check commands. An empty check list is a configuration
@@ -54,6 +59,7 @@ When changing the command runner, run:
 
 ```bash
 bash .SYSTEMX/SYSTEMX.sh validate
+bash .SYSTEMX/SYSTEMX.sh validate --template
 python3 -B -m unittest discover -s .SYSTEMX/tests -v
 ```
 

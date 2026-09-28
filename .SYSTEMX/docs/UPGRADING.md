@@ -23,6 +23,13 @@ The template does not synchronize itself into other repositories.
 5. Select the existing objective and relevant task IDs using `focus`. Link the
    preserved checkpoint if useful, then inspect `context --agent agent.0`.
 
+Use ordinary `validate` on the adopted project. `validate --template` is for
+blank public distributions and should reject real project records. The updated
+validator also checks chronological history and rejects stale current blockers,
+reviewers, or terminal next actions. If a manual edit or old integration left
+inconsistent metadata, reconcile it against original evidence; do not fabricate
+timestamps or clear acceptance history merely to satisfy the validator.
+
 Example after the project already has `TASK-001`:
 
 ```bash

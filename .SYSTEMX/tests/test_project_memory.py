@@ -1,6 +1,7 @@
 """Task acceptance, context isolation, and durable record consistency checks."""
 
 import json
+import copy
 from pathlib import Path
 import unittest
 
@@ -129,6 +130,49 @@ class ProjectMemoryTests(unittest.TestCase):
         ledger["tasks"][0]["dependsOn"] = [second]
         self.write_ledger(ledger)
         self.assertIn("cycle", self.run_cli("refresh-work").stderr)
+
+    def test_long_dependency_chain_is_independent_of_record_order_and_recursion_limit(self):
+        self.add()
+        seed = self.ledger()["tasks"][0]
+        tasks = []
+        for number in range(1, 1101):
+            task = copy.deepcopy(seed)
+            task["id"] = "TASK-{:03d}".format(number)
+            task["dependsOn"] = ["TASK-{:03d}".format(number - 1)] if number > 1 else []
+            tasks.append(task)
+        ledger = {"schemaVersion": 1, "tasks": list(reversed(tasks))}
+        self.write_ledger(ledger)
+        self.assert_ok(self.run_cli("refresh-work"))
+        self.assert_ok(self.run_cli("validate"))
+        tasks[0]["dependsOn"] = ["TASK-1100"]
+        self.write_ledger(ledger)
+        self.assertIn("cycle", self.run_cli("refresh-work").stderr)
+
+    def test_history_must_begin_at_creation_and_preserve_observation_order(self):
+        task_id = self.add()
+        self.start(task_id)
+        ledger = self.ledger()
+        task = ledger["tasks"][0]
+        task["createdAt"] = "2026-01-01T00:00:00Z"
+        task["history"][0]["at"] = "2026-01-02T00:00:00Z"
+        self.write_ledger(ledger)
+        self.assertIn("begin at createdAt", self.run_cli("refresh-work").stderr)
+        task["history"][0]["at"] = task["createdAt"]
+        task["history"][1]["at"] = task["updatedAt"] = "2025-12-31T00:00:00Z"
+        self.write_ledger(ledger)
+        self.assertIn("remain chronological", self.run_cli("refresh-work").stderr)
+
+    def test_manual_records_cannot_retain_inapplicable_current_fields(self):
+        self.add()
+        ledger = self.ledger()
+        task = ledger["tasks"][0]
+        task["blocker"] = "Stale blocker on a TODO task"
+        self.write_ledger(ledger)
+        self.assertIn("Only blocked tasks", self.run_cli("refresh-work").stderr)
+        task["blocker"] = ""
+        task["reviewedBy"] = task["history"][-1]["reviewedBy"] = "agent.0"
+        self.write_ledger(ledger)
+        self.assertIn("Only completed tasks", self.run_cli("refresh-work").stderr)
 
     def test_milestones_must_be_declared_in_the_master_plan(self):
         self.assertEqual(self.run_cli("task-add", "--title", "Plan item", "--acceptance", "proof",

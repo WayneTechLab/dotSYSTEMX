@@ -55,7 +55,57 @@ class SystemxTests(unittest.TestCase):
 
     def test_clean_template_validates_without_initialization(self):
         self.assert_ok(self.run_cli("validate"))
+        self.assert_ok(self.run_cli("validate", "--template"))
         self.assertFalse((self.systemx / "project.json").exists())
+
+    def test_public_template_rejects_populated_project_records_without_affecting_normal_use(self):
+        memory = self.systemx / "MEMORY/PROJECT.md"
+        memory.write_text(memory.read_text() + "\nProject-specific fixture fact\n")
+        self.assert_ok(self.run_cli("validate"))
+        result = self.run_cli("validate", "--template")
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("differs from its reviewed blank seed", result.stderr)
+
+    def test_public_template_rejects_ignored_and_unlisted_files(self):
+        for relative in ("local/private.txt", "custom-project.md", "logs/session.txt"):
+            path = self.systemx / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("Project-specific artifact\n")
+            self.assert_ok(self.run_cli("validate"))
+            result = self.run_cli("validate", "--template")
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("extra files", result.stderr)
+            path.unlink()
+        self.assert_ok(self.run_cli("init"))
+        self.assertIn("extra files", self.run_cli("validate", "--template").stderr)
+
+    def test_public_template_manifest_requires_all_seed_hashes(self):
+        path = self.systemx / "config/template-records.json"
+        manifest = json.loads(path.read_text())
+        del manifest["sha256"]["MEMORY/PROJECT.md"]
+        path.write_text(json.dumps(manifest))
+        self.assertIn("Blank-record hashes must contain exactly", self.run_cli("validate", "--template").stderr)
+
+    def test_public_template_still_requires_blank_work_when_seed_hash_is_rebased(self):
+        import hashlib
+        self.assert_ok(self.run_cli("task-add", "--title", "Project task", "--acceptance", "Fixture proof"))
+        path = self.systemx / "config/template-records.json"
+        manifest = json.loads(path.read_text())
+        for name in manifest["sha256"]:
+            manifest["sha256"][name] = hashlib.sha256((self.systemx / name).read_text().encode()).hexdigest()
+        path.write_text(json.dumps(manifest))
+        result = self.run_cli("validate", "--template")
+        self.assertIn("empty work/focus", result.stderr)
+
+    def test_public_template_tolerates_crlf_without_creating_bytecode(self):
+        path = self.systemx / "GLOBAL/CONTEXT.md"
+        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+        before = {str(p.relative_to(self.systemx)): p.read_bytes() for p in self.systemx.rglob("*") if p.is_file()}
+        result = subprocess.run([sys.executable, str(self.runner), "validate", "--template"],
+                                cwd=self.temp.name, text=True, capture_output=True, timeout=15)
+        self.assert_ok(result)
+        after = {str(p.relative_to(self.systemx)): p.read_bytes() for p in self.systemx.rglob("*") if p.is_file()}
+        self.assertEqual(before, after)
 
     def test_init_creates_config_once_and_preserves_existing_bytes(self):
         self.assert_ok(self.run_cli("init"))
@@ -149,15 +199,13 @@ class SystemxTests(unittest.TestCase):
         self.save_config()
         self.assertEqual(self.run_cli("validate").returncode, 2)
 
-    def test_broken_link_and_removed_component_are_rejected(self):
+    def test_project_extension_links_validate_but_are_not_distributed(self):
         extra = self.systemx / "extra.md"
         extra.write_text("[missing](missing-file.md)\n")
         self.assertIn("broken", self.run_cli("validate").stderr)
-        extra.write_text("Reference: " + ".SYSTEMX/" + "LAN/old.md\n")
-        self.assertIn("removed component", self.run_cli("validate").stderr)
-        extra.unlink()
-        (self.systemx / "KIT").mkdir()
-        self.assertEqual(self.run_cli("validate").returncode, 2)
+        extra.write_text("[Standard](STANDARD.md)\n")
+        self.assert_ok(self.run_cli("validate"))
+        self.assertIn("extra files", self.run_cli("validate", "--template").stderr)
 
     def test_missing_required_file_is_rejected(self):
         (self.systemx / "LICENSE").unlink()

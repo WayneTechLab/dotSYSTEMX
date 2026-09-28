@@ -17,6 +17,10 @@ standard library and require no package installation.
 [Command reference](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Command-Reference) ·
 [MIT license](.SYSTEMX/LICENSE)
 
+The [format contract](.SYSTEMX/FORMAT.md) defines the canonical records, task
+lifecycle, versioning, and public distribution requirements. SYSTEMX is a
+reusable project convention; it is not a certification of an adopted project.
+
 ## What you get
 
 | Capability | What it provides |
@@ -163,6 +167,7 @@ active project with existing records.
 
 | Guide | Read it when you want to… |
 | --- | --- |
+| [Standard format](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format) | Understand canonical records, versioning, and a clean public distribution. |
 | [Getting started](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started) | Adopt the template in a new or existing project. |
 | [Agent 0 and subagents](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents) | Assign work, scope workers, and review results. |
 | [Planning and memory](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory) | Structure a master plan and preserve useful context. |
@@ -170,6 +175,8 @@ active project with existing records.
 | [Command reference](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Command-Reference) | Find command syntax, flags, and expected behavior. |
 | [Configuration and quality](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Configuration-and-Quality) | Connect your stack and define meaningful checks. |
 | [Operations and troubleshooting](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Operations-and-Troubleshooting) | Handle releases, recovery, locks, and common setup problems. |
+| [Evidence and acceptance](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Evidence-and-Acceptance) | Separate source, artifact, functional, operational, and publication claims. |
+| [Upgrading](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Upgrading) | Preserve project records when merging a new template version. |
 | [Contributing](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Contributing) | Propose improvements while keeping the template reusable. |
 
 ## Verification and boundaries
@@ -178,6 +185,8 @@ To validate this template and run its isolated regression suite:
 
 ```bash
 bash .SYSTEMX/SYSTEMX.sh validate
+# On a pristine distribution, before recording project work:
+bash .SYSTEMX/SYSTEMX.sh validate --template
 python3 -B -m unittest discover -s .SYSTEMX/tests -v
 ```
 
@@ -185,6 +194,11 @@ Template validation checks structure, configuration, local file links, task
 records, dependencies, and generated-view consistency. Project quality comes
 from the checks you configure. Recorded evidence and reviewer names are project
 records, not independent authentication or proof that a test ran.
+The additional `--template` check requires blank project records and the
+explicit distribution file inventory. It rejects initialized configuration,
+extra workers, custom files, and private runtime artifacts, including ignored
+files inside the folder. It is intended for template publication, not active
+project validation. Maintainers also review the actual exported archive.
 
 Review commands before executing them. Keep secrets out of configuration,
 memory, and Git history, and exclude `.SYSTEMX` from public application build

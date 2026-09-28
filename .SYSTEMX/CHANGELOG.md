@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0 (unreleased)
+## 1.2.0
 
 - Added a compact focus record and generated CURRENT.md, linked to existing
   task state and optional dated checkpoints. Focus changes preserve task history.
@@ -12,6 +12,14 @@
   changed-condition retry guidance, and a record-preserving upgrade guide.
 - Applied reusable lessons from existing SYSTEMX deployments without importing
   their project records, provider configuration, domain rules, or agent runtime.
+- Added a canonical format contract and `validate --template` for blank public
+  distributions, including seed fingerprints and an explicit file inventory.
+- Replaced source-specific component restrictions with the public distribution
+  inventory; adopted projects can add their own linked supporting documents.
+- Standardized task-note terminology and instruction-precedence guidance;
+  aligned the optional message schema with its documented evidence requirements.
+- Enforced chronological history and consistent current fields, and replaced
+  recursive dependency traversal so long task chains remain valid.
 
 ## 1.1.0
 

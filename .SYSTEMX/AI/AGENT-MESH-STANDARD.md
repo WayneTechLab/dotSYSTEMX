@@ -38,11 +38,12 @@ Projects needing machine-readable coordination can use the
 ```json
 {
   "id": "message-001",
-  "missionId": "task-001",
+  "missionId": "mission-001",
   "waveId": "review-01",
   "lane": "test",
-  "from": "coordinator",
-  "to": "test-worker",
+  "from": "agent.0",
+  "to": "agent.1",
+  "correlationId": "TASK-001",
   "type": "task",
   "status": "planned",
   "summary": "Verify the changed behavior in an isolated fixture.",
@@ -57,6 +58,9 @@ The schema's statuses are `planned`, `in_progress`, `blocked`, `needs_review`,
 `done`, and `archived`. Use `blocked` for a concrete dependency that prevents
 progress, not merely difficult work. `done` requires acceptance evidence.
 The example timestamp and identifiers are placeholders.
+Message-schema validation is optional and separate from the CLI's canonical
+record validation. A JSON Schema validator can enforce nonempty evidence for a
+`done` message and a blocker for `blocked`; it cannot verify their truth.
 
 These describe optional messages, not the canonical task lifecycle. Task status
 uses `todo` for planned work and `cancelled` for intentionally stopped work.

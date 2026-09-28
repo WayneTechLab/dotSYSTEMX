@@ -6,7 +6,7 @@
   "templateVersion": "1.2.0",
   "license": "MIT",
   "licenseSourcePath": "LICENSE",
-  "retainedVerbatim": ["AI/agent-mesh.schema.json"],
+  "retainedVerbatim": [],
   "adaptedFrom": [
     "AI/",
     "Standard-MD-Files/",

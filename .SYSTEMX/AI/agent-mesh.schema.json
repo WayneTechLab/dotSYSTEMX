@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://waynetechlab.com/systemx/agent-mesh.schema.json",
+  "$id": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/main/.SYSTEMX/AI/agent-mesh.schema.json",
   "title": "SYSTEMX Agent Mesh Message",
   "type": "object",
   "additionalProperties": false,
@@ -17,9 +17,18 @@
     "createdAt"
   ],
   "properties": {
-    "id": { "type": "string", "minLength": 1 },
-    "missionId": { "type": "string", "minLength": 1 },
-    "waveId": { "type": "string", "minLength": 1 },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "missionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "waveId": {
+      "type": "string",
+      "minLength": 1
+    },
     "lane": {
       "type": "string",
       "enum": [
@@ -34,30 +43,115 @@
         "release"
       ]
     },
-    "from": { "type": "string", "minLength": 1 },
-    "to": { "type": "string", "minLength": 1 },
+    "from": {
+      "type": "string",
+      "minLength": 1
+    },
+    "to": {
+      "type": "string",
+      "minLength": 1
+    },
     "type": {
       "type": "string",
-      "enum": ["task", "checkpoint", "handoff", "blocked", "complete", "archive"]
+      "enum": [
+        "task",
+        "checkpoint",
+        "handoff",
+        "blocked",
+        "complete",
+        "archive"
+      ]
     },
     "status": {
       "type": "string",
-      "enum": ["planned", "in_progress", "blocked", "needs_review", "done", "archived"]
+      "enum": [
+        "planned",
+        "in_progress",
+        "blocked",
+        "needs_review",
+        "done",
+        "archived"
+      ]
     },
-    "priority": { "type": "integer", "minimum": 0, "maximum": 10 },
-    "correlationId": { "type": "string" },
-    "sessionId": { "type": "string" },
-    "summary": { "type": "string", "minLength": 1 },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "correlationId": {
+      "type": "string"
+    },
+    "sessionId": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
     "evidence": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "blockers": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
-    "nextAction": { "type": "string" },
-    "createdAt": { "type": "string", "format": "date-time" },
-    "expiresAt": { "type": "string", "format": "date-time" }
-  }
+    "nextAction": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "done"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "evidence"
+        ],
+        "properties": {
+          "evidence": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "blocked"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "blockers"
+        ],
+        "properties": {
+          "blockers": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
 }

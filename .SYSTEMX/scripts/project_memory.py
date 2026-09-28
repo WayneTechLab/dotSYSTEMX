@@ -73,6 +73,7 @@ def timestamp(value):
     parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
     if parsed.tzinfo is None:
         raise ValueError("Timestamps must include a timezone")
+    return parsed
 
 
 def milestones(root):
@@ -126,16 +127,26 @@ def validate_records(root, ledger, registry):
             raise ValueError(task["id"] + " needs an explicit blocker")
         if task["reviewedBy"] not in {"", "agent.0", "user"}:
             raise ValueError("Completion reviewer must be agent.0 or user")
+        if task["status"] != "done" and task["reviewedBy"]:
+            raise ValueError("Only completed tasks may have a completion reviewer")
+        if task["status"] != "blocked" and task["blocker"]:
+            raise ValueError("Only blocked tasks may have a current blocker")
+        if task["status"] in {"done", "cancelled"} and task["nextAction"]:
+            raise ValueError("Terminal tasks must not have a current next action")
         if task["status"] == "done" and (not task["evidence"] or not task["reviewedBy"]):
             raise ValueError(task["id"] + " cannot be done without evidence and a reviewer")
-        timestamp(task["createdAt"])
+        created_at = timestamp(task["createdAt"])
         timestamp(task["updatedAt"])
         if not isinstance(task["history"], list) or not task["history"]:
             raise ValueError(task["id"] + " needs transition history")
         previous_status = None
+        previous_at = created_at
         for event in task["history"]:
             fields(event, ("at", "status", "owner", "note", "evidence", "reviewedBy"), "History event")
-            timestamp(event["at"])
+            event_at = timestamp(event["at"])
+            if event_at < previous_at or (previous_status is None and event_at != created_at):
+                raise ValueError("Task history must begin at createdAt and remain chronological")
+            previous_at = event_at
             string(event["status"], "History status")
             string(event["owner"], "History owner")
             if event["status"] not in VIEWS or event["owner"] not in agents:
@@ -145,6 +156,8 @@ def validate_records(root, ledger, registry):
             string(event["reviewedBy"], "History reviewer", nonempty=False)
             if event["reviewedBy"] not in {"", "agent.0", "user"}:
                 raise ValueError("Invalid history reviewer")
+            if event["status"] != "done" and event["reviewedBy"]:
+                raise ValueError("Only completed history events may have a reviewer")
             if previous_status is None and event["status"] != "todo":
                 raise ValueError("Task history must start at todo")
             if previous_status is not None and event["status"] != previous_status:
@@ -167,21 +180,24 @@ def validate_records(root, ledger, registry):
                 raise ValueError(task["id"] + " has an unknown dependency")
             if task["status"] in {"in_progress", "needs_review", "done"} and tasks[dependency]["status"] != "done":
                 raise ValueError(task["id"] + " depends on unfinished " + dependency)
-    visited, active = set(), set()
-
-    def visit(task_id):
-        if task_id in active:
-            raise ValueError("Task dependencies contain a cycle")
-        if task_id in visited:
-            return
-        active.add(task_id)
-        for dependency in tasks[task_id]["dependsOn"]:
-            visit(dependency)
-        active.remove(task_id)
-        visited.add(task_id)
-
-    for task_id in tasks:
-        visit(task_id)
+    # Iterative traversal also supports long imported chains without depending
+    # on Python's recursion limit or the order of records in the ledger.
+    remaining = {task_id: len(task["dependsOn"]) for task_id, task in tasks.items()}
+    dependents = {task_id: [] for task_id in tasks}
+    for task_id, task in tasks.items():
+        for dependency in task["dependsOn"]:
+            dependents[dependency].append(task_id)
+    ready = [task_id for task_id, count in remaining.items() if count == 0]
+    visited = 0
+    while ready:
+        task_id = ready.pop()
+        visited += 1
+        for dependent in dependents[task_id]:
+            remaining[dependent] -= 1
+            if remaining[dependent] == 0:
+                ready.append(dependent)
+    if visited != len(tasks):
+        raise ValueError("Task dependencies contain a cycle")
     return tasks, agents
 
 

@@ -1,7 +1,11 @@
 # Task: <short title>
 
+This is supporting detail for an existing canonical task. Keep changing owner,
+status, dependencies, blockers, and next action in `WORK/TASKS.json`; refer to that
+record instead of maintaining a parallel status list.
+
+- Canonical task ID:
 - Objective and acceptance criteria:
-- Owner and status: planned / in progress / blocked / needs review / done
 - Repository, branch/revision, and files or systems in scope:
 - Relevant instructions, constraints, and existing authorization:
 - Out of scope and stop conditions:
@@ -10,7 +14,7 @@
 
 - Findings and implementation decisions:
 - Changes made:
-- Remaining work or exact blocker:
+- Findings to submit to the coordinator for a ledger update:
 
 ## Evidence
 
@@ -19,4 +23,4 @@
 | | | | |
 
 - Skipped checks and reasons:
-- Next action and responsible owner:
+- Related task IDs and proposed follow-up:

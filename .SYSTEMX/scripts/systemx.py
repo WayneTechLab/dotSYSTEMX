@@ -2,6 +2,7 @@
 """Standalone SYSTEMX tools. Python standard library only; no shell evaluation."""
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -12,6 +13,9 @@ import subprocess
 import sys
 from urllib.parse import unquote, urlsplit
 
+# Inspection commands must not create bytecode files in a copied distribution.
+if __name__ == "__main__":
+    sys.dont_write_bytecode = True
 import project_memory
 
 SYSTEMX = Path(__file__).resolve().parent.parent
@@ -28,9 +32,14 @@ REQUIRED = (
     "templates/DECISION.md", "templates/TASK.md", "templates/HANDOFF.md",
     "templates/RELEASE.md", "scripts/systemx.py", "scripts/validate.sh",
     "scripts/quality-check.sh", "tests/test_systemx.py",
+    "FORMAT.md", "config/template-records.json",
 ) + project_memory.REQUIRED
+BLANK_RECORDS = (
+    "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
+    "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
+    "WORK/FOCUS.json", "config/project.example.json",
+)
 IGNORED_DIRS = {"local", "logs", "state", ".git", "__pycache__", "node_modules"}
-REMOVED_COMPONENTS = {"LAN", "KT", "KIT"}
 LINK = re.compile(r"\]\((?:<([^>]+)>|([^\s)]+))(?:\s+\"[^\"]*\")?\)")
 
 
@@ -90,9 +99,9 @@ def load_config():
     return validate_config(read_json(path))
 
 
-def template_files():
+def template_files(include_runtime=False):
     for directory, dirs, files in os.walk(SYSTEMX, followlinks=False):
-        dirs[:] = sorted(name for name in dirs if name not in IGNORED_DIRS)
+        dirs[:] = sorted(name for name in dirs if include_runtime or name not in IGNORED_DIRS)
         for name in dirs + sorted(files):
             path = Path(directory) / name
             if path.is_symlink():
@@ -101,19 +110,48 @@ def template_files():
             yield Path(directory) / name
 
 
-def validate_template():
+def distribution_issues(files):
+    issues = []
+    extra = {path.relative_to(SYSTEMX).as_posix() for path in files} - set(REQUIRED)
+    if extra:
+        issues.append("Public template contains extra files: " + ", ".join(sorted(extra)))
+    try:
+        manifest = read_json(SYSTEMX / "config/template-records.json")
+        exact_keys(manifest, ("schemaVersion", "sha256"), "Blank-record manifest")
+        if type(manifest["schemaVersion"]) is not int or manifest["schemaVersion"] != 1:
+            raise ConfigError("Blank-record schemaVersion must be the integer 1")
+        exact_keys(manifest["sha256"], BLANK_RECORDS, "Blank-record hashes")
+        for relative, expected in manifest["sha256"].items():
+            if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected):
+                raise ConfigError("Invalid blank-record SHA-256 for " + relative)
+            path = project_memory.managed(SYSTEMX, relative)
+            # Universal-newline text reading makes Git CRLF checkouts equivalent.
+            digest = hashlib.sha256(path.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
+            if digest != expected:
+                issues.append("Public template record differs from its reviewed blank seed: " + relative)
+        ledger, registry = project_memory.load(SYSTEMX)
+        focus = project_memory.load_focus(SYSTEMX, ledger)
+        config = read_json(SYSTEMX / "config/project.example.json")
+        if ledger["tasks"] or focus["objective"] or registry["agents"] != [
+                {"id": "agent.0", "role": "coordinator", "memory": "AGENTS/agent.0/MEMORY.md"}]:
+            issues.append("Public template must have empty work/focus and only the agent.0 role")
+        if (any(config["project"].values()) or config["checks"] or any(config["commands"].values())):
+            issues.append("Public template command configuration must be empty")
+    except (ConfigError, OSError, ValueError) as error:
+        issues.append("Public template: " + str(error))
+    return issues
+
+
+def validate_template(distribution=False):
     issues = []
     for name in REQUIRED:
         if not (SYSTEMX / name).is_file():
             issues.append("Missing required file: " + name)
-    for name in sorted(REMOVED_COMPONENTS):
-        if (SYSTEMX / name).exists():
-            issues.append("Removed component must not be included: " + name)
     version_path = SYSTEMX / "VERSION"
     if version_path.is_file() and not re.fullmatch(r"\d+\.\d+\.\d+", version_path.read_text().strip()):
         issues.append("VERSION must contain a three-part numeric template version")
     try:
-        files = list(template_files())
+        files = list(template_files(include_runtime=distribution))
     except ConfigError as error:
         issues.append(str(error))
         files = []
@@ -138,8 +176,6 @@ def validate_template():
         except (OSError, UnicodeError) as error:
             issues.append(relative + ": " + str(error))
             continue
-        if re.search(r"\.SYSTEMX/(?:LAN|KT|KIT)(?:[/\s`]|$)", content, re.I):
-            issues.append(relative + ": reference to a removed component")
         # Only inline local file links are checked, not URLs or heading anchors.
         content = re.sub(r"^```.*?^```[^\n]*$", "", content, flags=re.M | re.S)
         for match in LINK.finditer(content):
@@ -155,10 +191,12 @@ def validate_template():
         project_memory.validate_work(SYSTEMX)
     except (OSError, ValueError) as error:
         issues.append("Project coordination: " + str(error))
+    if distribution and not issues:
+        issues.extend(distribution_issues(files))
     if issues:
         raise ConfigError("Template validation failed:\n- " + "\n- ".join(issues))
-    print("SYSTEMX template valid: {} files, {} Markdown documents checked.".format(
-        len(files), markdown_count), flush=True)
+    print("SYSTEMX {} valid: {} files, {} Markdown documents checked.".format(
+        "public template" if distribution else "structure", len(files), markdown_count), flush=True)
     return 0
 
 
@@ -320,7 +358,10 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Standalone SYSTEMX project operations")
     subparsers = parser.add_subparsers(dest="action")
     for action in ("validate", "doctor", "init", "menu", "help"):
-        subparsers.add_parser(action)
+        command_parser = subparsers.add_parser(action)
+        if action == "validate":
+            command_parser.add_argument("--template", action="store_true",
+                                        help="require only distribution files and reviewed blank project records")
     for action in ("check", "dev", "build", "deploy"):
         command_parser = subparsers.add_parser(action)
         command_parser.add_argument("--dry-run", action="store_true", help="print plan without executing commands")
@@ -330,6 +371,8 @@ def main(argv=None):
         parser.print_help()
         return 0
     try:
+        if args.action == "validate":
+            return validate_template(args.template)
         if args.action in project_memory.COMMANDS:
             return project_memory.dispatch(SYSTEMX, args)
         return dispatch(args.action or "menu", getattr(args, "dry_run", False))

@@ -17,7 +17,7 @@ Every connector should document:
 | `authMethod` | OAuth, API key, service account, CLI login, or manual dashboard login. |
 | `allowedActions` | Explicit verbs the project may call. |
 | `readOnlyActions` | Actions safe for diagnostics and smoke checks. |
-| `writeActions` | Actions requiring preflight and operator review. |
+| `writeActions` | Mutating actions and the authorization/preflight each actually requires. |
 | `secrets` | Secret names only, never values. |
 | `webhookEvents` | Events the app consumes. |
 | `evidence` | Logs, screenshots, API responses, or local test output proving behavior. |
@@ -51,14 +51,15 @@ When an external service requires browser interaction:
 
 ## Fallback Ladder
 
-Use this order for connector troubleshooting:
+Choose the relevant steps for the observed failure and available tools; this is
+not a requirement to run every step or install a specific framework:
 
 1. Local config check.
 2. CLI auth status.
 3. API read-only health call.
 4. Webhook signature verification.
 5. Local emulator or fixture replay.
-6. Headed Playwright reproduction.
+6. A bounded UI reproduction using the project's supported tools.
 7. Browser/MCP inspection.
 8. Operator handoff with exact blocker and next click/action.
 

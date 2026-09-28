@@ -6,10 +6,17 @@
    hidden files and local changes.
 2. Copy the complete `.SYSTEMX` folder. If one already exists, compare versions
    and merge deliberately. Do not replace project config, secrets, or evidence.
+   Use a clean template checkout or reviewed release archive; a working project's
+   folder can contain ignored private data that ordinary filesystem copying retains.
 3. Read the [standard](../STANDARD.md) and inspect the scripts before execution.
 4. Run `bash .SYSTEMX/SYSTEMX.sh validate` and `bash .SYSTEMX/SYSTEMX.sh doctor`.
    Python 3.9+ is required only for the command tools. Git is optional for
    documentation use; the doctor uses it if available.
+
+Before initializing a pristine distribution, `validate --template` additionally
+checks that its project seeds are blank and that only distribution files are
+present. Use ordinary `validate` after adoption. The [format contract](../FORMAT.md)
+documents these separate modes.
 
 ## Record project choices
 

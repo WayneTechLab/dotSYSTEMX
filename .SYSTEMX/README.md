@@ -13,6 +13,9 @@ is bundled or provisioned.
 
 For an LLM or returning agent, begin at [START-HERE.md](START-HERE.md). For initial
 adoption, read [STANDARD.md](STANDARD.md), then [docs/SETUP.md](docs/SETUP.md).
+The [format contract](FORMAT.md) defines paths, canonical fields, lifecycle,
+versioning, and the blank distribution. This is a reusable project convention;
+it does not certify the quality or compliance of an adopted project.
 
 ## Quick start
 
@@ -46,6 +49,7 @@ bash .SYSTEMX/WSG-MENU.sh
 | Path | Purpose |
 | --- | --- |
 | [STANDARD.md](STANDARD.md) | Shared scope, authority, applicability, and completion rules. |
+| [FORMAT.md](FORMAT.md) | Canonical record format, versioning, lifecycle, and public distribution contract. |
 | [START-HERE.md](START-HERE.md) | LLM load order and resume protocol. |
 | [CURRENT.md](CURRENT.md) | Generated objective, selected tasks, and checkpoint pointer; no separate status ledger. |
 | [GLOBAL/](GLOBAL/README.md) | Context shared by all agents in the current project; optional external standards references. |
@@ -67,7 +71,8 @@ bash .SYSTEMX/WSG-MENU.sh
 | Command | Behavior |
 | --- | --- |
 | `help` / `--help` | Show usage. |
-| `validate` | Check template structure, JSON, local Markdown file links, and removed component references. |
+| `validate` | Check structure, JSON, local Markdown file links, task records, and generated views. |
+| `validate --template` | Also require the reviewed blank seeds and only distribution files, including checks of normally ignored folders. |
 | `doctor` | Report local paths, Git state, configuration, and executable availability; no network calls. |
 | `init` | Create project config only when it does not exist. |
 | `check` | Validate the template, then execute every configured project check in order. |
@@ -99,6 +104,9 @@ Project context and task records are also blank: there is no historical backlog
 to clear when starting a new project. The Agent 0 role exists so work can begin.
 `validate` is a template consistency check, not a security audit or application
 test suite. The runner stops on the first failed command and returns its failure.
+For a pristine public copy, run `validate --template` before initialization. That
+mode rejects project-specific records and extra files; an adopted active project
+should use ordinary `validate`. See [publishing the format](FORMAT.md#public-distribution-versus-adopted-project).
 
 ## Configuration contract
 
