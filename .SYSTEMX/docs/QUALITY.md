@@ -66,3 +66,11 @@ python3 -B -m unittest discover -s .SYSTEMX/tests -v
 These tests use temporary copies and fake project commands. They do not install
 tools, invoke configured user deployments, or contact cloud services. Keep
 validation behavior and the command documentation aligned when changing either.
+
+After intentionally changing distribution files, regenerate the inventory with
+`python3 -B .SYSTEMX/scripts/release.py`, review its diff, and rerun the relevant
+checks. Never regenerate blank-seed hashes for populated project records. Build
+the Python package from a pristine reviewed distribution and validate an installed
+wheel plus its exported folder; a successful package build alone does not verify
+that all hidden template files were included. Test installer updates in temporary
+projects, including pins, custom files, upstream removals, and unavailable networks.

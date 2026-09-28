@@ -5,6 +5,15 @@ uses SYSTEMX. The template ships with empty project records. Populate them only
 with the current project's authorized facts and work; do not carry the template
 repository's build history into every new project.
 
+For a managed installation, inspect the outer `INSTALLATION.json` first. Its
+`activeVersion` selects `.systemx/releases/<version>/` for default instructions,
+templates, and tools. Use `STANDARD.md` and `START-HERE.md` from that release,
+while reading all project context, plans, tasks, and memory from the outer
+`.SYSTEMX`. Root copies of default files are preserved and may be older or
+customized; reconcile project instructions without overwriting them. The managed
+`context` command prints both locations. See [installation](docs/INSTALLATION.md)
+and the [setup profiles](config/profiles.json) for the current working location.
+
 ## Read in this order
 
 1. Applicable environment/repository instructions and [STANDARD.md](STANDARD.md).

@@ -16,9 +16,13 @@ from urllib.parse import unquote, urlsplit
 # Inspection commands must not create bytecode files in a copied distribution.
 if __name__ == "__main__":
     sys.dont_write_bytecode = True
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
 import project_memory
 
-SYSTEMX = Path(__file__).resolve().parent.parent
+DEFAULTS = Path(__file__).resolve().parent.parent
+SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
 REQUIRED = (
     ".gitignore", "README.md", "STANDARD.md", "LICENSE", "VERSION",
@@ -33,13 +37,17 @@ REQUIRED = (
     "templates/RELEASE.md", "scripts/systemx.py", "scripts/validate.sh",
     "scripts/quality-check.sh", "tests/test_systemx.py",
     "FORMAT.md", "config/template-records.json",
+    "__init__.py", "__main__.py", "manager.py", "INSTALL.sh", "INSTALL.ps1", "SYSTEMX.ps1",
+    "config/distribution.json", "config/profiles.json", "scripts/release.py", "tests/test_manager.py",
+    "profiles/project.md", "profiles/directory.md", "profiles/drive.md", "profiles/chat.md",
+    "docs/INSTALLATION.md", "docs/LIBRARY.md",
 ) + project_memory.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
     "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
     "WORK/FOCUS.json", "config/project.example.json",
 )
-IGNORED_DIRS = {"local", "logs", "state", ".git", "__pycache__", "node_modules"}
+IGNORED_DIRS = {"local", "logs", "state", ".git", ".systemx", "__pycache__", "node_modules"}
 LINK = re.compile(r"\]\((?:<([^>]+)>|([^\s)]+))(?:\s+\"[^\"]*\")?\)")
 
 
@@ -137,6 +145,9 @@ def distribution_issues(files):
             issues.append("Public template must have empty work/focus and only the agent.0 role")
         if (any(config["project"].values()) or config["checks"] or any(config["commands"].values())):
             issues.append("Public template command configuration must be empty")
+        sys.path.insert(0, str(DEFAULTS))
+        import manager
+        manager.read_bundle(SYSTEMX)
     except (ConfigError, OSError, ValueError) as error:
         issues.append("Public template: " + str(error))
     return issues
@@ -204,7 +215,7 @@ def init_project():
     destination = SYSTEMX / "project.json"
     if destination.exists() or destination.is_symlink():
         raise ConfigError("project.json already exists; it was not changed.")
-    config = validate_config(read_json(SYSTEMX / "config/project.example.json"))
+    config = validate_config(read_json(DEFAULTS / "config/project.example.json"))
     try:
         with destination.open("x", encoding="utf-8") as output:
             output.write(json.dumps(config, indent=2) + "\n")
@@ -355,7 +366,9 @@ def dispatch(action, dry_run=False):
 
 
 def main(argv=None):
+    global SYSTEMX, PROJECT_ROOT
     parser = argparse.ArgumentParser(description="Standalone SYSTEMX project operations")
+    parser.add_argument("--root", type=Path, help="project record directory when running versioned defaults")
     subparsers = parser.add_subparsers(dest="action")
     for action in ("validate", "doctor", "init", "menu", "help"):
         command_parser = subparsers.add_parser(action)
@@ -367,14 +380,21 @@ def main(argv=None):
         command_parser.add_argument("--dry-run", action="store_true", help="print plan without executing commands")
     project_memory.add_cli(subparsers)
     args = parser.parse_args(argv)
+    if args.root is not None:
+        SYSTEMX = args.root.expanduser().resolve()
+        PROJECT_ROOT = SYSTEMX.parent
     if args.action == "help":
         parser.print_help()
         return 0
     try:
+        if args.action in {"context", "task-packet"} and SYSTEMX != DEFAULTS:
+            print("Selected defaults: " + str(DEFAULTS))
+            print("Read STANDARD.md and START-HERE.md from these defaults; read project records from " + str(SYSTEMX))
+            print("Retained root guidance may be older or customized; reconcile it with the selected defaults and applicable instructions.")
         if args.action == "validate":
             return validate_template(args.template)
         if args.action in project_memory.COMMANDS:
-            return project_memory.dispatch(SYSTEMX, args)
+            return project_memory.dispatch(SYSTEMX, args, DEFAULTS)
         return dispatch(args.action or "menu", getattr(args, "dry_run", False))
     except (ConfigError, OSError, ValueError) as error:
         print("SYSTEMX: " + str(error), file=sys.stderr)

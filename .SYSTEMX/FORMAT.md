@@ -31,6 +31,7 @@ and generated views described here; it does not execute an agent runtime.
 | `AGENTS/REGISTRY.json` | Stable role IDs and memory paths | Each role's scoped memory |
 | `MEMORY/PROJECT.md` | Verified durable facts, decisions, lessons | Dated session checkpoints |
 | `project.json` | Explicit host-project commands | Empty `config/project.example.json` |
+| `INSTALLATION.json` (managed installs) | Selected defaults release, version pin, profile, update policy, fingerprints | Retained defaults under `.systemx/releases/<version>/` |
 
 Keep raw/private runtime artifacts in ignored local storage. A role is not a
 running process; a report is not an authorization grant; a generated view is
@@ -117,6 +118,8 @@ distribution before publication. The latter also requires:
 - Blank work and focus, Agent 0 only, and empty example command configuration.
 - Reviewed blank context, plan, and memory seeds matching
   `config/template-records.json` SHA-256 values (UTF-8 text normalized to LF).
+- A complete `config/distribution.json` inventory whose file fingerprints match
+  the published release, including its own version and blank-record manifest.
 
 An adopted project is expected to fail the blank-template check after it records
 real work. This check is not a secret scanner or an approval of every sentence;
@@ -134,3 +137,29 @@ git archive --format=zip --output=../SYSTEMX-template.zip HEAD .SYSTEMX
 Extract the archive and run `validate --template` there before sharing it. The
 MIT license and source attribution remain part of every copy. Follow the
 [upgrade guide](docs/UPGRADING.md) when merging into an active project.
+
+## Managed installation contract, schema version 1
+
+The optional `INSTALLATION.json` contains exactly `schemaVersion`, `profile`,
+`repository`, `activeVersion`, `pinnedVersion`, `autoUpdate`, `installedAt`,
+`updatedAt`, and `releases`. Profiles are `project`, `directory`, `drive`, or `chat`.
+Repository is a GitHub `OWNER/REPO`. Version IDs are exact three-part numeric
+releases. `pinnedVersion` is either null or the active version; a pin requires
+`autoUpdate: "manual"`. The other policy is explicit opt-in `"on-start"`.
+`releases` maps retained version IDs to their distribution-manifest SHA-256 values.
+
+An update appends a verified default snapshot and creates missing root files.
+It never replaces or deletes an existing project file, folder, or release snapshot.
+Only manager-owned selection/check metadata changes, with earlier selection states
+retained. Root VERSION and copied default files therefore retain their initial
+contents; the selected defaults version comes from INSTALLATION.json. Running a
+selected release must use the outer project's mutable records. Snapshot records
+are blank seeds and never become the active project's ledger or memory.
+
+The distribution manifest contains exactly `schemaVersion`, `version`, and
+`files`, mapping portable relative file paths to SHA-256 fingerprints normalized
+to LF. It excludes its own fingerprint. Immutable release snapshots include the
+manifest itself; installation state records that manifest's fingerprint.
+Fingerprints detect changed artifacts relative to the selected source; they are
+not independent publisher signatures. See [installation](docs/INSTALLATION.md)
+for policy, local locking, interrupted writes, and filesystem limits.

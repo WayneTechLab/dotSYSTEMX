@@ -3,7 +3,25 @@
 Treat the reusable standard and an active project's records as different kinds
 of content. Review an update in the intended checkout, preserve local changes,
 and merge the standard without replacing the project's accepted plan or memory.
-The template does not synchronize itself into other repositories.
+Each project selects its own defaults; updates do not synchronize project memory
+or configure automatic updates in other projects.
+
+## Managed installs and preserved files
+
+The [installer and updater](INSTALLATION.md) add versioned default snapshots and
+missing root files while preserving every existing project file and directory.
+Use them to adopt a current managed-install release, then select the desired
+version independently for each project. New installs are pinned with manual
+updates. The root VERSION remains the initial seed version; installation state
+identifies the currently selected defaults.
+
+An older project's launcher is preserved, too. During adoption use the installed
+`systemx run --target ... -- ...` command or the added `manager.py run` interface
+to select new defaults. Existing old shell scripts cannot be silently replaced.
+Review any custom root guidance against the selected release, and use `validate`
+to check the existing records before continuing. Adoption does not migrate or
+clear incompatible legacy ledgers, rewrite old generated views, or assert
+application readiness. Perform any needed record reconciliation explicitly.
 
 ## Existing 1.1.0 projects
 

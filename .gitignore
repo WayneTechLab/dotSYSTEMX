@@ -1,0 +1,8 @@
+# Local Python package build and development environments.
+/build/
+/dist/
+/*.egg-info/
+/.venv/
+__pycache__/
+*.py[cod]
+.DS_Store

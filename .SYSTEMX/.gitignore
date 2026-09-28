@@ -2,6 +2,9 @@
 /local/
 /logs/
 /state/
+/.systemx/update.lock
+/.systemx/last-check.json
+/.systemx/history/
 __pycache__/
 *.py[cod]
 .DS_Store

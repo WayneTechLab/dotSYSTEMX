@@ -423,7 +423,7 @@ def set_task(root, args):
     return 0
 
 
-def add_agent(root, args):
+def add_agent(root, args, defaults=None):
     if not re.fullmatch(r"agent\.[1-9]\d*", args.agent_id):
         raise ValueError("Use a worker ID such as agent.1; agent.0 is the coordinator")
     string(args.role, "Agent role")
@@ -435,7 +435,7 @@ def add_agent(root, args):
         destination = managed(root, relative)
         if destination.exists():
             raise ValueError("Agent memory already exists; review it before registering")
-        content = managed(root, "templates/AGENT-MEMORY.md").read_text(encoding="utf-8")
+        content = managed(defaults or root, "templates/AGENT-MEMORY.md").read_text(encoding="utf-8")
         content = content.replace("__AGENT_ID__", args.agent_id).replace("__AGENT_ROLE__", escaped(args.role))
         atomic_write(root, relative, content)
         registry["agents"].append({"id": args.agent_id, "role": args.role, "memory": relative})
@@ -610,7 +610,7 @@ COMMANDS = {"status", "refresh-work", "context", "agent-add", "task-add", "task-
             "focus", "task-ready", "task-packet"}
 
 
-def dispatch(root, args):
+def dispatch(root, args, defaults=None):
     if args.action == "focus":
         return set_focus(root, args)
     if args.action == "task-ready":
@@ -622,7 +622,7 @@ def dispatch(root, args):
     if args.action == "context":
         return context(root, args.agent)
     if args.action == "agent-add":
-        return add_agent(root, args)
+        return add_agent(root, args, defaults)
     if args.action == "task-add":
         return add_task(root, args)
     if args.action == "task-set":

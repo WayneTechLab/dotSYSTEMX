@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dotsystemx"
+version = "1.3.0"
+description = "Portable project context, coordination, and additive template version management"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = [".SYSTEMX/LICENSE"]
+dependencies = []
+
+[project.scripts]
+systemx = "systemx.manager:main"
+
+[project.urls]
+Repository = "https://github.com/WayneTechLab/dotSYSTEMX"
+Documentation = "https://github.com/WayneTechLab/dotSYSTEMX/wiki"
+Changelog = "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog"
+
+[tool.setuptools]
+packages = ["systemx"]
+package-dir = {systemx = ".SYSTEMX"}
+include-package-data = false
+
+[tool.setuptools.package-data]
+systemx = [".gitignore", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",
+           "config/*.json", "AI/*.md", "AI/*.json", "GLOBAL/*.md", "PLAN/*.md",
+           "WORK/*.md", "WORK/*.json", "MEMORY/*.md", "MEMORY/sessions/*.md",
+           "AGENTS/*.md", "AGENTS/*.json", "AGENTS/agent.0/*.md", "templates/*.md",
+           "docs/*.md", "profiles/*.md", "scripts/*.py", "scripts/*.sh", "tests/*.py"]

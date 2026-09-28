@@ -1,5 +1,22 @@
 # Changelog
 
+The public release history is maintained in the
+[Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
+This copy travels with the folder for offline use.
+
+## 1.3.0
+
+- Added setup profiles for project roots/VS Code, OS directories, local Google
+  Drive folders, and LLM chats, using one canonical template and record format.
+- Added a Python library and CLI, Bash and PowerShell installation entry points,
+  exact version selection, per-project pins, and manual updates by default.
+- Added immutable default snapshots and an additive updater that preserves all
+  existing project files, directories, and prior releases, including upstream removals.
+- Added opt-in startup updates with an offline override and manual major-version
+  changes; no background OS scheduler or automatic user-record migration.
+- Added a fingerprinted distribution inventory, local writer locking, state
+  history, dry-run planning, and local chat packet export without uploads.
+
 ## 1.2.0
 
 - Added a compact focus record and generated CURRENT.md, linked to existing
