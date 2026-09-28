@@ -4,6 +4,21 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.5.0
+
+- Added honest token/cost/time guidance, a measurement approach, and new Technical,
+  Stack, About, First-Time Setup, and Uninstall guides.
+- Added preview-first `first-run` with explicit apply, empty configuration seeding,
+  preservation of existing settings, and clear remaining setup steps.
+- Added local install/update/policy/alias/first-run operation receipts and an
+  offline audit of the selected project's installation footprint.
+- Added reversible uninstall to a new external same-filesystem backup, including
+  user records, file inventories, raw-byte hashes, alias handling, and an external log.
+- Added verified restore with conflict refusal and failure/recovery receipts;
+  package removal and manual integrations have separate logged cleanup instructions.
+- Kept updates additive, new installs pinned/manual, reusable records blank,
+  exact-case path guards active, and all existing host files protected.
+
 ## 1.4.0
 
 - Standardized the public name and canonical folder spelling as `.SYSTEMX`.

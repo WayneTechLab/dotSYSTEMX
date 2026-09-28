@@ -13,15 +13,18 @@ import subprocess
 import sys
 import tempfile
 import urllib.request
+import uuid
 import zipfile
 
 if __package__:
+    from . import lifecycle
     from .systemx_paths import (SystemXPathError, inspect_layout, is_link, lexical_path,
-                               lowercase_alias, project_directory, record_directory)
+                               lowercase_alias as path_alias, project_directory, record_directory)
 else:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import lifecycle
     from systemx_paths import (SystemXPathError, inspect_layout, is_link, lexical_path,
-                              lowercase_alias, project_directory, record_directory)
+                              lowercase_alias as path_alias, project_directory, record_directory)
 
 DEFAULT_REPOSITORY = "WayneTechLab/dotSYSTEMX"
 PACKAGE = Path(__file__).resolve().parent
@@ -112,6 +115,8 @@ def verified_bundle(files):
                 "config/template-records.json", *SEEDS}
     if tuple(map(int, manifest["version"].split("."))) >= (1, 4, 0):
         required.add("systemx_paths.py")
+    if tuple(map(int, manifest["version"].split("."))) >= (1, 5, 0):
+        required.add("lifecycle.py")
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -276,12 +281,34 @@ def update_lock(root):
         descriptor = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
     except FileExistsError as error:
         raise InstallError("Another install/update holds .systemx/update.lock; inspect its owner before recovery") from error
+    handle = {"path": path}
     try:
         with os.fdopen(descriptor, "w") as stream:
             stream.write(json.dumps({"pid": os.getpid(), "createdAt": now()}))
-        yield
+        yield handle
     finally:
-        path.unlink()
+        handle["path"].unlink()
+
+
+@contextmanager
+def operation_log(root, action, details):
+    folder = safe_path(root / ".SYSTEMX", ".systemx/operations")
+    folder.mkdir(parents=True, exist_ok=True)
+    create_missing(safe_path(root / ".SYSTEMX", ".systemx/operations/.gitignore"), b"*\n")
+    path = folder / (uuid.uuid4().hex + ".json")
+    value = {"schemaVersion": 1, "action": action, "startedAt": now(),
+             "status": "started", "details": details}
+    lifecycle.atomic_json(path, value)
+    try:
+        yield value
+    except BaseException as error:
+        value.update({"status": "failed", "errorType": type(error).__name__})
+        raise
+    else:
+        value["status"] = "complete"
+    finally:
+        value["finishedAt"] = now()
+        lifecycle.atomic_json(path, value)
 
 
 def save_state(root, state):
@@ -391,16 +418,25 @@ def install(target, *, source=None, version=None, profile="project", repository=
     with update_lock(root):
         if state_path(root).exists():
             raise InstallError("Another installer initialized this project")
-        result = apply_bundle(root, bundle, None, profile, repository)
-        # Optional link creation happens after a complete usable install. A failure
-        # retains that installation and tells the caller how to retry the alias.
-        result["pathLayout"] = alias(root, create=lowercase_alias)
-        return result
+        with operation_log(root, "install", {"version": bundle["version"], "profile": profile}) as log:
+            result = apply_bundle(root, bundle, None, profile, repository)
+            # The complete installation is retained if optional link setup fails.
+            result["pathLayout"] = path_alias(root, create=lowercase_alias)
+            log["result"] = result
+            return result
 
 
 def alias(target, *, create=False, dry_run=False):
     """Inspect exact casing or opt in to a local .systemx -> .SYSTEMX link."""
-    return lowercase_alias(target, create=create, dry_run=dry_run)
+    if not create or dry_run:
+        return path_alias(target, create=create, dry_run=dry_run)
+    root = project_root(target)
+    if inspect_layout(root, required=True)["aliasStatus"] != "absent":
+        return path_alias(root, create=True)
+    with update_lock(root), operation_log(root, "alias", {"target": ".systemx -> .SYSTEMX"}) as log:
+        result = path_alias(root, create=True)
+        log["result"] = result
+        return result
 
 
 def update(target, *, source=None, version=None, dry_run=False):
@@ -421,7 +457,10 @@ def update(target, *, source=None, version=None, dry_run=False):
         current = load_state(root)
         if current != state:
             raise InstallError("Installation policy changed while preparing the update; retry")
-        return apply_bundle(root, bundle, state, state["profile"], state["repository"])
+        with operation_log(root, "update", {"fromVersion": state["activeVersion"], "toVersion": bundle["version"]}) as log:
+            result = apply_bundle(root, bundle, state, state["profile"], state["repository"])
+            log["result"] = result
+            return result
 
 
 def set_policy(target, *, pin=None, auto_update=None):
@@ -443,7 +482,8 @@ def set_policy(target, *, pin=None, auto_update=None):
                 raise InstallError("Unpin explicitly before enabling automatic updates")
             state["autoUpdate"] = auto_update
         state["updatedAt"] = now()
-        save_state(root, state)
+        with operation_log(root, "policy", {"pinnedVersion": state["pinnedVersion"], "autoUpdate": state["autoUpdate"]}):
+            save_state(root, state)
         return state
 
 
@@ -519,6 +559,175 @@ def export_chat(target, output, *, agent="agent.0"):
     return {"output": str(path), "version": bundle["version"], "uploaded": False}
 
 
+def first_run(target, *, source=None, version=None, profile="project", lowercase_alias=False, apply=False):
+    """Preview or initialize a pinned installation and empty config, without running project commands."""
+    root = project_root(target)
+    managed = state_path(root).exists()
+    if managed:
+        result = status(root)
+        if source is not None or version is not None:
+            raise InstallError("Already managed; use update to select another source/version")
+    else:
+        result = install(root, source=source, version=version, profile=profile,
+                         lowercase_alias=lowercase_alias, dry_run=not apply)
+    result = {"action": "first-run", "applied": apply, "installation": result,
+              "config": "preserve" if safe_path(root / ".SYSTEMX", "project.json").exists() else "create-empty",
+              "nextSteps": ["Fill .SYSTEMX/GLOBAL/CONTEXT.md with approved project facts",
+                            "Define outcomes and acceptance in .SYSTEMX/PLAN/MASTER-PLAN.md",
+                            "Configure only real project checks in .SYSTEMX/project.json",
+                            "Run validate, then load context --agent agent.0"],
+              "guide": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup"}
+    if not apply:
+        return result
+    if managed and lowercase_alias:
+        alias(root, create=True)
+    with update_lock(root), operation_log(root, "first-run", {"alreadyManaged": managed}) as log:
+        _, bundle = active_bundle(root, load_state(root))
+        created = create_missing(safe_path(root / ".SYSTEMX", "project.json"), bundle["files"]["config/project.example.json"])
+        result["config"] = "created-empty" if created else "preserved"
+        log["result"] = result
+    return result
+
+
+def audit(target):
+    """Read-only audit of the selected project's footprint, never a whole-computer cleanup claim."""
+    root = project_directory(target, check_layout=False)
+    entries = lifecycle.path_entries(root)
+    result = {"target": str(root), "scope": "Project .SYSTEMX directory and case variants only",
+              "entries": entries, "clean": not entries, "issues": [], "operationLogs": [],
+              "externalRemoval": "Use the installing Python environment's pip uninstall dotsystemx separately; shared runtimes and host files are outside this audit"}
+    try:
+        result["pathLayout"] = inspect_layout(root)
+        if state_path(root).exists():
+            result["installation"] = status(root)
+        logs = safe_path(root / ".SYSTEMX", ".systemx/operations")
+        if logs.is_dir():
+            for path in sorted(logs.glob("*.json")):
+                safe_path(root / ".SYSTEMX", path.relative_to(root / ".SYSTEMX"))
+                value = decode(path.read_bytes())
+                result["operationLogs"].append({"file": str(path), "action": value.get("action"), "status": value.get("status")})
+                if value.get("status") != "complete":
+                    result["issues"].append("Incomplete operation: " + path.name)
+        lock = safe_path(root / ".SYSTEMX", ".systemx/update.lock")
+        if lock.exists():
+            result["issues"].append("Writer lock present; verify its owner before any recovery")
+    except (OSError, ValueError, TypeError, AttributeError) as error:
+        result["issues"].append(str(error))
+    return result
+
+
+def uninstall(target, *, backup=None, apply=False):
+    """Archive the entire exact-case folder and remove its local alias, with an external receipt."""
+    root = project_root(target)
+    folder = root / ".SYSTEMX"
+    if not folder.exists():
+        return {"action": "uninstall", "applied": False, "status": "not-installed", "audit": audit(root)}
+    # Running code/working directories cannot be moved reliably on all platforms.
+    # The package or a separate reviewed checkout is the removal entry point.
+    if PACKAGE.is_relative_to(folder) or Path.cwd().resolve().is_relative_to(folder):
+        raise InstallError("Run uninstall from outside the target .SYSTEMX, using the installed library or a separate reviewed checkout")
+    destination = lifecycle.external_backup(root, backup) if backup else None
+    if apply and destination is None:
+        raise InstallError("Uninstall --apply requires --backup pointing to a new directory outside the project")
+    layout = inspect_layout(root, required=True)
+    records = lifecycle.inventory(folder, exclude=(".systemx/update.lock",))
+    result = {"action": "uninstall", "applied": False, "target": str(root),
+              "scope": "Archive the entire .SYSTEMX folder, including all user tasks, memory, configuration, defaults, and logs",
+              "backup": str(destination) if destination else None, "entries": len(records),
+              "fileBytes": sum(entry.get("bytes", 0) for entry in records.values()),
+              "removeAlias": layout["aliasStatus"] == "linked", "permanentDeletion": False}
+    if not apply:
+        return result
+    with update_lock(root) as lock:
+        layout = inspect_layout(root, required=True)
+        records = lifecycle.inventory(folder, exclude=(".systemx/update.lock",))
+        result.update({"entries": len(records), "fileBytes": sum(entry.get("bytes", 0) for entry in records.values()),
+                       "removeAlias": layout["aliasStatus"] == "linked"})
+        destination.mkdir(mode=0o700)  # Exclusive destination; never reuse or overwrite a backup.
+        create_missing(destination / ".gitignore", b"*\n")
+        receipt_path = destination / "UNINSTALL-LOG.json"
+        receipt = {"schemaVersion": 1, "action": "uninstall", "status": "prepared", "startedAt": now(),
+                   "target": str(root), "aliasWasLinked": layout["aliasStatus"] == "linked", "inventory": records}
+        lifecycle.atomic_json(receipt_path, receipt)
+        try:
+            os.rename(folder, destination / ".SYSTEMX")
+            lock["path"] = destination / ".SYSTEMX/.systemx/update.lock"
+            receipt["status"] = "archived"
+            lifecycle.atomic_json(receipt_path, receipt)
+            if receipt["aliasWasLinked"]:
+                alias_path = root / ".systemx"
+                if not alias_path.is_symlink() or os.readlink(alias_path) != ".SYSTEMX":
+                    raise InstallError("Alias changed during removal; archived data is safe, inspect the remaining entry")
+                alias_path.unlink()
+            if lifecycle.inventory(destination / ".SYSTEMX", exclude=(".systemx/update.lock",)) != records:
+                raise InstallError("Archived files changed during removal; inspect the backup before restoring")
+            receipt.update({"status": "complete", "finishedAt": now(), "audit": audit(root)})
+            lifecycle.atomic_json(receipt_path, receipt)
+        except BaseException as error:
+            receipt.update({"status": "incomplete", "errorType": type(error).__name__, "finishedAt": now()})
+            lifecycle.atomic_json(receipt_path, receipt)
+            raise
+    result.update({"applied": True, "log": str(receipt_path), "audit": audit(root)})
+    return result
+
+
+def restore(target, *, backup, apply=False):
+    """Verify a removal backup, then restore only into an empty project slot."""
+    root = project_directory(target, check_layout=False)
+    if not root.is_dir():
+        raise InstallError("Restore target must be an existing containing project directory")
+    destination = lifecycle.external_backup(root, backup, must_exist=True)
+    receipt_path = destination / "UNINSTALL-LOG.json"
+    if is_link(receipt_path):
+        raise InstallError("Refusing a linked uninstall receipt")
+    receipt = decode(receipt_path.read_bytes())
+    if (not isinstance(receipt, dict) or type(receipt.get("schemaVersion")) is not int or receipt["schemaVersion"] != 1 or
+            receipt.get("action") != "uninstall" or receipt.get("status") not in {"prepared", "archived", "complete", "incomplete"} or
+            not isinstance(receipt.get("inventory"), dict) or type(receipt.get("aliasWasLinked")) is not bool):
+        raise InstallError("Unrecognized uninstall receipt")
+    # A previous partial uninstall may have left its exact, dangling alias.
+    for entry in lifecycle.path_entries(root):
+        path = root / entry["name"]
+        if not (entry["name"] == ".systemx" and receipt["aliasWasLinked"] and
+                path.is_symlink() and os.readlink(path) == ".SYSTEMX" and not path.exists()):
+            raise InstallError("Restore will not overwrite an existing .SYSTEMX or case variant")
+    archived = destination / ".SYSTEMX"
+    if PACKAGE.is_relative_to(archived) or Path.cwd().resolve().is_relative_to(archived):
+        raise InstallError("Run restore from outside the archived .SYSTEMX using the installed library or a separate reviewed checkout")
+    if (archived / ".systemx/update.lock").exists():
+        raise InstallError("Backup has a writer lock; verify its owner before recovery")
+    if lifecycle.inventory(archived) != receipt["inventory"]:
+        raise InstallError("Backup inventory differs from the uninstall log; inspect it before manual recovery")
+    result = {"action": "restore", "target": str(root), "backup": str(destination),
+              "applied": False, "entries": len(receipt["inventory"])}
+    if not apply:
+        return result
+    restore_lock = destination / "restore.lock"
+    descriptor = os.open(restore_lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    try:
+        os.close(descriptor)
+        # Recheck after claiming the backup lock; no existing directory is replaced.
+        if (root / ".SYSTEMX").exists() or (root / ".SYSTEMX").is_symlink():
+            raise InstallError("A .SYSTEMX entry appeared during restore; nothing was overwritten")
+        if lifecycle.inventory(archived) != receipt["inventory"]:
+            raise InstallError("Backup changed while preparing restore")
+        receipt["restore"] = {"target": str(root), "startedAt": now(), "status": "started"}
+        lifecycle.atomic_json(receipt_path, receipt)
+        try:
+            os.rename(archived, root / ".SYSTEMX")
+            if receipt["aliasWasLinked"]:
+                path_alias(root, create=True)
+            receipt["restore"].update({"status": "complete", "finishedAt": now()})
+        except BaseException as error:
+            receipt["restore"].update({"status": "incomplete", "errorType": type(error).__name__, "finishedAt": now()})
+            raise
+        finally:
+            lifecycle.atomic_json(receipt_path, receipt)
+    finally:
+        restore_lock.unlink()
+    return {**result, "applied": True, "log": str(receipt_path), "audit": audit(root)}
+
+
 def main(argv=None):
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
@@ -558,6 +767,24 @@ def main(argv=None):
     command.add_argument("--agent", default="agent.0")
     command = sub.add_parser("setup")
     command.add_argument("--profile", choices=PROFILES, required=True)
+    command = sub.add_parser("first-run", help="preview or initialize a project without running project commands")
+    command.add_argument("--target", required=True)
+    command.add_argument("--profile", choices=PROFILES, default="project")
+    command.add_argument("--source")
+    command.add_argument("--version")
+    command.add_argument("--lowercase-alias", action="store_true")
+    mode = command.add_mutually_exclusive_group()
+    mode.add_argument("--apply", action="store_true")
+    mode.add_argument("--dry-run", action="store_true")
+    command = sub.add_parser("audit", help="read-only inspection of this project's installation footprint")
+    command.add_argument("--target", required=True)
+    for name in ("uninstall", "restore"):
+        command = sub.add_parser(name, help="preview by default; --apply performs a reversible folder move")
+        command.add_argument("--target", required=True)
+        command.add_argument("--backup", required=name == "restore")
+        mode = command.add_mutually_exclusive_group()
+        mode.add_argument("--apply", action="store_true")
+        mode.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     try:
         if args.action == "install":
@@ -575,10 +802,21 @@ def main(argv=None):
             return run(args.target, args.arguments, offline=args.offline).returncode
         elif args.action == "export-chat":
             result = export_chat(args.target, args.output, agent=args.agent)
+        elif args.action == "first-run":
+            result = first_run(args.target, source=args.source, version=args.version, profile=args.profile,
+                               lowercase_alias=args.lowercase_alias, apply=args.apply)
+        elif args.action == "audit":
+            result = audit(args.target)
+        elif args.action == "uninstall":
+            result = uninstall(args.target, backup=args.backup, apply=args.apply)
+        elif args.action == "restore":
+            result = restore(args.target, backup=args.backup, apply=args.apply)
         else:
             profiles = decode((PACKAGE / "config/profiles.json").read_bytes())
             result = profiles["profiles"][args.profile]
         print(json.dumps(result, indent=2))
+        if args.action == "audit" and result["issues"]:
+            return 2
         return 0
     except (OSError, ValueError, KeyError, TypeError, zipfile.BadZipFile) as error:
         print("SYSTEMX manager: " + str(error), file=sys.stderr)

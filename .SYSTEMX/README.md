@@ -14,6 +14,19 @@ setup refuses independent case variants to protect project records.
 [Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Setup profiles](config/profiles.json) · [MIT license](LICENSE)
 
+## Focused context and reversible setup
+
+Current focus, a single task ledger, bounded context, and scoped agent memory can
+reduce repeated input and rework. That can lower usage-based token costs and save
+time, depending on model, caching, output, and tools. There is no fixed savings
+guarantee; see [tokens, cost, and time](docs/EFFICIENCY.md).
+
+[First-time setup](docs/FIRST-RUN.md) previews before applying changes. Local
+operation logs, scoped audits, and a [reversible uninstall](docs/UNINSTALL.md)
+make the installation inspectable while retaining your records in a backup.
+Read the [Technical Guide](docs/TECHNICAL-GUIDE.md),
+[Stack Guide](docs/STACK-GUIDE.md), and [About page](docs/ABOUT.md).
+
 ## Start here
 
 For work in an active project, load [START-HERE.md](START-HERE.md). For setup,

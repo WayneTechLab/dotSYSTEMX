@@ -61,7 +61,7 @@ def inspect_layout(project, *, required=False):
     return {"canonical": str(canonical), "alias": str(alias), "aliasStatus": status}
 
 
-def project_directory(target):
+def project_directory(target, *, check_layout=True):
     if str(target).startswith(("http://", "https://", "drive://")):
         raise SystemXPathError("Target must be a local folder; use a Drive desktop folder or export a chat packet")
     raw = lexical_path(target)
@@ -71,7 +71,8 @@ def project_directory(target):
         raise SystemXPathError("Choose the containing project directory, not an OS root, .SYSTEMX, or a directory inside it")
     if root.exists() and not root.is_dir():
         raise SystemXPathError("Target is not a directory")
-    inspect_layout(root)
+    if check_layout:
+        inspect_layout(root)
     return root
 
 

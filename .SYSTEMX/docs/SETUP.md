@@ -1,5 +1,8 @@
 # Setup
 
+New users should start with [First-Time Setup](FIRST-RUN.md), including preview,
+local installation logs, first project facts, verification, and removal planning.
+
 ## Adopt the folder
 
 Use the exact stored name `.SYSTEMX` on every platform. Review the

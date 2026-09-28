@@ -37,7 +37,8 @@ chosen Python environment:
 
 ```bash
 python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git"
-systemx install --target "/path/to/project" --profile project
+systemx first-run --target "/path/to/project" --profile project
+systemx first-run --target "/path/to/project" --profile project --apply
 systemx run --target "/path/to/project" -- context --agent agent.0
 ```
 
@@ -53,6 +54,25 @@ Python 3.9+ and use its standard library. Documentation can be used on its own.
 For exact release pins, interpreter setup, and package installation, follow
 [Installation and updates](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Installation-and-Updates)
 and [Library integration](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Library-Integration).
+
+The [first-time setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup)
+walks through an isolated tool environment, setup preview, project facts, and
+verification. First run creates configuration only when missing and executes no
+project commands.
+
+## Spend less context on repeated work
+
+A focused `.SYSTEMX` handoff can reduce repeated input tokens and avoidable
+searches, planning restarts, and tool calls. Current focus, one task ledger,
+bounded resume context, and scoped worker memory help an assistant load the
+information needed for the next task instead of repeatedly reading full histories.
+
+Fewer billable tokens can lower usage-based API costs; fewer repeated steps can
+save processing time. Results depend on the model, caching, output, tools, and
+workflow. **No fixed percentage of token, money, or time savings is guaranteed.**
+A fixed-price subscription may gain capacity without a smaller bill. The
+[efficiency guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Tokens-Cost-and-Time)
+explains the mechanisms, an illustrative calculation, and how to measure results.
 
 ## A clear place for each responsibility
 
@@ -86,8 +106,21 @@ Automatic updates are optional and run only when the managed launcher starts.
 They do not create background OS jobs. The [update guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Installation-and-Updates)
 explains pins, offline use, retained defaults, and compatibility checks.
 
+## Setup you can inspect and remove
+
+Installation operations have local logs. `systemx audit --target PATH` checks the
+selected project's footprint. Uninstall previews by default; applying it moves
+the complete `.SYSTEMX` folder, including your records, to a chosen backup and
+writes a verified inventory and removal log. Restore checks that backup before
+putting it back. The [uninstall guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Uninstall-and-Cleanup)
+also covers package removal and manual integrations without removing shared tools.
+
 ## Documentation
 
+- [About .SYSTEMX](https://github.com/WayneTechLab/dotSYSTEMX/wiki/About)
+- [Technical Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Technical-Guide)
+- [Stack Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Stack-Guide)
+- [First-Time Setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup)
 - [Standard format](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format)
 - [Agent 0 and subagents](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents)
 - [Planning and memory](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory)

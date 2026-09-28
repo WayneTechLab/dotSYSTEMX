@@ -38,6 +38,17 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Managed validation failed' }
           & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') paths
           if ($LASTEXITCODE -ne 0) { throw 'Exact-case inspection failed' }
+          python -B .SYSTEMX/manager.py first-run --target $target --apply
+          if ($LASTEXITCODE -ne 0) { throw 'First-run failed' }
+          $backup = Join-Path $env:RUNNER_TEMP 'SYSTEMX removal backup'
+          python -B .SYSTEMX/manager.py uninstall --target $target --backup $backup --apply
+          if ($LASTEXITCODE -ne 0) { throw 'Removal failed' }
+          python -B .SYSTEMX/manager.py audit --target $target
+          if ($LASTEXITCODE -ne 0) { throw 'Removal audit failed' }
+          python -B .SYSTEMX/manager.py restore --target $target --backup $backup --apply
+          if ($LASTEXITCODE -ne 0) { throw 'Restore failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') validate
+          if ($LASTEXITCODE -ne 0) { throw 'Restored validation failed' }
       - name: Build library wheel
         if: runner.os == 'Linux' && matrix.python == '3.13'
         run: python -m pip wheel . --no-deps --wheel-dir dist

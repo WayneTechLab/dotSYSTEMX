@@ -44,6 +44,8 @@ REQUIRED = (
     "config/distribution.json", "config/profiles.json", "scripts/release.py", "tests/test_manager.py",
     "profiles/project.md", "profiles/directory.md", "profiles/drive.md", "profiles/chat.md",
     "docs/INSTALLATION.md", "docs/LIBRARY.md", "docs/EXACT-CASE.md", "systemx_paths.py", "tests/test_paths.py",
+    "lifecycle.py", "tests/test_lifecycle.py", "docs/FIRST-RUN.md", "docs/UNINSTALL.md",
+    "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
 ) + project_memory.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
@@ -324,12 +326,14 @@ def menu():
                "4": ("check", False), "5": ("dev", False), "6": ("build", False),
                "7": ("deploy", True), "8": ("deploy", False),
                "9": ("status", False), "10": ("context", False),
-               "11": ("paths", False), "12": ("alias-create", False)}
+               "11": ("paths", False), "12": ("alias-create", False),
+               "13": ("setup-guide", False), "14": ("removal-guide", False)}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
               "9) Project work status\n10) Agent 0 resume context\n"
-              "11) Check exact .SYSTEMX casing and alias\n12) Enable local .systemx -> .SYSTEMX alias\n0) Exit")
+              "11) Check exact .SYSTEMX casing and alias\n12) Enable local .systemx -> .SYSTEMX alias\n"
+              "13) First-time setup guide\n14) Uninstall, restore, and cleanup guide\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -357,8 +361,17 @@ def menu():
 
 def dispatch(action, dry_run=False):
     record_directory(SYSTEMX)
+    if action in {"setup-guide", "removal-guide"}:
+        name = "FIRST-RUN.md" if action == "setup-guide" else "UNINSTALL.md"
+        print((DEFAULTS / "docs" / name).read_text(encoding="utf-8"))
+        return 0
     if action in {"paths", "alias-create"}:
-        print(json.dumps(lowercase_alias(PROJECT_ROOT, create=action == "alias-create"), indent=2))
+        if action == "alias-create":
+            import manager
+            result = manager.alias(PROJECT_ROOT, create=True)
+        else:
+            result = lowercase_alias(PROJECT_ROOT)
+        print(json.dumps(result, indent=2))
         return 0
     if action == "validate":
         return validate_template()
@@ -380,7 +393,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Standalone .SYSTEMX project operations (exact-case directory)")
     parser.add_argument("--root", type=Path, help="project record directory when running versioned defaults")
     subparsers = parser.add_subparsers(dest="action")
-    for action in ("validate", "doctor", "init", "menu", "help", "paths"):
+    for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide"):
         command_parser = subparsers.add_parser(action)
         if action == "validate":
             command_parser.add_argument("--template", action="store_true",

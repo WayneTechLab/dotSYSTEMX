@@ -5,6 +5,7 @@
 /.systemx/update.lock
 /.systemx/last-check.json
 /.systemx/history/
+/.systemx/operations/
 __pycache__/
 *.py[cod]
 .DS_Store

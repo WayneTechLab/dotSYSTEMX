@@ -12,7 +12,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.4.0"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.5.0"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -80,3 +80,22 @@ The API always manages the real `.SYSTEMX` directory beneath its target.
 requests creation. Case-insensitive filesystems report `filesystem-equivalent`.
 The `status` response includes `pathLayout`. Conflicting case variants raise
 `ValueError` without merging or deleting them. See the [case contract](EXACT-CASE.md).
+
+## First run and reversible removal
+
+```python
+from systemx import first_run, audit, uninstall, restore
+
+first_run("/path/to/project")  # preview
+first_run("/path/to/project", apply=True)
+audit("/path/to/project")      # read-only, scoped footprint and operation history
+uninstall("/path/to/project", backup="/path/to/new-backup")  # preview
+uninstall("/path/to/project", backup="/path/to/new-backup", apply=True)
+restore("/path/to/project", backup="/path/to/new-backup")    # preview
+restore("/path/to/project", backup="/path/to/new-backup", apply=True)
+```
+
+Uninstall moves the whole `.SYSTEMX` folder, including user records, to an external
+backup on the same filesystem. It does not uninstall this Python package. Run
+removal/restore from an external environment or checkout. Preserve the receipt
+and use the [cleanup guide](UNINSTALL.md) for package removal and intentional leftovers.

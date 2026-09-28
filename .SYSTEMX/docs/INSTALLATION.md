@@ -6,6 +6,10 @@ and [LLM chats](../profiles/chat.md). A profile describes location and persisten
 it does not fork the task format, configure a stack, or start an agent runtime.
 Use `systemx setup --profile project` to print its setup URL and capabilities.
 
+For a guided first adoption, use [first-time setup](FIRST-RUN.md). The `first-run`
+command previews by default, then installs/adopts and creates empty configuration
+only when explicitly applied.
+
 ## Install from a reviewed folder
 
 ```bash
@@ -35,6 +39,7 @@ project/
     ├── STANDARD.md, scripts/…  Initial files; existing copies are preserved
     └── .systemx/              # internal cache, not the optional sibling alias
         ├── releases/<version>/ Immutable default files for each retained release
+        ├── operations/        Local installation operation receipts
         ├── history/           Earlier manager state, retained locally
         ├── last-check.json    Optional startup-check metadata
         └── update.lock        Temporary local writer lock
@@ -42,13 +47,14 @@ project/
 
 The installed defaults and `INSTALLATION.json` can be committed together for
 reproducible project clones. The supplied ignores exclude transient checks,
-state history, and the lock. Do not deploy this folder as public application data.
+state history, operation logs, and the lock. Do not deploy this folder as public application data.
 
 Updates **never replace or delete existing files or folders in the project**.
 They append a new versioned defaults directory, create only missing root files,
 and update the manager-owned selection metadata. They retain files removed or
 renamed upstream, older releases, custom defaults, tasks, configuration, and memory.
-There is no cleanup, uninstall, prune, or destructive reset command.
+Removal is a separate explicit, reversible operation; see [uninstall and cleanup](UNINSTALL.md).
+It archives the complete folder and logs its inventory instead of deleting records.
 
 The root `VERSION` records the initially copied files and is preserved too.
 `systemx status --target ...` reports the authoritative **selected defaults version**.
@@ -64,8 +70,8 @@ After reviewing the [published release history](https://github.com/WayneTechLab/
 ```bash
 systemx status --target "/path/to/project"
 systemx policy --target "/path/to/project" --pin none
-systemx update --target "/path/to/project" --version 1.4.0 --dry-run
-systemx update --target "/path/to/project" --version 1.4.0
+systemx update --target "/path/to/project" --version 1.5.0 --dry-run
+systemx update --target "/path/to/project" --version 1.5.0
 systemx policy --target "/path/to/project" --pin current
 ```
 
