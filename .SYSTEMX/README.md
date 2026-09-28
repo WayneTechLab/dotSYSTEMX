@@ -2,6 +2,9 @@
 
 A reusable project operating standard by Wayne Tech Lab LLC.
 
+[Repository overview](https://github.com/WayneTechLab/dotSYSTEMX) ·
+[Documentation wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki)
+
 Copy this folder into a repository to give people and AI tools a common place
 for project context, engineering standards, checks, release preparation, and
 handoff. It works alongside the project's chosen language, framework, hosting
