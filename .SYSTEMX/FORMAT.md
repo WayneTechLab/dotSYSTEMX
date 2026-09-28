@@ -1,4 +1,4 @@
-# SYSTEMX format contract
+# .SYSTEMX format contract
 
 SYSTEMX defines a reusable project operating format. It is a project-maintained
 convention, not a certification or an externally ratified industry standard.
@@ -8,7 +8,9 @@ and generated views described here; it does not execute an agent runtime.
 ## File and version conventions
 
 - Put the complete `.SYSTEMX` directory at the host project root. Preserve exact
-  path casing on case-sensitive systems. Use UTF-8 text and relative references.
+  path casing on every system; the stored folder name must be `.SYSTEMX`. A
+  local lowercase alias may only route to that directory under the
+  [exact-case contract](docs/EXACT-CASE.md). Use UTF-8 text and relative references.
 - `VERSION` identifies the template release. Each canonical JSON document has
   its own integer `schemaVersion`; version 1 rejects missing or unknown fields.
 - Add project-specific metadata in separate project-owned documents and link

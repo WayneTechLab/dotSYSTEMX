@@ -2,6 +2,11 @@
 
 ## Adopt the folder
 
+Use the exact stored name `.SYSTEMX` on every platform. Review the
+[case and alias guide](EXACT-CASE.md) before copying files. The installer
+option `--lowercase-alias` and menu option 12 provide an optional local alias;
+menu option 11 checks the current layout without changing it.
+
 1. Choose [project/VS Code](../profiles/project.md), [OS directory](../profiles/directory.md),
    [Google Drive](../profiles/drive.md), or [LLM chat](../profiles/chat.md).
    Identify the destination working directory and inspect existing files, including

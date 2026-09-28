@@ -1,5 +1,12 @@
 # Start here: load the active project
 
+**Exact directory name: `.SYSTEMX`**, including the leading dot and uppercase
+letters. Inspect existing hidden paths before writing. Never create a second
+`.systemx` or mixed-case folder. A lowercase path is allowed only when it resolves
+to the canonical directory through filesystem case equivalence or the optional
+relative sibling link `.systemx -> .SYSTEMX`. If separate paths exist, stop and
+reconcile them with review; never merge, rename, or delete them automatically.
+
 This is the entry point for an LLM starting or resuming work in a project that
 uses SYSTEMX. The template ships with empty project records. Populate them only
 with the current project's authorized facts and work; do not carry the template

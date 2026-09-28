@@ -1,5 +1,9 @@
 # LLM chat setup
 
+Use the exact directory name **`.SYSTEMX`**. Do not create or upload a separate
+`.systemx` tree. OS aliases are local conveniences and are not part of this
+cloud/chat format; see the [case contract](../docs/EXACT-CASE.md).
+
 Use SYSTEMX as project reference material within the active chat's instruction
 hierarchy. A setup URL does not give an LLM filesystem or cloud access.
 

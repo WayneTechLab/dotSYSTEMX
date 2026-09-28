@@ -15,7 +15,11 @@ bash .SYSTEMX/INSTALL.sh --target "/path/to/project" --profile project
 
 On Windows use `.SYSTEMX\INSTALL.ps1` with the same flags, or invoke
 `py -3 -B .SYSTEMX\manager.py install ...`. Quote paths containing spaces.
-The target is the containing working directory, not `.SYSTEMX` or a drive root.
+The target is the containing working directory, not `.SYSTEMX`, any case variant,
+a directory inside it, or a drive root. Use `--lowercase-alias` to request a local
+`.systemx -> .SYSTEMX` link. The installer recognizes case-insensitive paths without
+creating a link, and refuses separate case-conflicting entries. See
+[exact casing and alias setup](EXACT-CASE.md) for the menu, library, and recovery.
 The installer requires Python but does not install runtimes or OS services.
 For installation as a command or importable package, see [the library guide](LIBRARY.md).
 
@@ -29,7 +33,7 @@ project/
     ├── MEMORY/, AGENTS/        Project-owned memory and roles
     ├── project.json            Optional project-owned command configuration
     ├── STANDARD.md, scripts/…  Initial files; existing copies are preserved
-    └── .systemx/
+    └── .systemx/              # internal cache, not the optional sibling alias
         ├── releases/<version>/ Immutable default files for each retained release
         ├── history/           Earlier manager state, retained locally
         ├── last-check.json    Optional startup-check metadata
@@ -60,8 +64,8 @@ After reviewing the [published release history](https://github.com/WayneTechLab/
 ```bash
 systemx status --target "/path/to/project"
 systemx policy --target "/path/to/project" --pin none
-systemx update --target "/path/to/project" --version 1.3.0 --dry-run
-systemx update --target "/path/to/project" --version 1.3.0
+systemx update --target "/path/to/project" --version 1.4.0 --dry-run
+systemx update --target "/path/to/project" --version 1.4.0
 systemx policy --target "/path/to/project" --pin current
 ```
 

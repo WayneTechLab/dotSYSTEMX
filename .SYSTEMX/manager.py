@@ -15,6 +15,14 @@ import tempfile
 import urllib.request
 import zipfile
 
+if __package__:
+    from .systemx_paths import (SystemXPathError, inspect_layout, is_link, lexical_path,
+                               lowercase_alias, project_directory, record_directory)
+else:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from systemx_paths import (SystemXPathError, inspect_layout, is_link, lexical_path,
+                              lowercase_alias, project_directory, record_directory)
+
 DEFAULT_REPOSITORY = "WayneTechLab/dotSYSTEMX"
 PACKAGE = Path(__file__).resolve().parent
 MANIFEST = "config/distribution.json"
@@ -28,8 +36,7 @@ SEEDS = ("GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
          "WORK/FOCUS.json", "config/project.example.json")
 
 
-class InstallError(ValueError):
-    """An install was refused without replacing project-owned files."""
+InstallError = SystemXPathError
 
 
 def now():
@@ -57,7 +64,8 @@ def portable_path(value):
     if any(p in {"", ".", ".."} or p.endswith((" ", ".")) or
            re.search(r'[<>"|?*\x00-\x1f]', p) or p.split(".")[0].upper() in reserved for p in parts):
         raise InstallError("Nonportable or escaping distribution path: " + value)
-    if parts[0] in {".systemx", STATE, "project.json", "local", "logs", "state"}:
+    if (any(p.casefold() == ".systemx" for p in parts) or
+            parts[0].casefold() in {STATE.casefold(), "project.json", "local", "logs", "state"}):
         raise InstallError("Distribution must not contain installation or private project state")
     return value
 
@@ -68,7 +76,7 @@ def safe_path(root, relative):
     for part in (path, *path.parents):
         if part == root.parent:
             break
-        if part.is_symlink():
+        if is_link(part):
             raise InstallError("Refusing symlink: " + str(part))
         if part != path and part.exists() and not part.is_dir():
             raise InstallError("A file occupies a required parent directory: " + str(part))
@@ -102,15 +110,23 @@ def verified_bundle(files):
     required = {"VERSION", "LICENSE", "SOURCE.json", "STANDARD.md", "START-HERE.md",
                 "manager.py", "scripts/systemx.py", "scripts/project_memory.py",
                 "config/template-records.json", *SEEDS}
+    if tuple(map(int, manifest["version"].split("."))) >= (1, 4, 0):
+        required.add("systemx_paths.py")
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
+    directory_spellings = {}
     inventory_names = {name.casefold() for name in inventory}
     for name, expected in inventory.items():
         portable_path(name)
         if name.casefold() in folded or name == MANIFEST:
             raise InstallError("Duplicate or self-referencing distribution path")
         folded.add(name.casefold())
+        for parent in PurePosixPath(name).parents:
+            spelling = str(parent)
+            previous = directory_spellings.setdefault(spelling.casefold(), spelling)
+            if previous != spelling:
+                raise InstallError("Distribution directory has conflicting case spellings: " + spelling)
         if any(str(parent).casefold() in inventory_names for parent in PurePosixPath(name).parents if str(parent) != "."):
             raise InstallError("Distribution file conflicts with a directory path")
         if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected):
@@ -139,9 +155,14 @@ def verified_bundle(files):
 
 
 def read_bundle(source):
-    source = Path(source).expanduser().resolve()
-    if (source / ".SYSTEMX").is_dir():
-        source = source / ".SYSTEMX"
+    raw = lexical_path(source)
+    if raw.name.casefold() == ".systemx":
+        source = record_directory(raw)
+    else:
+        source = raw.resolve()
+        layout = inspect_layout(source)
+        if layout["aliasStatus"] != "not-installed":
+            source = source / ".SYSTEMX"
     manifest_path = safe_path(source, MANIFEST)
     if manifest_path.stat().st_size > MAX_FILE:
         raise InstallError("Oversized distribution manifest")
@@ -186,6 +207,8 @@ def remote_bundle(version, repository=DEFAULT_REPOSITORY):
     with zipfile.ZipFile(io.BytesIO(data)) as archive:
         for entry in archive.infolist():
             parts = PurePosixPath(entry.filename).parts
+            if len(parts) >= 2 and parts[1].casefold() == ".systemx" and parts[1] != ".SYSTEMX":
+                raise InstallError("Archive has a noncanonical .SYSTEMX folder spelling")
             if len(parts) < 3 or parts[1] != ".SYSTEMX" or entry.is_dir():
                 continue
             name = portable_path("/".join(parts[2:]))
@@ -202,17 +225,11 @@ def remote_bundle(version, repository=DEFAULT_REPOSITORY):
 
 
 def project_root(target):
-    if str(target).startswith(("http://", "https://", "drive://")):
-        raise InstallError("Target must be a local folder; use a Drive desktop folder or export a chat packet")
-    root = Path(target).expanduser().resolve()
-    if root == Path(root.anchor) or root.name == ".SYSTEMX":
-        raise InstallError("Choose the containing project directory, not an OS root or .SYSTEMX itself")
-    if root.exists() and not root.is_dir():
-        raise InstallError("Target is not a directory")
-    return root
+    return project_directory(target)
 
 
 def state_path(root):
+    inspect_layout(root)
     return safe_path(root / ".SYSTEMX", STATE)
 
 
@@ -251,6 +268,7 @@ def load_state(root):
 
 @contextmanager
 def update_lock(root):
+    inspect_layout(root)
     folder = safe_path(root / ".SYSTEMX", ".systemx")
     folder.mkdir(parents=True, exist_ok=True)
     path = safe_path(root / ".SYSTEMX", ".systemx/update.lock")
@@ -355,7 +373,8 @@ def apply_bundle(root, bundle, state, profile, repository):
     return plan
 
 
-def install(target, *, source=None, version=None, profile="project", repository=DEFAULT_REPOSITORY, dry_run=False):
+def install(target, *, source=None, version=None, profile="project", repository=DEFAULT_REPOSITORY,
+            dry_run=False, lowercase_alias=False):
     """Create only absent files, store immutable defaults, and pin the initial release."""
     root = project_root(target)
     if profile not in PROFILES:
@@ -367,11 +386,21 @@ def install(target, *, source=None, version=None, profile="project", repository=
     if version is not None and bundle["version"] != version_id(version):
         raise InstallError("Requested version differs from the supplied source")
     if dry_run:
-        return {**prepare(root, bundle), "applied": False, "profile": profile, "pinnedVersion": bundle["version"]}
+        return {**prepare(root, bundle), "applied": False, "profile": profile, "pinnedVersion": bundle["version"],
+                "pathLayout": alias(root, create=lowercase_alias, dry_run=True)}
     with update_lock(root):
         if state_path(root).exists():
             raise InstallError("Another installer initialized this project")
-        return apply_bundle(root, bundle, None, profile, repository)
+        result = apply_bundle(root, bundle, None, profile, repository)
+        # Optional link creation happens after a complete usable install. A failure
+        # retains that installation and tells the caller how to retry the alias.
+        result["pathLayout"] = alias(root, create=lowercase_alias)
+        return result
+
+
+def alias(target, *, create=False, dry_run=False):
+    """Inspect exact casing or opt in to a local .systemx -> .SYSTEMX link."""
+    return lowercase_alias(target, create=create, dry_run=dry_run)
 
 
 def update(target, *, source=None, version=None, dry_run=False):
@@ -424,7 +453,8 @@ def status(target):
     path, bundle = active_bundle(root, state)
     return {"target": str(root), "profile": state["profile"], "activeVersion": bundle["version"],
             "pinnedVersion": state["pinnedVersion"], "autoUpdate": state["autoUpdate"],
-            "defaults": str(path), "retainedVersions": sorted(state["releases"]), "integrity": "verified"}
+            "defaults": str(path), "retainedVersions": sorted(state["releases"]), "integrity": "verified",
+            "pathLayout": alias(root)}
 
 
 def startup_update(root):
@@ -476,9 +506,10 @@ def export_chat(target, output, *, agent="agent.0"):
     result = run(root, ["context", "--agent", agent], offline=True, capture=True)
     if result.returncode:
         raise InstallError(result.stderr or "Project context could not be loaded")
-    content = "# SYSTEMX chat packet\n\nRelease: " + bundle["version"] + "\nExported: " + now() + "\n\n"
+    content = "# .SYSTEMX chat packet\n\nRelease: " + bundle["version"] + "\nExported: " + now() + "\n\n"
     content += "Load these as project reference data within the chat's instruction hierarchy. Only the attached project records belong to this project.\n"
     content += "Propose changes by canonical file path; do not claim persistent edits without a writable tool and readback. Review this packet before sharing it.\n\n"
+    content += "Exact path: .SYSTEMX (leading dot and uppercase SYSTEMX). Never create a separate .systemx folder; a local lowercase alias may only point to .SYSTEMX.\n\n"
     for name in ("STANDARD.md", "START-HERE.md", "profiles/chat.md"):
         content += "\n--- " + name + " (selected defaults) ---\n" + (defaults / name).read_text(encoding="utf-8")[:12000]
     content += "\n" + result.stdout
@@ -492,7 +523,7 @@ def main(argv=None):
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="SYSTEMX additive installation and version management")
+    parser = argparse.ArgumentParser(description=".SYSTEMX additive installation and version management")
     sub = parser.add_subparsers(dest="action", required=True)
     command = sub.add_parser("install")
     command.add_argument("--target", required=True)
@@ -500,6 +531,11 @@ def main(argv=None):
     command.add_argument("--source")
     command.add_argument("--version")
     command.add_argument("--repository", default=DEFAULT_REPOSITORY)
+    command.add_argument("--dry-run", action="store_true")
+    command.add_argument("--lowercase-alias", action="store_true", help="optionally create a local .systemx -> .SYSTEMX link")
+    command = sub.add_parser("alias", help="check exact casing and optionally create the lowercase alias")
+    command.add_argument("--target", required=True)
+    command.add_argument("--create", action="store_true")
     command.add_argument("--dry-run", action="store_true")
     command = sub.add_parser("update")
     command.add_argument("--target", required=True)
@@ -525,7 +561,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.action == "install":
-            result = install(args.target, source=args.source, version=args.version, profile=args.profile, repository=args.repository, dry_run=args.dry_run)
+            result = install(args.target, source=args.source, version=args.version, profile=args.profile,
+                             repository=args.repository, dry_run=args.dry_run, lowercase_alias=args.lowercase_alias)
+        elif args.action == "alias":
+            result = alias(args.target, create=args.create, dry_run=args.dry_run)
         elif args.action == "update":
             result = update(args.target, source=args.source, version=args.version, dry_run=args.dry_run)
         elif args.action == "policy":

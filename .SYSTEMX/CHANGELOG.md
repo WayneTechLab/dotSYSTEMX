@@ -4,6 +4,18 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.4.0
+
+- Standardized the public name and canonical folder spelling as `.SYSTEMX`.
+- Added shared exact-case guards for installers, updates, library calls, local
+  sources, remote archives, and direct project commands, including mixed-case conflicts.
+- Added an opt-in relative `.systemx -> .SYSTEMX` alias through setup, CLI,
+  menu, and library. Case-insensitive filesystems need no extra directory entry.
+- Added path diagnostics, conflict recovery guidance, explicit LLM and chat
+  naming rules, and portable alias checks across Linux, macOS, and Windows.
+- Preserved all project records, version pins, earlier snapshots, root defaults,
+  and the compatible nested manager cache. No case-conflict data is merged or deleted.
+
 ## 1.3.0
 
 - Added setup profiles for project roots/VS Code, OS directories, local Google

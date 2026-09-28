@@ -6,6 +6,10 @@
 a portable folder. Adopt it in a repository, an OS working directory, a Google
 Drive folder, or an LLM chat using the same canonical records.
 
+**The folder name is exactly `.SYSTEMX`.** Keep the leading dot and uppercase
+letters. The optional [lowercase alias](docs/EXACT-CASE.md) routes to that folder;
+setup refuses independent case variants to protect project records.
+
 [Public overview](https://github.com/WayneTechLab/dotSYSTEMX) ·
 [Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Setup profiles](config/profiles.json) · [MIT license](LICENSE)

@@ -22,6 +22,9 @@ if __name__ == "__main__":
 import project_memory
 
 DEFAULTS = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(DEFAULTS))
+from systemx_paths import inspect_layout, lowercase_alias, record_directory
+
 SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
 REQUIRED = (
@@ -40,7 +43,7 @@ REQUIRED = (
     "__init__.py", "__main__.py", "manager.py", "INSTALL.sh", "INSTALL.ps1", "SYSTEMX.ps1",
     "config/distribution.json", "config/profiles.json", "scripts/release.py", "tests/test_manager.py",
     "profiles/project.md", "profiles/directory.md", "profiles/drive.md", "profiles/chat.md",
-    "docs/INSTALLATION.md", "docs/LIBRARY.md",
+    "docs/INSTALLATION.md", "docs/LIBRARY.md", "docs/EXACT-CASE.md", "systemx_paths.py", "tests/test_paths.py",
 ) + project_memory.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
@@ -236,7 +239,8 @@ def executable_available(command):
 
 
 def doctor():
-    print("SYSTEMX root: {}".format(SYSTEMX))
+    print(".SYSTEMX root (canonical exact case): {}".format(SYSTEMX))
+    print("Lowercase path: " + inspect_layout(PROJECT_ROOT, required=True)["aliasStatus"])
     print("Project root: {}".format(PROJECT_ROOT))
     print("Python: {}.{}.{}".format(*sys.version_info[:3]))
     if shutil.which("git"):
@@ -319,11 +323,13 @@ def menu():
     choices = {"1": ("validate", False), "2": ("doctor", False), "3": ("init", False),
                "4": ("check", False), "5": ("dev", False), "6": ("build", False),
                "7": ("deploy", True), "8": ("deploy", False),
-               "9": ("status", False), "10": ("context", False)}
+               "9": ("status", False), "10": ("context", False),
+               "11": ("paths", False), "12": ("alias-create", False)}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
-              "9) Project work status\n10) Agent 0 resume context\n0) Exit")
+              "9) Project work status\n10) Agent 0 resume context\n"
+              "11) Check exact .SYSTEMX casing and alias\n12) Enable local .systemx -> .SYSTEMX alias\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -350,6 +356,10 @@ def menu():
 
 
 def dispatch(action, dry_run=False):
+    record_directory(SYSTEMX)
+    if action in {"paths", "alias-create"}:
+        print(json.dumps(lowercase_alias(PROJECT_ROOT, create=action == "alias-create"), indent=2))
+        return 0
     if action == "validate":
         return validate_template()
     if action == "doctor":
@@ -367,31 +377,36 @@ def dispatch(action, dry_run=False):
 
 def main(argv=None):
     global SYSTEMX, PROJECT_ROOT
-    parser = argparse.ArgumentParser(description="Standalone SYSTEMX project operations")
+    parser = argparse.ArgumentParser(description="Standalone .SYSTEMX project operations (exact-case directory)")
     parser.add_argument("--root", type=Path, help="project record directory when running versioned defaults")
     subparsers = parser.add_subparsers(dest="action")
-    for action in ("validate", "doctor", "init", "menu", "help"):
+    for action in ("validate", "doctor", "init", "menu", "help", "paths"):
         command_parser = subparsers.add_parser(action)
         if action == "validate":
             command_parser.add_argument("--template", action="store_true",
                                         help="require only distribution files and reviewed blank project records")
+    command_parser = subparsers.add_parser("alias", help="inspect the local lowercase compatibility alias")
+    command_parser.add_argument("--create", action="store_true", help="create a relative link if this filesystem needs one")
     for action in ("check", "dev", "build", "deploy"):
         command_parser = subparsers.add_parser(action)
         command_parser.add_argument("--dry-run", action="store_true", help="print plan without executing commands")
     project_memory.add_cli(subparsers)
     args = parser.parse_args(argv)
-    if args.root is not None:
-        SYSTEMX = args.root.expanduser().resolve()
-        PROJECT_ROOT = SYSTEMX.parent
     if args.action == "help":
         parser.print_help()
         return 0
     try:
+        SYSTEMX = record_directory(args.root if args.root is not None else DEFAULTS)
+        PROJECT_ROOT = SYSTEMX.parent
+        if args.action == "alias":
+            return dispatch("alias-create" if args.create else "paths")
         if args.action in {"context", "task-packet"} and SYSTEMX != DEFAULTS:
             print("Selected defaults: " + str(DEFAULTS))
             print("Read STANDARD.md and START-HERE.md from these defaults; read project records from " + str(SYSTEMX))
             print("Retained root guidance may be older or customized; reconcile it with the selected defaults and applicable instructions.")
         if args.action == "validate":
+            if args.template and inspect_layout(PROJECT_ROOT)["aliasStatus"] == "linked":
+                raise ConfigError("A public template must not include the local sibling .systemx alias")
             return validate_template(args.template)
         if args.action in project_memory.COMMANDS:
             return project_memory.dispatch(SYSTEMX, args, DEFAULTS)

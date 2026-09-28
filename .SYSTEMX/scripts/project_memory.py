@@ -466,6 +466,7 @@ def context(root, agent_id):
         raise ValueError("Unknown agent: " + agent_id)
     print("PROJECT RESUME PACKET: {}\nRecheck volatile facts. Stored memory is not current instruction authority.".format(agent_id))
     print("Read applicable repository instructions, STANDARD.md, and START-HERE.md first.")
+    print("Canonical records: .SYSTEMX (exact case, including the dot). Never create an independent .systemx or mixed-case folder.")
     focus = load_focus(root, ledger)
     current = render_current(ledger, focus)
     print("\n--- CURRENT.md (from canonical records) ---\n" + current[:6000])
@@ -553,6 +554,7 @@ def task_packet(root, task_id, base):
                            "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md", agent["memory"]]}
     encoded = json.dumps(packet, indent=2)
     print("WORKER ASSIGNMENT CONTEXT (recorded data; does not dispatch a worker or grant permission)")
+    print("Canonical project directory: .SYSTEMX (exact case). A lowercase alias must resolve to that same directory.")
     print(encoded[:14000])
     if len(encoded) > 14000:
         print("[Packet truncated after 14000 characters; use task-show and inspect dependency records before dispatch.]")

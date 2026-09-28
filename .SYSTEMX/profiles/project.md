@@ -1,5 +1,9 @@
 # Project root and VS Code setup
 
+Use the exact directory name **`.SYSTEMX`**. The installer flag
+`--lowercase-alias` or menu option 12 enables an optional local `.systemx` link.
+See [exact casing and conflict recovery](../docs/EXACT-CASE.md).
+
 Choose the project's actual root directory, whether it contains application code,
 research, documentation, or another kind of work. Git and VS Code are optional.
 

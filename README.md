@@ -1,11 +1,16 @@
-# dotSYSTEMX
+# .SYSTEMX
 
 **A portable operating standard for human and AI-assisted projects.**
 
-dotSYSTEMX gives people and LLMs a shared structure for project context, master
+.SYSTEMX gives people and LLMs a shared structure for project context, master
 planning, task tracking, evidence, and durable memory. Start in a repository,
 a working directory, a Google Drive folder, or a chat, using the same `.SYSTEMX`
 format throughout.
+
+**Keep the exact folder name `.SYSTEMX` on every platform.** Setup can add an
+optional lowercase compatibility link so `.systemx` reaches the same directory.
+[Exact casing and alias setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias)
+explains filesystem behavior and safe handling of existing conflicts.
 
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [Setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started) ·
@@ -51,7 +56,7 @@ and [Library integration](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Librar
 
 ## A clear place for each responsibility
 
-| Responsibility | SYSTEMX provides |
+| Responsibility | .SYSTEMX provides |
 | --- | --- |
 | Project understanding | Shared context, constraints, terminology, and authoritative references |
 | Master planning | Outcomes, milestones, dependencies, and acceptance criteria |
@@ -92,7 +97,7 @@ explains pins, offline use, retained defaults, and compatibility checks.
 - [Versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog)
 - [Contributing](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Contributing)
 
-SYSTEMX defines a project operating convention. Project quality and delivery
+.SYSTEMX defines a project operating convention. Project quality and delivery
 readiness come from the acceptance criteria, configured checks, and verified
 evidence of each adopted project. Keep private records out of public exports.
 

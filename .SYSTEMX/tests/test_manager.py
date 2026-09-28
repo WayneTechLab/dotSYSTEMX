@@ -29,6 +29,8 @@ class ManagerTests(unittest.TestCase):
         self.source = self.folder / "release"
         shutil.copytree(SOURCE, self.source, ignore=shutil.ignore_patterns("__pycache__", ".systemx", "local", "logs", "state"))
         self.version = (self.source / "VERSION").read_text().strip()
+        major, minor, patch = map(int, self.version.split("."))
+        self.next_version = f"{major}.{minor}.{patch + 1}"
 
     def write_manifest(self, version=None):
         if version:
@@ -49,7 +51,8 @@ class ManagerTests(unittest.TestCase):
         return {p.relative_to(root).as_posix(): p.read_bytes() for p in root.rglob("*")
                 if p.is_file() and ".systemx" not in p.relative_to(root).parts and p.name != manager.STATE}
 
-    def next_release(self, version="1.3.1"):
+    def next_release(self, version=None):
+        version = version or self.next_version
         (self.source / "STANDARD.md").write_text("# Updated default\n")
         (self.source / "docs/new-guide.md").write_text("# New default\n")
         (self.source / "templates/RELEASE.md").unlink()
@@ -81,7 +84,7 @@ class ManagerTests(unittest.TestCase):
         self.assertTrue((local / "START-HERE.md").exists())
 
     def test_update_preserves_changed_defaults_records_and_removed_upstream_paths(self):
-        self.install()
+        self.install(lowercase_alias=True)
         local = self.root / ".SYSTEMX"
         (local / "MEMORY/PROJECT.md").write_text("Project-owned learned fact\n")
         (local / "STANDARD.md").write_text("Locally customized standard\n")
@@ -95,17 +98,18 @@ class ManagerTests(unittest.TestCase):
         manager.set_policy(self.root, pin="none")
         preview = manager.update(self.root, source=self.source, dry_run=True)
         self.assertIn("docs/new-guide.md", preview["add"])
-        self.assertFalse(manager.release_path(self.root, "1.3.1").exists())
+        self.assertFalse(manager.release_path(self.root, self.next_version).exists())
         manager.update(self.root, source=self.source)
         for name, content in before.items():
             self.assertEqual((local / name).read_bytes(), content, name)
         self.assertTrue((local / "my-folder").is_dir())
+        self.assertTrue((self.root / ".systemx").samefile(local))
         self.assertEqual((local / "docs/new-guide.md").read_text(), "# New default\n")
-        self.assertEqual((manager.release_path(self.root, "1.3.1") / "STANDARD.md").read_text(), "# Updated default\n")
+        self.assertEqual((manager.release_path(self.root, self.next_version) / "STANDARD.md").read_text(), "# Updated default\n")
         for name, content in old_bytes.items():
             self.assertEqual((old_release / name).read_bytes(), content)
         manager.set_policy(self.root, pin="current")
-        self.assertEqual(manager.status(self.root)["pinnedVersion"], "1.3.1")
+        self.assertEqual(manager.status(self.root)["pinnedVersion"], self.next_version)
 
     def test_same_release_cannot_be_replaced_and_integrity_is_checked_before_execution(self):
         self.install()
@@ -156,12 +160,12 @@ class ManagerTests(unittest.TestCase):
         self.next_release()
         bundle = manager.read_bundle(self.source)
         before = self.root_files()
-        with patch.object(manager, "latest_version", return_value="1.3.1") as latest, \
+        with patch.object(manager, "latest_version", return_value=self.next_version) as latest, \
              patch.object(manager, "remote_bundle", return_value=bundle), redirect_stderr(io.StringIO()):
             manager.startup_update(self.root)
             manager.startup_update(self.root)
             self.assertEqual(latest.call_count, 1)
-        self.assertEqual(manager.status(self.root)["activeVersion"], "1.3.1")
+        self.assertEqual(manager.status(self.root)["activeVersion"], self.next_version)
         for name, data in before.items():
             self.assertEqual((self.root / ".SYSTEMX" / name).read_bytes(), data)
 
@@ -267,7 +271,7 @@ class ManagerTests(unittest.TestCase):
         old_state = manager.load_state(self.root)
         original = manager.create_missing
         def failing_create(path, data):
-            if "1.3.1" in path.parts and path.name == "STANDARD.md":
+            if self.next_version in path.parts and path.name == "STANDARD.md":
                 raise OSError("Simulated interrupted write")
             return original(path, data)
         with patch.object(manager, "create_missing", side_effect=failing_create), self.assertRaises(OSError):
@@ -275,7 +279,7 @@ class ManagerTests(unittest.TestCase):
         self.assertEqual(manager.load_state(self.root), old_state)
         self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
         manager.update(self.root, source=self.source)
-        self.assertEqual(manager.status(self.root)["activeVersion"], "1.3.1")
+        self.assertEqual(manager.status(self.root)["activeVersion"], self.next_version)
 
 
 if __name__ == "__main__":

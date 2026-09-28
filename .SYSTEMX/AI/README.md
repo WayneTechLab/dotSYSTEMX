@@ -1,4 +1,11 @@
-# SYSTEMX AI standard
+# .SYSTEMX AI standard
+
+**Exact directory name: `.SYSTEMX`**, including the leading dot and uppercase
+letters. Inspect existing hidden paths before writing. Never create a second
+`.systemx` or mixed-case folder. A lowercase path is allowed only when it resolves
+to the canonical directory through filesystem case equivalence or the optional
+relative sibling link `.systemx -> .SYSTEMX`. If separate paths exist, stop and
+reconcile them with review; never merge, rename, or delete them automatically.
 
 Use these rules when AI assistance is part of the project. Ordinary solo or
 human-led work does not require an agent mesh, message bus, or additional tools.

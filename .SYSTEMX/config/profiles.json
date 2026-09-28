@@ -6,28 +6,40 @@
       "setupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Project",
       "guide": "profiles/project.md",
       "target": "An explicit local project root, with or without Git",
-      "persistence": "Files in the selected project's .SYSTEMX folder"
+      "persistence": "Files in the selected project's .SYSTEMX folder",
+      "canonicalDirectory": ".SYSTEMX",
+      "aliasSetupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias",
+      "lowercaseAlias": "Optional local filesystem link only; never a separate project directory"
     },
     "directory": {
       "name": "Operating-system directory",
       "setupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Directory",
       "guide": "profiles/directory.md",
       "target": "A user-selected Windows, macOS, or Linux working directory",
-      "persistence": "Files in that directory's .SYSTEMX folder"
+      "persistence": "Files in that directory's .SYSTEMX folder",
+      "canonicalDirectory": ".SYSTEMX",
+      "aliasSetupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias",
+      "lowercaseAlias": "Optional local filesystem link only; never a separate project directory"
     },
     "drive": {
       "name": "Google Drive folder",
       "setupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Google-Drive",
       "guide": "profiles/drive.md",
       "target": "A locally available Drive for desktop project folder",
-      "persistence": "Regular files synchronized by Drive; one writer at a time"
+      "persistence": "Regular files synchronized by Drive; one writer at a time",
+      "canonicalDirectory": ".SYSTEMX",
+      "aliasSetupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias",
+      "lowercaseAlias": "Optional local filesystem link only; never a separate project directory"
     },
     "chat": {
       "name": "LLM chat",
       "setupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-LLM-Chat",
       "guide": "profiles/chat.md",
       "target": "A local project folder used to prepare a reviewable chat packet",
-      "persistence": "Explicit file changes or exports; chat alone does not persist records"
+      "persistence": "Explicit file changes or exports; chat alone does not persist records",
+      "canonicalDirectory": ".SYSTEMX",
+      "aliasSetupUrl": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias",
+      "lowercaseAlias": "Optional local filesystem link only; never a separate project directory"
     }
   }
 }

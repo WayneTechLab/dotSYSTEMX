@@ -12,7 +12,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.3.0"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.4.0"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -32,7 +32,7 @@ project defaults under the [preservation contract](INSTALLATION.md).
 ## Python API
 
 ```python
-from systemx import install, update, status, set_policy, export_chat
+from systemx import install, update, status, set_policy, export_chat, alias
 
 # Plan without touching the target, using a local reviewed distribution:
 plan = install("/path/to/project", source="/path/to/template/.SYSTEMX",
@@ -70,3 +70,13 @@ additional authority is included by installing this library.
 
 Packaging references: [PyPA project metadata](https://packaging.python.org/en/latest/specifications/pyproject-toml/)
 and [entry points](https://packaging.python.org/en/latest/specifications/entry-points/).
+
+## Exact directory casing
+
+The API always manages the real `.SYSTEMX` directory beneath its target.
+`install(target, lowercase_alias=True)` optionally creates a local relative
+`.systemx -> .SYSTEMX` link. `alias(target)` reports the layout without writing;
+`alias(target, create=True, dry_run=True)` previews and `alias(target, create=True)`
+requests creation. Case-insensitive filesystems report `filesystem-equivalent`.
+The `status` response includes `pathLayout`. Conflicting case variants raise
+`ValueError` without merging or deleting them. See the [case contract](EXACT-CASE.md).

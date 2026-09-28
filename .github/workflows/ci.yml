@@ -32,10 +32,12 @@ jobs:
         shell: pwsh
         run: |
           $target = Join-Path $env:RUNNER_TEMP 'SYSTEMX project with spaces'
-          & .\.SYSTEMX\INSTALL.ps1 --target $target --profile directory
+          & .\.SYSTEMX\INSTALL.ps1 --target $target --profile directory --lowercase-alias
           if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
           & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') validate
           if ($LASTEXITCODE -ne 0) { throw 'Managed validation failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') paths
+          if ($LASTEXITCODE -ne 0) { throw 'Exact-case inspection failed' }
       - name: Build library wheel
         if: runner.os == 'Linux' && matrix.python == '3.13'
         run: python -m pip wheel . --no-deps --wheel-dir dist

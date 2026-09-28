@@ -1,4 +1,11 @@
-# SYSTEMX agent entry point
+# .SYSTEMX agent entry point
+
+**Exact directory name: `.SYSTEMX`**, including the leading dot and uppercase
+letters. Inspect existing hidden paths before writing. Never create a second
+`.systemx` or mixed-case folder. A lowercase path is allowed only when it resolves
+to the canonical directory through filesystem case equivalence or the optional
+relative sibling link `.systemx -> .SYSTEMX`. If separate paths exist, stop and
+reconcile them with review; never merge, rename, or delete them automatically.
 
 For work in an adopted active project, start with [START-HERE.md](START-HERE.md)
 and follow the [shared standard](STANDARD.md). Use the existing master plan,

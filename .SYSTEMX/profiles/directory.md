@@ -1,5 +1,9 @@
 # Operating-system directory setup
 
+Use the exact directory name **`.SYSTEMX`**. The installer flag
+`--lowercase-alias` or menu option 12 enables an optional local `.systemx` link.
+See [exact casing and conflict recovery](../docs/EXACT-CASE.md).
+
 Select a working directory you own. It does not need Git, an IDE, or an
 application framework. The installer creates `.SYSTEMX` beneath that directory.
 It refuses a drive/filesystem root; use a named working folder such as

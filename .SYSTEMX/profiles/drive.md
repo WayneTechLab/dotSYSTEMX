@@ -1,5 +1,9 @@
 # Google Drive setup
 
+Use the exact directory name **`.SYSTEMX`**. Do not create or upload a separate
+`.systemx` tree. OS aliases are local conveniences and are not part of this
+cloud/chat format; see the [case contract](../docs/EXACT-CASE.md).
+
 Use the same regular Markdown and JSON files in a project folder made available
 locally by Drive for desktop. Choose the real mounted/mirrored path on your
 computer; a `drive.google.com` folder URL is not a filesystem path.
