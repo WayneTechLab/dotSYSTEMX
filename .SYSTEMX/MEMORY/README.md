@@ -4,6 +4,7 @@
 
 | Layer | Canonical record | Maintainer |
 | --- | --- | --- |
+| Current objective and task/checkpoint pointers | [WORK/FOCUS.json](../WORK/FOCUS.json), displayed in [CURRENT.md](../CURRENT.md) | Agent 0 through `focus` |
 | Shared project context | [GLOBAL/CONTEXT.md](../GLOBAL/CONTEXT.md) | Agent 0 with the owner |
 | Outcomes and sequencing | [PLAN/MASTER-PLAN.md](../PLAN/MASTER-PLAN.md) | Agent 0 with the owner |
 | Live work and acceptance evidence | [WORK/TASKS.json](../WORK/TASKS.json) | Agent 0 through the work commands |
@@ -14,6 +15,9 @@
 The task ledger is the authority for task status. Memory references task IDs and
 evidence rather than duplicating whole task lists. Shared memory records verified
 facts; tentative findings remain labeled in the worker's notes until reviewed.
+Do not copy changing next actions or task totals into every entry point. The
+generated current view reads those facts from the ledger, and a dated checkpoint
+retains what was observed then without claiming that it is still current.
 
 ## Start and resume
 
@@ -38,6 +42,10 @@ Use [SESSION-CHECKPOINT.md](../templates/SESSION-CHECKPOINT.md) for a durable
 checkpoint. Keep the current resume note short; archive older checkpoints under
 `MEMORY/sessions/` with a timestamp and task ID, then link them. Do not overwrite
 someone else's checkpoint or retain full transcripts by default.
+Point `focus --checkpoint MEMORY/sessions/<file>.md` at an existing sanitized
+checkpoint when replacing the current focus selection. The command preserves
+older files. `context` includes a bounded current view and prioritizes selected
+focus tasks before other open work; it does not preload historical checkpoints.
 
 ## Promote and correct
 

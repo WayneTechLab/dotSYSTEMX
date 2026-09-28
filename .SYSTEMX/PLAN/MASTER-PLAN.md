@@ -22,9 +22,13 @@ Reference task IDs in this table for traceability.
 
 ## Current focus
 
-- Selected milestone and why:
-- Next acceptance boundary:
-- Decisions or dependencies that constrain sequencing:
+Select the current objective and existing task IDs with `focus`; review the
+generated [current view](../CURRENT.md). Keep the plan's sequencing rationale
+here, without duplicating changing task status or next actions.
+
+- Priority and dependency rationale:
+- Applicable acceptance boundaries and evidence categories:
+- Decisions that constrain sequencing:
 
 ## Risks and changes
 

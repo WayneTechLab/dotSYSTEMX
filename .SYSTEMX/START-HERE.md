@@ -8,19 +8,24 @@ repository's build history into every new project.
 ## Read in this order
 
 1. Applicable environment/repository instructions and [STANDARD.md](STANDARD.md).
-2. [Global context](GLOBAL/CONTEXT.md): purpose, constraints, source hierarchy,
+2. [Current focus](CURRENT.md): selected objective, current task pointers, and
+   optional dated checkpoint. Task state is generated from the ledger.
+3. [Global context](GLOBAL/CONTEXT.md): purpose, constraints, source hierarchy,
    shared standards, and references for this project.
-3. [Master plan](PLAN/MASTER-PLAN.md): outcomes, milestones, acceptance, dependencies.
-4. [Project memory](MEMORY/PROJECT.md): verified durable facts, decisions, lessons,
-   and the latest resume checkpoint.
-5. [Work overview](WORK/README.md) and the tasks relevant to the current objective.
-6. Your assigned agent memory. Agent 0 begins at
+4. [Master plan](PLAN/MASTER-PLAN.md): outcomes, milestones, acceptance, dependencies.
+5. [Project memory](MEMORY/PROJECT.md): verified durable facts, decisions, and lessons.
+6. [Work overview](WORK/README.md) and the tasks relevant to the current objective.
+7. Your assigned agent memory. Agent 0 begins at
    [AGENTS/agent.0/MEMORY.md](AGENTS/agent.0/MEMORY.md).
 
 The command `bash .SYSTEMX/SYSTEMX.sh context --agent agent.0` prints a bounded
 resume packet containing these shared records and the selected agent's memory.
 `task-show TASK-001` reads the complete record for a particular task. Neither
 command starts agents, resumes processes, contacts services, or executes work.
+`task-ready` lists dependency-ready TODO work; it does not establish resource or
+permission readiness. `task-packet TASK-001 --base <observed-revision>` prepares
+bounded assignment context without dispatching a worker. Agent 0 must verify
+the caller-supplied base and original acceptance criteria.
 
 ## Resume protocol
 
@@ -30,6 +35,10 @@ command starts agents, resumes processes, contacts services, or executes work.
 - Inspect the existing plan and blockers. Continue from the next incomplete
   accepted step; do not restart planning or broad testing just because the chat
   context changed.
+- Read the original evidence and retain its scope. Source, installed/deployed,
+  functional, and operational claims stay separate under the
+  [evidence guide](docs/EVIDENCE.md). Follow existing live job handles to a terminal
+  result before starting a conflicting replacement; a timeout is not cancellation.
 - Agent 0 owns task assignments, integration, shared-memory promotion, and review.
   Read the [coordination contract](AGENTS/README.md).
 - A subagent reads its assignment, dependency records, shared context, and its

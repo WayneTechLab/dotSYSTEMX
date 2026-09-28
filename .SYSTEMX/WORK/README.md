@@ -57,7 +57,7 @@ dependent tasks first if they would otherwise rely on an unfinished dependency.
 ## Consistency and concurrency
 
 Commands validate records, take a local coordination lock, update JSON atomically,
-then regenerate all six pages. `validate` detects stale generated pages, bad
+then regenerate all six status pages and [CURRENT.md](../CURRENT.md). `validate` detects stale generated pages, bad
 owners, missing dependencies, cycles, and invalid completion records.
 
 After an intentional manual edit or resolved Git merge, run:
@@ -72,3 +72,40 @@ and direct file edits do not acquire it. Agent 0 owns shared writes. If a proces
 crashes and leaves `state/coordination.lock`, establish that no writer is running
 before removing that empty lock directory. Do not delete task or agent records
 to recover a stale lock.
+
+## Current focus and bounded dispatch
+
+[FOCUS.json](FOCUS.json) records the current objective, up to ten existing task
+IDs, and an optional checkpoint pointer. It contains no duplicate task status,
+blocker, or next action. All of those are read from the ledger when generating
+`CURRENT.md`. Selected task IDs can remain as completed context until Agent 0
+chooses the next focus; their completion never implies the project is complete.
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh focus --objective 'Finish the accepted outcome' --task TASK-001
+bash .SYSTEMX/SYSTEMX.sh task-ready --agent agent.1
+# Replace the placeholder with the source revision you just verified.
+bash .SYSTEMX/SYSTEMX.sh task-packet TASK-001 --base 'REPLACE_WITH_VERIFIED_REVISION'
+```
+
+Supply the actual observed revision as the base argument. Repeat `--task` to
+select multiple IDs. `focus` replaces the
+whole selection; include every ID to retain. Add `--checkpoint` with an existing
+Markdown path relative to `.SYSTEMX` under `MEMORY/sessions/`. The objective is
+limited to 600 characters. `focus --clear` clears only the selection and retains
+task history and checkpoint files.
+
+`task-ready` returns only TODO tasks whose dependencies are all done. It excludes
+active, review, blocked, cancelled, and completed tasks. Dependencies on cancelled
+work remain unresolved. It does not rank the critical path or check write-scope,
+resource, credential, process, or permission readiness.
+
+`task-packet` prints the existing assignment and dependency summaries, required
+acceptance, source revision reported by the caller, and the owner's memory. It
+does not reassign or start work. It caps the task packet at 14,000 characters and
+owner memory at 3,000, with explicit truncation notices. Read `task-show` and
+original dependency evidence when more detail is needed. A packet can describe
+blocked work for diagnosis; it does not certify dispatch readiness.
+
+Use the [evidence guide](../docs/EVIDENCE.md) to scope source and runtime claims
+and the [upgrade guide](../docs/UPGRADING.md) when adopting an existing layout.

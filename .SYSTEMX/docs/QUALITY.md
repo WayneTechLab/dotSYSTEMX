@@ -9,6 +9,7 @@ Schema semantics, credentials, dependencies, or application behavior.
 It also validates task/agent records, dependencies, transition history, milestone
 references, completion evidence fields, and generated work-view consistency.
 Recorded evidence and reviewer names are not independently authenticated.
+Current-focus references and the generated `CURRENT.md` are also checked.
 
 `bash .SYSTEMX/SYSTEMX.sh check` first validates the folder, then runs the
 project's configured check commands. An empty check list is a configuration
@@ -32,6 +33,10 @@ confidence. Broaden verification when the change, a failure, or an unresolved
 concern justifies it.
 
 ## Evidence contract
+
+Use the [evidence and acceptance guide](EVIDENCE.md) for independent source,
+artifact, deployed/installed, functional, operational, and publication claims.
+Only adopt the boundaries the project's acceptance criteria require.
 
 Record the command or action, relevant revision, environment, date, result, and
 artifact location. Distinguish automated verification from manual observation.

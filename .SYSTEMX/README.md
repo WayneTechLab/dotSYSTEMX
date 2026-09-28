@@ -47,6 +47,7 @@ bash .SYSTEMX/WSG-MENU.sh
 | --- | --- |
 | [STANDARD.md](STANDARD.md) | Shared scope, authority, applicability, and completion rules. |
 | [START-HERE.md](START-HERE.md) | LLM load order and resume protocol. |
+| [CURRENT.md](CURRENT.md) | Generated objective, selected tasks, and checkpoint pointer; no separate status ledger. |
 | [GLOBAL/](GLOBAL/README.md) | Context shared by all agents in the current project; optional external standards references. |
 | [PLAN/MASTER-PLAN.md](PLAN/MASTER-PLAN.md) | Outcomes, milestones, dependencies, and acceptance boundaries. |
 | [WORK/](WORK/README.md) | Canonical task ledger and generated TODO, working-on, blocked, review, done, and cancelled views. |
@@ -76,9 +77,12 @@ bash .SYSTEMX/WSG-MENU.sh
 | `menu` or no arguments | Open the interactive menu; EOF exits. |
 | `status` | Show recorded work and owners; does not inspect live worker processes. |
 | `context --agent agent.0` | Print a bounded packet of shared context, plan, project memory, and selected agent memory. |
+| `focus --objective 'Outcome' --task TASK-001` | Select current objective and existing tasks; optionally link a dated checkpoint. |
+| `task-ready` | List TODO tasks whose recorded dependencies are done; advisory only. |
+| `task-packet TASK-001 --base REVISION` | Print bounded assignment context and owner memory with a caller-supplied base revision. |
 | `agent-add agent.1 --role test` | Create a worker role and memory file; does not start a worker. |
 | `task-add`, `task-set`, `task-show` | Create, transition, or inspect canonical task records; see [WORK/README.md](WORK/README.md). |
-| `refresh-work` | Regenerate status pages after reviewed manual ledger edits or merge resolution. |
+| `refresh-work` | Regenerate six status pages and CURRENT.md after reviewed canonical record edits or merge resolution. |
 
 Add `--dry-run` to `check`, `dev`, `build`, or `deploy` to print the command plan
 without running project commands. Missing commands or empty quality checks fail
@@ -142,6 +146,9 @@ version; compare and merge changes without overwriting local configuration or
 project records. Keep `.SYSTEMX` outside public build and deployment artifacts.
 Its ignore rules apply only inside this folder; configure the host repository's
 secret and build ignores separately.
+Use the [upgrade guide](docs/UPGRADING.md) for existing 1.1.0 records or older
+project-specific layouts. The [evidence guide](docs/EVIDENCE.md) separates
+accepted source work from applicable deployment and operational acceptance.
 
 This is a curated derivative of the
 [upstream template](https://github.com/WayneTechLab/SFWA-WTL-TEMPLATE/tree/c3e2272efe7d9fe3fde1add3144aab3ec6e487c4/.SYSTEMX).

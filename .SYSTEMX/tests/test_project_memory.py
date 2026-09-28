@@ -218,6 +218,140 @@ class ProjectMemoryTests(unittest.TestCase):
                          ["todo", "in_progress", "needs_review", "done"])
         self.assertTrue(task["evidence"])
 
+    def test_focus_projects_current_task_state_without_mutating_the_ledger(self):
+        task_id = self.add("Current objective")
+        before = (self.systemx / "WORK/TASKS.json").read_bytes()
+        self.assert_ok(self.run_cli("focus", "--objective", "Finish the accepted outcome", "--task", task_id))
+        self.assertEqual((self.systemx / "WORK/TASKS.json").read_bytes(), before)
+        self.start(task_id)
+        current = (self.systemx / "CURRENT.md").read_text()
+        self.assertIn("in_progress / agent.0", current)
+        self.assertIn("Run the focused check", current)
+        self.assert_ok(self.run_cli("task-set", task_id, "--status", "blocked", "--blocker", "Fixture missing"))
+        self.assertIn("Fixture missing", (self.systemx / "CURRENT.md").read_text())
+        focus = json.loads((self.systemx / "WORK/FOCUS.json").read_text())
+        self.assertNotIn("status", focus)
+        self.assertNotIn("blocker", focus)
+        self.assert_ok(self.run_cli("validate"))
+
+    def test_invalid_focus_is_rejected_before_mutating_either_record(self):
+        task_id = self.add()
+        before = [(self.systemx / path).read_bytes() for path in ("WORK/FOCUS.json", "CURRENT.md")]
+        for arguments in [(), ("--objective", " "), ("--objective", "x" * 601),
+                          ("--objective", "Work", "--task", "TASK-999"),
+                          ("--objective", "Work", "--task", task_id, "--task", task_id),
+                          ("--clear", "--objective", "Work")]:
+            self.assertEqual(self.run_cli("focus", *arguments).returncode, 2)
+            self.assertEqual([(self.systemx / path).read_bytes() for path in ("WORK/FOCUS.json", "CURRENT.md")], before)
+
+    def test_checkpoint_pointer_is_contained_and_clear_preserves_history(self):
+        task_id = self.add()
+        checkpoint = self.systemx / "MEMORY/sessions/session.md"
+        checkpoint.write_text("Original observation and source credit\n")
+        args = ("focus", "--objective", "Resume existing work", "--task", task_id, "--checkpoint")
+        for bad in ("../outside.md", "MEMORY/sessions/missing.md", "MEMORY/sessions/README.md",
+                    "MEMORY/PROJECT.md", str(checkpoint), "MEMORY/sessions/../PROJECT.md"):
+            self.assertEqual(self.run_cli(*args, bad).returncode, 2)
+        outside = Path(self.temp.name) / "private.md"
+        outside.write_text("Other project memory\n")
+        (self.systemx / "MEMORY/sessions/link.md").symlink_to(outside)
+        self.assertEqual(self.run_cli(*args, "MEMORY/sessions/link.md").returncode, 2)
+        (self.systemx / "MEMORY/sessions/link.md").unlink()
+        self.assert_ok(self.run_cli(*args, "MEMORY/sessions/session.md"))
+        before = (self.systemx / "WORK/TASKS.json").read_bytes()
+        self.assert_ok(self.run_cli("focus", "--clear"))
+        self.assertEqual(checkpoint.read_text(), "Original observation and source credit\n")
+        self.assertEqual((self.systemx / "WORK/TASKS.json").read_bytes(), before)
+        self.assertIn("No current objective recorded", (self.systemx / "CURRENT.md").read_text())
+
+    def test_focus_lock_and_stale_current_view_are_handled(self):
+        task_id = self.add()
+        lock = self.systemx / "state/coordination.lock"
+        lock.mkdir()
+        self.assertEqual(self.run_cli("focus", "--objective", "Work", "--task", task_id).returncode, 2)
+        lock.rmdir()
+        self.assert_ok(self.run_cli("focus", "--objective", "Work", "--task", task_id))
+        current = self.systemx / "CURRENT.md"
+        expected = current.read_bytes()
+        current.write_text("Hand-maintained stale result\n")
+        self.assertIn("CURRENT.md is stale", self.run_cli("validate").stderr)
+        self.assert_ok(self.run_cli("refresh-work"))
+        self.assertEqual(current.read_bytes(), expected)
+
+    def test_obsolete_checkpoint_can_be_replaced_without_resetting_work(self):
+        task_id = self.add()
+        checkpoint = self.systemx / "MEMORY/sessions/old.md"
+        checkpoint.write_text("Dated evidence\n")
+        self.assert_ok(self.run_cli("focus", "--objective", "Work", "--task", task_id,
+                                    "--checkpoint", "MEMORY/sessions/old.md"))
+        checkpoint.rename(checkpoint.with_name("archived.md"))
+        self.assertIn("Checkpoint must name", self.run_cli("validate").stderr)
+        before = (self.systemx / "WORK/TASKS.json").read_bytes()
+        self.assert_ok(self.run_cli("focus", "--objective", "Work", "--task", task_id,
+                                    "--checkpoint", "MEMORY/sessions/archived.md"))
+        self.assertEqual((self.systemx / "WORK/TASKS.json").read_bytes(), before)
+        self.assert_ok(self.run_cli("validate"))
+
+    def test_readiness_excludes_active_blocked_review_terminal_and_waiting_work(self):
+        first = self.add("Prerequisite")
+        dependent = self.add("Waiting", "--depends-on", first)
+        active = self.add("Active")
+        self.start(active)
+        blocked = self.add("Blocked")
+        self.assert_ok(self.run_cli("task-set", blocked, "--status", "blocked", "--blocker", "Needs input"))
+        cancelled = self.add("Cancelled prerequisite")
+        self.assert_ok(self.run_cli("task-set", cancelled, "--status", "cancelled", "--note", "Withdrawn"))
+        dead_end = self.add("Needs cancelled work", "--depends-on", cancelled)
+        review = self.add("Review")
+        self.start(review)
+        self.assert_ok(self.run_cli("task-set", review, "--status", "needs_review"))
+        result = self.run_cli("task-ready")
+        self.assert_ok(result)
+        self.assertIn(first, result.stdout)
+        for task in (dependent, active, blocked, cancelled, dead_end, review):
+            self.assertNotIn(task, result.stdout)
+        self.complete(first)
+        result = self.run_cli("task-ready")
+        self.assertIn(dependent, result.stdout)
+        self.assertNotIn(first, result.stdout)
+
+    def test_task_packet_is_bounded_preserves_dependency_credit_and_is_read_only(self):
+        self.assert_ok(self.run_cli("agent-add", "agent.1", "--role", "test"))
+        (self.systemx / "AGENTS/agent.1/MEMORY.md").write_text("UNRELATED_WORKER_PRIVATE_CONTEXT")
+        first = self.add("Accepted source")
+        self.complete(first)
+        task_id = self.add("Runtime acceptance", "--depends-on", first, "--scope", "src/feature.py")
+        before = {str(path.relative_to(self.systemx)): path.read_bytes()
+                  for path in self.systemx.rglob("*") if path.is_file()}
+        result = self.run_cli("task-packet", task_id, "--base", "observed-commit")
+        self.assert_ok(result)
+        for value in (task_id, first, "observed-commit", "src/feature.py", '"status": "done"', '"reviewedBy": "agent.0"'):
+            self.assertIn(value, result.stdout)
+        self.assertNotIn("UNRELATED_WORKER_PRIVATE_CONTEXT", result.stdout)
+        self.assertNotIn('"history"', result.stdout)
+        self.assertIn("does not dispatch", result.stdout)
+        self.assert_ok(self.run_cli("task-ready", "--agent", "agent.0"))
+        self.assertEqual(self.run_cli("task-ready", "--agent", "agent.99").returncode, 2)
+        self.assertEqual(self.run_cli("task-packet", "TASK-999", "--base", "source").returncode, 2)
+        after = {str(path.relative_to(self.systemx)): path.read_bytes()
+                 for path in self.systemx.rglob("*") if path.is_file()}
+        self.assertEqual(before, after)
+        (self.systemx / "AGENTS/agent.0/MEMORY.md").write_text("x" * 4000 + "TAIL_NOT_LOADED")
+        result = self.run_cli("task-packet", task_id, "--base", "source")
+        self.assertIn("Memory truncated after 3000", result.stdout)
+        self.assertNotIn("TAIL_NOT_LOADED", result.stdout)
+
+    def test_focus_tasks_are_loaded_before_a_large_backlog(self):
+        for index in range(26):
+            task_id = self.add("Task " + str(index))
+        self.assert_ok(self.run_cli("focus", "--objective", "Continue the accepted plan", "--task", task_id))
+        result = self.run_cli("context")
+        self.assert_ok(result)
+        self.assertLess(result.stdout.index("CURRENT.md (from canonical records)"), result.stdout.index("--- GLOBAL/CONTEXT.md ---"))
+        tasks = result.stdout.split("--- Relevant open tasks: 26 ---")[1]
+        self.assertLess(tasks.index("TASK-026"), tasks.index("TASK-001"))
+        self.assertIn("Showing 25 tasks", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

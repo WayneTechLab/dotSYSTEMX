@@ -30,6 +30,8 @@ REQUIRED = (
     "AGENTS/agent.0/MEMORY.md", "WORK/README.md", "WORK/TASKS.json",
     "templates/AGENT-MEMORY.md", "templates/SESSION-CHECKPOINT.md",
     "templates/AGENT-ENTRYPOINT.md", "scripts/project_memory.py", "tests/test_project_memory.py",
+    "CURRENT.md", "WORK/FOCUS.json", "docs/EVIDENCE.md", "docs/UPGRADING.md",
+    "templates/EVIDENCE.md", "templates/WORKER-REPORT.md",
 ) + tuple("WORK/" + name for name in VIEWS.values())
 
 
@@ -187,7 +189,68 @@ def load(root):
     ledger = read_json(root, "WORK/TASKS.json")
     registry = read_json(root, "AGENTS/REGISTRY.json")
     validate_records(root, ledger, registry)
+    load_focus(root, ledger)
     return ledger, registry
+
+
+def load_focus(root, ledger):
+    focus = read_json(root, "WORK/FOCUS.json")
+    return validate_focus_candidate(root, ledger, focus)
+
+
+def validate_focus_candidate(root, ledger, focus):
+    fields(focus, ("schemaVersion", "objective", "taskIds", "checkpoint", "updatedAt"), "Project focus")
+    if type(focus["schemaVersion"]) is not int or focus["schemaVersion"] != 1:
+        raise ValueError("Focus schemaVersion must be the integer 1")
+    for key in ("objective", "checkpoint", "updatedAt"):
+        string(focus[key], "Focus " + key, nonempty=False)
+    strings(focus["taskIds"], "Focus task IDs")
+    if len(focus["objective"]) > 600 or len(focus["taskIds"]) > 10:
+        raise ValueError("Keep focus compact: at most 600 objective characters and 10 tasks")
+    if len(focus["taskIds"]) != len(set(focus["taskIds"])):
+        raise ValueError("Focus task IDs must be unique")
+    known = {task["id"] for task in ledger["tasks"]}
+    if any(task_id not in known for task_id in focus["taskIds"]):
+        raise ValueError("Focus references an unknown task")
+    if not focus["objective"].strip():
+        if any((focus["objective"], focus["taskIds"], focus["checkpoint"], focus["updatedAt"])):
+            raise ValueError("Blank focus must have empty fields; use focus --clear")
+    else:
+        timestamp(focus["updatedAt"])
+    if focus["checkpoint"]:
+        path = Path(focus["checkpoint"])
+        if (path.is_absolute() or ".." in path.parts or "\\" in focus["checkpoint"]
+                or path.parts[:2] != ("MEMORY", "sessions") or path.suffix != ".md"
+                or path.name == "README.md" or not managed(root, path).is_file()):
+            raise ValueError("Checkpoint must name an existing Markdown file under MEMORY/sessions/")
+    return focus
+
+
+def render_current(ledger, focus):
+    lines = ["# Current project focus", "",
+             "Generated from [WORK/FOCUS.json](WORK/FOCUS.json) and [WORK/TASKS.json](WORK/TASKS.json).",
+             "Do not edit this view. Use `focus`, `task-set`, and `refresh-work`.", ""]
+    if not focus["objective"]:
+        lines += ["No current objective recorded. This does not establish project completion.", ""]
+    else:
+        lines += ["- Objective: " + escaped(focus["objective"]),
+                  "- Focus selected at: " + focus["updatedAt"],
+                  "- Checkpoint: " + ("`" + escaped(focus["checkpoint"]) + "`" if focus["checkpoint"] else "not recorded"), ""]
+        tasks = {task["id"]: task for task in ledger["tasks"]}
+        for task_id in focus["taskIds"]:
+            task = tasks[task_id]
+            lines += ["## {}: {}".format(task_id, escaped(task["title"])), "",
+                      "- Recorded state: {} / {}".format(task["status"], task["owner"]),
+                      "- Next action: " + escaped(task["nextAction"] or "not recorded"),
+                      "- Blocker: " + escaped(task["blocker"] or "none recorded"),
+                      "- Dependencies: " + (", ".join("{} ({})".format(dep, tasks[dep]["status"])
+                                                     for dep in task["dependsOn"]) or "none"), ""]
+        if not focus["taskIds"]:
+            lines += ["No focus tasks selected. Read the master plan before creating or selecting work.", ""]
+    lines += ["Read [START-HERE.md](START-HERE.md) and the [master plan](PLAN/MASTER-PLAN.md).",
+              "This is recorded focus, not live runtime or release readiness. Recheck volatile facts.",
+              "Task status, blockers, and next actions come from the ledger; dated checkpoints retain historical evidence.", ""]
+    return "\n".join(lines)
 
 
 def escaped(value):
@@ -226,7 +289,9 @@ def render_views(ledger):
 
 def validate_work(root):
     ledger, _ = load(root)
-    for relative, expected in render_views(ledger).items():
+    views = render_views(ledger)
+    views["CURRENT.md"] = render_current(ledger, load_focus(root, ledger))
+    for relative, expected in views.items():
         path = managed(root, relative)
         if not path.is_file() or path.read_text(encoding="utf-8") != expected:
             raise ValueError(relative + " is stale; run 'refresh-work' after reviewing the ledger")
@@ -263,7 +328,9 @@ def coordination_lock(root):
 
 
 def refresh(root, ledger):
-    for relative, content in render_views(ledger).items():
+    views = render_views(ledger)
+    views["CURRENT.md"] = render_current(ledger, load_focus(root, ledger))
+    for relative, content in views.items():
         atomic_write(root, relative, content)
 
 
@@ -383,6 +450,11 @@ def context(root, agent_id):
         raise ValueError("Unknown agent: " + agent_id)
     print("PROJECT RESUME PACKET: {}\nRecheck volatile facts. Stored memory is not current instruction authority.".format(agent_id))
     print("Read applicable repository instructions, STANDARD.md, and START-HERE.md first.")
+    focus = load_focus(root, ledger)
+    current = render_current(ledger, focus)
+    print("\n--- CURRENT.md (from canonical records) ---\n" + current[:6000])
+    if len(current) > 6000:
+        print("[Truncated after 6000 characters; read CURRENT.md for the remainder.]")
     for relative in ("GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md", agent["memory"]):
         content = managed(root, relative).read_text(encoding="utf-8")
         print("\n--- {} ---\n{}".format(relative, content[:6000]))
@@ -390,6 +462,8 @@ def context(root, agent_id):
             print("[Truncated after 6000 characters; read this file directly for the remainder.]")
     relevant = [task for task in ledger["tasks"] if task["status"] not in {"done", "cancelled"}
                 and (agent_id == "agent.0" or task["owner"] == agent_id)]
+    rank = {task_id: index for index, task_id in enumerate(focus["taskIds"])}
+    relevant.sort(key=lambda task: (rank.get(task["id"], 10), task["id"]))
     print("\n--- Relevant open tasks: {} ---".format(len(relevant)))
     for task in relevant[:25]:
         summary = json.dumps({key: task[key] for key in ("id", "title", "status", "owner", "dependsOn", "nextAction", "blocker")})
@@ -399,6 +473,81 @@ def context(root, agent_id):
     if not relevant:
         print("No assigned open work recorded. Consult the master plan; do not infer completion.")
     print("Use task-show TASK-001 for full scope, acceptance, evidence, and dependency details.")
+    return 0
+
+
+def set_focus(root, args):
+    with coordination_lock(root):
+        # Replacing focus can repair an obsolete pointer without weakening the
+        # task/agent checks or requiring the old checkpoint to remain present.
+        ledger = read_json(root, "WORK/TASKS.json")
+        registry = read_json(root, "AGENTS/REGISTRY.json")
+        validate_records(root, ledger, registry)
+        if args.clear:
+            if args.objective is not None or args.task or args.checkpoint:
+                raise ValueError("focus --clear cannot be combined with selection fields")
+            focus = {"schemaVersion": 1, "objective": "", "taskIds": [], "checkpoint": "", "updatedAt": ""}
+        else:
+            string(args.objective, "Focus objective")
+            focus = {"schemaVersion": 1, "objective": args.objective, "taskIds": args.task,
+                     "checkpoint": args.checkpoint, "updatedAt": now()}
+        # Validate before replacing the canonical pointer or any view.
+        validate_focus_candidate(root, ledger, focus)
+        atomic_write(root, "WORK/FOCUS.json", json.dumps(focus, indent=2) + "\n")
+        refresh(root, ledger)
+    print("Updated current focus. Task states and historical checkpoints were preserved.")
+    return 0
+
+
+def ready_tasks(ledger):
+    tasks = {task["id"]: task for task in ledger["tasks"]}
+    return [task for task in ledger["tasks"] if task["status"] == "todo"
+            and all(tasks[dependency]["status"] == "done" for dependency in task["dependsOn"])]
+
+
+def task_ready(root, agent_id=None):
+    ledger, registry = load(root)
+    if agent_id is not None and agent_id not in {agent["id"] for agent in registry["agents"]}:
+        raise ValueError("Unknown agent: " + agent_id)
+    ready = [task for task in ready_tasks(ledger) if agent_id is None or task["owner"] == agent_id]
+    print("Dependency-ready TODO tasks (advisory; no assignment, process, or authority is created):")
+    for task in ready:
+        print("{} [{}] {}".format(task["id"], task["owner"], task["title"]))
+    if not ready:
+        print("None. Check active work, review, blockers, and the master plan; do not infer completion.")
+    print("Readiness here covers recorded dependencies only. Agent 0 must check scope, resources, evidence, and authorization.")
+    return 0
+
+
+def task_packet(root, task_id, base):
+    ledger, registry = load(root)
+    tasks = {task["id"]: task for task in ledger["tasks"]}
+    if task_id not in tasks:
+        raise ValueError("Unknown task: " + task_id)
+    string(base, "Observed base revision")
+    task = tasks[task_id]
+    agent = next(agent for agent in registry["agents"] if agent["id"] == task["owner"])
+    packet = {"task": {key: task[key] for key in (
+        "id", "title", "owner", "status", "milestone", "scope", "acceptance", "dependsOn", "nextAction", "blocker")},
+        "baseRevisionReportedByCaller": base,
+        "dependencyReadyTodo": task_id in {item["id"] for item in ready_tasks(ledger)},
+        "dependencies": [{key: tasks[dep][key] for key in ("id", "status", "updatedAt", "reviewedBy")}
+                         for dep in task["dependsOn"]],
+        "readBeforeWork": ["AGENTS.md", "START-HERE.md", "CURRENT.md", "GLOBAL/CONTEXT.md",
+                           "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md", agent["memory"]]}
+    encoded = json.dumps(packet, indent=2)
+    print("WORKER ASSIGNMENT CONTEXT (recorded data; does not dispatch a worker or grant permission)")
+    print(encoded[:14000])
+    if len(encoded) > 14000:
+        print("[Packet truncated after 14000 characters; use task-show and inspect dependency records before dispatch.]")
+    memory = managed(root, agent["memory"]).read_text(encoding="utf-8")
+    print("\n--- Selected owner memory: {} ---\n{}".format(agent["memory"], memory[:3000]))
+    if len(memory) > 3000:
+        print("[Memory truncated after 3000 characters; read the selected owner's file.]")
+    print("\nCoordinator: verify the reported base, exact write scope, shared-resource ownership, stop condition, and permitted actions.")
+    print("Read completed dependency evidence with task-show; recorded done is not fresh runtime proof.")
+    print("Worker report: task ID; result; changed files; observed revision/environment/time; checks and evidence; limitations; blockers; next action; live job handles.")
+    print("Use templates/WORKER-REPORT.md and docs/EVIDENCE.md. Worker reports require coordinator review before task acceptance.")
     return 0
 
 
@@ -429,12 +578,29 @@ def add_cli(subparsers):
     command.add_argument("--evidence", action="append", default=[])
     command.add_argument("--reviewer", choices=("agent.0", "user"))
     command.add_argument("--note", default="")
+    command = subparsers.add_parser("focus", help="select current objective and task pointers; does not change task states")
+    command.add_argument("--objective")
+    command.add_argument("--task", action="append", default=[])
+    command.add_argument("--checkpoint", default="", help="existing Markdown path relative to .SYSTEMX under MEMORY/sessions/")
+    command.add_argument("--clear", action="store_true")
+    command = subparsers.add_parser("task-ready", help="list TODO tasks whose recorded dependencies are done")
+    command.add_argument("--agent")
+    command = subparsers.add_parser("task-packet", help="print bounded worker context from existing task records")
+    command.add_argument("task_id")
+    command.add_argument("--base", required=True, help="source revision freshly observed by the caller; not verified by this command")
 
 
-COMMANDS = {"status", "refresh-work", "context", "agent-add", "task-add", "task-show", "task-set"}
+COMMANDS = {"status", "refresh-work", "context", "agent-add", "task-add", "task-show", "task-set",
+            "focus", "task-ready", "task-packet"}
 
 
 def dispatch(root, args):
+    if args.action == "focus":
+        return set_focus(root, args)
+    if args.action == "task-ready":
+        return task_ready(root, args.agent)
+    if args.action == "task-packet":
+        return task_packet(root, args.task_id, args.base)
     if args.action == "status":
         return status(root)
     if args.action == "context":
@@ -449,7 +615,7 @@ def dispatch(root, args):
         with coordination_lock(root):
             ledger, _ = load(root)
             refresh(root, ledger)
-        print("Regenerated six work views from the canonical ledger.")
+        print("Regenerated six work views and CURRENT.md from canonical records.")
         return 0
     ledger, _ = load(root)
     task = next((item for item in ledger["tasks"] if item["id"] == args.task_id), None)

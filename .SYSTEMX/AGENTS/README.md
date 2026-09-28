@@ -14,11 +14,17 @@ identity, or permission grant.
 ## Worker lifecycle
 
 1. Agent 0 defines the task, scope, dependencies, acceptance criteria, and owner.
+   Use `task-ready` to find dependency-ready TODO work; choose based on the
+   existing plan's priority and shared-resource availability. Do not invent tasks
+   merely to fill worker slots.
 2. If delegation is authorized and useful, register a stable worker ID with
    `agent-add agent.1 --role test`, then use the available environment to start
    the worker. Registration alone does not spawn it.
 3. The worker loads shared context and its own memory with
    `context --agent agent.1`, then confirms the assigned scope.
+   `task-packet TASK-001 --base <observed-revision>` provides the existing task,
+   dependency states, acceptance criteria, and only its owner's memory. It
+   creates no assignment or runtime process. Verify the supplied revision.
 4. Agent 0 sets the task to `in_progress` when work actually starts. Assign
    non-overlapping write scopes or coordinate shared-file changes explicitly.
 5. The worker maintains its own memory and supplies a checkpoint with evidence,
@@ -35,11 +41,27 @@ still require coordination and merge review.
 
 ## Handoffs and memory
 
+Reuse an existing worker when its scope and available context still fit. Keep
+packets bounded: one concrete requirement or failure, exact files, required
+evidence, permitted actions, and a stop condition. An uncertain investigation
+should return its observations before the coordinator widens it. Concurrency
+depends on the available environment and actual ready work; no fixed model,
+worker count, or provider is prescribed by this standard.
+
+Assign one owner for shared resources such as a compiler, test database, browser
+session, installer, or deployment target. Record any live job/session handle and
+follow it to a terminal result. Parent/coordinator integration includes checking
+shared contracts and running relevant combined checks after composing changes.
+Repeat tests only when a change, failure, or unresolved concern justifies it.
+
 Each worker gets `AGENTS/<agent-id>/MEMORY.md` from the
 [agent memory template](../templates/AGENT-MEMORY.md). Task ownership lives only
 in [WORK/TASKS.json](../WORK/TASKS.json); memory links the relevant IDs and captures
 the observations needed to resume. Use the
 [session checkpoint](../templates/SESSION-CHECKPOINT.md) for longer handoffs.
+Use the compact [worker report](../templates/WORKER-REPORT.md) to distinguish
+the result, original evidence, limits, and next action. Keep working status in
+the task ledger and select project focus with `focus`.
 
 When a worker stops, its role record remains available for historical evidence.
 Do not describe a registered worker as active without current runtime evidence.

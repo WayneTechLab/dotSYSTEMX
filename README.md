@@ -24,6 +24,7 @@ standard library and require no package installation.
 | Shared project context | Purpose, constraints, terminology, and authoritative references for everyone working on the project. |
 | Master planning | Outcomes, milestones, dependencies, and acceptance criteria connected to concrete tasks. |
 | Work tracking | One task ledger with generated TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED views. |
+| Current focus | A compact objective and task/checkpoint pointers, with a generated current view. |
 | Agent 0 coordination | A coordinator role for assignments, integration, acceptance review, and shared-memory updates. |
 | Scoped agent memory | Separate worker notes, verified project facts, and session checkpoints for reliable handoffs. |
 | Project commands | Explicit configuration for checks, development, builds, and deployments. |
@@ -81,6 +82,7 @@ self-contained.
 ```text
 .SYSTEMX/
 ├── START-HERE.md          LLM and operator load order
+├── CURRENT.md             Generated current objective and task pointers
 ├── STANDARD.md            Shared operating contract
 ├── GLOBAL/                Project-wide context and constraints
 ├── PLAN/                  Master plan and milestones
@@ -96,7 +98,7 @@ self-contained.
 ```
 
 **Start or resume at [.SYSTEMX/START-HERE.md](.SYSTEMX/START-HERE.md).** The load
-order moves from shared context to the master plan, project memory, current
+order starts with the current focus, then shared context, master plan, project memory, current
 tasks, and the selected agent's notes. Volatile facts still need to be rechecked
 against the working tree and actual runtime.
 
@@ -135,6 +137,7 @@ bash .SYSTEMX/SYSTEMX.sh
 # Inspect work and reload project context
 bash .SYSTEMX/SYSTEMX.sh status
 bash .SYSTEMX/SYSTEMX.sh context --agent agent.0
+bash .SYSTEMX/SYSTEMX.sh task-ready
 
 # Run configured project checks
 bash .SYSTEMX/SYSTEMX.sh check
@@ -147,6 +150,14 @@ bash .SYSTEMX/SYSTEMX.sh deploy --dry-run
 produce an error instead of a false success. Commands run from the containing
 project root, and a failed step stops the sequence. See
 [configuration and quality](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Configuration-and-Quality).
+
+In an adopted project with existing tasks, select the objective with `focus` and
+prepare an assignment with `task-packet`. These commands preserve the canonical
+ledger and do not start workers. See the [work commands](.SYSTEMX/WORK/README.md).
+The [evidence guide](.SYSTEMX/docs/EVIDENCE.md) explains how to preserve source
+credit while keeping runtime or release acceptance open. Use the
+[upgrade guide](.SYSTEMX/docs/UPGRADING.md) before merging this folder into an
+active project with existing records.
 
 ## Documentation
 

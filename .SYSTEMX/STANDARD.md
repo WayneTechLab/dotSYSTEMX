@@ -17,6 +17,10 @@ Use [START-HERE.md](START-HERE.md) to resume active work. Shared context belongs
 [master plan](PLAN/MASTER-PLAN.md), and verified learned facts in
 [project memory](MEMORY/PROJECT.md). Agent 0 coordinates these records; workers
 maintain their own scoped memory and submit findings for review.
+The current objective and task/checkpoint pointers belong in
+[WORK/FOCUS.json](WORK/FOCUS.json); [CURRENT.md](CURRENT.md) is generated from it
+and the task ledger. Keep dated execution detail in checkpoints instead of
+accumulating competing current-state narratives in entry points.
 
 ## Source of authority
 
@@ -65,6 +69,7 @@ work remains a blocker; it is not equivalent to passing a check.
 | Architecture, implementation, UX, content, and data | [Development](docs/DEVELOPMENT.md) |
 | Privacy, credentials, permissions, and supply chain | [Security](docs/SECURITY.md) |
 | Tests, evidence, and acceptance | [Quality](docs/QUALITY.md) |
+| Scoped proof and adoption of existing workflows | [Evidence boundaries](docs/EVIDENCE.md), [upgrades](docs/UPGRADING.md) |
 | Git, releases, monitoring, recovery, and ownership | [Operations](docs/OPERATIONS.md) |
 | AI collaboration and tool use | [AI standard](AI/README.md) |
 | Active work, master plan, and continuity | [Start/resume protocol](START-HERE.md), [work ledger](WORK/README.md), [memory](MEMORY/README.md) |

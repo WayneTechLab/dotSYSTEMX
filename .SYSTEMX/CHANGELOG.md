@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.0 (unreleased)
+
+- Added a compact focus record and generated CURRENT.md, linked to existing
+  task state and optional dated checkpoints. Focus changes preserve task history.
+- Added advisory dependency-ready task selection and bounded worker packets
+  with explicit source-revision provenance and selected-owner memory.
+- Prioritized focus tasks in resume context; retained bounded loading and
+  independent historical checkpoints.
+- Added evidence categories, compact worker reports, live-job ownership and
+  changed-condition retry guidance, and a record-preserving upgrade guide.
+- Applied reusable lessons from existing SYSTEMX deployments without importing
+  their project records, provider configuration, domain rules, or agent runtime.
+
 ## 1.1.0
 
 - Added an LLM start/resume entry point, global project context, master plan,

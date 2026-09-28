@@ -18,15 +18,15 @@ accepted decisions here. Read the [memory protocol](README.md) before editing.
 | Finding | Evidence and limit | Consequence for future work |
 | --- | --- | --- |
 
-## Resume checkpoint
+## Continuity references
 
-- Updated at and by:
-- Current objective and relevant task IDs:
-- Workspace/revision reference to recheck:
-- Latest accepted evidence:
-- Exact next action:
-- Blocker or pending owner decision:
-- Link to a longer checkpoint, if needed:
+The active objective and checkpoint pointer belong in
+[WORK/FOCUS.json](../WORK/FOCUS.json), maintained with `focus` and displayed in
+[CURRENT.md](../CURRENT.md). Task next actions and blockers belong in the ledger.
+
+- Durable evidence or decision references needed across sessions:
+- Historical checkpoints worth retaining and why:
+- Conditions requiring old observations to be rechecked:
 
 Current task status remains in [WORK/TASKS.json](../WORK/TASKS.json). Do not infer
 current runtime or production state from an old memory entry.
