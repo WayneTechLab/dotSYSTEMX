@@ -1,0 +1,13 @@
+# Local runtime data and credentials. Project config and project docs are tracked.
+/local/
+/logs/
+/state/
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+!.env.example
+*.secrets.*
+*.pem
+*.key

@@ -1,0 +1,27 @@
+{
+  "repository": "https://github.com/WayneTechLab/SFWA-WTL-TEMPLATE",
+  "branch": "main",
+  "commit": "c3e2272efe7d9fe3fde1add3144aab3ec6e487c4",
+  "sourcePath": ".SYSTEMX",
+  "templateVersion": "1.1.0",
+  "license": "MIT",
+  "licenseSourcePath": "LICENSE",
+  "retainedVerbatim": ["AI/agent-mesh.schema.json"],
+  "adaptedFrom": [
+    "AI/",
+    "Standard-MD-Files/",
+    "Unified-Setup-Process/intake/",
+    "docs/",
+    "WSG-MENU.sh",
+    "scripts/"
+  ],
+  "excluded": [
+    "LAN/",
+    "KIT/",
+    "Template/starter/",
+    "provider-specific setup and deployment automation",
+    "duplicate setup packets and edition manifests",
+    "historical status, research, logs, and application releases"
+  ],
+  "note": "Curated standalone derivative, not a byte-for-byte mirror. License notice is included inside .SYSTEMX so the folder is self-contained."
+}

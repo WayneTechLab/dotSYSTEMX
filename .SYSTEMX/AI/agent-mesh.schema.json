@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://waynetechlab.com/systemx/agent-mesh.schema.json",
+  "title": "SYSTEMX Agent Mesh Message",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "missionId",
+    "waveId",
+    "lane",
+    "from",
+    "to",
+    "type",
+    "status",
+    "summary",
+    "createdAt"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "missionId": { "type": "string", "minLength": 1 },
+    "waveId": { "type": "string", "minLength": 1 },
+    "lane": {
+      "type": "string",
+      "enum": [
+        "research",
+        "code",
+        "test",
+        "browser",
+        "desktop",
+        "connector",
+        "security",
+        "docs",
+        "release"
+      ]
+    },
+    "from": { "type": "string", "minLength": 1 },
+    "to": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": ["task", "checkpoint", "handoff", "blocked", "complete", "archive"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["planned", "in_progress", "blocked", "needs_review", "done", "archived"]
+    },
+    "priority": { "type": "integer", "minimum": 0, "maximum": 10 },
+    "correlationId": { "type": "string" },
+    "sessionId": { "type": "string" },
+    "summary": { "type": "string", "minLength": 1 },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "blockers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "nextAction": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" }
+  }
+}

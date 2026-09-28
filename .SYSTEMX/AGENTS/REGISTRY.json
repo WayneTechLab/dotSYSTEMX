@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "id": "agent.0",
+      "role": "coordinator",
+      "memory": "AGENTS/agent.0/MEMORY.md"
+    }
+  ]
+}
