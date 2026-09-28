@@ -2,16 +2,24 @@
 
 ## Adopt the folder
 
-1. Identify the destination repository and inspect existing files, including
+1. Choose [project/VS Code](../profiles/project.md), [OS directory](../profiles/directory.md),
+   [Google Drive](../profiles/drive.md), or [LLM chat](../profiles/chat.md).
+   Identify the destination working directory and inspect existing files, including
    hidden files and local changes.
-2. Copy the complete `.SYSTEMX` folder. If one already exists, compare versions
-   and merge deliberately. Do not replace project config, secrets, or evidence.
+2. Use the [additive installer](INSTALLATION.md) for a managed version and pin,
+   or copy the complete `.SYSTEMX` folder for documentation-only use. If one already
+   exists, do not copy over it. Review an installer dry run and preserve existing records.
    Use a clean template checkout or reviewed release archive; a working project's
    folder can contain ignored private data that ordinary filesystem copying retains.
 3. Read the [standard](../STANDARD.md) and inspect the scripts before execution.
 4. Run `bash .SYSTEMX/SYSTEMX.sh validate` and `bash .SYSTEMX/SYSTEMX.sh doctor`.
    Python 3.9+ is required only for the command tools. Git is optional for
    documentation use; the doctor uses it if available.
+
+For a managed project, `systemx run --target "/path/to/project" -- validate`
+uses its selected defaults even if an older root launcher was retained. New
+installations are pinned with manual updates; opt-in startup updates are configured
+separately in the installation guide. Existing root default copies remain unchanged.
 
 Before initializing a pristine distribution, `validate --template` additionally
 checks that its project seeds are blank and that only distribution files are

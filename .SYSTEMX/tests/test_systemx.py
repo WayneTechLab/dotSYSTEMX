@@ -99,7 +99,7 @@ class SystemxTests(unittest.TestCase):
 
     def test_public_template_tolerates_crlf_without_creating_bytecode(self):
         path = self.systemx / "GLOBAL/CONTEXT.md"
-        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+        path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
         before = {str(p.relative_to(self.systemx)): p.read_bytes() for p in self.systemx.rglob("*") if p.is_file()}
         result = subprocess.run([sys.executable, str(self.runner), "validate", "--template"],
                                 cwd=self.temp.name, text=True, capture_output=True, timeout=15)
@@ -246,8 +246,16 @@ class SystemxTests(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("bash"), "Bash launcher requires Bash")
     def test_legacy_launcher_works_from_another_directory(self):
-        result = subprocess.run(["bash", str(self.systemx / "WSG-MENU.sh"), "validate"],
-                                cwd=self.temp.name, text=True, capture_output=True, timeout=15)
+        bash = shutil.which("bash")
+        if os.name == "nt":
+            git = shutil.which("git")
+            candidate = Path(git).resolve().parent.parent / "bin/bash.exe" if git else None
+            if candidate is None or not candidate.is_file():
+                self.skipTest("Git Bash is required to test the compatibility shell on Windows")
+            bash = str(candidate)
+        result = subprocess.run([bash, (self.systemx / "WSG-MENU.sh").as_posix(), "validate"],
+                                cwd=self.temp.name, text=True, capture_output=True, timeout=30,
+                                env={**os.environ, "SYSTEMX_PYTHON": sys.executable.replace("\\", "/")})
         self.assert_ok(result)
 
     @unittest.skipUnless(shutil.which("git"), "Git ignore check requires Git")

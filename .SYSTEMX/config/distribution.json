@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "version": "1.3.0",
   "files": {
+    ".gitattributes": "2530e5358932f1d9082aa2500c85be0427df842781eeadca4afe07e60a907e7f",
     ".gitignore": "7aa6357726c3e939c671fbaed143fb3a6d1a73100cb8f3e2264b5b347395daaa",
     "AGENTS.md": "b7e11dc83dda19eafefe23ca474f44d62b0380921c5e4cfdb285dbb5d4a0c61c",
     "AGENTS/README.md": "319aa285cde66357a28581e3ea9a45249c213d8e2e3f83df807ab7ed1ea3dbac",
@@ -18,8 +19,8 @@
     "FORMAT.md": "e00a08d13e3957abfd4d393f67f594d4fd3b287b15822974a73b4bb807b2aaab",
     "GLOBAL/CONTEXT.md": "2cd0b6bb4754ada2992711656ca7450a4f00c1a8eed7731a64e4e78b05e5a872",
     "GLOBAL/README.md": "47f6536df3710d31cb1fcb09d702c44477062c689949214e31037768d7c839bc",
-    "INSTALL.ps1": "f0890aa330d754b19187015b8f7705f38345b7879978eb572d08df4dc66b7ad3",
-    "INSTALL.sh": "a22278d49586447eaa4a894cded0d5a1198c3a70f9549cf98c82c0695457e8a8",
+    "INSTALL.ps1": "b20f1912facb9b84cfb9974c944520ecfd295bd17be1c0e67c997b09b6306c19",
+    "INSTALL.sh": "228ed06396ce51147ce5a7dbd0177a3d53234ac7c5d8cb8d98ea4750da5a2565",
     "LICENSE": "ed33088709b6fad2f81f53d8240674eba33e43bd7d958935b764fc0608d3e3b7",
     "MEMORY/PROJECT.md": "1bc8b6b1dd9f2b063368d2b9da577608f4f8a58bf81f3cbe5a4fc1ba56b21bff",
     "MEMORY/README.md": "a7144e5bff0ee8dfd6e32a78cdb32e3fdab68c265f760f94e11051a0c537ff1d",
@@ -29,8 +30,8 @@
     "SOURCE.json": "54db63ad1bc94e438b804d5ac0e32d7449b2cbe7fb0c2ceaa7e9cc56f6362623",
     "STANDARD.md": "28a7057f5cfee7287b1215caf9927c081c6215247e584a58d22a94e205c6bb82",
     "START-HERE.md": "d1d6cb3c3852dcbc36f5602b85cca8db44bfffb01993a13d87f3616f55789200",
-    "SYSTEMX.ps1": "aa8b663c6b459a261a3696ec01f1a4f707ed24275f351671bd6341a549c664de",
-    "SYSTEMX.sh": "d2721fb5cf822625b1530e5c687942dd8abd2b0169b5c09814f923881e5fcd05",
+    "SYSTEMX.ps1": "96b5a571977900663c6a83a71c242346f8aa9f71e23f2eacec6b6e04c4002549",
+    "SYSTEMX.sh": "46779849ff176a8ce9040ed31245b772cb1c326c16acdca3092a470f68e632db",
     "VERSION": "64d23f858ef51b0f996e4966d4e27c0371b437e2d2787890b1f7ad22d4ec5663",
     "WORK/BLOCKED.md": "877fbc95dff9b7c788356e82b60ef9230b50d640d433070b0ac3255c2a779412",
     "WORK/CANCELLED.md": "ec309dea48c7c5d720c93f7741fe6d2df5fb1a6f4bc270f2da4d7851265e6308",
@@ -54,7 +55,7 @@
     "docs/OPERATIONS.md": "9f2d437fbb2cc6f626fa41cf5b4213f27357df39b16e2ed14dc4cdfcfc0ccc1d",
     "docs/QUALITY.md": "c45ba326d65567320b3b674855bd6b8c5ed798b7902d58a3f8d2ff016dbf70f6",
     "docs/SECURITY.md": "2cf924092bd475bf088de9eb13ed94dfff5e992dcfdccb40808438ca1099dc94",
-    "docs/SETUP.md": "2ead746697473fde8c216a89dfbcfc9f61c8aefaf23f7c3e931d68ff8bf984f4",
+    "docs/SETUP.md": "13a4a5242ad991e284a57dcf3dccbf817471277a1dd358a87fd87af67ba93f28",
     "docs/UPGRADING.md": "255057aa2507f214f3b00aeda24d837cea79d88f0a569343a9e4b1524b948d4a",
     "manager.py": "209d409a90ad4826358f24268b135c42a0a7a25e7e23901867bbd65212ee68d5",
     "profiles/chat.md": "48615398f4d4349f3ce26d7e73f54a43e856ed07bc3a1fc2ac8f4e52fc6fe796",
@@ -64,7 +65,7 @@
     "scripts/project_memory.py": "4e427cf2284520e9d6297bc43ba50d50be5f5e6a660915376aa1222164176f1f",
     "scripts/quality-check.sh": "e3a8b8e80b074572cad1e8e386d379e00958f9327e2e0959da1849ac6fef73eb",
     "scripts/release.py": "977f97f985202a3fa6f87de4e17ecce3ab0273141381938bc1f0899f44bd02b8",
-    "scripts/systemx.py": "c87a2d2c1981be7e10a26093dbae8d4e75b9006cba794e8109b2e8a454857876",
+    "scripts/systemx.py": "7d1f4d1017bd294b5d9e75f343d3c3ccd72924a3b65ffd22ca037acc1644f003",
     "scripts/validate.sh": "87f8e32c4984c9e8f7bea6c50a2779ea09a515f821cd771754ab550b0471708a",
     "templates/AGENT-ENTRYPOINT.md": "e2f4b3fce8886ed43e709dd92eddfe75d8e7016e2572467e26c740a87563214a",
     "templates/AGENT-MEMORY.md": "025dd33eb72989cbb5aa6ca9d34e2848c5a5bec12c424a5ce8abf0df244af5d8",
@@ -79,6 +80,6 @@
     "templates/WORKER-REPORT.md": "5ebefb42f51ede3f8b4d537616cd320c21d9f5b098f2b15c0445cce28d97ad4f",
     "tests/test_manager.py": "00ac6fdd78e196d27921db8b360e9c2c9569057280aba8a9a3d77f516fb281c5",
     "tests/test_project_memory.py": "7fd49cc234c30be606648f4c10ea73ac2bf7b8e27068e3247bbf46d284056485",
-    "tests/test_systemx.py": "6e8dbc4aee3e7cce398670543c5c03a8083c5dd4a9f887b0ecb81b4504857ae6"
+    "tests/test_systemx.py": "61d7fd6bc5a8f6b6d61f91c929572f99aace7d9eeadda042cdcfc55728e183a7"
   }
 }

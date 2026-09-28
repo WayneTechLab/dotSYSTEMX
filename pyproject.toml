@@ -26,7 +26,7 @@ package-dir = {systemx = ".SYSTEMX"}
 include-package-data = false
 
 [tool.setuptools.package-data]
-systemx = [".gitignore", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",
+systemx = [".gitignore", ".gitattributes", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",
            "config/*.json", "AI/*.md", "AI/*.json", "GLOBAL/*.md", "PLAN/*.md",
            "WORK/*.md", "WORK/*.json", "MEMORY/*.md", "MEMORY/sessions/*.md",
            "AGENTS/*.md", "AGENTS/*.json", "AGENTS/agent.0/*.md", "templates/*.md",

@@ -25,7 +25,7 @@ DEFAULTS = Path(__file__).resolve().parent.parent
 SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
 REQUIRED = (
-    ".gitignore", "README.md", "STANDARD.md", "LICENSE", "VERSION",
+    ".gitignore", ".gitattributes", "README.md", "STANDARD.md", "LICENSE", "VERSION",
     "CHANGELOG.md", "SOURCE.json", "SYSTEMX.sh", "WSG-MENU.sh",
     "config/project.example.json", "docs/SETUP.md", "docs/DEVELOPMENT.md",
     "docs/SECURITY.md", "docs/QUALITY.md", "docs/OPERATIONS.md",
