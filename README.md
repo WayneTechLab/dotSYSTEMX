@@ -68,6 +68,70 @@ walks through an isolated tool environment, setup preview, project facts, and
 verification. First run creates configuration only when missing and executes no
 project commands.
 
+## Start a new AI chat
+
+Paste the prompt below into your assistant and fill in the project fields. Use
+the [New Chat Setup Prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt)
+wiki page for the full instructions, chat-only workflow, and session handoff.
+
+| Entry point | Link |
+| --- | --- |
+| Project setup | [First-Time Setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) |
+| Chat-only use | [LLM Chat Setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-LLM-Chat) |
+| Pinned folder-only download | [`.SYSTEMX 1.6.0-alpha.1` ZIP](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.6.0-alpha.1/SYSTEMX-1.6.0-alpha.1.zip) |
+
+<details>
+<summary>Copy the new-project setup prompt</summary>
+
+```text
+Set up the public .SYSTEMX template for my project, then use it to
+coordinate this project's work.
+
+Project name: [PROJECT NAME]
+Project folder or workspace: [FULL PATH, OR "CHAT ONLY"]
+Initial objective: [WHAT THIS PROJECT SHOULD ACCOMPLISH]
+
+Template: https://github.com/WayneTechLab/dotSYSTEMX
+Pinned release: 1.6.0-alpha.1
+Setup: https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt
+
+Read the setup guidance and use only the selected release's .SYSTEMX
+folder content. Install into MY project; keep its facts, tasks, and
+memory out of the public source template.
+
+Inspect existing hidden paths. Use exactly ".SYSTEMX", including the dot
+and uppercase letters. Never create a separate ".systemx" folder.
+Preserve existing files, records, Git settings, and repository instructions.
+If case-conflicting paths exist, explain the conflict before making changes.
+
+With filesystem access, use the selected release's manager to preview
+first-run setup, then apply it if there are no conflicts. Keep the version
+pinned and updates manual. Leave the optional lowercase alias disabled
+unless I request it. Preserve any existing managed version and policy;
+use the documented update workflow if a version change is needed.
+
+Follow START-HERE.md. Initialize Global context, the Master Plan, project
+memory, current focus, and tasks using only this project's known facts.
+Use agent.0 as coordinator and WORK/TASKS.json as the status authority.
+Generate status views with the supplied tools. Registering a role does
+not authorize starting subagents. Record unknowns instead of inventing them.
+
+Validate the adopted project and report the actual path, selected version,
+changes, operation-log location, and next step.
+
+If this is chat-only or you cannot write files, use attached records and
+explicit handoff documents. If you cannot open the setup URL, request the
+release ZIP or relevant extracted files. Distinguish proposed changes
+from saved changes; claim persistence only after a successful write and
+readback. Ask for missing project details only when needed to proceed.
+```
+
+</details>
+
+A URL provides instructions; it does not grant filesystem access or persistent
+memory. Review exported context before sharing it with another chat. The pinned
+release keeps setup repeatable while this alpha project continues to change.
+
 ## Spend less context on repeated work
 
 A focused `.SYSTEMX` handoff can reduce repeated input tokens and avoidable
@@ -129,6 +193,7 @@ also covers package removal and manual integrations without removing shared tool
 - [Technical Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Technical-Guide)
 - [Stack Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Stack-Guide)
 - [First-Time Setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup)
+- [New Chat Setup Prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt)
 - [Standard format](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format)
 - [Agent 0 and subagents](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents)
 - [Planning and memory](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory)
