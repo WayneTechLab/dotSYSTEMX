@@ -1,5 +1,7 @@
 # About .SYSTEMX
 
+> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+
 `.SYSTEMX` is an open, reusable project operating format for people and AI
 assistants. Its purpose is continuity: keep project context, accepted outcomes,
 current work, evidence, and learned facts available across sessions and tools.

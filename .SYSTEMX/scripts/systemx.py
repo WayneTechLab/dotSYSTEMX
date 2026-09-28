@@ -24,6 +24,7 @@ import project_memory
 DEFAULTS = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(DEFAULTS))
 from systemx_paths import inspect_layout, lowercase_alias, record_directory
+from versions import version_id
 
 SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
@@ -46,6 +47,7 @@ REQUIRED = (
     "docs/INSTALLATION.md", "docs/LIBRARY.md", "docs/EXACT-CASE.md", "systemx_paths.py", "tests/test_paths.py",
     "lifecycle.py", "tests/test_lifecycle.py", "docs/FIRST-RUN.md", "docs/UNINSTALL.md",
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
+    "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
 ) + project_memory.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
@@ -164,8 +166,11 @@ def validate_template(distribution=False):
         if not (SYSTEMX / name).is_file():
             issues.append("Missing required file: " + name)
     version_path = SYSTEMX / "VERSION"
-    if version_path.is_file() and not re.fullmatch(r"\d+\.\d+\.\d+", version_path.read_text().strip()):
-        issues.append("VERSION must contain a three-part numeric template version")
+    if version_path.is_file():
+        try:
+            version_id(version_path.read_text().strip())
+        except ValueError as error:
+            issues.append("VERSION: " + str(error))
     try:
         files = list(template_files(include_runtime=distribution))
     except ConfigError as error:

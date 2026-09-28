@@ -6,6 +6,13 @@ and merge the standard without replacing the project's accepted plan or memory.
 Each project selects its own defaults; updates do not synchronize project memory
 or configure automatic updates in other projects.
 
+## Upgrade to the alpha series
+
+Install the new external CLI before selecting an alpha version; managers from
+1.5.0 and earlier only accept numeric final IDs. Follow the exact commands in
+[release policy](RELEASE-POLICY.md). Existing schema-1 project records and manager
+state remain supported. Alpha does not grant permission to reset or overwrite them.
+
 ## Managed installs and preserved files
 
 The [installer and updater](INSTALLATION.md) add versioned default snapshots and

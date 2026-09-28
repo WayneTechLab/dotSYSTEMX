@@ -1,5 +1,13 @@
 # .SYSTEMX
 
+> **ALPHA — USE AT YOUR OWN RISK.** `.SYSTEMX` is experimental and may change daily.
+> Interfaces, defaults, and guidance may change before a stable release. Pin a
+> reviewed version, keep recoverable backups, and validate it in your own project.
+> It is provided without warranty; template checks do not establish production readiness.
+
+**Current release: [`1.6.0-alpha.1`](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.6.0-alpha.1)** ·
+[Alpha release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
+
 **One project operating format, wherever the work lives.**
 
 .SYSTEMX brings shared context, planning, tasks, evidence, and agent memory into

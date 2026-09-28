@@ -29,7 +29,7 @@ class ManagerTests(unittest.TestCase):
         self.source = self.folder / "release"
         shutil.copytree(SOURCE, self.source, ignore=shutil.ignore_patterns("__pycache__", ".systemx", "local", "logs", "state"))
         self.version = (self.source / "VERSION").read_text().strip()
-        major, minor, patch = map(int, self.version.split("."))
+        major, minor, patch = manager.version_key(self.version)[:3]
         self.next_version = f"{major}.{minor}.{patch + 1}"
 
     def write_manifest(self, version=None):
@@ -180,6 +180,53 @@ class ManagerTests(unittest.TestCase):
              redirect_stderr(io.StringIO()):
             manager.startup_update(self.root)
         self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
+
+    def test_alpha_update_preserves_records_and_graduates_to_stable(self):
+        self.write_manifest("1.6.0-alpha.2")
+        self.install()
+        manager.set_policy(self.root, pin="none", auto_update="on-start")
+        before = self.root_files()
+        self.next_release("1.6.0-alpha.10")
+        bundle = manager.read_bundle(self.source)
+        with patch.object(manager, "latest_version", return_value=bundle["version"]) as latest, \
+             patch.object(manager, "remote_bundle", return_value=bundle), redirect_stderr(io.StringIO()):
+            manager.startup_update(self.root)
+            latest.assert_called_once_with(manager.DEFAULT_REPOSITORY, channel="alpha")
+        self.assertEqual(manager.status(self.root)["releaseChannel"], "alpha")
+        self.write_manifest("1.6.0")
+        manager.update(self.root, source=self.source)
+        self.assertEqual(manager.status(self.root)["releaseChannel"], "stable")
+        self.assertEqual(manager.status(self.root)["retainedVersions"], ["1.6.0-alpha.2", "1.6.0-alpha.10", "1.6.0"])
+        for name, data in before.items():
+            self.assertEqual((self.root / ".SYSTEMX" / name).read_bytes(), data)
+
+    def test_implicit_downgrade_rejected_but_explicit_rollback_allowed(self):
+        self.write_manifest("1.6.0-alpha.10")
+        self.install()
+        manager.set_policy(self.root, pin="none")
+        self.next_release("1.6.0-alpha.2")
+        bundle = manager.read_bundle(self.source)
+        with patch.object(manager, "latest_version", return_value=bundle["version"]), \
+             patch.object(manager, "remote_bundle", return_value=bundle):
+            with self.assertRaisesRegex(manager.InstallError, "downgrade"):
+                manager.update(self.root)
+            manager.update(self.root, version="1.6.0-alpha.2")
+        self.assertEqual(manager.status(self.root)["activeVersion"], "1.6.0-alpha.2")
+
+    def test_stable_project_discovers_only_stable_channel(self):
+        self.write_manifest("1.5.0")
+        self.install()
+        manager.set_policy(self.root, pin="none", auto_update="on-start")
+        with patch.object(manager, "latest_version", return_value="1.5.0") as latest:
+            manager.startup_update(self.root)
+            latest.assert_called_once_with(manager.DEFAULT_REPOSITORY, channel="stable")
+
+    def test_cli_reports_tool_version_without_a_project(self):
+        result = subprocess.run([sys.executable, "-B", str(self.source / "manager.py"), "--version"],
+                                capture_output=True, text=True, cwd=self.folder)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(".SYSTEMX " + self.version, result.stdout)
+        self.assertIn(manager.package_version(self.version), result.stdout)
 
     def test_symlinks_conflicts_and_locks_preserve_user_content(self):
         self.root.mkdir()

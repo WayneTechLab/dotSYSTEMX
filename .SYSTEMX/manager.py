@@ -18,11 +18,13 @@ import zipfile
 
 if __package__:
     from . import lifecycle
+    from .versions import version_id, version_key, release_channel, package_version
     from .systemx_paths import (SystemXPathError, inspect_layout, is_link, lexical_path,
                                lowercase_alias as path_alias, project_directory, record_directory)
 else:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import lifecycle
+    from versions import version_id, version_key, release_channel, package_version
     from systemx_paths import (SystemXPathError, inspect_layout, is_link, lexical_path,
                               lowercase_alias as path_alias, project_directory, record_directory)
 
@@ -44,12 +46,6 @@ InstallError = SystemXPathError
 
 def now():
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-
-
-def version_id(value):
-    if not isinstance(value, str) or not re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)", value):
-        raise InstallError("Use an exact release version, such as 1.3.0")
-    return value
 
 
 def repository_id(value):
@@ -113,10 +109,13 @@ def verified_bundle(files):
     required = {"VERSION", "LICENSE", "SOURCE.json", "STANDARD.md", "START-HERE.md",
                 "manager.py", "scripts/systemx.py", "scripts/project_memory.py",
                 "config/template-records.json", *SEEDS}
-    if tuple(map(int, manifest["version"].split("."))) >= (1, 4, 0):
+    base_version = version_key(manifest["version"])[:3]
+    if base_version >= (1, 4, 0):
         required.add("systemx_paths.py")
-    if tuple(map(int, manifest["version"].split("."))) >= (1, 5, 0):
+    if base_version >= (1, 5, 0):
         required.add("lifecycle.py")
+    if base_version >= (1, 6, 0):
+        required.add("versions.py")
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -194,13 +193,44 @@ def get_url(url, limit):
     return data
 
 
-def latest_version(repository=DEFAULT_REPOSITORY):
+def latest_version(repository=DEFAULT_REPOSITORY, channel="stable"):
     repository_id(repository)
-    release = decode(get_url("https://api.github.com/repos/" + repository + "/releases/latest", MAX_FILE))
-    if release.get("draft") or release.get("prerelease"):
-        raise InstallError("Expected a stable published release")
-    tag = release.get("tag_name", "")
-    return version_id(tag[1:] if tag.startswith("v") else tag)
+    if channel not in {"stable", "alpha"}:
+        raise InstallError("Unknown release channel")
+    # Stable installations never discover alpha releases implicitly. Alpha users
+    # explicitly selected an alpha first; they can also graduate to a final tag.
+    base = "https://api.github.com/repos/" + repository + "/releases"
+    if channel == "stable":
+        release = decode(get_url(base + "/latest", MAX_FILE))
+        if not isinstance(release, dict) or release.get("draft") or release.get("prerelease"):
+            raise InstallError("Expected a stable published release")
+        tag = release.get("tag_name", "")
+        value = version_id(tag[1:] if isinstance(tag, str) and tag.startswith("v") else tag)
+        if release_channel(value) != "stable":
+            raise InstallError("Stable discovery refused an alpha tag")
+        return value
+    candidates = []
+    # Bounded discovery; fail rather than silently select from a truncated list.
+    for page in range(1, 11):
+        releases = decode(get_url(base + "?per_page=100&page=" + str(page), MAX_ARCHIVE))
+        if not isinstance(releases, list) or len(releases) > 100:
+            raise InstallError("Invalid release list")
+        for release in releases:
+            if not isinstance(release, dict) or release.get("draft"):
+                continue
+            tag = release.get("tag_name", "")
+            try:
+                value = version_id(tag[1:] if isinstance(tag, str) and tag.startswith("v") else tag)
+            except ValueError:
+                continue
+            expected_prerelease = release_channel(value) == "alpha"
+            if release.get("prerelease") is expected_prerelease:
+                candidates.append(value)
+        if len(releases) < 100:
+            if not candidates:
+                raise InstallError("No compatible published alpha or final release found")
+            return max(candidates, key=version_key)
+    raise InstallError("Release discovery limit reached; select an exact --version")
 
 
 def remote_bundle(version, repository=DEFAULT_REPOSITORY):
@@ -446,7 +476,10 @@ def update(target, *, source=None, version=None, dry_run=False):
     if state["pinnedVersion"] and version not in {None, state["pinnedVersion"]}:
         raise InstallError("Version is pinned; explicitly unpin before selecting another release")
     desired = version or (state["pinnedVersion"] if not source else None)
-    bundle = read_bundle(source) if source else remote_bundle(desired or latest_version(state["repository"]), state["repository"])
+    bundle = read_bundle(source) if source else remote_bundle(
+        desired or latest_version(state["repository"], channel=release_channel(state["activeVersion"])), state["repository"])
+    if not source and version is None and version_key(bundle["version"]) < version_key(state["activeVersion"]):
+        raise InstallError("Discovery would downgrade this project; select an exact --version to roll back")
     if version is not None and bundle["version"] != version_id(version):
         raise InstallError("Requested version differs from the supplied source")
     if state["pinnedVersion"] and bundle["version"] != state["pinnedVersion"]:
@@ -493,7 +526,8 @@ def status(target):
     path, bundle = active_bundle(root, state)
     return {"target": str(root), "profile": state["profile"], "activeVersion": bundle["version"],
             "pinnedVersion": state["pinnedVersion"], "autoUpdate": state["autoUpdate"],
-            "defaults": str(path), "retainedVersions": sorted(state["releases"]), "integrity": "verified",
+            "releaseChannel": release_channel(bundle["version"]),
+            "defaults": str(path), "retainedVersions": sorted(state["releases"], key=version_key), "integrity": "verified",
             "pathLayout": alias(root)}
 
 
@@ -510,8 +544,8 @@ def startup_update(root):
         except (ValueError, KeyError, TypeError):
             pass
     try:
-        version = latest_version(state["repository"])
-        new, old = tuple(map(int, version.split("."))), tuple(map(int, state["activeVersion"].split(".")))
+        version = latest_version(state["repository"], channel=release_channel(state["activeVersion"]))
+        new, old = version_key(version), version_key(state["activeVersion"])
         if new > old and new[0] == old[0]:
             update(root, version=version)
             print("SYSTEMX selected new defaults: " + version, file=sys.stderr)
@@ -733,6 +767,9 @@ def main(argv=None):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=".SYSTEMX additive installation and version management")
+    tool_version = version_id((PACKAGE / "VERSION").read_text(encoding="utf-8").strip())
+    parser.add_argument("--version", action="version", version=".SYSTEMX " + tool_version +
+                        " (" + release_channel(tool_version) + "; Python package " + package_version(tool_version) + ")")
     sub = parser.add_subparsers(dest="action", required=True)
     command = sub.add_parser("install")
     command.add_argument("--target", required=True)

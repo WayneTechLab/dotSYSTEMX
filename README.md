@@ -1,5 +1,13 @@
 # .SYSTEMX
 
+> **ALPHA — USE AT YOUR OWN RISK.** `.SYSTEMX` is experimental and may change daily.
+> Interfaces, defaults, and guidance may change before a stable release. Pin a
+> reviewed version, keep recoverable backups, and validate it in your own project.
+> It is provided without warranty; template checks do not establish production readiness.
+
+**Current release: [`1.6.0-alpha.1`](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.6.0-alpha.1)** ·
+[Alpha release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
+
 **A portable operating standard for human and AI-assisted projects.**
 
 .SYSTEMX gives people and LLMs a shared structure for project context, master
@@ -15,7 +23,7 @@ explains filesystem behavior and safe handling of existing conflicts.
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [Setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started) ·
 [Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
-[MIT license](.SYSTEMX/LICENSE)
+[MIT license](LICENSE)
 
 ## Choose your workspace
 
@@ -36,7 +44,7 @@ Use the GitHub template button, or install the command and library into your
 chosen Python environment:
 
 ```bash
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.6.0-alpha.1"
 systemx first-run --target "/path/to/project" --profile project
 systemx first-run --target "/path/to/project" --profile project --apply
 systemx run --target "/path/to/project" -- context --agent agent.0
@@ -128,7 +136,9 @@ also covers package removal and manual integrations without removing shared tool
 - [Evidence and acceptance](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Evidence-and-Acceptance)
 - [Command reference](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Command-Reference)
 - [Versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog)
-- [Contributing](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Contributing)
+- [Contributing](CONTRIBUTING.md)
+- [Support and bug reports](SUPPORT.md)
+- [Security reporting](SECURITY.md)
 
 .SYSTEMX defines a project operating convention. Project quality and delivery
 readiness come from the acceptance criteria, configured checks, and verified
@@ -137,7 +147,7 @@ evidence of each adopted project. Keep private records out of public exports.
 ## Project and license
 
 Maintained by **[Wayne Tech Lab LLC](https://github.com/WayneTechLab)** and released
-under the [MIT License](.SYSTEMX/LICENSE).
+under the [MIT License](LICENSE).
 
 The standalone template is derived from the operating folder in
 [SFWA-WTL-TEMPLATE](https://github.com/WayneTechLab/SFWA-WTL-TEMPLATE).

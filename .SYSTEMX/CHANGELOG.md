@@ -4,6 +4,21 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.6.0-alpha.1 — Alpha1
+
+- Consolidated all existing template branches into `Alpha1`, retaining `main`
+  as the default public branch and preserving branch history.
+- Declared alpha maturity, use-at-own-risk status, and possible daily changes
+  across public entry points; immutable release IDs distinguish reviewed snapshots.
+- Added strict alpha IDs, numeric prerelease ordering, stable-channel isolation,
+  alpha discovery, final-release graduation, and implicit-downgrade refusal.
+- Added `systemx --version`, selected release-channel reporting, Python alpha
+  package metadata, and documented migration from pre-alpha managers.
+- Added discoverable licensing, contribution/support/security reporting paths,
+  bug-report templates, and release/compatibility guidance for public adopters.
+- Kept pins/manual updates by default, additive preservation, operation receipts,
+  exact casing, reversible removal, and blank reusable project records.
+
 ## 1.5.0
 
 - Added honest token/cost/time guidance, a measurement approach, and new Technical,

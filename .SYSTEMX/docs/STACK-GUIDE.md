@@ -1,5 +1,7 @@
 # Stack Guide
 
+> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+
 `.SYSTEMX` is stack-neutral. It organizes how work is understood and verified;
 your project chooses its languages, frameworks, data stores, and deployment tools.
 

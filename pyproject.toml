@@ -4,18 +4,25 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.5.0"
+version = "1.6.0a1"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
 license-files = [".SYSTEMX/LICENSE"]
 dependencies = []
+keywords = ["systemx", "project-memory", "llm", "project-template"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+]
 
 [project.scripts]
 systemx = "systemx.manager:main"
 
 [project.urls]
+Issues = "https://github.com/WayneTechLab/dotSYSTEMX/issues"
 Repository = "https://github.com/WayneTechLab/dotSYSTEMX"
 Documentation = "https://github.com/WayneTechLab/dotSYSTEMX/wiki"
 Changelog = "https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog"

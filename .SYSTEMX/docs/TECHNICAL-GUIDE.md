@@ -1,5 +1,7 @@
 # Technical Guide
 
+> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+
 `.SYSTEMX` is a file-based project operating format with optional Python tools.
 It supplies records, local validation, bounded context, version selection, and
 reversible installation lifecycle operations. It is not a model runtime or a

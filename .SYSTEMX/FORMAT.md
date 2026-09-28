@@ -1,5 +1,7 @@
 # .SYSTEMX format contract
 
+> **Alpha: use at your own risk; may change daily.** See the [release policy](docs/RELEASE-POLICY.md).
+
 SYSTEMX defines a reusable project operating format. It is a project-maintained
 convention, not a certification or an externally ratified industry standard.
 Documentation can be used without the CLI. The CLI validates the JSON records
@@ -145,8 +147,10 @@ MIT license and source attribution remain part of every copy. Follow the
 The optional `INSTALLATION.json` contains exactly `schemaVersion`, `profile`,
 `repository`, `activeVersion`, `pinnedVersion`, `autoUpdate`, `installedAt`,
 `updatedAt`, and `releases`. Profiles are `project`, `directory`, `drive`, or `chat`.
-Repository is a GitHub `OWNER/REPO`. Version IDs are exact three-part numeric
-releases. `pinnedVersion` is either null or the active version; a pin requires
+Repository is a GitHub `OWNER/REPO`. Version IDs are exact `X.Y.Z` final releases
+or `X.Y.Z-alpha.N` prereleases, with no leading zeroes and alpha N starting at 1.
+The selected ID determines the discovery channel; see [release policy](docs/RELEASE-POLICY.md).
+`pinnedVersion` is either null or the active version; a pin requires
 `autoUpdate: "manual"`. The other policy is explicit opt-in `"on-start"`.
 `releases` maps retained version IDs to their distribution-manifest SHA-256 values.
 

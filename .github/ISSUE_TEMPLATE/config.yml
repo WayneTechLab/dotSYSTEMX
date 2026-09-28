@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation and setup
+    url: https://github.com/WayneTechLab/dotSYSTEMX/wiki
+    about: Guides for setup, updates, memory, and removal.
+  - name: Private security report
+    url: https://github.com/WayneTechLab/dotSYSTEMX/security/advisories/new
+    about: Report sensitive vulnerabilities without disclosing them publicly.

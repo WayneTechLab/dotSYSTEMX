@@ -64,19 +64,27 @@ from the outer `.SYSTEMX`, never the blank seeds in a release snapshot.
 
 ## Select, lock, or update a version
 
+**Before moving from 1.5.0 or earlier to alpha, upgrade the external CLI/library
+first.** Older managers cannot parse alpha IDs, and additive updates deliberately
+preserve their original files. See [alpha migration and release policy](RELEASE-POLICY.md).
+`systemx --version` reports the installed tool; `systemx status --target ...`
+reports that project's selected defaults and derived `releaseChannel`.
+
 New installations are pinned to the installed release and use manual updates.
 After reviewing the [published release history](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog):
 
 ```bash
 systemx status --target "/path/to/project"
 systemx policy --target "/path/to/project" --pin none
-systemx update --target "/path/to/project" --version 1.5.0 --dry-run
-systemx update --target "/path/to/project" --version 1.5.0
+systemx update --target "/path/to/project" --version 1.6.0-alpha.1 --dry-run
+systemx update --target "/path/to/project" --version 1.6.0-alpha.1
 systemx policy --target "/path/to/project" --pin current
 ```
 
 Use the desired published version in place of the example. Omitting `--version`
-on an unpinned update selects GitHub's latest stable release. `--source` selects
+on an unpinned update discovers the selected version's channel: stable versions
+select only final releases; alpha versions select newer published alpha or final
+releases. Discovery cannot silently downgrade a project. `--source` selects
 a local reviewed distribution instead; its manifest determines the version.
 Version selection can return to an older managed-install release, while retaining
 all local data and snapshots. Application/schema migrations are never reversed
@@ -100,8 +108,9 @@ systemx policy --target "/path/to/project" --pin current
 ```
 
 With this opt-in policy, the managed launcher checks at startup, at most once per
-24 hours after a successful check, and selects a newer stable release in the same
-major version using the additive rules. A new major version requires manual review.
+24 hours after a successful check, and selects a newer release in the same
+major version and the selected channel using the additive rules. An alpha project
+follows alpha or final releases; a stable project never opts into alpha automatically. A new major version requires manual review.
 No process runs when SYSTEMX is closed. There are no OS scheduler, login, or Git hooks.
 An unavailable check leaves the verified installed release usable. A failed check
 can be retried at the next startup. Use `systemx run --offline --target ... -- ...`

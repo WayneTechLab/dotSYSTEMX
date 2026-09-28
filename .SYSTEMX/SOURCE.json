@@ -3,7 +3,7 @@
   "branch": "main",
   "commit": "c3e2272efe7d9fe3fde1add3144aab3ec6e487c4",
   "sourcePath": ".SYSTEMX",
-  "templateVersion": "1.5.0",
+  "templateVersion": "1.6.0-alpha.1",
   "license": "MIT",
   "licenseSourcePath": "LICENSE",
   "retainedVerbatim": [],

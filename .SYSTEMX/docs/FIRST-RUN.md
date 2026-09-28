@@ -1,5 +1,7 @@
 # First-Time Setup
 
+> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+
 This guide takes a new user from choosing a workspace to a project with a pinned
 `.SYSTEMX` installation, empty command configuration, and a clear next step.
 It does not install a product stack, fill in invented requirements, or start agents.
@@ -36,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.5.0"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.6.0-alpha.1"
 "$HOME/.venvs/dotsystemx/bin/systemx" --help
 ```
 
@@ -44,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.5.0"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.6.0-alpha.1"
 & "$HOME\.venvs\dotsystemx\Scripts\systemx.exe" --help
 ```
 

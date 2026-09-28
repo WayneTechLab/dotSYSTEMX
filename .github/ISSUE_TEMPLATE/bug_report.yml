@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a reproducible .SYSTEMX problem using sanitized evidence.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: ".SYSTEMX is alpha and may change daily. Do not post secrets or project records. Report vulnerabilities privately through the Security tab."
+  - type: textarea
+    id: versions
+    attributes:
+      label: Tool version and selected defaults
+      description: "Include systemx --version and the activeVersion from status. Redact paths."
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: "OS, Python version, setup profile, and filesystem or Drive details if relevant."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction, expected result, and actual result
+      description: "Use a temporary project and the smallest sanitized example. Include errors and preservation impact."
+    validations:
+      required: true

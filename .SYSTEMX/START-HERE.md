@@ -1,5 +1,7 @@
 # Start here: load the active project
 
+> **Alpha: use at your own risk; may change daily.** See the [release policy](docs/RELEASE-POLICY.md).
+
 **Exact directory name: `.SYSTEMX`**, including the leading dot and uppercase
 letters. Inspect existing hidden paths before writing. Never create a second
 `.systemx` or mixed-case folder. A lowercase path is allowed only when it resolves
