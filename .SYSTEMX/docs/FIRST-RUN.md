@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.3-alpha.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.4-alpha.1"
 "$HOME/.venvs/dotsystemx/bin/systemx" --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.3-alpha.1"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.4-alpha.1"
 & "$HOME\.venvs\dotsystemx\Scripts\systemx.exe" --help
 ```
 

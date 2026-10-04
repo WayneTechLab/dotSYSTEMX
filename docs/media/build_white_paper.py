@@ -6,7 +6,9 @@ This builder is documentation tooling, not part of the portable runtime.
 """
 from pathlib import Path
 import re
+import argparse
 from html import escape
+from reportlab.platypus.tableofcontents import TableOfContents
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
@@ -18,7 +20,12 @@ from reportlab.platypus import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / '.SYSTEMX/MEDIA/SYSTEMX-White-Paper-v1.0.md'
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--edition', choices=('1.0', '1.1'), default='1.1')
+args = parser.parse_args()
+EDITION = args.edition
+BASELINE = '1.8.2-alpha.1' if EDITION == '1.0' else '1.8.3-alpha.1'
+SOURCE = ROOT / ('.SYSTEMX/MEDIA/SYSTEMX-White-Paper-v' + EDITION + '.md')
 OUTPUT = SOURCE.with_suffix('.pdf')
 W, H = A4
 MARGIN = 48
@@ -31,11 +38,11 @@ RULE = colors.HexColor('#d6e2e6')
 BODY = colors.HexColor('#233744')
 
 STYLES = {
-    'body': ParagraphStyle('body',fontName='Helvetica',fontSize=10.2,leading=14.6,textColor=BODY,spaceAfter=10),
+    'body': ParagraphStyle('body',fontName='Helvetica',fontSize=9.8,leading=13.6,textColor=BODY,spaceAfter=8),
     'small': ParagraphStyle('small',fontName='Helvetica',fontSize=8.5,leading=12,textColor=MUTED,spaceAfter=7),
     'h1': ParagraphStyle('h1',fontName='Helvetica-Bold',fontSize=23,leading=28,textColor=NAVY,spaceAfter=17,keepWithNext=True),
     'h2': ParagraphStyle('h2',fontName='Helvetica-Bold',fontSize=12.2,leading=16,textColor=TEAL,spaceBefore=7,spaceAfter=8,keepWithNext=True),
-    'cell': ParagraphStyle('cell',fontName='Helvetica',fontSize=8.5,leading=11.7,textColor=BODY,spaceAfter=0),
+    'cell': ParagraphStyle('cell',fontName='Helvetica',fontSize=8.3,leading=10.8,textColor=BODY,spaceAfter=0),
     'th': ParagraphStyle('th',fontName='Helvetica-Bold',fontSize=8.5,leading=11.7,textColor=colors.white,spaceAfter=0),
     'code': ParagraphStyle('code',fontName='Courier',fontSize=8,leading=11.7,textColor=NAVY,backColor=LIGHT,borderPadding=10,spaceBefore=5,spaceAfter=14),
 }
@@ -95,7 +102,7 @@ def table(lines):
     else:widths=[WIDTH/n]*n
     cells=[[para(x,'th' if i==0 else 'cell') for x in row] for i,row in enumerate(rows)]
     t=Table(cells,colWidths=widths,repeatRows=1,hAlign='LEFT')
-    t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),NAVY),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,LIGHT]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),8),('RIGHTPADDING',(0,0),(-1,-1),8),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('LINEBELOW',(0,-1),(-1,-1),.5,RULE)]))
+    t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),NAVY),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,LIGHT]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),8),('RIGHTPADDING',(0,0),(-1,-1),8),('TOPPADDING',(0,0),(-1,-1),5.5),('BOTTOMPADDING',(0,0),(-1,-1),5.5),('LINEBELOW',(0,-1),(-1,-1),.5,RULE)]))
     return [t,Spacer(1,12)]
 
 def content(text,refs=False):
@@ -127,20 +134,21 @@ class PaperDoc(BaseDocTemplate):
         if hasattr(flowable,'section_key'):
             self.canv.bookmarkPage(flowable.section_key)
             self.canv.addOutlineEntry(flowable.getPlainText(),flowable.section_key,0,False)
+            self.notify('TOCEntry', (0, flowable.getPlainText(), self.page, flowable.section_key))
 
 def header_footer(c,doc):
     if doc.page==1:return
     c.saveState();c.setFillColor(NAVY);c.setFont('Helvetica-Bold',9);c.drawString(MARGIN,H-30,'.SYSTEMX')
-    c.setFillColor(MUTED);c.setFont('Helvetica',8);c.drawRightString(W-MARGIN,H-30,'WHITE PAPER  /  EDITION 1.0')
+    c.setFillColor(MUTED);c.setFont('Helvetica',8);c.drawRightString(W-MARGIN,H-30,'WHITE PAPER  /  EDITION ' + EDITION)
     c.setStrokeColor(RULE);c.setLineWidth(.6);c.line(MARGIN,39,W-MARGIN,39)
-    c.setFont('Helvetica',7.5);c.drawString(MARGIN,26,'4 OCTOBER 2026  |  ALPHA FORMAT  |  BASELINE v1.8.2-alpha.1')
+    c.setFont('Helvetica',7.5);c.drawString(MARGIN,26,'4 OCTOBER 2026  |  ALPHA FORMAT  |  BASELINE v' + BASELINE)
     c.drawRightString(W-MARGIN,26,str(doc.page));c.restoreState()
 
 def cover(c,doc):
     c.saveState();c.setFillColor(NAVY);c.rect(0,H-24,W,24,fill=1,stroke=0)
     c.setFillColor(TEAL);c.rect(MARGIN,H-121,5,55,fill=1,stroke=0)
     c.setFillColor(NAVY);c.setFont('Helvetica-Bold',48);c.drawString(MARGIN+18,H-108,'.SYSTEMX')
-    c.setFillColor(MUTED);c.setFont('Helvetica-Bold',10);c.drawString(MARGIN,H-158,'WHITE PAPER  /  EDITION 1.0')
+    c.setFillColor(MUTED);c.setFont('Helvetica-Bold',10);c.drawString(MARGIN,H-158,'WHITE PAPER  /  EDITION ' + EDITION)
     c.setStrokeColor(RULE);c.line(MARGIN,57,W-MARGIN,57)
     c.setFont('Helvetica',8);c.drawString(MARGIN,39,'PUBLIC DISCUSSION PAPER  |  4 OCTOBER 2026')
     c.drawRightString(W-MARGIN,39,'PROJECT MEMORY  /  COORDINATION  /  EVIDENCE');c.restoreState()
@@ -152,18 +160,18 @@ def build():
     doc=PaperDoc(str(OUTPUT),pagesize=A4,leftMargin=MARGIN,rightMargin=MARGIN,topMargin=58,bottomMargin=54,title='.SYSTEMX: Portable Project Memory for Agentic Work',author='.SYSTEMX Project',subject='Architecture, evidence, lifecycle and evaluation of the .SYSTEMX alpha format',pageCompression=1)
     frame=Frame(MARGIN,54,WIDTH,H-112,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)
     doc.addPageTemplates([PageTemplate(id='cover',frames=[frame],onPage=cover,autoNextPageTemplate='body'),PageTemplate(id='body',frames=[frame],onPage=header_footer)])
-    story=[Spacer(1,123),para('Portable project memory<br/>for agentic work','h1'),para('A coordination format for people, AI assistants and the tools that execute their work.'),para('EDITION 1.0  |  4 OCTOBER 2026<br/>Technical baseline: v1.8.2-alpha.1','small'),Spacer(1,12)]
+    story=[Spacer(1,123),para('Portable project memory<br/>for agentic work','h1'),para('A coordination format for people, AI assistants and the tools that execute their work.'),para('EDITION ' + EDITION + '  |  4 OCTOBER 2026<br/>Technical baseline: v' + BASELINE,'small'),Spacer(1,12)]
     abstract=front.split('### Abstract\n',1)[1]
     story.extend(content('### Abstract\n'+abstract))
     story.extend([PageBreak(),para('Reading this paper','h1'),para('Start with the executive perspective, then follow the records, roles and operating boundaries. The final sections address measurement, adoption and the evidence behind the claims.')])
-    for index,section in enumerate(sections):
-        title=section.split('\n',1)[0]
-        story.append(Paragraph('<link href="#section'+str(index)+'" color="#007e87">'+escape(title)+'</link>',ParagraphStyle('toc',parent=STYLES['body'],spaceAfter=12,fontSize=10.5)))
+    toc = TableOfContents()
+    toc.levelStyles = [ParagraphStyle('toc',parent=STYLES['body'],fontSize=9.2,leading=13,spaceBefore=2,spaceAfter=3,leftIndent=0,rightIndent=22)]
+    story.append(toc)
     story.extend([Spacer(1,13),para('Interpretation guide','h2'),para('Implemented features are identified through pinned source references. Worked examples illustrate the method. Efficiency benefits are hypotheses for evaluation. Proposed extensions are separate from the current implementation.')])
     for index,section in enumerate(sections):
         title,body=section.split('\n',1);heading=para(title,'h1');heading.section_key='section'+str(index)
         story.extend([PageBreak(),heading]);story.extend(content(body,refs=title.startswith('References')))
-    doc.build(story)
+    doc.multiBuild(story)
     print(OUTPUT)
 
 if __name__=='__main__':build()

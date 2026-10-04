@@ -8,22 +8,31 @@ handoff boundary. The brand is **.SYSTEMX**; provider names describe use cases.
 
 ## White paper
 
-**Portable project memory for agentic work** - edition 1.0, 4 October 2026.
-A 17-page paper for founders, engineering teams and AI tooling practitioners,
-covering architecture, Agent 0/X/Z, multi-project coordination, installation,
-efficiency measurement, evidence limits and a worked web-app example.
+**Portable project memory for agentic work** - expanded edition 1.1,
+4 October 2026. A 50-page implementation reference for founders, engineering
+teams and AI tooling practitioners: 29 chapters, canonical record contracts,
+all 100 Agent Z questions, command families, a complete baseline file inventory,
+and a tested local coordination walkthrough.
 
-[Read the PDF](SYSTEMX-White-Paper-v1.0.pdf) ·
-[Editable Markdown](SYSTEMX-White-Paper-v1.0.md) ·
-[Document metadata and checksums](SYSTEMX-White-Paper-v1.0.json) ·
-[Wiki overview](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
+[Expanded PDF](SYSTEMX-White-Paper-v1.1.pdf) ·
+[Editable Markdown](SYSTEMX-White-Paper-v1.1.md) ·
+[Metadata and checksums](SYSTEMX-White-Paper-v1.1.json) ·
+[Wiki and audio reading](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
 
-The paper pins technical claims to v1.8.2-alpha.1 and ships in the documentation
-patch v1.8.3-alpha.1. Its worked examples are illustrative; it does not claim
-measured savings, AGI, vendor endorsement or production certification. The PDF
-has selectable text, vector diagrams, bookmarks and clickable references; the
-Markdown is the accessible editable source. Optional PDF build tooling lives
-outside the portable runtime in the repository's `docs/media/` directory.
+Edition 1.0 remains available as the shorter 17-page introduction:
+[original PDF](SYSTEMX-White-Paper-v1.0.pdf) and
+[original Markdown](SYSTEMX-White-Paper-v1.0.md).
+
+Edition 1.1 pins implementation references to v1.8.3-alpha.1 and ships in the
+v1.8.4-alpha.1 documentation patch. The PDF contains selectable text, two vector
+diagrams, numbered contents, bookmarks and clickable references. It is not a
+tagged PDF/UA export; Markdown remains the editable reading alternative.
+Examples do not establish measured savings, AGI or production certification.
+
+The release provides a separate synthetic audio reading and its text transcript.
+Audio is excluded from the portable installer bundle to keep its existing size
+limits. The source PDF/Markdown stay in this exact MEDIA directory. Optional
+publishing, narration and walkthrough tools live in `docs/media/` in the repository.
 
 ## Choose a workflow
 

@@ -4,6 +4,18 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.4-alpha.1 - Expanded white paper and audio companion
+
+- Added edition 1.1 as a 50-page implementation reference with 29 chapters,
+  exact record contracts, the complete 100-question policy, command families,
+  source inventory, coordination mechanics and recovery boundaries.
+- Added an executable disposable walkthrough that verifies failed/corrected
+  checks, state transitions, stable event replay, review deltas and acceptance.
+- Retained edition 1.0 unchanged; added numbered PDF contents and a separate
+  synthetic audio companion in the release, outside the portable file bundle.
+- Updated public README/wiki discovery and package inventory. Runtime behavior
+  and record schemas are unchanged.
+
 ## 1.8.3-alpha.1 — Public white paper
 
 - Added a 17-page white paper and editable Markdown in `.SYSTEMX/MEDIA`, with
