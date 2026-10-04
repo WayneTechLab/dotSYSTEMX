@@ -59,13 +59,14 @@ lowercase access to the same canonical folder where supported.
 
 ## How it works
 
-![The .SYSTEMX loop: context, plan, work, evidence, review, and memory. Your AI tools run the work; .SYSTEMX keeps the records.](docs/assets/systemx-workflow.png)
+![.SYSTEMX coordination: a researched brief and shared context guide Agent 0 and authorized tools. Agent X records time and evidence; Agent Z reviews the fixed rubric. Acceptance and a saved checkpoint define the next bounded action or finish.](docs/assets/systemx-coordination.png)
 
 1. **Define the outcome.** Save the project's purpose, constraints, and acceptance criteria.
 2. **Plan the next work.** Agent 0 connects milestones to tasks with owners and dependencies.
 3. **Work within scope.** One agent handles the task, or authorized subagents take independent assignments.
-4. **Verify and review.** Record evidence and review the result before marking it done.
-5. **Save the next step.** Update the current focus and checkpoint so the next session can continue.
+4. **Record time and evidence.** Agent X preserves meaningful events, attempts, revisions, and due items.
+5. **Verify and review.** Agent Z applies the fixed 100-question policy at a review boundary; Agent 0/user accepts against the original criteria.
+6. **Save the next step or finish.** Update canonical tasks, generated views, reviewed memory, and the checkpoint. Reuse unchanged proof instead of starting another processing loop.
 
 | Responsibility | Record inside `.SYSTEMX` |
 | --- | --- |
@@ -75,6 +76,8 @@ lowercase access to the same canonical folder where supported.
 | Current objective and task pointers | `WORK/FOCUS.json` → generated `CURRENT.md` |
 | Verified decisions and reusable knowledge | `MEMORY/PROJECT.md` |
 | Coordinator and worker continuity | `AGENTS/<id>/MEMORY.md` and dated session checkpoints |
+| Event/time and due-item records after activation | `EVENTS/EVENTS.json` and `EVENTS/SCHEDULE.json` |
+| Versioned policy and fixed review scorecards after activation | `REVIEWS/POLICY.json`, requests, policy snapshots, and reports |
 
 The ledger generates TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED views.
 “Global” means shared within the active project. The public template starts
@@ -89,7 +92,9 @@ flowchart LR
     Root --> Plan["PLAN / Master Plan"]
     Root --> Work["WORK / Tasks and focus"]
     Root --> Memory["MEMORY / Facts and checkpoints"]
-    Root --> Agents["AGENTS / Agent 0 and worker notes"]
+    Root --> Agents["AGENTS / Agent 0, optional X/Z, and worker notes"]
+    Root -. role activation .-> Events["EVENTS / Time and due items"]
+    Root -. role activation .-> Reviews["REVIEWS / 100-question policy and scorecards"]
     Work --> Views["Generated current and status views"]
 ```
 
@@ -101,6 +106,30 @@ for the record flow, managed defaults, and accessible text explanations.
 
 Follow [a first task from start to finish](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Daily-Workflow)
 or read the [planning and memory guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory).
+
+## From one researched brief to a finished project
+
+Start with a deep-research brief: the problem, audience, relevant sources,
+constraints, examples, and measurable acceptance criteria. More verified,
+relevant information can improve results; a larger unfiltered prompt can also
+increase noise and cost. Save sources once and give each task the context it needs.
+
+A comprehensive “one shot” request can become **phases → milestones → tasks →
+execution waves**, with authorized subagents or threads handling independent
+scopes. Agent 0 keeps the Global context and Master Plan connected to each turn;
+Agent X records what happened and when; Agent Z reviews evidence and the remaining
+delta. Canonical task updates keep TODO, WORKING-ON, REVIEW, and DONE views coherent.
+
+This can feel like a shared project brain: verified knowledge and corrections
+accumulate across sessions. It is a coordination and memory pattern, not AGI or
+model retraining, and improvement still depends on the quality of evidence and
+review. “One shot” describes the starting brief, not a guarantee of completion
+in one response or unlimited unattended execution.
+
+Follow the [20-page web app, start-to-finish guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/One-Shot-Project-Guide)
+for a route inventory, toolchain map, research and execution super prompts,
+wave gates, and completion evidence. The same process supports research reports,
+CLI tools, bots, content sites, and migrations.
 
 ## SYSTEMX PROJECTS: one workspace, separate project memory
 
@@ -140,6 +169,22 @@ routing; source references do not automatically connect services or launch agent
 Read the [SYSTEMX PROJECTS manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/SYSTEMX-Projects)
 for first-time setup, scoped task commands, subagent handoffs, status snapshots,
 chat export, version ownership, and removal.
+
+## Shared context across repositories, clouds, chats, and bots
+
+Use one `.SYSTEMX` per repository, one portfolio with named `.SYSTEMXP` children,
+or a combination with explicit ownership and handoff references. Several chats
+can work from the same project snapshot when their tools have authorized access.
+A Drive folder URL identifies the source; the connector or local sync client
+provides access and persistence. Keep one canonical writer per scope and verify
+saved revisions before another session writes.
+
+A bot on a computer, VM, or cloud worker can load the same project records at
+startup through its CLI or adapter. This supplies immediately available context
+when access exists; the harness still owns execution, scheduling, and permissions.
+Read [shared workspaces, clouds, chats, and bots](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Shared-Workspaces-Cloud-and-Bots)
+for Drive, cloud snapshot patterns, Codex sessions/dots, Grok-based workers,
+concurrent-chat handoffs, recovery, and removal boundaries.
 
 ## Agent 0 and your AI tools
 
@@ -203,6 +248,8 @@ chat handoffs, and coordinated work across projects.
 
 | Workspace | Setup guide |
 | --- | --- |
+| A researched brief through a complete app or other deliverable | [One-shot project guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/One-Shot-Project-Guide) |
+| Shared work across chats, repositories, clouds, or bots | [Shared workspace guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Shared-Workspaces-Cloud-and-Bots) |
 | Multiple projects or channels in one workspace | [SYSTEMX PROJECTS](https://github.com/WayneTechLab/dotSYSTEMX/wiki/SYSTEMX-Projects) |
 | Repository or VS Code project root | [Project setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Project) |
 | Windows, macOS, or Linux working directory | [Directory setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Directory) |

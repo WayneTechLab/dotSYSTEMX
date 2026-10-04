@@ -23,3 +23,13 @@ reconcile them with review; never merge, rename, or delete them automatically.
 
 Current user instructions and environment policies take precedence over stored
 memory. Delegation requires the authority supplied by the active task/environment.
+
+For a child, select its registered name explicitly and use
+`.SYSTEMX/Projects/NAME/.SYSTEMXP`; never a nameless or nested installation.
+Agent X records meaningful time/evidence; Agent Z uses the fixed versioned
+100-question policy at review boundaries or on request. Activate their records
+explicitly in the selected scope when authorized. Canonical task writes regenerate
+status views; do not maintain duplicate TODO/DONE lists in other chats. Across
+threads, worktrees, or synced copies, name one canonical writer and verify the
+snapshot before integrating changes. Read only relevant context and retained
+proof; save reviewed facts and the next action without an automatic repeat loop.

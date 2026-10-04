@@ -7,7 +7,8 @@ brand. Maintainer attribution belongs separately in README/wiki text.
 Only the selected final PNGs are included here; the drafts are not distributed.
 
 - `systemx-logo.png`: standalone monochrome folder/branch mark and wordmark.
-- `systemx-workflow.png`: six-step educational overview on a white background.
+- `systemx-workflow.png`: legacy six-step illustration, retained for existing links.
+  Current documentation uses the Agent 0/X/Z diagrams listed in [asset notes](README.md).
 
 Both files have an opaque white background. They are raster assets, not editable
 vector masters. The workflow is an illustration of a human/agent-maintained
@@ -30,3 +31,6 @@ Edit target: the supplied .SYSTEMX workflow infographic.
 Remove only the small "Wayne Tech Lab" attribution at the lower-right corner and replace that area with the matching clean white background. Do not add any replacement attribution.
 Preserve every other element exactly: .SYSTEMX title including the leading dot, subtitle, all six step labels and descriptions, numbers, icons, the directed cycle arrows, the footer sentence "Your AI tools run the work. .SYSTEMX keeps the records.", the layout, neutral monochrome colors, and solid white background. No other changes.
 ```
+
+The current Mermaid `.mmd`, SVG, and PNG diagrams are technical renderings, not
+imagegen edits. Their source and maintenance notes are in [README.md](README.md).

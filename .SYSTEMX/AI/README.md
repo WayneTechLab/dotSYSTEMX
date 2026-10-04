@@ -42,3 +42,12 @@ coordinates the [master plan](../PLAN/MASTER-PLAN.md),
 
 Project policy may use these formats where helpful. The template does not
 install an AI runtime or grant access to external accounts.
+
+## Complete projects and shared work
+
+Use the [one-shot project guide](../docs/ONE-SHOT-PROJECT.md) to turn a
+researched brief into phases, milestones, tasks, worker waves, and accepted
+delivery. Use [shared workspaces, clouds, and bots](../docs/SHARED-WORKSPACES.md)
+for repositories, named `.SYSTEMXP` children, authorized Drive/cloud access,
+multi-chat handoffs, and persistent local/VM bot context. The harness supplies
+execution and transport; the records preserve the objective, proof, and next step.

@@ -9,12 +9,18 @@ service that automatically reads every project or starts agents.
 
 ## Architecture
 
+The [Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide) provides Mermaid trees and record-flow diagrams.
+The [subagent sequence](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Subagent-Processing) separates runtime messages from saved
+project state; neither diagram adds an execution service to this file format.
+
 ```text
 Host project
 └── .SYSTEMX                       exact stored directory name
     ├── GLOBAL, PLAN, MEMORY       project context, outcomes, durable facts
     ├── WORK                       canonical tasks and current focus
-    ├── AGENTS                     Agent 0 role and scoped worker memory
+    ├── AGENTS                     Agent 0, optional X/Z, and scoped worker memory
+    ├── EVENTS                     event and due ledgers after activation
+    ├── REVIEWS                    policy, requests, scorecards after activation
     ├── Projects/REGISTRY.json      explicit child identities
     ├── Projects/NAME/.SYSTEMXP     isolated child records; no nested installation
     ├── project.json               explicit project command arguments
@@ -27,7 +33,7 @@ Host project
 
 The optional sibling `.systemx -> .SYSTEMX` link is a second route to the same
 folder. It is different from the nested manager cache. Follow the
-[exact-case contract](EXACT-CASE.md).
+[exact-case contract](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias).
 
 ## Components and data flow
 
@@ -38,7 +44,10 @@ folder. It is different from the nested manager cache. Follow the
 | `lifecycle.py` | File inventories, raw-byte hashes, atomic JSON receipts, backup boundaries |
 | `scripts/systemx.py` | Configuration validation, menu, doctor, explicitly configured commands |
 | `scripts/project_memory.py` | Task ledger, focus, generated views, agent records, bounded context |
-| `scripts/project_workspaces.py` | Explicit project routing, blank initialization, scoped commands, local status snapshots |
+| `scripts/project_workspaces.py` | Explicit child scope routing, blank creation, scoped commands, local snapshots |
+| `scripts/agent_standards.py` | Explicit X/Z setup, safe records, common scope dispatch |
+| `scripts/agent_x.py` | Event occurrence/recording time and due-item tracking |
+| `scripts/agent_z.py` | Fixed 100-question policy, request/report validation, score math and deltas |
 | `config/distribution.json` | Explicit public file inventory with release fingerprints |
 | `config/template-records.json` | Reviewed blank seed fingerprints |
 
@@ -46,7 +55,7 @@ The library and CLI use the same manager functions. A managed run verifies its
 selected default snapshot and invokes its runner with `--root` pointing to the
 outer project records. Old root defaults are preserved. Task state is stored once
 in `WORK/TASKS.json`; CURRENT and status pages are derived views. The
-[format contract](../FORMAT.md) defines record fields and transitions.
+[format contract](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format) defines record fields and transitions.
 
 ## Installation lifecycle
 
@@ -95,6 +104,38 @@ No MCP server, daemon, remote agent mesh, OAuth registration, or cloud sync engi
 is currently installed. Extensions must define ownership, authorization, logs,
 and removal behavior rather than implying that the template grants those powers.
 
+### Designing a future adapter
+
+Keep any new harness or MCP adapter behind the existing project boundary:
+
+- Resolve one explicit project and selected default version for each operation.
+- Separate bounded reads, proposed changes, and authorized writes. Honor the
+  host's permissions; role names and reviewer strings are not credentials.
+- Use canonical commands and record formats. Map runtime job IDs in coordination
+  notes instead of creating a competing task database without a migration plan.
+- Serialize writes across the adapter's actual deployment. The current local
+  lock is not a distributed lock across machines, worktrees, or Drive copies.
+- Make retries safe to reconcile: inspect the previous result before repeating
+  a task creation, file write, or external action. Log enough to recover it.
+- Define privacy, retained evidence, version compatibility, and removal of any
+  extra integration files, services, or credentials the adapter installs.
+
+These are extension requirements, not capabilities of a shipped MCP server.
+The current integration surface is the [library and CLI](LIBRARY.md).
+
+## Task scale and context scale
+
+The task tool reads the JSON ledger as a whole and writes it back while updating
+generated views. Bounded context output limits what an assistant initially sees;
+it does not make storage or validation independent of ledger size. Histories,
+evidence references, and generated status pages grow with recorded work.
+
+The 10,000+ task-event goal concerns project continuity. It is not a throughput
+benchmark, task queue, or automatic archival feature. Measure representative
+large ledgers in the target environment before making capacity claims. Preserve
+IDs, dependencies, and evidence when designing a future storage migration.
+See [Anti-drift and long-running work](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Anti-Drift-and-Long-Running-Work).
+
 ## Verification and efficiency
 
 `validate --template` checks a pristine public distribution. Ordinary `validate`
@@ -129,3 +170,11 @@ The release's seed registry remains Agent 0 only for older bootstrap-manager
 compatibility. Activating named X/Z roles is an explicit record-format adoption;
 older selected tools cannot interpret those new role IDs. Shared updates keep
 project-owned question policies and past reports unchanged.
+
+## Toolchain and shared context
+
+Read the [toolchain map](ONE-SHOT-PROJECT.md#2-prepare-the-toolchain-and-selected-scope)
+for the boundary between model/harness, records, app tools, verification, and
+delivery. The [shared workspace guide](SHARED-WORKSPACES.md) covers
+cloud snapshot requirements, multi-chat writer ownership, and bot startup context.
+These are integration patterns over the current CLI/library, not new cloud services.

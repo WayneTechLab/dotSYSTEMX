@@ -1,0 +1,14 @@
+flowchart TB
+  A["Chat / assistant<br/>Selected read access"] --> Owner["CANONICAL WRITER · AGENT 0<br/>Review base revision · integrate accepted changes"]
+  B["Bots / CLI / VM<br/>Bounded run + evidence"] --> Owner
+  C["Subagents / other threads<br/>Separate scopes + reports"] --> Owner
+  Owner --> Records["ONE RECORD AUTHORITY PER SCOPE<br/>.SYSTEMX or Projects/NAME/.SYSTEMXP<br/>Context · plan · tasks · X events · Z reviews"]
+  Records --> Transport["YOUR AUTHORIZED TRANSPORT<br/>Git · Drive sync / connector · cloud snapshot adapter"]
+  Transport --> Verify["VERIFY PUBLICATION<br/>Saved revision + readback + conflict checks"]
+  Verify --> Next["NEXT AUTHORIZED RUN<br/>Load the verified snapshot and relevant changes"]
+  classDef role fill:#ECF4ED,stroke:#38674B,color:#163721
+  classDef data fill:#EAF2FA,stroke:#22476B,color:#142D45
+  classDef gate fill:#FFF4D6,stroke:#8A6920,color:#4A3508
+  class Owner role
+  class Records,Transport data
+  class Verify gate

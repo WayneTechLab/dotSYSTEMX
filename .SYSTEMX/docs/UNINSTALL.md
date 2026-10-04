@@ -150,3 +150,11 @@ tree and survive whole-installation backup/restore. These roles install no daemo
 cron job, cloud schedule, model service, or notification integration. References
 to an external scheduler are metadata; deleting or cancelling a local record does
 not uninstall or cancel that external integration.
+
+## External sync and bot resources
+
+Drive clients, cloud snapshots, adapters, VM volumes, API grants, and external bot
+schedules are outside the standard installer. If you add them, record the exact
+owner/resource, operation log, verification, retention choice, and removal steps.
+Uninstalling local `.SYSTEMX` does not cancel a remote job or delete its data.
+See [shared workspace recovery and removal](SHARED-WORKSPACES.md#recovery-privacy-and-removal).

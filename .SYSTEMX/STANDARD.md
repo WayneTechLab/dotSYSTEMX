@@ -114,3 +114,17 @@ action from that difference. Reuse valid evidence and unchanged reviews. Neither
 a due item nor a score automatically creates work, changes task state, repeats
 checks, or grants authority. Company policies may refine the versioned review
 questions; they do not override environment or user instructions.
+
+## Research, phases, and shared-source handoffs
+
+A deep-research brief should retain relevant original sources, constraints,
+uncertainty, and acceptance criteria. Phases and execution waves are planning
+conventions in the Master Plan, not new task-schema fields or commands. Tasks
+retain canonical IDs, local dependencies, ownership, evidence, and history.
+Read relevant changes each meaningful turn; preserve accepted work and reviewed
+facts. Accumulating project knowledge is not model training or a guarantee of AGI.
+
+For shared chats or bots, identify the canonical scope, source revision, access,
+and write owner. A URL alone provides no access or persistence. No cloud sync
+engine or bot scheduler is installed. See [complete-project workflow](docs/ONE-SHOT-PROJECT.md)
+and [shared-workspace patterns](docs/SHARED-WORKSPACES.md).

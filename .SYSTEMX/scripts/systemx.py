@@ -49,6 +49,7 @@ REQUIRED = (
     "lifecycle.py", "tests/test_lifecycle.py", "docs/FIRST-RUN.md", "docs/UNINSTALL.md",
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
+    "docs/ONE-SHOT-PROJECT.md", "docs/SHARED-WORKSPACES.md",
 ) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",

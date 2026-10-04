@@ -4,6 +4,19 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.1-alpha.1 — Complete-project and shared-workspace manual
+
+- Added a deep-research-to-completion guide with a 20-page web app matrix,
+  toolchain mapping, phases/milestones/tasks/waves, and reusable super prompts.
+- Added repository/portfolio/hybrid, Drive, cloud snapshot, multi-chat, bot,
+  physical-machine, and VM patterns with explicit record authority and persistence.
+- Updated the public README, portable entry instructions, manual navigation,
+  Agent 0/X/Z feedback explanations, and current editable infographics.
+- Corrected the command reference's unpinned alpha discovery description and
+  documented all existing menu guide entries and transport boundaries.
+- No runtime behavior, project-record schema, or adopted review-policy change.
+  Existing project files and selected pins remain preserved.
+
 ## 1.8.0-alpha.1 — Agent X and Agent Z
 
 - Added explicit standard-role activation with preserved registries and setup receipts.

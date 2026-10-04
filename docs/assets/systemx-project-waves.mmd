@@ -1,0 +1,17 @@
+flowchart TB
+  subgraph Prepare["DEFINE AND BUILD"]
+    direction LR
+    R["0 · RESEARCH<br/>Brief + 20-route matrix"] --> F["1 · FOUNDATION<br/>Shell + shared contracts"]
+    F --> P["2 · PARALLEL WAVE<br/>Scoped page / API / test tasks"]
+  end
+  subgraph Complete["INTEGRATE AND ACCEPT"]
+    direction LR
+    I["3 · INTEGRATE<br/>Agent 0 + connected journeys"] --> V["4 · VERIFY + REVIEW<br/>Checks + Agent Z scorecard"]
+    V --> D["5 · DELIVER + FINISH<br/>Actual target evidence"]
+  end
+  Prepare --> Complete
+  Complete --> Record["EVERY WAVE · Agent X timestamps + evidence<br/>Agent 0 keeps tasks, Global context, Master Plan, and next action current"]
+  classDef phase fill:#EAF2FA,stroke:#22476B,color:#142D45
+  classDef role fill:#ECF4ED,stroke:#38674B,color:#163721
+  class R,F,P,I,V,D phase
+  class Record role

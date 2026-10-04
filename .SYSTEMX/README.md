@@ -152,3 +152,12 @@ child, use `projects roles-init --project NAME --apply`. Activation preserves
 existing records. Neither role launches workers, schedules jobs, accepts tasks,
 or repeats unchanged reviews automatically. The public seed registry stays
 Agent 0 only; standard X/Z definitions and blank activation templates are included.
+
+## Complete projects and shared work
+
+Use the [one-shot project guide](docs/ONE-SHOT-PROJECT.md) to turn a
+researched brief into phases, milestones, tasks, worker waves, and accepted
+delivery. Use [shared workspaces, clouds, and bots](docs/SHARED-WORKSPACES.md)
+for repositories, named `.SYSTEMXP` children, authorized Drive/cloud access,
+multi-chat handoffs, and persistent local/VM bot context. The harness supplies
+execution and transport; the records preserve the objective, proof, and next step.

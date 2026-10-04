@@ -272,3 +272,11 @@ bash .SYSTEMX/SYSTEMX.sh projects agent-z policy --project Project-A
 record IDs are scoped; do not compare reports from different projects. Outer
 updates preserve each child's adopted policy and history. Merely adding new
 defaults does not activate roles or rewrite a child's registry.
+
+## Shared portfolio and repository patterns
+
+Each child needs a registered name: `Projects/NAME/.SYSTEMXP`. A nameless
+`Projects/.SYSTEMXP` is unsupported. For hybrid repository/portfolio setups,
+assign one record authority to each kind of work and use explicit handoff/source
+references. Follow [shared workspaces, clouds, and bots](SHARED-WORKSPACES.md)
+for multi-chat ownership, local/VM persistence, and cloud transport boundaries.

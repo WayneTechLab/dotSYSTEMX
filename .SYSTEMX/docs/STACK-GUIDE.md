@@ -40,7 +40,7 @@ For example, if a JavaScript project already defines a working `test` script,
 a check can use `{"name": "tests", "command": ["npm", "test"]}`. That does not
 install npm, create a test suite, or prove the command passes. Keep missing
 commands empty until the project supplies them. See the
-[configuration contract](../README.md#configuration-contract).
+[configuration contract](https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/README.md#configuration-contract).
 
 Keep application dependencies, credentials, infrastructure, and build output in
 the host project's chosen layout. Use the appropriate package manager to install
@@ -57,3 +57,13 @@ do not rely on Git, Drive, or archives preserving them. Prefer an isolated Pytho
 environment for the library so its package and logs are easy to identify and
 remove. Start with [first-time setup](FIRST-RUN.md), then keep the
 [uninstall guide](UNINSTALL.md) with the project handoff.
+
+## Full-project and bot toolchains
+
+Use the [one-shot toolchain map](ONE-SHOT-PROJECT.md#2-prepare-the-toolchain-and-selected-scope)
+to connect a researched brief to real app and verification tools. Codex-based
+sessions/dots, Grok-based bots, or other harnesses can use the same records through
+an authorized local CLI or explicit adapter. Follow [shared workspace patterns](SHARED-WORKSPACES.md)
+for persistent VM/local storage, Drive, cloud snapshots, and removal ownership.
+No provider adapter, scheduler, model API client, or synchronization daemon is
+added to the standard installation by those examples.

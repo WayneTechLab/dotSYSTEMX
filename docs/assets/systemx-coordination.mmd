@@ -1,0 +1,17 @@
+flowchart TB
+  Brief["RESEARCHED BRIEF + SHARED CONTEXT<br/>Global · Master Plan · acceptance"] --> A0["AGENT 0<br/>Select ready tasks · assign scopes · integrate"]
+  A0 --> W["AUTHORIZED TOOLCHAIN<br/>Assistant + authorized workers<br/>Code · research · verification"]
+  W --> X["AGENT X<br/>Time · actors · revisions · evidence · due items"]
+  W --> Z["AGENT Z<br/>100 fixed questions · reuse unchanged proof"]
+  X --> Decision
+  Z --> Decision{"AGENT 0 / USER<br/>Acceptance met?"}
+  Decision -->|Yes| Finish["ACCEPT · HAND OFF · STOP<br/>Actual delivery proof · known limits"]
+  Decision -->|Concrete gap| Next["Next bounded action or real blocker"]
+  Next --> Saved["SAVED CANONICAL STATE<br/>Tasks · views · facts · checkpoint<br/>Next authorized turn reads relevant changes"]
+  Finish --> Saved
+  classDef context fill:#EAF2FA,stroke:#22476B,color:#142D45
+  classDef role fill:#ECF4ED,stroke:#38674B,color:#163721
+  classDef finish fill:#FFF4D6,stroke:#8A6920,color:#4A3508
+  class Brief,Saved context
+  class A0,X,Z role
+  class Finish,Next finish

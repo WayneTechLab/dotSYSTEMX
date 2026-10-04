@@ -91,3 +91,12 @@ execution. Agent Z reuses the same versioned questions and existing report when
 source, evidence, and policy are unchanged. Review at the acceptance boundary or
 on request; do not restart work from a score alone. Preview `roles-init` before
 activating these roles in an existing project.
+
+## Complete projects and shared work
+
+Use the [one-shot project guide](docs/ONE-SHOT-PROJECT.md) to turn a
+researched brief into phases, milestones, tasks, worker waves, and accepted
+delivery. Use [shared workspaces, clouds, and bots](docs/SHARED-WORKSPACES.md)
+for repositories, named `.SYSTEMXP` children, authorized Drive/cloud access,
+multi-chat handoffs, and persistent local/VM bot context. The harness supplies
+execution and transport; the records preserve the objective, proof, and next step.
