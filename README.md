@@ -1,220 +1,214 @@
 # .SYSTEMX
 
+**DOT SYSTEMX — project memory and coordination for agentic coding.**
+
+Keep the objective, plan, tasks, evidence, and next step in one portable folder.
+`.SYSTEMX` helps people and AI assistants continue a project across sessions,
+tools, and agents without repeatedly reconstructing what happened or drifting
+away from what was agreed.
+
+[Read the manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
+[First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
+[Copy a setup prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt) ·
+[Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate)
+
 > **ALPHA — USE AT YOUR OWN RISK.** `.SYSTEMX` is experimental and may change daily.
-> Interfaces, defaults, and guidance may change before a stable release. Pin a
-> reviewed version, keep recoverable backups, and validate it in your own project.
+> Pin a reviewed release, keep recoverable backups, and validate it in your project.
 > It is provided without warranty; template checks do not establish production readiness.
+> See the [release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
+> and [versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 
-**Current release: [`1.6.0-alpha.1`](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.6.0-alpha.1)** ·
-[Alpha release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
+## Why I started .SYSTEMX
 
-**A portable operating standard for human and AI-assisted projects.**
+I started `.SYSTEMX` to keep my local scripts and TODO folder in sync while
+working on a project. I needed a reliable place to record what needed doing,
+what was being worked on, and what was actually finished.
 
-.SYSTEMX gives people and LLMs a shared structure for project context, master
-planning, task tracking, evidence, and durable memory. Start in a repository,
-a working directory, a Google Drive folder, or a chat, using the same `.SYSTEMX`
-format throughout.
+Over the last year, that working folder has evolved into a reusable operating
+standard for agentic coding: project context, a Master Plan, task ownership,
+Agent 0 coordination, evidence, and memory that can survive a new chat. It grew
+within my larger Firebase and Google Cloud template. This standalone version
+makes the same approach available to projects using other stacks, and to work
+that does not involve code at all.
 
-**Keep the exact folder name `.SYSTEMX` on every platform.** Setup can add an
-optional lowercase compatibility link so `.systemx` reaches the same directory.
-[Exact casing and alias setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias)
-explains filesystem behavior and safe handling of existing conflicts.
+The goal is to help an AI stay with the original objective while a process,
+idea, or application moves through thousands of changes. **Continuity across
+10,000 or more task-based events is the design ambition.** That means keeping
+useful state across assignments, checks, reviews, and handoffs; it is not a
+claim of benchmarked throughput or guaranteed autonomous completion.
 
-[Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
-[Setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started) ·
-[Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
-[MIT license](LICENSE)
+The [About page](https://github.com/WayneTechLab/dotSYSTEMX/wiki/About) tells the
+founder's story. The [long-running work guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Anti-Drift-and-Long-Running-Work)
+explains how to organize that ambition into manageable, reviewable work.
 
-## Choose your workspace
+## Why “DOT SYSTEMX”?
 
-| Location | Setup |
+The name comes directly from **`.SYSTEMX`**. The leading period is the “dot”:
+on macOS and Linux, names beginning with a dot are conventionally hidden from
+ordinary file listings. Windows uses a separate hidden attribute. A hidden
+folder is still ordinary project data; the name does not make it private,
+encrypted, or excluded from Git.
+
+**Always use the exact spelling `.SYSTEMX`, including the dot and uppercase
+letters.** On a case-sensitive filesystem, `.systemx` can become a second,
+conflicting folder. Setup offers an optional compatibility link that routes
+lowercase access to the same canonical folder where supported.
+[Naming and alias instructions](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Exact-Case-and-Alias).
+
+## How it works
+
+1. **Define the outcome.** Save the project's purpose, constraints, and acceptance criteria.
+2. **Plan the next work.** Agent 0 connects milestones to tasks with owners and dependencies.
+3. **Work within scope.** One agent handles the task, or authorized subagents take independent assignments.
+4. **Verify and review.** Record evidence and review the result before marking it done.
+5. **Save the next step.** Update the current focus and checkpoint so the next session can continue.
+
+| Responsibility | Record inside `.SYSTEMX` |
+| --- | --- |
+| Shared project context and constraints | `GLOBAL/CONTEXT.md` |
+| Outcomes, milestones, and acceptance criteria | `PLAN/MASTER-PLAN.md` |
+| Task ownership, status, dependencies, and evidence | `WORK/TASKS.json` |
+| Current objective and task pointers | `WORK/FOCUS.json` → generated `CURRENT.md` |
+| Verified decisions and reusable knowledge | `MEMORY/PROJECT.md` |
+| Coordinator and worker continuity | `AGENTS/<id>/MEMORY.md` and dated session checkpoints |
+
+The ledger generates TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED views.
+“Global” means shared within the active project. The public template starts
+blank, with only the `agent.0` coordinator role.
+
+Follow [a first task from start to finish](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Daily-Workflow)
+or read the [planning and memory guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory).
+
+## Agent 0 and your AI tools
+
+Agent 0 keeps the overall objective, assignments, review, and shared memory
+coherent. Subagents receive bounded tasks and return findings, changes, and
+evidence. Your **AI harness**—the app, CLI, or IDE integration running the
+assistant—provides the actual agent processes and tools. `.SYSTEMX` provides
+the coordination rules and persistent project records.
+
+Once the project is set up, a short request can be:
+
+```text
+Finish [TASK OR OBJECTIVE] using .SYSTEMX Agent 0 with subagents.
+Use up to 10 subagents by default for this request, subject to the
+harness's available capacity. Use fewer when the work does not benefit
+from parallelism. Agent 0 owns coordination, integration, and final review.
+```
+
+In a Codex environment with subagent support, the assistant can use Codex's
+delegation tools and show worker activity in the client. Each worker's scope,
+results, and handoff can be recorded under `.SYSTEMX`, with Agent 0 reviewing
+what becomes shared project memory. See the
+[complete Agent 0 workflow](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents)
+and [copyable task prompts](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Prompt-Cookbook).
+
+Here, **10 is a requested ceiling for subagents, in addition to Agent 0**;
+lower environment limits still apply. The template does not enforce a worker
+count or start agents when a folder is opened. Its normal workflow uses one
+worker unless delegation is authorized. Recording a role is separate from
+launching and observing an actual worker.
+
+## Start with your project
+
+| Workspace | Setup guide |
 | --- | --- |
 | Repository or VS Code project root | [Project setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Project) |
 | Windows, macOS, or Linux working directory | [Directory setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Directory) |
-| Google Drive project folder | [Google Drive setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Google-Drive) |
+| Locally synchronized Google Drive project folder | [Google Drive setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Google-Drive) |
 | LLM chat with attachments or authorized file tools | [Chat setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-LLM-Chat) |
 
-The profiles share one format. Each project keeps its own context, tasks,
-version selection, and memory. Drive uses locally available regular files and
-Drive's synchronization; chat uses an explicit context export or writable tools.
-
-## Get started
-
-Use the GitHub template button, or install the command and library into your
-chosen Python environment:
-
-```bash
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.6.0-alpha.1"
-systemx first-run --target "/path/to/project" --profile project
-systemx first-run --target "/path/to/project" --profile project --apply
-systemx run --target "/path/to/project" -- context --agent agent.0
-```
-
-From a reviewed checkout or extracted template, no package installation is needed:
-
-```bash
-bash .SYSTEMX/INSTALL.sh --target "/path/to/project" --profile project
-```
-
-Windows users can use `.SYSTEMX\INSTALL.ps1` with the same flags or invoke
-`py -3 -B .SYSTEMX\manager.py install`. The optional command tools require
-Python 3.9+ and use its standard library. Documentation can be used on its own.
-For exact release pins, interpreter setup, and package installation, follow
-[Installation and updates](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Installation-and-Updates)
-and [Library integration](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Library-Integration).
-
-The [first-time setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup)
-walks through an isolated tool environment, setup preview, project facts, and
-verification. First run creates configuration only when missing and executes no
-project commands.
-
-## Start a new AI chat
-
-Paste the prompt below into your assistant and fill in the project fields. Use
-the [New Chat Setup Prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt)
-wiki page for the full instructions, chat-only workflow, and session handoff.
-
-| Entry point | Link |
-| --- | --- |
-| Project setup | [First-Time Setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) |
-| Chat-only use | [LLM Chat Setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-LLM-Chat) |
-| Pinned folder-only download | [`.SYSTEMX 1.6.0-alpha.1` ZIP](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.6.0-alpha.1/SYSTEMX-1.6.0-alpha.1.zip) |
-
-<details>
-<summary>Copy the new-project setup prompt</summary>
+For an existing project, copy this into a new AI chat and replace the fields:
 
 ```text
-Set up the public .SYSTEMX template for my project, then use it to
-coordinate this project's work.
+Set up .SYSTEMX for my project using the public template:
+https://github.com/WayneTechLab/dotSYSTEMX
 
-Project name: [PROJECT NAME]
-Project folder or workspace: [FULL PATH, OR "CHAT ONLY"]
-Initial objective: [WHAT THIS PROJECT SHOULD ACCOMPLISH]
+Project: [NAME]
+Workspace: [FULL PROJECT PATH, OR "CHAT ONLY"]
+Objective: [WHAT SHOULD BE ACCOMPLISHED]
 
-Template: https://github.com/WayneTechLab/dotSYSTEMX
-Pinned release: 1.6.0-alpha.1
-Setup: https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt
+Read and follow the setup prompt:
+https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt
 
-Read the setup guidance and use only the selected release's .SYSTEMX
-folder content. Install into MY project; keep its facts, tasks, and
-memory out of the public source template.
-
-Inspect existing hidden paths. Use exactly ".SYSTEMX", including the dot
-and uppercase letters. Never create a separate ".systemx" folder.
-Preserve existing files, records, Git settings, and repository instructions.
-If case-conflicting paths exist, explain the conflict before making changes.
-
-With filesystem access, use the selected release's manager to preview
-first-run setup, then apply it if there are no conflicts. Keep the version
-pinned and updates manual. Leave the optional lowercase alias disabled
-unless I request it. Preserve any existing managed version and policy;
-use the documented update workflow if a version change is needed.
-
-Follow START-HERE.md. Initialize Global context, the Master Plan, project
-memory, current focus, and tasks using only this project's known facts.
-Use agent.0 as coordinator and WORK/TASKS.json as the status authority.
-Generate status views with the supplied tools. Registering a role does
-not authorize starting subagents. Record unknowns instead of inventing them.
-
-Validate the adopted project and report the actual path, selected version,
-changes, operation-log location, and next step.
-
-If this is chat-only or you cannot write files, use attached records and
-explicit handoff documents. If you cannot open the setup URL, request the
-release ZIP or relevant extracted files. Distinguish proposed changes
-from saved changes; claim persistence only after a successful write and
-readback. Ask for missing project details only when needed to proceed.
+Use its pinned release and preview first-run setup before applying it.
+Preserve existing files, project records, Git settings, and instructions.
+Use exactly .SYSTEMX; never create a separate .systemx directory.
+Keep new installs pinned with manual updates. Follow START-HERE.md and
+initialize only this project's known facts, plan, tasks, and Agent 0 memory.
+Validate setup and report the actual saved location and next action.
+If you cannot access the URL or write files, explain that and use the
+documented attachment/chat-only handoff. Do not claim unsaved changes persist.
 ```
 
-</details>
+A URL alone does not give an assistant file access or memory. A filesystem
+installation needs writable project tools; chat-only use needs records that
+you save and reattach. To make these instructions discoverable for code outside
+the folder, follow the [harness setup guidance](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents#connect-the-folder-to-your-harness).
 
-A URL provides instructions; it does not grant filesystem access or persistent
-memory. Review exported context before sharing it with another chat. The pinned
-release keeps setup repeatable while this alpha project continues to change.
+Prefer a terminal? The [first-time setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup)
+covers an isolated Python environment, exact release installation, setup
+preview, and verification. Plain documents work without Python. The optional
+CLI and Python library require Python 3.9+ and use its standard library.
 
-## Spend less context on repeated work
+## Less repeated context, less drift
 
-A focused `.SYSTEMX` handoff can reduce repeated input tokens and avoidable
-searches, planning restarts, and tool calls. Current focus, one task ledger,
-bounded resume context, and scoped worker memory help an assistant load the
-information needed for the next task instead of repeatedly reading full histories.
+An assistant that repeatedly reads a long conversation spends context and time
+rediscovering decisions. A focused `.SYSTEMX` handoff gives it the current
+objective, relevant tasks, accepted facts, and the next action. Task ownership
+and evidence make duplicated work and unsupported completion claims easier to
+detect. Checkpoints make interruptions easier to recover from.
 
-Fewer billable tokens can lower usage-based API costs; fewer repeated steps can
-save processing time. Results depend on the model, caching, output, tools, and
-workflow. **No fixed percentage of token, money, or time savings is guaranteed.**
-A fixed-price subscription may gain capacity without a smaller bill. The
-[efficiency guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Tokens-Cost-and-Time)
-explains the mechanisms, an illustrative calculation, and how to measure results.
+This can reduce repeated input tokens, searches, planning, and unnecessary tool
+calls. Fewer billable tokens may lower usage-based API costs; fewer repeated
+steps may shorten work. Extra agents also consume tokens, and maintaining good
+records has a cost. **No fixed token, money, or time savings are guaranteed.**
+A fixed-price subscription may gain capacity without a smaller bill.
 
-## A clear place for each responsibility
+Read [how to measure token, cost, and time savings](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Tokens-Cost-and-Time)
+and [how the workflow limits drift](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Anti-Drift-and-Long-Running-Work).
 
-| Responsibility | .SYSTEMX provides |
-| --- | --- |
-| Project understanding | Shared context, constraints, terminology, and authoritative references |
-| Master planning | Outcomes, milestones, dependencies, and acceptance criteria |
-| Work tracking | One task ledger with generated TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED views |
-| Current focus | An objective and pointers to existing tasks and checkpoints |
-| Agent coordination | Agent 0 ownership, scoped worker assignments, and acceptance review |
-| Memory | Verified project facts, individual agent notes, and session checkpoints |
-| Delivery | Explicit project commands and reusable quality, security, and operations guidance |
+## Built for the rest of the project lifecycle
 
-Records start blank, with only the `agent.0` coordinator role. Your project
-supplies the requirements, tools, commands, and evidence. Registering a worker
-does not start a process or grant additional authority.
+- **Preserved project records.** Managed updates add versioned defaults and
+  missing files while preserving existing files, folders, customizations, and
+  earlier snapshots. New installs are pinned with manual updates; startup
+  updates are opt-in. [Installation and updates](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Installation-and-Updates).
+- **Inspectable setup and removal.** Local operation logs, footprint audits,
+  preview-first uninstall, a recoverable backup, and verified restore support
+  the installation lifecycle. [Uninstall and cleanup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Uninstall-and-Cleanup).
+- **Evidence at the right scope.** A passed source check, a deployed service,
+  and a working product each require their own proof. Agent 0 reviews results
+  against the project's acceptance criteria. [Evidence and acceptance](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Evidence-and-Acceptance).
+- **Existing tools and stacks.** Connect your real project commands or use the
+  Python library. Shared compilers, databases, and deployment targets need
+  explicit ownership. [Stack Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Stack-Guide)
+  and [Library integration](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Library-Integration).
 
-Begin at [.SYSTEMX/START-HERE.md](.SYSTEMX/START-HERE.md). In a managed installation,
-that entry point explains how to load the selected defaults alongside the active
-project's records. “Global” means shared within that project, with explicit
-references for any organization-wide standards.
+The format works with a project's existing toolchain. It does not install a
+Firebase application, cloud services, an agent runtime, or an MCP server.
+Future integrations must preserve the same scope, permission, evidence, and
+memory boundaries. The [Technical Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Technical-Guide)
+explains the current implementation.
 
-## Updates that preserve your work
+## Manual and project information
 
-Managed installs begin with a version pin and manual updates. Each update adds
-a separate set of default files and creates only missing project files.
-**Existing files, local folders, customizations, task history, and earlier
-releases are preserved.** Select a newer default version per project when ready.
+The [wiki is the user manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki):
+start with setup and daily work, copy a prompt, then explore coordination,
+long-running projects, efficiency, and advanced operations. Version IDs,
+migration details, and the changelog live there.
 
-Automatic updates are optional and run only when the managed launcher starts.
-They do not create background OS jobs. The [update guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Installation-and-Updates)
-explains pins, offline use, retained defaults, and compatibility checks.
+[About and founder's note](https://github.com/WayneTechLab/dotSYSTEMX/wiki/About) ·
+[Standard format](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format) ·
+[Command reference](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Command-Reference) ·
+[Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) · [Security](SECURITY.md)
 
-## Setup you can inspect and remove
+Maintained by **[Wayne Tech Lab LLC](https://github.com/WayneTechLab)** under the
+[MIT License](LICENSE). `.SYSTEMX` is a project-maintained operating standard;
+adopting it does not certify a project's quality or production readiness.
 
-Installation operations have local logs. `systemx audit --target PATH` checks the
-selected project's footprint. Uninstall previews by default; applying it moves
-the complete `.SYSTEMX` folder, including your records, to a chosen backup and
-writes a verified inventory and removal log. Restore checks that backup before
-putting it back. The [uninstall guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Uninstall-and-Cleanup)
-also covers package removal and manual integrations without removing shared tools.
-
-## Documentation
-
-- [About .SYSTEMX](https://github.com/WayneTechLab/dotSYSTEMX/wiki/About)
-- [Technical Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Technical-Guide)
-- [Stack Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Stack-Guide)
-- [First-Time Setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup)
-- [New Chat Setup Prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt)
-- [Standard format](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format)
-- [Agent 0 and subagents](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents)
-- [Planning and memory](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory)
-- [Task workflow](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Task-Workflow)
-- [Evidence and acceptance](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Evidence-and-Acceptance)
-- [Command reference](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Command-Reference)
-- [Versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog)
-- [Contributing](CONTRIBUTING.md)
-- [Support and bug reports](SUPPORT.md)
-- [Security reporting](SECURITY.md)
-
-.SYSTEMX defines a project operating convention. Project quality and delivery
-readiness come from the acceptance criteria, configured checks, and verified
-evidence of each adopted project. Keep private records out of public exports.
-
-## Project and license
-
-Maintained by **[Wayne Tech Lab LLC](https://github.com/WayneTechLab)** and released
-under the [MIT License](LICENSE).
-
-The standalone template is derived from the operating folder in
+This standalone template was extracted from
 [SFWA-WTL-TEMPLATE](https://github.com/WayneTechLab/SFWA-WTL-TEMPLATE).
-[Source provenance](.SYSTEMX/SOURCE.json) records the extraction scope.
-Retain the license and attribution when copying or redistributing the folder.
+[Source provenance](.SYSTEMX/SOURCE.json) records that relationship. Keep private
+project records out of public exports, and retain the license and attribution
+when redistributing the folder.
