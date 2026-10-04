@@ -1,5 +1,7 @@
 # .SYSTEMX
 
+<img src="docs/assets/systemx-logo.png" alt=".SYSTEMX logo: a branching folder beside the exact uppercase wordmark" width="560">
+
 **DOT SYSTEMX — project memory and coordination for agentic coding.**
 
 Keep the objective, plan, tasks, evidence, and next step in one portable folder.
@@ -57,6 +59,8 @@ lowercase access to the same canonical folder where supported.
 
 ## How it works
 
+![The .SYSTEMX loop: context, plan, work, evidence, review, and memory. Your AI tools run the work; .SYSTEMX keeps the records.](docs/assets/systemx-workflow.png)
+
 1. **Define the outcome.** Save the project's purpose, constraints, and acceptance criteria.
 2. **Plan the next work.** Agent 0 connects milestones to tasks with owners and dependencies.
 3. **Work within scope.** One agent handles the task, or authorized subagents take independent assignments.
@@ -75,6 +79,25 @@ lowercase access to the same canonical folder where supported.
 The ledger generates TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED views.
 “Global” means shared within the active project. The public template starts
 blank, with only the `agent.0` coordinator role.
+
+<details>
+<summary>View the .SYSTEMX record tree</summary>
+
+```mermaid
+flowchart LR
+    Root[".SYSTEMX"] --> Context["GLOBAL / Project context"]
+    Root --> Plan["PLAN / Master Plan"]
+    Root --> Work["WORK / Tasks and focus"]
+    Root --> Memory["MEMORY / Facts and checkpoints"]
+    Root --> Agents["AGENTS / Agent 0 and worker notes"]
+    Work --> Views["Generated current and status views"]
+```
+
+This is a map of responsibilities, not a complete directory listing. See the
+[Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide)
+for the record flow, managed defaults, and accessible text explanations.
+
+</details>
 
 Follow [a first task from start to finish](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Daily-Workflow)
 or read the [planning and memory guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory).
@@ -108,6 +131,12 @@ lower environment limits still apply. The template does not enforce a worker
 count or start agents when a folder is opened. Its normal workflow uses one
 worker unless delegation is authorized. Recording a role is separate from
 launching and observing an actual worker.
+
+The [subagent processing guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Subagent-Processing)
+shows the full assignment-to-review sequence. The
+[advanced use cases](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Advanced-Use-Cases)
+show how to apply it to features, investigations, research, shared folders,
+chat handoffs, and coordinated work across projects.
 
 ## Start with your project
 
