@@ -234,7 +234,8 @@ class WorkspaceTests(unittest.TestCase):
         # Changed defaults must also preserve initialized children and sibling code.
         source = Path(self.temp.name) / "next-release" / ".SYSTEMX"
         shutil.copytree(test_systemx.SOURCE, source)
-        version = "1.7.1-alpha.1"
+        major, minor, patch = manager.version_key((test_systemx.SOURCE / "VERSION").read_text().strip())[:3]
+        version = "{}.{}.{}-alpha.1".format(major, minor, patch + 1)
         (source / "VERSION").write_text(version + "\n")
         provenance = json.loads((source / "SOURCE.json").read_text())
         provenance["templateVersion"] = version

@@ -89,7 +89,16 @@ def digest(data):
 
 
 def decode(data):
-    return json.loads(data.decode("utf-8"))
+    def unique(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise InstallError("Duplicate JSON field: " + key)
+            value[key] = item
+        return value
+    def invalid(value):
+        raise InstallError("Non-finite JSON value: " + value)
+    return json.loads(data.decode("utf-8"), object_pairs_hook=unique, parse_constant=invalid)
 
 
 def verified_bundle(files):
@@ -120,6 +129,9 @@ def verified_bundle(files):
         required.update({"scripts/project_workspaces.py", "Projects/REGISTRY.json",
                          "templates/project/WORK/TASKS.json", "templates/project/WORK/FOCUS.json",
                          "templates/project/AGENTS/REGISTRY.json", "templates/project/project.json"})
+    if base_version >= (1, 8, 0):
+        required.update({"scripts/agent_standards.py", "scripts/agent_x.py", "scripts/agent_z.py",
+                         "config/agent-z-policy.json", "templates/AGENT-X-MEMORY.md", "templates/AGENT-Z-MEMORY.md"})
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -144,7 +156,9 @@ def verified_bundle(files):
     if files["VERSION"].decode().strip() != manifest["version"]:
         raise InstallError("Distribution version mismatch")
     seeds = decode(files["config/template-records.json"])
-    if seeds.get("schemaVersion") != 1 or set(seeds.get("sha256", {})) != set(SEEDS):
+    if (not isinstance(seeds, dict) or set(seeds) != {"schemaVersion", "sha256"} or
+            type(seeds["schemaVersion"]) is not int or seeds["schemaVersion"] != 1 or
+            not isinstance(seeds["sha256"], dict) or set(seeds["sha256"]) != set(SEEDS)):
         raise InstallError("Invalid blank-record manifest")
     if any(digest(files[name]) != seeds["sha256"][name] for name in SEEDS):
         raise InstallError("Distribution contains changed project seeds")
@@ -184,6 +198,8 @@ def read_bundle(source):
         raise InstallError("Oversized distribution manifest")
     raw = manifest_path.read_bytes()
     manifest = decode(raw)
+    if not isinstance(manifest, dict):
+        raise InstallError("Distribution manifest must be an object")
     names = manifest.get("files", {})
     if not isinstance(names, dict) or len(names) > MAX_FILES:
         raise InstallError("Invalid distribution inventory")
@@ -571,6 +587,13 @@ def startup_update(root):
 
 
 def run(target, arguments, *, offline=False, capture=False):
+    if not isinstance(arguments, (list, tuple)) or any(
+            not isinstance(value, str) or "\x00" in value for value in arguments):
+        raise InstallError("Command arguments must be a string argument array")
+    if arguments and arguments[0] == "--":
+        arguments = arguments[1:]
+    if arguments and arguments[0].startswith("-") and arguments[0] not in {"-h", "--help"}:
+        raise InstallError("Do not override the selected target; use run --target explicitly")
     root = project_root(target)
     if state_path(root).exists():
         if not offline:
@@ -578,8 +601,6 @@ def run(target, arguments, *, offline=False, capture=False):
         defaults, _ = active_bundle(root, load_state(root))
     else:
         defaults = root / ".SYSTEMX"
-    if arguments and arguments[0] == "--":
-        arguments = arguments[1:]
     command = [sys.executable, "-B", str(defaults / "scripts/systemx.py"), "--root", str(root / ".SYSTEMX"), *arguments]
     return subprocess.run(command, cwd=root, text=True, encoding="utf-8", capture_output=capture, shell=False)
 

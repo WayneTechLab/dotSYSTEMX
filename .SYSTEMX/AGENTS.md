@@ -32,3 +32,13 @@ This file covers the `.SYSTEMX` subtree in tools that discover `AGENTS.md`.
 For host-project-wide discovery, use the supplied
 [root entry-point template](templates/AGENT-ENTRYPOINT.md) as appropriate for the
 chosen tool. Do not overwrite existing repository instructions.
+
+## Event tracking and repeatable review
+
+Standard roles [Agent X](docs/AGENT-X.md) (`agent.x`) and [Agent Z](docs/AGENT-Z.md)
+(`agent.z`) are activated explicitly with `roles-init --apply` in the selected
+scope. Agent X records events and due items; it does not execute schedules.
+Agent Z uses the fixed 100-question policy for prompt/on-request reviews and
+completion review. Reuse unchanged inputs and retained evidence; do not create
+an automatic reprocessing loop. Scores are advisory; Agent 0/user retains task
+acceptance and external-action authority. Keep reusable role seeds blank.

@@ -109,3 +109,12 @@ blocked work for diagnosis; it does not certify dispatch readiness.
 
 Use the [evidence guide](../docs/EVIDENCE.md) to scope source and runtime claims
 and the [upgrade guide](../docs/UPGRADING.md) when adopting an existing layout.
+
+## Agent X events and Agent Z acceptance review
+
+When standard roles are enabled, record meaningful observations with Agent X and
+review a task once with Agent Z at `needs_review`, or reuse a scorecard for the
+same source/evidence/policy inputs. Link its report as supporting evidence; Agent
+0 or the user still accepts `done`. A score never changes task state or establishes
+production authority. An initial prompt can be reviewed on request. See
+[Agent X](../docs/AGENT-X.md) and [Agent Z](../docs/AGENT-Z.md).

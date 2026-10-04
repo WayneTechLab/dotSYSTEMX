@@ -36,19 +36,32 @@ REQUIRED = (
 
 
 def managed(root, relative):
+    from systemx_paths import is_link
     path = root / relative
     if not path.resolve().is_relative_to(root.resolve()):
         raise ValueError("Managed record is outside .SYSTEMX: " + str(relative))
     for part in (path, *path.parents):
         if part == root:
             break
-        if part.is_symlink():
-            raise ValueError("Managed record must not use symlinks: " + str(relative))
+        if is_link(part):
+            raise ValueError("Managed record must not use links or junctions: " + str(relative))
+        if part.is_file() and part.stat().st_nlink > 1:
+            raise ValueError("Managed record must not use hard links: " + str(relative))
     return path
 
 
 def read_json(root, relative):
-    return json.loads(managed(root, relative).read_text(encoding="utf-8"))
+    def unique(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError("Duplicate JSON field: " + key)
+            value[key] = item
+        return value
+    def invalid(value):
+        raise ValueError("Non-finite JSON value: " + value)
+    return json.loads(managed(root, relative).read_text(encoding="utf-8"),
+                      object_pairs_hook=unique, parse_constant=invalid)
 
 
 def fields(value, required, label):
@@ -93,9 +106,12 @@ def validate_records(root, ledger, registry):
     for agent in registry["agents"]:
         fields(agent, ("id", "role", "memory"), "Agent record")
         string(agent["id"], "Agent ID")
-        if not re.fullmatch(r"agent\.(?:0|[1-9]\d*)", agent["id"]) or agent["id"] in agents:
-            raise ValueError("Agent IDs must be unique and use agent.0, agent.1, etc.")
+        if not re.fullmatch(r"agent\.(?:0|[1-9]\d*|x|z)", agent["id"]) or agent["id"] in agents:
+            raise ValueError("Use unique agent.0, agent.x, agent.z, or numeric worker IDs")
         string(agent["role"], "Agent role")
+        expected_role = {"agent.x": "event-time", "agent.z": "review"}.get(agent["id"])
+        if expected_role and agent["role"] != expected_role:
+            raise ValueError(agent["id"] + " has a reserved standard role: " + expected_role)
         expected = "AGENTS/{}/MEMORY.md".format(agent["id"])
         if agent["memory"] != expected or not managed(root, expected).is_file():
             raise ValueError("Missing or invalid memory path for " + agent["id"])

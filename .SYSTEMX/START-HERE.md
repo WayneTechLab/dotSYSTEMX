@@ -80,3 +80,14 @@ An agent registry entry is a role record, not proof that a worker is running.
 Memory is a versioned project document, not automatic model recall. Each session
 must load it through files or its tools. Existing platform memory and instruction
 policies still apply.
+
+## Standard event and review roles
+
+If enabled in this scope, read only the assigned [Agent X](docs/AGENT-X.md) or
+[Agent Z](docs/AGENT-Z.md) role memory and the records needed for the current task.
+Do not load all events, schedules, or 100 review questions into every resume
+packet. Agent X separates event time, recording time, due time, and observed
+execution. Agent Z reuses the same versioned questions and existing report when
+source, evidence, and policy are unchanged. Review at the acceptance boundary or
+on request; do not restart work from a score alone. Preview `roles-init` before
+activating these roles in an existing project.

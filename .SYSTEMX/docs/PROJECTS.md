@@ -256,3 +256,19 @@ background scheduler, distributed lock, automatic agent runtime, cloud transport
 credential broker, or MCP server. A Drive-synced directory is still local storage;
 its sync client does not make concurrent writes safe. Assign one writer per
 selected ledger and retain original evidence.
+
+## Standard roles within a child
+
+Use `projects roles-init --project Project-A` to preview Agent X/Z activation,
+then add `--apply`. Their records stay in the selected `.SYSTEMXP`. Examples:
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh projects agent-x due --project Project-A
+bash .SYSTEMX/SYSTEMX.sh projects agent-z policy --project Project-A
+```
+
+[Agent X](AGENT-X.md) tracks event/time/schedule facts, while
+[Agent Z](AGENT-Z.md) uses the fixed 100-question review policy. Role IDs and
+record IDs are scoped; do not compare reports from different projects. Outer
+updates preserve each child's adopted policy and history. Merely adding new
+defaults does not activate roles or rewrite a child's registry.

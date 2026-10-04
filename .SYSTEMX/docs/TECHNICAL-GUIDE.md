@@ -113,3 +113,19 @@ its own local coordination lock; project creation locks the outer registry.
 Snapshots contain selected task counts, focus, and source hashes, not a service
 health verdict. Shared default snapshots and version selection remain at the
 outer installation. A scope selector is not an OS sandbox or distributed lock.
+
+## Standard role implementation
+
+`agent_standards.py` supplies explicit setup, exact-case contained paths, strict
+JSON reads, stable fingerprints, and common scope dispatch. `agent_x.py` owns
+append-by-command events and due-item bookkeeping. `agent_z.py` owns the fixed
+policy, review requests, deterministic scoring arithmetic, immutable scorecards,
+and comparable deltas. All are Python standard-library modules with no runtime
+model, scheduler, cloud, or database dependency. Agent judgment and original
+proof remain external inputs; arithmetic and hashes do not establish their truth.
+
+`roles-init` preserves the existing registry and creates missing records only.
+The release's seed registry remains Agent 0 only for older bootstrap-manager
+compatibility. Activating named X/Z roles is an explicit record-format adoption;
+older selected tools cannot interpret those new role IDs. Shared updates keep
+project-owned question policies and past reports unchanged.

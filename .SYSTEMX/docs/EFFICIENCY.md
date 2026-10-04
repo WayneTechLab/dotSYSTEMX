@@ -69,3 +69,13 @@ and a focused `.SYSTEMX` handoff. Include the cost of generating and maintaining
 the handoff. Use several runs and report variation, not just the fastest result.
 Accept a smaller packet only if the resulting work still meets the same criteria.
 Store sanitized measurements in the adopted project, never in the blank template.
+
+## Fixed review without automatic reprocessing
+
+Agent Z keeps the same 100 questions for a policy version and reuses unchanged
+requests/reports. Agent X links observations to original event times and revisions.
+Load these records only for a relevant decision; they are not appended to every
+context packet. A scorecard does consume review effort and model context if an
+LLM evaluates it. Group work into meaningful acceptance boundaries, retain valid
+evidence, and repeat checks only for changed inputs or unresolved concerns.
+No fixed savings or automatic 10,000-event throughput is promised.

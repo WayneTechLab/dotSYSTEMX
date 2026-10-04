@@ -19,13 +19,13 @@ if __name__ == "__main__":
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
-import project_memory
-
 DEFAULTS = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(DEFAULTS))
+import project_memory
 from systemx_paths import inspect_layout, lowercase_alias, record_directory
 from versions import version_id
 import project_workspaces
+import agent_standards
 
 SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
@@ -49,7 +49,7 @@ REQUIRED = (
     "lifecycle.py", "tests/test_lifecycle.py", "docs/FIRST-RUN.md", "docs/UNINSTALL.md",
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
-) + project_memory.REQUIRED + project_workspaces.REQUIRED
+) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
     "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
@@ -63,9 +63,17 @@ class ConfigError(Exception):
     """A readable, actionable configuration or template error."""
 
 
+class RootSelector(argparse.Action):
+    """Retained older bootstrap managers must not allow a second global target."""
+    def __call__(self, parser, namespace, value, option_string=None):
+        if getattr(namespace, self.dest, None) is not None:
+            raise argparse.ArgumentError(self, "Select one global .SYSTEMX root; repeated targets are refused")
+        setattr(namespace, self.dest, value)
+
+
 def read_json(path):
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        return project_memory.read_json(path.parent, path.name)
     except (OSError, UnicodeError, ValueError) as error:
         raise ConfigError("Cannot read {}: {}".format(path.name, error)) from error
 
@@ -162,6 +170,8 @@ def distribution_issues(files):
         if project_workspaces.Workspaces(SYSTEMX, DEFAULTS).projects:
             issues.append("Public template must have an empty project registry")
         project_workspaces.blank_blueprint(SYSTEMX)
+        import agent_z
+        agent_z.validate_policy(agent_standards.read(SYSTEMX, "config/agent-z-policy.json"))
     except (ConfigError, OSError, ValueError) as error:
         issues.append("Public template: " + str(error))
     return issues
@@ -217,6 +227,7 @@ def validate_template(distribution=False):
                 issues.append(relative + ": broken or out-of-project link: " + target)
     try:
         project_memory.validate_work(SYSTEMX)
+        agent_standards.validate_optional(SYSTEMX)
         workspaces = project_workspaces.Workspaces(SYSTEMX, DEFAULTS)
         for name in workspaces.projects:
             workspaces.validate_scope(workspaces.select(name))
@@ -348,14 +359,16 @@ def menu():
                "9": ("status", False), "10": ("context", False),
                "11": ("paths", False), "12": ("alias-create", False),
                "13": ("setup-guide", False), "14": ("removal-guide", False),
-               "15": ("projects-guide", False), "16": ("projects-list", False)}
+               "15": ("projects-guide", False), "16": ("projects-list", False),
+               "17": ("standard-roles-guide", False)}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
               "9) Project work status\n10) Agent 0 resume context\n"
               "11) Check exact .SYSTEMX casing and alias\n12) Enable local .systemx -> .SYSTEMX alias\n"
               "13) First-time setup guide\n14) Uninstall, restore, and cleanup guide\n"
-              "15) SYSTEMX PROJECTS setup and selection\n16) List registered projects\n0) Exit")
+              "15) SYSTEMX PROJECTS setup and selection\n16) List registered projects\n"
+              "17) Agent X and Agent Z setup and review guide\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -383,6 +396,10 @@ def menu():
 
 def dispatch(action, dry_run=False):
     record_directory(SYSTEMX)
+    if action == "standard-roles-guide":
+        for name in ("AGENT-X.md", "AGENT-Z.md"):
+            print((DEFAULTS / "docs" / name).read_text(encoding="utf-8"))
+        return 0
     if action == "projects-guide":
         print((DEFAULTS / "docs/PROJECTS.md").read_text(encoding="utf-8"))
         return 0
@@ -429,7 +446,7 @@ def run_scoped_action(records, host, action, dry_run):
 def main(argv=None):
     global SYSTEMX, PROJECT_ROOT
     parser = argparse.ArgumentParser(description="Standalone .SYSTEMX project operations (exact-case directory)")
-    parser.add_argument("--root", type=Path, help="project record directory when running versioned defaults")
+    parser.add_argument("--root", type=Path, action=RootSelector, help="project record directory when running versioned defaults")
     subparsers = parser.add_subparsers(dest="action")
     for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide"):
         command_parser = subparsers.add_parser(action)
@@ -442,6 +459,7 @@ def main(argv=None):
         command_parser = subparsers.add_parser(action)
         command_parser.add_argument("--dry-run", action="store_true", help="print plan without executing commands")
     project_memory.add_cli(subparsers)
+    agent_standards.add_cli(subparsers)
     project_workspaces.add_cli(subparsers)
     args = parser.parse_args(argv)
     if args.action == "help":
@@ -452,6 +470,8 @@ def main(argv=None):
         PROJECT_ROOT = SYSTEMX.parent
         if args.action == "projects":
             return project_workspaces.dispatch(SYSTEMX, DEFAULTS, args, run_scoped_action)
+        if args.action in agent_standards.COMMANDS:
+            return agent_standards.dispatch(SYSTEMX, DEFAULTS, args)
         if args.action == "alias":
             return dispatch("alias-create" if args.create else "paths")
         if args.action in {"context", "task-packet"} and SYSTEMX != DEFAULTS:

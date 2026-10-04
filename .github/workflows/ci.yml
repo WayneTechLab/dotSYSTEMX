@@ -46,6 +46,12 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Child project setup failed' }
           & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects context --project 'Project A' --agent agent.0
           if ($LASTEXITCODE -ne 0) { throw 'Scoped context failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects roles-init --project 'Project A' --apply
+          if ($LASTEXITCODE -ne 0) { throw 'Standard role setup failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects agent-x due --project 'Project A'
+          if ($LASTEXITCODE -ne 0) { throw 'Agent X due tracking failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects agent-z policy --project 'Project A' | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'Agent Z policy load failed' }
           & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects validate
           if ($LASTEXITCODE -ne 0) { throw 'Child record validation failed' }
           $backup = Join-Path $env:RUNNER_TEMP 'SYSTEMX removal backup'

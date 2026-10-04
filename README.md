@@ -149,6 +149,28 @@ evidence. Your **AI harness**—the app, CLI, or IDE integration running the
 assistant—provides the actual agent processes and tools. `.SYSTEMX` provides
 the coordination rules and persistent project records.
 
+The standard also defines **Agent X** for events and time, and **Agent Z** for
+repeatable peer review:
+
+| Role | Responsibility |
+| --- | --- |
+| **Agent 0** | Plans work, routes subagents, integrates results, and accepts tasks |
+| **Agent X** | Records human/bot/automation events, due items, observations, and original timestamps |
+| **Agent Z** | Reviews the same 100 questions across 10 categories and reports an evidence-backed scorecard and delta |
+
+Activate their project records with `roles-init` to preview, then `roles-init --apply`.
+For a child, use `projects roles-init --project Project-A --apply`. Existing records
+are preserved; registration never launches workers or schedules jobs.
+
+Agent Z can review an initial prompt, a task ready for completion, a change, or a
+whole project. It retains the question set, source/evidence versions, unknowns,
+and original scorecards. Unchanged inputs reuse the saved review. A score does
+not automatically reopen work, rerun tests, approve deployment, or replace Agent
+0's acceptance decision. Project owners can customize a versioned local policy.
+Read the [Agent X guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-X),
+[Agent Z guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Z), and
+[100-question rubric](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Z-Questions).
+
 Once the project is set up, a short request can be:
 
 ```text
@@ -270,6 +292,7 @@ migration details, and the changelog live there.
 [About and founder's note](https://github.com/WayneTechLab/dotSYSTEMX/wiki/About) ·
 [Standard format](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format) ·
 [Command reference](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Command-Reference) ·
+[Code review and readiness](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Code-Review-and-Readiness) ·
 [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) · [Security](SECURITY.md)
 
 Maintained by **[Wayne Tech Lab LLC](https://github.com/WayneTechLab)** under the

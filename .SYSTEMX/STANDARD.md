@@ -99,3 +99,18 @@ work remains a blocker; it is not equivalent to passing a check.
 
 The written standard describes responsibilities. Only the explicitly configured
 checks enforce project behavior automatically.
+
+## Events, reviews, and the remaining delta
+
+Use [Agent X](docs/AGENT-X.md) to link meaningful events to exact revisions,
+original evidence, and timezone-aware occurrence times. Planned schedules,
+recorded due items, actual execution, and verified live state are different facts.
+Use [Agent Z](docs/AGENT-Z.md) for the same 100 evidence questions at a completion
+boundary or when requested. Preserve its policy version and original reports.
+
+Track the difference between the accepted idea, implementation, checked revision,
+delivered revision, and observed live behavior. Agent 0 chooses the next bounded
+action from that difference. Reuse valid evidence and unchanged reviews. Neither
+a due item nor a score automatically creates work, changes task state, repeats
+checks, or grants authority. Company policies may refine the versioned review
+questions; they do not override environment or user instructions.

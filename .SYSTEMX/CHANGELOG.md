@@ -4,6 +4,23 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.0-alpha.1 — Agent X and Agent Z
+
+- Added explicit standard-role activation with preserved registries and setup receipts.
+- Added Agent X event/time tracking, stable retry keys, bounded event views,
+  due-item bookkeeping, and clear external-scheduler boundaries.
+- Added Agent Z's fixed 100-question/10-category policy, evidence-backed answer
+  records, advisory scorecards, frozen policy versions, and comparable deltas.
+- Reused unchanged review inputs; kept task acceptance and execution with the
+  coordinator/user rather than automatic score-driven work loops.
+- Hardened workspace argument selection, malformed/ambiguous JSON handling,
+  root record link boundaries, and child-configuration error reporting.
+- Removed repeated sibling-directory scans from child record guards and exported
+  the documented `run` library entry point.
+- Added regression checks and updated public guides, upgrade/rollback boundaries,
+  and generic activation templates. No scheduler, cloud service, or agent runtime
+  is installed; public work/event/review histories remain empty.
+
 ## 1.7.0-alpha.1 — SYSTEMX PROJECTS
 
 - Added generic `Projects/NAME/.SYSTEMXP` child records with a blank project

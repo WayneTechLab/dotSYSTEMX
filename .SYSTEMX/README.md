@@ -141,3 +141,14 @@ Use [the upgrade guide](docs/UPGRADING.md) when adopting an existing project.
 The public [versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog)
 contains release details. The folder also retains offline release metadata and
 [source provenance](SOURCE.json). Keep the [license](LICENSE) in every copy.
+
+## Standard event and review roles
+
+[Agent X](docs/AGENT-X.md) tracks events, time, actors, and due items.
+[Agent Z](docs/AGENT-Z.md) applies the fixed 100-question policy across ten
+categories, retains scorecards, and compares revision/evidence deltas. Preview
+`roles-init`, then use `roles-init --apply` to enable both in this scope. For a
+child, use `projects roles-init --project NAME --apply`. Activation preserves
+existing records. Neither role launches workers, schedules jobs, accepts tasks,
+or repeats unchanged reviews automatically. The public seed registry stays
+Agent 0 only; standard X/Z definitions and blank activation templates are included.

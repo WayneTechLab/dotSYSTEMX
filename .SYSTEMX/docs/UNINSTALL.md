@@ -141,3 +141,12 @@ retains that complete tree. External sources merely listed in `SOURCES.json`
 are not removed or disconnected. No automatic individual-project deletion is
 provided; archive one child only with an explicit backup and reviewed registry
 edit. See [SYSTEMX PROJECTS](PROJECTS.md).
+
+## Agent X/Z records
+
+Event/schedule ledgers, role memory, adopted review policy, frozen questions,
+requests, and scorecards are part of the selected `.SYSTEMX` or child `.SYSTEMXP`
+tree and survive whole-installation backup/restore. These roles install no daemon,
+cron job, cloud schedule, model service, or notification integration. References
+to an external scheduler are metadata; deleting or cancelling a local record does
+not uninstall or cancel that external integration.

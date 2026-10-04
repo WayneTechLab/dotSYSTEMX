@@ -12,6 +12,7 @@ import tempfile
 import uuid
 
 import project_memory
+import agent_standards
 from systemx_paths import is_link
 
 REGISTRY = "Projects/REGISTRY.json"
@@ -142,8 +143,11 @@ class Workspaces:
                 if name.casefold() in folded:
                     raise ValueError("Case-conflicting project records")
                 folded.add(name.casefold())
-                relative = (Path(directory) / name).relative_to(self.root).as_posix()
-                self.safe(relative)
+                # Each parent is already checked by select() or this walk. Avoid
+                # rescanning all siblings for every child (quadratic in archives).
+                path = Path(directory) / name
+                if is_link(path) or (path.is_file() and path.stat().st_nlink > 1):
+                    raise ValueError("Linked workspace records are not allowed: " + str(path))
                 if name.casefold() in {".systemx", ".systemxp", "projects"}:
                     raise ValueError("Nested project markers are not supported inside .SYSTEMXP")
         for name in SEED_FILES:
@@ -154,6 +158,7 @@ class Workspaces:
     def validate_scope(self, selection, *, views=True):
         name, records, _ = selection
         self.guard(records)
+        agent_standards.validate_optional(records)
         ledger, _ = project_memory.load(records)
         project_memory.load_focus(records, ledger)
         if views:
@@ -172,7 +177,10 @@ class Workspaces:
             config = self.read_json(self.projects[name]["records"] + "/project.json")
             # Import at call time to avoid a circular import during CLI setup.
             import systemx
-            systemx.validate_config(config)
+            try:
+                systemx.validate_config(config)
+            except systemx.ConfigError as error:
+                raise ValueError(str(error)) from error
             if config["project"]["name"] != name:
                 raise ValueError("Project configuration name must match its selected registry entry")
         return ledger
@@ -268,7 +276,7 @@ class Workspaces:
                 project_memory.atomic_write(self.root, REGISTRY, json.dumps(latest.registry, indent=2) + "\n")
                 receipt["state"] = "complete"
                 result["receipt"] = log
-            except Exception:
+            except BaseException:
                 receipt["state"] = "failed"
                 receipt["recovery"] = "Preserve any unregistered project folder and inspect it before retrying"
                 raise
@@ -304,6 +312,7 @@ def add_cli(subparsers):
             return scope(commands.add_parser(*args, **kwargs))
 
     project_memory.add_cli(Scoped())
+    agent_standards.add_cli(commands, scope)
     for action in ("check", "dev", "build", "deploy"):
         command = scope(commands.add_parser(action))
         command.add_argument("--dry-run", action="store_true")
@@ -333,13 +342,15 @@ def dispatch(root, defaults, args, run_action):
             result = workspaces.refresh(selection, args.apply)
         else:
             workspaces.guard(records)
+            selected = argparse.Namespace(**vars(args))
+            selected.action = action
+            if action in agent_standards.COMMANDS:
+                return agent_standards.dispatch(records, defaults, selected)
             print("Selected scope: " + name + "\nRecords: " + str(records))
             print("Shared defaults: " + str(defaults))
             if action in ("check", "dev", "build", "deploy"):
                 workspaces.validate_scope(selection)
                 return run_action(records, host, action, args.dry_run)
-            selected = argparse.Namespace(**vars(args))
-            selected.action = action
             return project_memory.dispatch(records, selected, defaults)
     print(json.dumps(result, indent=2))
     return 0

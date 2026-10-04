@@ -117,7 +117,8 @@ pointers are rejected. Selection replaces the whole focus; it never changes task
 
 `AGENTS/REGISTRY.json` contains exactly `schemaVersion` and `agents`. Each agent
 has `id`, `role`, and `memory`. IDs are unique `agent.0`, `agent.1`, etc., without
-leading zeroes. Agent 0 must have role `coordinator`; other roles are nonempty
+leading zeroes, plus reserved standard roles `agent.x` (`event-time`) and
+`agent.z` (`review`) when explicitly activated using compatible tools. Agent 0 must have role `coordinator`; other roles are nonempty
 descriptions. Memory must exist at `AGENTS/<id>/MEMORY.md`, without symlinks.
 
 ## Commands and optional messages
@@ -191,3 +192,32 @@ manifest itself; installation state records that manifest's fingerprint.
 Fingerprints detect changed artifacts relative to the selected source; they are
 not independent publisher signatures. See [installation](docs/INSTALLATION.md)
 for policy, local locking, interrupted writes, and filesystem limits.
+
+## Agent X and Agent Z records
+
+The public registry remains Agent 0 only. `roles-init --apply` explicitly adds
+standard role entries and project-owned records while preserving existing bytes.
+Activated `agent.x`/`agent.z` IDs require tools that support them; older readers
+are not compatible with those added IDs. Record schema version 1 is otherwise
+unchanged. A downgrade after activation requires a reviewed migration or backup.
+
+`EVENTS/EVENTS.json` contains `schemaVersion: 1` and `events`. Each event has `id`,
+`key`, `at`, `recordedAt`, `actor` (`kind`, `id`), `kind`, `stage`, `summary`,
+`tasks`, `revision`, and `evidence`. Stable-key replays preserve the original
+record and conflicting facts are refused. `EVENTS/SCHEDULE.json` contains
+`schemaVersion: 1` and `items`, with one due occurrence per item and explicit
+open/complete/cancelled bookkeeping. See [Agent X](docs/AGENT-X.md).
+
+`REVIEWS/POLICY.json` contains `schemaVersion: 1`, `policyId`, `version`, and
+exactly ten `categories`, each with `id`, `name`, and exactly ten `questions`
+(`id`, `question`). Stable IDs are C01–C10 and Z01.01–Z10.10. A question change
+requires a new policy version; used policy versions are frozen under `policies/`.
+Requests retain the subject, code/input revision, evidence revision, stage,
+policy snapshot/hash, and all 100 answers. Reports preserve answers, derived
+scores, source fingerprints, and time. See [Agent Z](docs/AGENT-Z.md) for the
+answer contract, scoring, comparison, and immutable-report behavior.
+
+Normal validation checks current optional event/schedule ledgers and review
+policy when present. Historical review requests/reports have explicit selected-ID
+validation; they are not all loaded into context. None of these records replaces
+`WORK/TASKS.json`, authenticates a worker, or proves evidence independently.

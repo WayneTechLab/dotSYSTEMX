@@ -12,7 +12,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.7.0-alpha.1"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.0-alpha.1"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -29,7 +29,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.7.0-alpha.1` is spelled `1.7.0a1` in Python package
+The public release ID `1.8.0-alpha.1` is spelled `1.8.0a1` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)
@@ -134,3 +134,21 @@ It never overwrites an existing output or uploads the packet. The returned
 management dictionary includes `project` (null for root), `version`, `output`,
 and `uploaded: false`. Review private context before sharing. See
 [SYSTEMX PROJECTS](PROJECTS.md) for scoping, commands, and preservation rules.
+
+## Standard role commands
+
+```python
+from systemx import run, projects
+
+result = run("/path/to/workspace", ["roles-init"], offline=True, capture=True)
+result.check_returncode()  # preview; add --apply after reviewing the intended scope
+projects("/path/to/workspace", ["agent-z", "policy", "--project", "Project-A"]).check_returncode()
+```
+
+`run` is exported by the package and returns `subprocess.CompletedProcess`.
+Arguments must be an explicit string array; they cannot override the chosen
+workspace's global `--root`. Scoped `projects ... --root` remains valid.
+Role commands perform local record operations; they do not schedule external
+jobs, call a model, run checks, or upload evidence. Use `offline=True` to suppress
+an independently enabled startup update check. See [Agent X](AGENT-X.md) and
+[Agent Z](AGENT-Z.md).

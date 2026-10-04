@@ -76,8 +76,8 @@ After reviewing the [published release history](https://github.com/WayneTechLab/
 ```bash
 systemx status --target "/path/to/project"
 systemx policy --target "/path/to/project" --pin none
-systemx update --target "/path/to/project" --version 1.7.0-alpha.1 --dry-run
-systemx update --target "/path/to/project" --version 1.7.0-alpha.1
+systemx update --target "/path/to/project" --version 1.8.0-alpha.1 --dry-run
+systemx update --target "/path/to/project" --version 1.8.0-alpha.1
 systemx policy --target "/path/to/project" --pin current
 ```
 

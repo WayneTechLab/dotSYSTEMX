@@ -1,0 +1,467 @@
+{
+  "schemaVersion": 1,
+  "policyId": "systemx-agent-z",
+  "version": "1.0.0",
+  "categories": [
+    {
+      "id": "C01",
+      "name": "Intent and acceptance",
+      "questions": [
+        {
+          "id": "Z01.01",
+          "question": "Is the intended outcome stated clearly?"
+        },
+        {
+          "id": "Z01.02",
+          "question": "Is the subject of this review identified precisely?"
+        },
+        {
+          "id": "Z01.03",
+          "question": "Is the intended user or beneficiary identified?"
+        },
+        {
+          "id": "Z01.04",
+          "question": "Are the original acceptance criteria available?"
+        },
+        {
+          "id": "Z01.05",
+          "question": "Are success criteria observable rather than subjective claims?"
+        },
+        {
+          "id": "Z01.06",
+          "question": "Are explicit non-goals recorded?"
+        },
+        {
+          "id": "Z01.07",
+          "question": "Are important constraints recorded?"
+        },
+        {
+          "id": "Z01.08",
+          "question": "Are assumptions separated from confirmed requirements?"
+        },
+        {
+          "id": "Z01.09",
+          "question": "Does the result or proposed action address the original objective?"
+        },
+        {
+          "id": "Z01.10",
+          "question": "Is any remaining acceptance gap stated clearly?"
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "name": "Scope and authority",
+      "questions": [
+        {
+          "id": "Z02.01",
+          "question": "Is the active workspace or project explicitly selected?"
+        },
+        {
+          "id": "Z02.02",
+          "question": "Are permitted files and systems identified?"
+        },
+        {
+          "id": "Z02.03",
+          "question": "Are applicable instruction and policy sources identified?"
+        },
+        {
+          "id": "Z02.04",
+          "question": "Is the requested action within the user's authorization?"
+        },
+        {
+          "id": "Z02.05",
+          "question": "Are consequential external actions separately authorized when required?"
+        },
+        {
+          "id": "Z02.06",
+          "question": "Are unrelated local changes preserved?"
+        },
+        {
+          "id": "Z02.07",
+          "question": "Is each shared resource assigned a clear owner?"
+        },
+        {
+          "id": "Z02.08",
+          "question": "Are agent role records distinguished from running processes?"
+        },
+        {
+          "id": "Z02.09",
+          "question": "Are cross-project actions explicitly scoped?"
+        },
+        {
+          "id": "Z02.10",
+          "question": "Is the stopping or escalation condition clear?"
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "name": "Context and provenance",
+      "questions": [
+        {
+          "id": "Z03.01",
+          "question": "Are the relevant source records identified?"
+        },
+        {
+          "id": "Z03.02",
+          "question": "Is the source revision or input version recorded?"
+        },
+        {
+          "id": "Z03.03",
+          "question": "Are facts separated from proposals and interpretations?"
+        },
+        {
+          "id": "Z03.04",
+          "question": "Are volatile facts checked recently enough for this decision?"
+        },
+        {
+          "id": "Z03.05",
+          "question": "Can important claims be traced to original evidence?"
+        },
+        {
+          "id": "Z03.06",
+          "question": "Are conflicting sources reconciled or flagged?"
+        },
+        {
+          "id": "Z03.07",
+          "question": "Are imported documents treated as reference data within the instruction hierarchy?"
+        },
+        {
+          "id": "Z03.08",
+          "question": "Is private context limited to the selected scope?"
+        },
+        {
+          "id": "Z03.09",
+          "question": "Are unresolved questions retained instead of filled with guesses?"
+        },
+        {
+          "id": "Z03.10",
+          "question": "Can another reviewer reconstruct the relevant context from the references?"
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "name": "Planning and dependencies",
+      "questions": [
+        {
+          "id": "Z04.01",
+          "question": "Is the next action concrete and bounded?"
+        },
+        {
+          "id": "Z04.02",
+          "question": "Are task dependencies identified?"
+        },
+        {
+          "id": "Z04.03",
+          "question": "Are prerequisites verified before dependent work proceeds?"
+        },
+        {
+          "id": "Z04.04",
+          "question": "Is ownership clear for the work being reviewed?"
+        },
+        {
+          "id": "Z04.05",
+          "question": "Is the plan proportionate to the problem?"
+        },
+        {
+          "id": "Z04.06",
+          "question": "Are parallel assignments non-overlapping or explicitly coordinated?"
+        },
+        {
+          "id": "Z04.07",
+          "question": "Are time, capacity, and tool constraints considered?"
+        },
+        {
+          "id": "Z04.08",
+          "question": "Is recovery from an interrupted step described where needed?"
+        },
+        {
+          "id": "Z04.09",
+          "question": "Does the plan preserve prior accepted work?"
+        },
+        {
+          "id": "Z04.10",
+          "question": "Does further work have a stated reason rather than an automatic repeat loop?"
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "name": "Correctness and completeness",
+      "questions": [
+        {
+          "id": "Z05.01",
+          "question": "Does the deliverable satisfy the reviewed requirements?"
+        },
+        {
+          "id": "Z05.02",
+          "question": "Are the main inputs and outputs defined?"
+        },
+        {
+          "id": "Z05.03",
+          "question": "Are invalid or missing inputs handled explicitly?"
+        },
+        {
+          "id": "Z05.04",
+          "question": "Are relevant boundary conditions handled?"
+        },
+        {
+          "id": "Z05.05",
+          "question": "Are failure paths understandable and recoverable?"
+        },
+        {
+          "id": "Z05.06",
+          "question": "Are existing supported behaviors preserved?"
+        },
+        {
+          "id": "Z05.07",
+          "question": "Are state changes internally consistent?"
+        },
+        {
+          "id": "Z05.08",
+          "question": "Are unnecessary dependencies or project-specific assumptions avoided?"
+        },
+        {
+          "id": "Z05.09",
+          "question": "Are repeated operations safe for the intended workflow?"
+        },
+        {
+          "id": "Z05.10",
+          "question": "Are known defects or incomplete parts disclosed?"
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "name": "Verification and evidence",
+      "questions": [
+        {
+          "id": "Z06.01",
+          "question": "Are checks matched to the acceptance criteria?"
+        },
+        {
+          "id": "Z06.02",
+          "question": "Were the relevant checks actually performed?"
+        },
+        {
+          "id": "Z06.03",
+          "question": "Are the exact checked inputs or revisions recorded?"
+        },
+        {
+          "id": "Z06.04",
+          "question": "Are check results and execution times recorded?"
+        },
+        {
+          "id": "Z06.05",
+          "question": "Are failed and skipped checks visible?"
+        },
+        {
+          "id": "Z06.06",
+          "question": "Are negative or refusal cases checked where relevant?"
+        },
+        {
+          "id": "Z06.07",
+          "question": "Are modified components checked together where relevant?"
+        },
+        {
+          "id": "Z06.08",
+          "question": "Is stale evidence distinguished from current verification?"
+        },
+        {
+          "id": "Z06.09",
+          "question": "Is claimed completion supported by original evidence?"
+        },
+        {
+          "id": "Z06.10",
+          "question": "Is the scope of each verification claim stated accurately?"
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "name": "Security and data handling",
+      "questions": [
+        {
+          "id": "Z07.01",
+          "question": "Are secrets excluded from source, prompts, and public artifacts?"
+        },
+        {
+          "id": "Z07.02",
+          "question": "Are sensitive records kept within their authorized audience?"
+        },
+        {
+          "id": "Z07.03",
+          "question": "Are path and project boundaries respected?"
+        },
+        {
+          "id": "Z07.04",
+          "question": "Are untrusted inputs validated before use?"
+        },
+        {
+          "id": "Z07.05",
+          "question": "Are external commands or tools invoked with explicit arguments and scope?"
+        },
+        {
+          "id": "Z07.06",
+          "question": "Are permissions limited to what the requested action needs?"
+        },
+        {
+          "id": "Z07.07",
+          "question": "Are dependencies and external services necessary and identified?"
+        },
+        {
+          "id": "Z07.08",
+          "question": "Are destructive changes prevented or recoverable within the authorized workflow?"
+        },
+        {
+          "id": "Z07.09",
+          "question": "Are logs useful without exposing unnecessary private data?"
+        },
+        {
+          "id": "Z07.10",
+          "question": "Are material security or privacy uncertainties disclosed?"
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "name": "Usability and documentation",
+      "questions": [
+        {
+          "id": "Z08.01",
+          "question": "Is the result understandable to its intended audience?"
+        },
+        {
+          "id": "Z08.02",
+          "question": "Are setup steps complete for the supported environment?"
+        },
+        {
+          "id": "Z08.03",
+          "question": "Are examples generic or clearly labeled as project-specific?"
+        },
+        {
+          "id": "Z08.04",
+          "question": "Are names, paths, and exact casing consistent?"
+        },
+        {
+          "id": "Z08.05",
+          "question": "Are errors actionable without hiding the failed operation?"
+        },
+        {
+          "id": "Z08.06",
+          "question": "Are configuration and customization boundaries explained?"
+        },
+        {
+          "id": "Z08.07",
+          "question": "Are important limitations stated alongside the relevant feature?"
+        },
+        {
+          "id": "Z08.08",
+          "question": "Are the affected documentation and references current?"
+        },
+        {
+          "id": "Z08.09",
+          "question": "Can a new user follow the intended workflow without guessing missing steps?"
+        },
+        {
+          "id": "Z08.10",
+          "question": "Are accessibility or equivalent access needs addressed where relevant?"
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "name": "Delivery and operational state",
+      "questions": [
+        {
+          "id": "Z09.01",
+          "question": "Is implemented work distinguished from delivered or deployed work?"
+        },
+        {
+          "id": "Z09.02",
+          "question": "Is the intended delivery target identified?"
+        },
+        {
+          "id": "Z09.03",
+          "question": "Is the actual delivered revision or artifact identified?"
+        },
+        {
+          "id": "Z09.04",
+          "question": "Is the live or installed state observed rather than inferred from source checks?"
+        },
+        {
+          "id": "Z09.05",
+          "question": "Are configuration and environment differences accounted for?"
+        },
+        {
+          "id": "Z09.06",
+          "question": "Are update and compatibility effects understood?"
+        },
+        {
+          "id": "Z09.07",
+          "question": "Are rollback, backup, or removal paths appropriate to the change?"
+        },
+        {
+          "id": "Z09.08",
+          "question": "Are post-delivery checks tied to the actual delivered revision?"
+        },
+        {
+          "id": "Z09.09",
+          "question": "Are known differences between source and live state recorded?"
+        },
+        {
+          "id": "Z09.10",
+          "question": "Is operational ownership clear after handoff?"
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "name": "Time, continuity, and delta",
+      "questions": [
+        {
+          "id": "Z10.01",
+          "question": "Are relevant timestamps timezone-aware and unambiguous?"
+        },
+        {
+          "id": "Z10.02",
+          "question": "Are event occurrence times distinguished from recording times?"
+        },
+        {
+          "id": "Z10.03",
+          "question": "Are due items assigned an owner and explicit state?"
+        },
+        {
+          "id": "Z10.04",
+          "question": "Are planned schedules distinguished from executed jobs?"
+        },
+        {
+          "id": "Z10.05",
+          "question": "Are retries or repeated events identified without duplicating effects?"
+        },
+        {
+          "id": "Z10.06",
+          "question": "Does the handoff preserve the current objective and next action?"
+        },
+        {
+          "id": "Z10.07",
+          "question": "Are changed code, evidence, environment, or policy inputs identified since the prior review?"
+        },
+        {
+          "id": "Z10.08",
+          "question": "Are comparable review scores based on the same question set and policy version?"
+        },
+        {
+          "id": "Z10.09",
+          "question": "Are unchanged results reused instead of reprocessed automatically?"
+        },
+        {
+          "id": "Z10.10",
+          "question": "Is the remaining difference between idea, implementation, verification, and live state explicit?"
+        }
+      ]
+    }
+  ]
+}

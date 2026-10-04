@@ -104,3 +104,15 @@ schema or populated legacy `.SYSTEMXP` may need a reviewed migration to the
 schemas and occupied destinations without replacing them. Preserve the original
 records, IDs, evidence, and private source references. Do not copy real project
 records into the public template or blank creation seeds.
+
+## Agent X/Z adoption
+
+Update the selected defaults to a compatible release, verify it, and keep the
+version pinned. Preview `roles-init` in each intended scope before applying it.
+An update alone preserves registries and does not activate roles. The public seed
+registry remains Agent 0 only so existing managed launchers can verify upgraded
+defaults. Once `agent.x` or `agent.z` is registered, older tool versions cannot
+interpret those IDs: review migration or restore a pre-activation backup before
+rolling back. Never delete events or review records to make a downgrade appear
+successful. Project `REVIEWS/POLICY.json` is preserved; adopt later default
+questions only through an explicit versioned policy edit.
