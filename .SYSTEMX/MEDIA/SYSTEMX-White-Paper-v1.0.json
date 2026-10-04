@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "title": ".SYSTEMX: Portable project memory for agentic work",
+  "edition": "1.0",
+  "publishedOn": "2026-10-04",
+  "technicalBaseline": "1.8.2-alpha.1",
+  "technicalBaselineCommit": "59bc3abee59539a721a295288ff1ed266d82eb0f",
+  "publicationRelease": "1.8.3-alpha.1",
+  "pages": 17,
+  "authoring": "Editable Markdown; PDF typeset with ReportLab 4.4.9",
+  "builder": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/docs/media/build_white_paper.py",
+  "checksumMethod": "SHA-256 of exact file bytes",
+  "files": [
+    {
+      "file": "SYSTEMX-White-Paper-v1.0.md",
+      "bytes": 37777,
+      "sha256": "dc3b8acf344876737bf1ca0d0e29dd1725a5e86ef3c7d0f612ca5fe3e21d8e50"
+    },
+    {
+      "file": "SYSTEMX-White-Paper-v1.0.pdf",
+      "bytes": 59254,
+      "sha256": "1d6a82845e5d01b16c3cd512750353141050abcea218af4b128fdefa81386a41"
+    }
+  ]
+}

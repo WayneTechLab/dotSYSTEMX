@@ -10,6 +10,7 @@ tools, and agents without repeatedly reconstructing what happened or drifting
 away from what was agreed.
 
 [Read the manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
+[Read the white paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
 [Copy a setup prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt) ·
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate)

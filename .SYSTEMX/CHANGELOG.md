@@ -4,6 +4,18 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.3-alpha.1 — Public white paper
+
+- Added a 17-page white paper and editable Markdown in `.SYSTEMX/MEDIA`, with
+  document provenance, raw-byte checksums and a repository PDF builder.
+- Described architecture, Agent 0/X/Z, scoring, project isolation, execution
+  environments, additive lifecycle, efficiency hypotheses and an evaluation method.
+- Included a worked web-app plan, an adoption prompt, pinned implementation
+  references and external primary sources; distinguished implemented features,
+  illustrative examples and future directions.
+- Added public README/wiki discovery and included the paper in folder/wheel
+  distributions. Runtime behavior and record schemas are unchanged.
+
 ## 1.8.2-alpha.1 — Portable use-case media library
 
 - Added `.SYSTEMX/MEDIA` with four standalone cards for ChatGPT + Google Drive,

@@ -51,6 +51,8 @@ REQUIRED = (
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
     "docs/ONE-SHOT-PROJECT.md", "docs/SHARED-WORKSPACES.md",
     "MEDIA/README.md", "MEDIA/IMAGE-PROMPTS.md", "MEDIA/ASSETS.json",
+    "MEDIA/SYSTEMX-White-Paper-v1.0.md", "MEDIA/SYSTEMX-White-Paper-v1.0.pdf",
+    "MEDIA/SYSTEMX-White-Paper-v1.0.json",
     "MEDIA/chatgpt-google-drive.md", "MEDIA/chatgpt-google-drive.png", "MEDIA/chatgpt-google-drive-4k.jpg",
     "MEDIA/codex-github-main.md", "MEDIA/codex-github-main.png", "MEDIA/codex-github-main-4k.jpg",
     "MEDIA/dots-codex-cloud.md", "MEDIA/dots-codex-cloud.png", "MEDIA/dots-codex-cloud-4k.jpg",
