@@ -12,7 +12,8 @@ and generated views described here; it does not execute an agent runtime.
 - Put the complete `.SYSTEMX` directory at the host project root. Preserve exact
   path casing on every system; the stored folder name must be `.SYSTEMX`. A
   local lowercase alias may only route to that directory under the
-  [exact-case contract](docs/EXACT-CASE.md). Use UTF-8 text and relative references.
+  [exact-case contract](docs/EXACT-CASE.md). Use UTF-8 for text records and relative references. Educational binary images
+  live under `MEDIA/`; they are not canonical project state.
 - `VERSION` identifies the template release. Each canonical JSON document has
   its own integer `schemaVersion`; version 1 rejects missing or unknown fields.
 - Add project-specific metadata in separate project-owned documents and link

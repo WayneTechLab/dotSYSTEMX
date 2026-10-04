@@ -50,6 +50,11 @@ REQUIRED = (
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
     "docs/ONE-SHOT-PROJECT.md", "docs/SHARED-WORKSPACES.md",
+    "MEDIA/README.md", "MEDIA/IMAGE-PROMPTS.md", "MEDIA/ASSETS.json",
+    "MEDIA/chatgpt-google-drive.md", "MEDIA/chatgpt-google-drive.png", "MEDIA/chatgpt-google-drive-4k.jpg",
+    "MEDIA/codex-github-main.md", "MEDIA/codex-github-main.png", "MEDIA/codex-github-main-4k.jpg",
+    "MEDIA/dots-codex-cloud.md", "MEDIA/dots-codex-cloud.png", "MEDIA/dots-codex-cloud-4k.jpg",
+    "MEDIA/codex-copilot-cli-local.md", "MEDIA/codex-copilot-cli-local.png", "MEDIA/codex-copilot-cli-local-4k.jpg",
 ) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",

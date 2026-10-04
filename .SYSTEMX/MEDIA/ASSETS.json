@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "generatedOn": "2026-10-04",
+  "tool": "built-in imagegen",
+  "prompts": "IMAGE-PROMPTS.md",
+  "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 90",
+  "upscaled": true,
+  "nativeFilesUnmodified": true,
+  "checksumMethod": "SHA-256 of exact file bytes",
+  "assets": [
+    {
+      "id": "chatgpt-google-drive",
+      "native": {
+        "file": "chatgpt-google-drive.png",
+        "width": 1672,
+        "height": 941,
+        "bytes": 1398319,
+        "sha256": "ac7cee5a89cb7e707a6adf0069e2f721f7ae4d013e5cc00513f9c9f762459423"
+      },
+      "export": {
+        "file": "chatgpt-google-drive-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 1481101,
+        "sha256": "90e598146d114baf50ff8fdd4bba42c4f3407fdbdb17bca1b69ae8764a3df88b"
+      }
+    },
+    {
+      "id": "codex-github-main",
+      "native": {
+        "file": "codex-github-main.png",
+        "width": 1672,
+        "height": 941,
+        "bytes": 1390012,
+        "sha256": "9c0c74266eafe8fdf5167e1e473fad11a64a42da224bc3346d9dbc08d5140e53"
+      },
+      "export": {
+        "file": "codex-github-main-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 1544645,
+        "sha256": "f43f126fe22176b29f1dac2f8241e50ed00dabd232fd73444ce87d613e43041b"
+      }
+    },
+    {
+      "id": "dots-codex-cloud",
+      "native": {
+        "file": "dots-codex-cloud.png",
+        "width": 1672,
+        "height": 941,
+        "bytes": 1412536,
+        "sha256": "8d0baa8dae73fe50576a86c882b93c882682228b7bbad293a2fcc4ed373391d1"
+      },
+      "export": {
+        "file": "dots-codex-cloud-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 1496601,
+        "sha256": "6d46571eae779cbe1b2195251147b3fe3f67047d5f1c61a019f662e7aaf394e6"
+      }
+    },
+    {
+      "id": "codex-copilot-cli-local",
+      "native": {
+        "file": "codex-copilot-cli-local.png",
+        "width": 1672,
+        "height": 941,
+        "bytes": 1364313,
+        "sha256": "14772356fbbc8cc87d408d6a61a3d29fa24feedfacfc0d9b988070e2892ea7ed"
+      },
+      "export": {
+        "file": "codex-copilot-cli-local-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 1460982,
+        "sha256": "4dd5b23e3c518bf194690569b5b150d5afda7913f056352dd9313ee3513e46c5"
+      }
+    }
+  ]
+}

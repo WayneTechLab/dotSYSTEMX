@@ -4,6 +4,18 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.2-alpha.1 — Portable use-case media library
+
+- Added `.SYSTEMX/MEDIA` with four standalone cards for ChatGPT + Google Drive,
+  Codex + GitHub/main, Dots / Codex Cloud, and Codex / Copilot CLI + local drive.
+- Retained native imagegen PNGs and added separate 3840 × 2160 JPEG exports,
+  accessible text guides, exact prompts, dimensions and raw-byte checksums.
+- Added README/wiki galleries and explicit access, execution, acceptance and
+  persistence boundaries for each workflow and Agent 0/X/Z.
+- Included all media in the portable inventory and Python wheel. File sizes stay
+  within existing installer limits; updates still preserve user-owned files.
+- No runtime, task/review schema, scheduler or update-policy behavior change.
+
 ## 1.8.1-alpha.1 — Complete-project and shared-workspace manual
 
 - Added a deep-research-to-completion guide with a 20-page web app matrix,

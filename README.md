@@ -112,6 +112,21 @@ for the record flow, managed defaults, and accessible text explanations.
 Follow [a first task from start to finish](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Daily-Workflow)
 or read the [planning and memory guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory).
 
+## Choose your working environment
+
+Four separate use-case cards show how to carry the same `.SYSTEMX` records through
+chat, Git, cloud work and a local terminal. Open a card for its 4K download.
+
+| ChatGPT + Google Drive | Codex + GitHub / main project |
+| --- | --- |
+| [![ChatGPT and Google Drive workflow](.SYSTEMX/MEDIA/chatgpt-google-drive.png)](.SYSTEMX/MEDIA/chatgpt-google-drive-4k.jpg) | [![Codex and GitHub workflow](.SYSTEMX/MEDIA/codex-github-main.png)](.SYSTEMX/MEDIA/codex-github-main-4k.jpg) |
+| Dots / Codex Cloud | Codex / Copilot CLI + local drive |
+| [![Dots and Codex Cloud workflow](.SYSTEMX/MEDIA/dots-codex-cloud.png)](.SYSTEMX/MEDIA/dots-codex-cloud-4k.jpg) | [![Codex and Copilot CLI local-drive workflow](.SYSTEMX/MEDIA/codex-copilot-cli-local.png)](.SYSTEMX/MEDIA/codex-copilot-cli-local-4k.jpg) |
+
+[Open the wiki walkthroughs](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Use-Case-Infographics) ·
+[Media library, originals and text guides](.SYSTEMX/MEDIA/README.md).
+The 4K files are resized JPEG exports; native PNG masters are retained.
+
 ## From one researched brief to a finished project
 
 Start with a deep-research brief: the problem, audience, relevant sources,

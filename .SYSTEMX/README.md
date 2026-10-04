@@ -22,6 +22,10 @@ setup refuses independent case variants to protect project records.
 [Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Setup profiles](config/profiles.json) · [MIT license](LICENSE)
 
+[Use-case media library](MEDIA/README.md): ChatGPT + Drive, Codex + GitHub,
+Dots / Codex Cloud, and Codex / Copilot CLI on a local drive, with 4K cards
+and accessible text guides.
+
 ## Focused context and reversible setup
 
 Current focus, a single task ledger, bounded context, and scoped agent memory can

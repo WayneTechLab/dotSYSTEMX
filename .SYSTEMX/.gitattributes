@@ -1,3 +1,5 @@
 # Bash requires LF even in Windows checkouts using core.autocrlf.
 * text=auto
 *.sh text eol=lf
+*.png binary
+*.jpg binary
