@@ -59,7 +59,12 @@ lowercase access to the same canonical folder where supported.
 
 ## How it works
 
-![.SYSTEMX coordination: a researched brief and shared context guide Agent 0 and authorized tools. Agent X records time and evidence; Agent Z reviews the fixed rubric. Acceptance and a saved checkpoint define the next bounded action or finish.](docs/assets/systemx-coordination.png)
+[![.SYSTEMX full-system map: shared context, Agent 0 and authorized subagents, canonical tasks and generated views, Agent X event logs, Agent Z fixed reviews, execution tools, named .SYSTEMXP children, and versioned setup and recovery.](docs/assets/systemx-full-system.png)](docs/assets/systemx-full-system-4k.png)
+
+[Download the 4K PNG (upscaled)](docs/assets/systemx-full-system-4k.png) ·
+[Native PNG](docs/assets/systemx-full-system.png) ·
+[Read its text equivalent](docs/assets/systemx-full-system.md) ·
+[Explore the visual manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide#full-system-overview)
 
 1. **Define the outcome.** Save the project's purpose, constraints, and acceptance criteria.
 2. **Plan the next work.** Agent 0 connects milestones to tasks with owners and dependencies.

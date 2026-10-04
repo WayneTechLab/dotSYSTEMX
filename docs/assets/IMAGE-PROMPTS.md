@@ -8,7 +8,8 @@ Only the selected final PNGs are included here; the drafts are not distributed.
 
 - `systemx-logo.png`: standalone monochrome folder/branch mark and wordmark.
 - `systemx-workflow.png`: legacy six-step illustration, retained for existing links.
-  Current documentation uses the Agent 0/X/Z diagrams listed in [asset notes](README.md).
+  Current documentation uses the full-system poster and Agent 0/X/Z diagrams
+  listed in [asset notes](README.md).
 
 Both files have an opaque white background. They are raster assets, not editable
 vector masters. The workflow is an illustration of a human/agent-maintained
@@ -34,3 +35,16 @@ Preserve every other element exactly: .SYSTEMX title including the leading dot, 
 
 The current Mermaid `.mmd`, SVG, and PNG diagrams are technical renderings, not
 imagegen edits. Their source and maintenance notes are in [README.md](README.md).
+
+## Full-system infographic
+
+`systemx-full-system.png` is the current comprehensive raster overview, generated
+with the built-in imagegen tool. The exact initial and correction prompts are in
+[systemx-full-system-prompt.md](systemx-full-system-prompt.md), and the accessible
+[text equivalent](systemx-full-system.md) explains every section and boundary.
+It uses the standard Agent 0, Agent X, and Agent Z roles; no Agent Y is introduced.
+
+The native master is 1672 × 941 pixels. `systemx-full-system-4k.png` is the
+3840 × 2160 upscaled export requested by the user; it was resized locally with
+`sips` after imagegen creation and correction. Both files are retained, and the
+4K export is not represented as native 4K generation.
