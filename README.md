@@ -102,6 +102,45 @@ for the record flow, managed defaults, and accessible text explanations.
 Follow [a first task from start to finish](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Daily-Workflow)
 or read the [planning and memory guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory).
 
+## SYSTEMX PROJECTS: one workspace, separate project memory
+
+Track multiple projects or channels with **`.SYSTEMXP`**, the child record format
+for **SYSTEMX PROJECTS**. One outer `.SYSTEMX` supplies shared tools and standards;
+each project keeps its own context, Master Plan, tasks, status, decisions, and
+Agent 0/subagent memory.
+
+```text
+.SYSTEMX/
+├── GLOBAL/ · PLAN/ · WORK/ · AGENTS/   workspace coordination
+└── Projects/
+    ├── REGISTRY.json                  explicit project selection
+    ├── Project-A/
+    │   └── .SYSTEMXP/                 Project A's records
+    └── Project-B/
+        └── .SYSTEMXP/                 Project B's records
+```
+
+Use exactly **`.SYSTEMX/Projects/Project-A/.SYSTEMXP`**. Never create a nested
+`.SYSTEMX` or an independent lowercase marker. The public template's registry
+is empty; these names are examples. Code can live beside each child's records,
+or you can track explicit references to repositories, Drive folders, and chats.
+
+After setting up the outer folder, run from its workspace root:
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software   # preview
+bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
+bash .SYSTEMX/SYSTEMX.sh projects add Project-B --kind channel --apply
+bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
+```
+
+Every scoped work command requires an explicit project or root selection.
+Updates preserve existing child records and working files. This is local record
+routing; source references do not automatically connect services or launch agents.
+Read the [SYSTEMX PROJECTS manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/SYSTEMX-Projects)
+for first-time setup, scoped task commands, subagent handoffs, status snapshots,
+chat export, version ownership, and removal.
+
 ## Agent 0 and your AI tools
 
 Agent 0 keeps the overall objective, assignments, review, and shared memory
@@ -142,6 +181,7 @@ chat handoffs, and coordinated work across projects.
 
 | Workspace | Setup guide |
 | --- | --- |
+| Multiple projects or channels in one workspace | [SYSTEMX PROJECTS](https://github.com/WayneTechLab/dotSYSTEMX/wiki/SYSTEMX-Projects) |
 | Repository or VS Code project root | [Project setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Project) |
 | Windows, macOS, or Linux working directory | [Directory setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Directory) |
 | Locally synchronized Google Drive project folder | [Google Drive setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Setup-Google-Drive) |

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "name": "",
+    "description": ""
+  },
+  "checks": [],
+  "commands": {
+    "dev": [],
+    "build": [],
+    "deploy": []
+  }
+}

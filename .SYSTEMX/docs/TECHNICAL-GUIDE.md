@@ -15,6 +15,8 @@ Host project
     ├── GLOBAL, PLAN, MEMORY       project context, outcomes, durable facts
     ├── WORK                       canonical tasks and current focus
     ├── AGENTS                     Agent 0 role and scoped worker memory
+    ├── Projects/REGISTRY.json      explicit child identities
+    ├── Projects/NAME/.SYSTEMXP     isolated child records; no nested installation
     ├── project.json               explicit project command arguments
     ├── INSTALLATION.json          selected defaults and update policy
     └── .systemx                   internal manager storage
@@ -36,6 +38,7 @@ folder. It is different from the nested manager cache. Follow the
 | `lifecycle.py` | File inventories, raw-byte hashes, atomic JSON receipts, backup boundaries |
 | `scripts/systemx.py` | Configuration validation, menu, doctor, explicitly configured commands |
 | `scripts/project_memory.py` | Task ledger, focus, generated views, agent records, bounded context |
+| `scripts/project_workspaces.py` | Explicit project routing, blank initialization, scoped commands, local status snapshots |
 | `config/distribution.json` | Explicit public file inventory with release fingerprints |
 | `config/template-records.json` | Reviewed blank seed fingerprints |
 
@@ -100,3 +103,13 @@ project. Neither establishes production readiness by itself. Tests use temporary
 projects across Windows, macOS, Linux, and supported Python versions.
 [Token and time efficiency](EFFICIENCY.md) explains the scoped-context design and
 how to measure its effect without claiming unmeasured savings.
+
+## Child project scopes
+
+[SYSTEMX PROJECTS](PROJECTS.md) routes selected operations to
+`Projects/NAME/.SYSTEMXP` while reusing `project_memory.py` for the same record
+invariants. Configured child commands run from `Projects/NAME/`. Each ledger has
+its own local coordination lock; project creation locks the outer registry.
+Snapshots contain selected task counts, focus, and source hashes, not a service
+health verdict. Shared default snapshots and version selection remain at the
+outer installation. A scope selector is not an OS sandbox or distributed lock.

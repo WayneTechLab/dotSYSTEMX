@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.6.0-alpha.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.7.0-alpha.1"
 "$HOME/.venvs/dotsystemx/bin/systemx" --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.6.0-alpha.1"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.7.0-alpha.1"
 & "$HOME\.venvs\dotsystemx\Scripts\systemx.exe" --help
 ```
 
@@ -114,3 +114,16 @@ Save the [uninstall/restore instructions](UNINSTALL.md) with the handoff.
 
 Menu option 13 opens this guide. Option 14 opens the removal guide. Selecting
 these guide entries makes no setup or removal changes.
+
+## Optional: initialize multiple projects
+
+After outer setup, use [SYSTEMX PROJECTS](PROJECTS.md) to preview and create
+`Projects/NAME/.SYSTEMXP` records. Choose a project explicitly for every scoped
+command. Each new project starts blank with Agent 0 only; existing folders are
+never replaced. Do not run a second installer inside `.SYSTEMX`.
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software
+bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
+bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
+```

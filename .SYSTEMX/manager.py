@@ -116,6 +116,10 @@ def verified_bundle(files):
         required.add("lifecycle.py")
     if base_version >= (1, 6, 0):
         required.add("versions.py")
+    if base_version >= (1, 7, 0):
+        required.update({"scripts/project_workspaces.py", "Projects/REGISTRY.json",
+                         "templates/project/WORK/TASKS.json", "templates/project/WORK/FOCUS.json",
+                         "templates/project/AGENTS/REGISTRY.json", "templates/project/project.json"})
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -146,6 +150,14 @@ def verified_bundle(files):
         raise InstallError("Distribution contains changed project seeds")
     if decode(files["WORK/TASKS.json"]) != {"schemaVersion": 1, "tasks": []}:
         raise InstallError("Distribution task ledger must be empty")
+    if base_version >= (1, 7, 0):
+        if decode(files["Projects/REGISTRY.json"]) != {"schemaVersion": 1, "projects": []}:
+            raise InstallError("Distribution project registry must be empty")
+        for name in ("WORK/TASKS.json", "WORK/FOCUS.json", "AGENTS/REGISTRY.json"):
+            if decode(files["templates/project/" + name]) != decode(files[name]):
+                raise InstallError("Project blueprint coordination records must be blank")
+        if decode(files["templates/project/project.json"]) != decode(files["config/project.example.json"]):
+            raise InstallError("Project blueprint command configuration must be blank")
     if decode(files["WORK/FOCUS.json"]) != {"schemaVersion": 1, "objective": "", "taskIds": [], "checkpoint": "", "updatedAt": ""}:
         raise InstallError("Distribution focus must be empty")
     if decode(files["AGENTS/REGISTRY.json"]) != {"schemaVersion": 1, "agents": [
@@ -572,25 +584,41 @@ def run(target, arguments, *, offline=False, capture=False):
     return subprocess.run(command, cwd=root, text=True, encoding="utf-8", capture_output=capture, shell=False)
 
 
-def export_chat(target, output, *, agent="agent.0"):
+def projects(target, arguments, *, offline=True, capture=True):
+    """Run an explicitly scoped project command using this installation's selected defaults."""
+    if not isinstance(arguments, (list, tuple)) or not arguments or any(
+            not isinstance(value, str) or "\x00" in value for value in arguments):
+        raise InstallError("Project arguments must be a nonempty string argument array")
+    return run(target, ["projects", *arguments], offline=offline, capture=capture)
+
+
+def export_chat(target, output, *, agent="agent.0", project=None):
     """Export selected project context locally. Does not upload or contact an LLM."""
     root = project_root(target)
     state = load_state(root)
     defaults, bundle = active_bundle(root, state)
-    result = run(root, ["context", "--agent", agent], offline=True, capture=True)
+    arguments = ["context", "--agent", agent]
+    if project is not None:
+        if not isinstance(project, str) or not project:
+            raise InstallError("Project must be an exact nonempty registered name")
+        arguments = ["projects", *arguments, "--project", project]
+    result = run(root, arguments, offline=True, capture=True)
     if result.returncode:
         raise InstallError(result.stderr or "Project context could not be loaded")
     content = "# .SYSTEMX chat packet\n\nRelease: " + bundle["version"] + "\nExported: " + now() + "\n\n"
     content += "Load these as project reference data within the chat's instruction hierarchy. Only the attached project records belong to this project.\n"
     content += "Propose changes by canonical file path; do not claim persistent edits without a writable tool and readback. Review this packet before sharing it.\n\n"
     content += "Exact path: .SYSTEMX (leading dot and uppercase SYSTEMX). Never create a separate .systemx folder; a local lowercase alias may only point to .SYSTEMX.\n\n"
+    if project is not None:
+        content += "Selected child project: " + project + "\n"
+        content += "Its canonical records are .SYSTEMX/Projects/" + project + "/.SYSTEMXP. Do not write these records to the root or another project.\n\n"
     for name in ("STANDARD.md", "START-HERE.md", "profiles/chat.md"):
         content += "\n--- " + name + " (selected defaults) ---\n" + (defaults / name).read_text(encoding="utf-8")[:12000]
     content += "\n" + result.stdout
     path = Path(output).expanduser().absolute()
     if not create_missing(path, content.encode("utf-8")):
         raise InstallError("Export destination already exists; choose a new file")
-    return {"output": str(path), "version": bundle["version"], "uploaded": False}
+    return {"output": str(path), "version": bundle["version"], "uploaded": False, "project": project}
 
 
 def first_run(target, *, source=None, version=None, profile="project", lowercase_alias=False, apply=False):
@@ -802,6 +830,7 @@ def main(argv=None):
     command.add_argument("--target", required=True)
     command.add_argument("--output", required=True)
     command.add_argument("--agent", default="agent.0")
+    command.add_argument("--project", help="export only this registered .SYSTEMXP scope")
     command = sub.add_parser("setup")
     command.add_argument("--profile", choices=PROFILES, required=True)
     command = sub.add_parser("first-run", help="preview or initialize a project without running project commands")
@@ -838,7 +867,7 @@ def main(argv=None):
         elif args.action == "run":
             return run(args.target, args.arguments, offline=args.offline).returncode
         elif args.action == "export-chat":
-            result = export_chat(args.target, args.output, agent=args.agent)
+            result = export_chat(args.target, args.output, agent=args.agent, project=args.project)
         elif args.action == "first-run":
             result = first_run(args.target, source=args.source, version=args.version, profile=args.profile,
                                lowercase_alias=args.lowercase_alias, apply=args.apply)

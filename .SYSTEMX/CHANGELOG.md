@@ -4,6 +4,20 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.7.0-alpha.1 — SYSTEMX PROJECTS
+
+- Added generic `Projects/NAME/.SYSTEMXP` child records with a blank project
+  registry, per-project context/plan/tasks/focus, sources, decisions, and Agent 0 memory.
+- Added preview-first creation receipts, explicit scope selection, scoped task and
+  agent commands, local status snapshots, and project working-directory execution.
+- Reused ledger validation and acceptance rules while keeping root and siblings
+  isolated; rejected case conflicts, linked records, and nested installations.
+- Added a library routing function and selected-project chat export.
+- Preserved child records/code through shared version updates and reversible
+  uninstall/restore; documented explicit migration of custom registries.
+- Expanded README, portable guides, and wiki with generic setup and subagent examples.
+  The public template still ships no adopted projects or private project history.
+
 ## 1.6.0-alpha.1 — Alpha1
 
 - Consolidated all existing template branches into `Alpha1`, retaining `main`

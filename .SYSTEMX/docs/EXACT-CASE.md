@@ -120,3 +120,12 @@ or synchronized across providers or computers. A local alias can be set up on a
 supported filesystem separately; keep it out of the cloud transfer selection.
 Browser-only Drive and LLM chat use exact file paths, not OS link setup. Exported
 chat packets repeat the naming rule; review and persist changes explicitly.
+
+## Child project marker
+
+[SYSTEMX PROJECTS](PROJECTS.md) uses exactly `Projects/NAME/.SYSTEMXP` under the
+outer `.SYSTEMX`. Never use `.systemxp` as a separate folder or install `.SYSTEMX`
+inside `.SYSTEMX`. Child routing verifies stored case and refuses linked records
+and conflicting names. The optional root lowercase alias does not apply to child
+markers. Resolve pre-existing conflicts deliberately without automatic merging
+or deletion.

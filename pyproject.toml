@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.6.0a1"
+version = "1.7.0a1"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -37,4 +37,10 @@ systemx = [".gitignore", ".gitattributes", "LICENSE", "VERSION", "*.md", "*.json
            "config/*.json", "AI/*.md", "AI/*.json", "GLOBAL/*.md", "PLAN/*.md",
            "WORK/*.md", "WORK/*.json", "MEMORY/*.md", "MEMORY/sessions/*.md",
            "AGENTS/*.md", "AGENTS/*.json", "AGENTS/agent.0/*.md", "templates/*.md",
-           "docs/*.md", "profiles/*.md", "scripts/*.py", "scripts/*.sh", "tests/*.py"]
+           "docs/*.md", "profiles/*.md", "scripts/*.py", "scripts/*.sh", "tests/*.py",
+           "Projects/*.md", "Projects/*.json", "templates/project/*.md", "templates/project/*.json",
+           "templates/project/GLOBAL/*.md", "templates/project/PLAN/*.md",
+           "templates/project/MEMORY/*.md", "templates/project/MEMORY/sessions/*.md",
+           "templates/project/AGENTS/*.json", "templates/project/AGENTS/agent.0/*.md",
+           "templates/project/WORK/*.md", "templates/project/WORK/*.json",
+           "templates/project/DECISIONS/*.md", "templates/project/SYNC/*.md"]

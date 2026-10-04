@@ -12,7 +12,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.6.0-alpha.1"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.7.0-alpha.1"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -29,7 +29,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.6.0-alpha.1` is spelled `1.6.0a1` in Python package
+The public release ID `1.7.0-alpha.1` is spelled `1.7.0a1` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)
@@ -56,7 +56,8 @@ update("/path/to/project", source="/path/to/new-template/.SYSTEMX", dry_run=True
 export_chat("/path/to/project", "/path/to/new-session.md", agent="agent.0")
 ```
 
-Functions return structured dictionaries. Importing the library performs no
+Management functions return structured dictionaries. `run` and `projects` return
+`subprocess.CompletedProcess`; inspect `returncode`, `stdout`, and `stderr`. Importing the library performs no
 filesystem or network actions. The CLI renders management results as JSON and
 uses exit status 2 for a rejected operation. Project command execution preserves
 the underlying command's exit status. Use `systemx run --target ... -- <command>`
@@ -105,3 +106,31 @@ Uninstall moves the whole `.SYSTEMX` folder, including user records, to an exter
 backup on the same filesystem. It does not uninstall this Python package. Run
 removal/restore from an external environment or checkout. Preserve the receipt
 and use the [cleanup guide](UNINSTALL.md) for package removal and intentional leftovers.
+
+## SYSTEMX PROJECTS API and selected chat export
+
+```python
+from systemx import projects, export_chat
+
+preview = projects("/path/to/workspace", ["add", "Project-A", "--kind", "software"])
+preview.check_returncode()
+created = projects("/path/to/workspace", ["add", "Project-A", "--apply"])
+created.check_returncode()
+packet = projects("/path/to/workspace", ["context", "--project", "Project-A"])
+packet.check_returncode()
+print(packet.stdout)
+export_chat("/path/to/workspace", "/path/to/project-a-chat.md", project="Project-A")
+```
+
+`projects(target, arguments, *, offline=True, capture=True)` runs the selected
+outer release's `projects` command. The target is the directory containing the
+outer `.SYSTEMX`, not a child's folder. Arguments are a nonempty list/tuple of
+strings. Scope commands require `--project NAME` or `--root`.
+
+`export_chat(..., project="Project-A")` includes only that child's active records
+with shared default guidance. Omit `project` for the root packet. The equivalent
+CLI is `systemx export-chat --target PATH --project Project-A --output NEW_FILE`.
+It never overwrites an existing output or uploads the packet. The returned
+management dictionary includes `project` (null for root), `version`, `output`,
+and `uploaded: false`. Review private context before sharing. See
+[SYSTEMX PROJECTS](PROJECTS.md) for scoping, commands, and preservation rules.

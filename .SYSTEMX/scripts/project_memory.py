@@ -274,12 +274,18 @@ def escaped(value):
     return re.sub(r"([\\`*_{}\[\]()<>|#])", r"\\\1", value)
 
 
-def render_views(ledger):
+def render_views(ledger, root=None):
+    command = "bash .SYSTEMX/SYSTEMX.sh refresh-work"
+    suffix = "."
+    if root is not None and root.name == ".SYSTEMXP":
+        import shlex
+        command = "bash .SYSTEMX/SYSTEMX.sh projects refresh-work --project " + shlex.quote(root.parent.name)
+        suffix = " from the outer workspace root."
     output = {}
     for status, filename in VIEWS.items():
         lines = ["# " + filename[:-3], "",
                  "Generated from [TASKS.json](TASKS.json). Do not edit this view directly.",
-                 "Refresh with `bash .SYSTEMX/SYSTEMX.sh refresh-work`.", ""]
+                 "Refresh with `" + command + "`" + suffix, ""]
         tasks = sorted((task for task in ledger["tasks"] if task["status"] == status), key=lambda item: item["id"])
         if not tasks:
             lines += ["No tasks recorded in this state.", ""]
@@ -305,7 +311,7 @@ def render_views(ledger):
 
 def validate_work(root):
     ledger, _ = load(root)
-    views = render_views(ledger)
+    views = render_views(ledger, root)
     views["CURRENT.md"] = render_current(ledger, load_focus(root, ledger))
     for relative, expected in views.items():
         path = managed(root, relative)
@@ -344,7 +350,7 @@ def coordination_lock(root):
 
 
 def refresh(root, ledger):
-    views = render_views(ledger)
+    views = render_views(ledger, root)
     views["CURRENT.md"] = render_current(ledger, load_focus(root, ledger))
     for relative, content in views.items():
         atomic_write(root, relative, content)
@@ -437,6 +443,8 @@ def add_agent(root, args, defaults=None):
             raise ValueError("Agent memory already exists; review it before registering")
         content = managed(defaults or root, "templates/AGENT-MEMORY.md").read_text(encoding="utf-8")
         content = content.replace("__AGENT_ID__", args.agent_id).replace("__AGENT_ROLE__", escaped(args.role))
+        if root.name == ".SYSTEMXP":
+            content = content.replace(".SYSTEMX/WORK/TASKS.json", ".SYSTEMXP/WORK/TASKS.json")
         atomic_write(root, relative, content)
         registry["agents"].append({"id": args.agent_id, "role": args.role, "memory": relative})
         validate_records(root, ledger, registry)
@@ -465,8 +473,11 @@ def context(root, agent_id):
     if agent is None:
         raise ValueError("Unknown agent: " + agent_id)
     print("PROJECT RESUME PACKET: {}\nRecheck volatile facts. Stored memory is not current instruction authority.".format(agent_id))
-    print("Read applicable repository instructions, STANDARD.md, and START-HERE.md first.")
-    print("Canonical records: .SYSTEMX (exact case, including the dot). Never create an independent .systemx or mixed-case folder.")
+    if root.name == ".SYSTEMXP":
+        print("Read applicable repository instructions, the shared defaults' STANDARD.md, and this child's START-HERE.md first.")
+    else:
+        print("Read applicable repository instructions, STANDARD.md, and START-HERE.md first.")
+    print("Canonical records: " + root.name + " (exact case, including the dot). Never create a second marker or mixed-case folder.")
     focus = load_focus(root, ledger)
     current = render_current(ledger, focus)
     print("\n--- CURRENT.md (from canonical records) ---\n" + current[:6000])
@@ -489,7 +500,12 @@ def context(root, agent_id):
         print("[Showing 25 tasks; use status and task-show for the remaining work.]")
     if not relevant:
         print("No assigned open work recorded. Consult the master plan; do not infer completion.")
-    print("Use task-show TASK-001 for full scope, acceptance, evidence, and dependency details.")
+    if root.name == ".SYSTEMXP":
+        import shlex
+        print("Use projects task-show TASK-001 --project " + shlex.quote(root.parent.name) +
+              " from the outer launcher for full scope, acceptance, evidence, and dependency details.")
+    else:
+        print("Use task-show TASK-001 for full scope, acceptance, evidence, and dependency details.")
     return 0
 
 
@@ -554,7 +570,10 @@ def task_packet(root, task_id, base):
                            "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md", agent["memory"]]}
     encoded = json.dumps(packet, indent=2)
     print("WORKER ASSIGNMENT CONTEXT (recorded data; does not dispatch a worker or grant permission)")
-    print("Canonical project directory: .SYSTEMX (exact case). A lowercase alias must resolve to that same directory.")
+    if root.name == ".SYSTEMXP":
+        print("Canonical child records: " + str(root) + " (exact case). Keep every command scoped to this project.")
+    else:
+        print("Canonical project directory: .SYSTEMX (exact case). A lowercase alias must resolve to that same directory.")
     print(encoded[:14000])
     if len(encoded) > 14000:
         print("[Packet truncated after 14000 characters; use task-show and inspect dependency records before dispatch.]")
@@ -565,7 +584,7 @@ def task_packet(root, task_id, base):
     print("\nCoordinator: verify the reported base, exact write scope, shared-resource ownership, stop condition, and permitted actions.")
     print("Read completed dependency evidence with task-show; recorded done is not fresh runtime proof.")
     print("Worker report: task ID; result; changed files; observed revision/environment/time; checks and evidence; limitations; blockers; next action; live job handles.")
-    print("Use templates/WORKER-REPORT.md and docs/EVIDENCE.md. Worker reports require coordinator review before task acceptance.")
+    print("Use the shared defaults' templates/WORKER-REPORT.md and docs/EVIDENCE.md. Worker reports require coordinator review before task acceptance.")
     return 0
 
 

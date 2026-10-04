@@ -18,8 +18,12 @@ class SystemxTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "project with spaces"
         self.systemx = self.root / ".SYSTEMX"
-        shutil.copytree(SOURCE, self.systemx, ignore=shutil.ignore_patterns(
-            "__pycache__", "project.json", "project", "local", "logs", "state"))
+        def ignore(directory, names):
+            excluded = {"__pycache__", "local", "logs", "state"}
+            if Path(directory) == SOURCE:
+                excluded.update({"project.json", "project"})
+            return set(names) & excluded
+        shutil.copytree(SOURCE, self.systemx, ignore=ignore)
         self.runner = self.systemx / "scripts" / "systemx.py"
         self.config = json.loads((self.systemx / "config" / "project.example.json").read_text())
 

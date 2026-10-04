@@ -42,6 +42,12 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Exact-case inspection failed' }
           python -B .SYSTEMX/manager.py first-run --target $target --apply
           if ($LASTEXITCODE -ne 0) { throw 'First-run failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects add 'Project A' --kind software --apply
+          if ($LASTEXITCODE -ne 0) { throw 'Child project setup failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects context --project 'Project A' --agent agent.0
+          if ($LASTEXITCODE -ne 0) { throw 'Scoped context failed' }
+          & (Join-Path $target '.SYSTEMX\SYSTEMX.ps1') projects validate
+          if ($LASTEXITCODE -ne 0) { throw 'Child record validation failed' }
           $backup = Join-Path $env:RUNNER_TEMP 'SYSTEMX removal backup'
           python -B .SYSTEMX/manager.py uninstall --target $target --backup $backup --apply
           if ($LASTEXITCODE -ne 0) { throw 'Removal failed' }

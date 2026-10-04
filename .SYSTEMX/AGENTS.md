@@ -7,6 +7,14 @@ to the canonical directory through filesystem case equivalence or the optional
 relative sibling link `.systemx -> .SYSTEMX`. If separate paths exist, stop and
 reconcile them with review; never merge, rename, or delete them automatically.
 
+For a registered child project, explicitly select its name from
+`Projects/REGISTRY.json` and read `Projects/NAME/.SYSTEMXP/START-HERE.md`.
+Use `projects context --project NAME --agent agent.0` from the outer launcher.
+Read child context, plans, tasks, and memory from that `.SYSTEMXP`, while using
+shared standards and tools from the selected outer defaults. Root commands still
+address root records. Do not infer the scope from the last chat, create nested
+`.SYSTEMX` installations, or load sibling memory. See [SYSTEMX PROJECTS](docs/PROJECTS.md).
+
 For work in an adopted active project, start with [START-HERE.md](START-HERE.md)
 and follow the [shared standard](STANDARD.md). Use the existing master plan,
 canonical task records, and assigned agent memory to resume the current objective.

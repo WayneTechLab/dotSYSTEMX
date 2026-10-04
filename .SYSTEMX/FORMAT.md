@@ -41,6 +41,27 @@ Keep raw/private runtime artifacts in ignored local storage. A role is not a
 running process; a report is not an authorization grant; a generated view is
 not a second editable ledger. Preserve original evidence when superseding it.
 
+## SYSTEMX PROJECTS, schema version 1
+
+`Projects/REGISTRY.json` contains exactly `schemaVersion: 1` and `projects`.
+Each entry has exactly `name`, `path`, `records`, and `kind`. Paths are relative
+to the outer `.SYSTEMX` and must equal `Projects/NAME` and
+`Projects/NAME/.SYSTEMXP`. Names are unique ignoring case; use the exact stored
+spelling for selection. The public registry is empty.
+
+A child's ledger, focus, agent registry, and `project.json` use the contracts
+below, scoped to that child. `project.name` must match its registry name.
+`SOURCES.json` contains `schemaVersion: 1` and `sources`; each source has `kind`,
+`location`, and `description`. See [SYSTEMX PROJECTS](docs/PROJECTS.md) for allowed
+kinds, path rules, local status snapshots, and command examples.
+
+IDs and dependency edges stay inside one ledger. Qualified project/task references
+are prose coordination links, not cross-ledger dependencies. Each child has its
+own Agent 0 memory but shares the outer defaults, pin, and update policy.
+There are no nested `.SYSTEMX` installs, implicit current project, automatic
+source transport, or recursive child workspaces. Unknown custom registries need
+reviewed migration; the tools reject them without replacing their files.
+
 ## Task ledger, schema version 1
 
 The top-level object contains exactly `schemaVersion` and `tasks` (an array).
@@ -120,6 +141,7 @@ distribution before publication. The latter also requires:
 - Only the explicitly listed distribution files; no local artifacts, initialized
   project config, extra workers, custom documents, caches, or dependencies.
 - Blank work and focus, Agent 0 only, and empty example command configuration.
+- An empty project registry and blank child creation seeds; no adopted `.SYSTEMXP` folders.
 - Reviewed blank context, plan, and memory seeds matching
   `config/template-records.json` SHA-256 values (UTF-8 text normalized to LF).
 - A complete `config/distribution.json` inventory whose file fingerprints match

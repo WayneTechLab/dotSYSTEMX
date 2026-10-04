@@ -25,6 +25,7 @@ DEFAULTS = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(DEFAULTS))
 from systemx_paths import inspect_layout, lowercase_alias, record_directory
 from versions import version_id
+import project_workspaces
 
 SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
@@ -48,7 +49,7 @@ REQUIRED = (
     "lifecycle.py", "tests/test_lifecycle.py", "docs/FIRST-RUN.md", "docs/UNINSTALL.md",
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
-) + project_memory.REQUIRED
+) + project_memory.REQUIRED + project_workspaces.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
     "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
@@ -117,6 +118,9 @@ def load_config():
 def template_files(include_runtime=False):
     for directory, dirs, files in os.walk(SYSTEMX, followlinks=False):
         dirs[:] = sorted(name for name in dirs if include_runtime or name not in IGNORED_DIRS)
+        if not include_runtime and Path(directory) == SYSTEMX / "Projects":
+            # Project code and records have their own explicit validation boundary.
+            dirs[:] = []
         for name in dirs + sorted(files):
             path = Path(directory) / name
             if path.is_symlink():
@@ -155,6 +159,9 @@ def distribution_issues(files):
         sys.path.insert(0, str(DEFAULTS))
         import manager
         manager.read_bundle(SYSTEMX)
+        if project_workspaces.Workspaces(SYSTEMX, DEFAULTS).projects:
+            issues.append("Public template must have an empty project registry")
+        project_workspaces.blank_blueprint(SYSTEMX)
     except (ConfigError, OSError, ValueError) as error:
         issues.append("Public template: " + str(error))
     return issues
@@ -210,6 +217,9 @@ def validate_template(distribution=False):
                 issues.append(relative + ": broken or out-of-project link: " + target)
     try:
         project_memory.validate_work(SYSTEMX)
+        workspaces = project_workspaces.Workspaces(SYSTEMX, DEFAULTS)
+        for name in workspaces.projects:
+            workspaces.validate_scope(workspaces.select(name))
     except (OSError, ValueError) as error:
         issues.append("Project coordination: " + str(error))
     if distribution and not issues:
@@ -305,6 +315,11 @@ def command_plan(action, config):
 
 def run_action(action, dry_run=False):
     validate_template()
+    return execute_action(action, dry_run)
+
+
+def execute_action(action, dry_run=False):
+    """Run configured commands after the caller validates its own record scope."""
     plan = command_plan(action, load_config())
     print("Working directory: " + str(PROJECT_ROOT), flush=True)
     for label, command in plan:
@@ -332,13 +347,15 @@ def menu():
                "7": ("deploy", True), "8": ("deploy", False),
                "9": ("status", False), "10": ("context", False),
                "11": ("paths", False), "12": ("alias-create", False),
-               "13": ("setup-guide", False), "14": ("removal-guide", False)}
+               "13": ("setup-guide", False), "14": ("removal-guide", False),
+               "15": ("projects-guide", False), "16": ("projects-list", False)}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
               "9) Project work status\n10) Agent 0 resume context\n"
               "11) Check exact .SYSTEMX casing and alias\n12) Enable local .systemx -> .SYSTEMX alias\n"
-              "13) First-time setup guide\n14) Uninstall, restore, and cleanup guide\n0) Exit")
+              "13) First-time setup guide\n14) Uninstall, restore, and cleanup guide\n"
+              "15) SYSTEMX PROJECTS setup and selection\n16) List registered projects\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -366,6 +383,12 @@ def menu():
 
 def dispatch(action, dry_run=False):
     record_directory(SYSTEMX)
+    if action == "projects-guide":
+        print((DEFAULTS / "docs/PROJECTS.md").read_text(encoding="utf-8"))
+        return 0
+    if action == "projects-list":
+        print(json.dumps(project_workspaces.Workspaces(SYSTEMX, DEFAULTS).registry, indent=2))
+        return 0
     if action in {"setup-guide", "removal-guide"}:
         name = "FIRST-RUN.md" if action == "setup-guide" else "UNINSTALL.md"
         print((DEFAULTS / "docs" / name).read_text(encoding="utf-8"))
@@ -393,6 +416,16 @@ def dispatch(action, dry_run=False):
     return run_action(action, dry_run)
 
 
+def run_scoped_action(records, host, action, dry_run):
+    global SYSTEMX, PROJECT_ROOT
+    previous = SYSTEMX, PROJECT_ROOT
+    try:
+        SYSTEMX, PROJECT_ROOT = records, host
+        return execute_action(action, dry_run)
+    finally:
+        SYSTEMX, PROJECT_ROOT = previous
+
+
 def main(argv=None):
     global SYSTEMX, PROJECT_ROOT
     parser = argparse.ArgumentParser(description="Standalone .SYSTEMX project operations (exact-case directory)")
@@ -409,6 +442,7 @@ def main(argv=None):
         command_parser = subparsers.add_parser(action)
         command_parser.add_argument("--dry-run", action="store_true", help="print plan without executing commands")
     project_memory.add_cli(subparsers)
+    project_workspaces.add_cli(subparsers)
     args = parser.parse_args(argv)
     if args.action == "help":
         parser.print_help()
@@ -416,6 +450,8 @@ def main(argv=None):
     try:
         SYSTEMX = record_directory(args.root if args.root is not None else DEFAULTS)
         PROJECT_ROOT = SYSTEMX.parent
+        if args.action == "projects":
+            return project_workspaces.dispatch(SYSTEMX, DEFAULTS, args, run_scoped_action)
         if args.action == "alias":
             return dispatch("alias-create" if args.create else "paths")
         if args.action in {"context", "task-packet"} and SYSTEMX != DEFAULTS:

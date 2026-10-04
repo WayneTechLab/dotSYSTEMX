@@ -89,3 +89,18 @@ from Global context. Trading controllers, contract release policies, provider
 deployment scripts, local dashboards, and active-project history are not part
 of this universal template. Keep operational/private content outside public
 build outputs.
+
+## Adding SYSTEMX PROJECTS
+
+Update the outer installation to a release containing `docs/PROJECTS.md` and
+`scripts/project_workspaces.py`; review/unpin the current version first, then
+re-pin after verification. Existing root tasks and memory remain in place.
+Use `projects add NAME` to preview a new blank child and `--apply` to create it;
+never install another `.SYSTEMX` under the outer folder.
+
+If `Projects/REGISTRY.json` already exists, additive updates preserve it. A custom
+schema or populated legacy `.SYSTEMXP` may need a reviewed migration to the
+[generic registry and record contracts](PROJECTS.md). New commands reject unknown
+schemas and occupied destinations without replacing them. Preserve the original
+records, IDs, evidence, and private source references. Do not copy real project
+records into the public template or blank creation seeds.

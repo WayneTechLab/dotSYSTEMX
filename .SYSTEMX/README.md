@@ -5,7 +5,7 @@
 > reviewed version, keep recoverable backups, and validate it in your own project.
 > It is provided without warranty; template checks do not establish production readiness.
 
-**Current release: [`1.6.0-alpha.1`](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.6.0-alpha.1)** ·
+[Versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog) ·
 [Alpha release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
 
 **One project operating format, wherever the work lives.**
@@ -64,6 +64,25 @@ Managed installs select their versioned defaults automatically through the
 launcher. Each project starts pinned with manual updates. See
 [installation and updates](docs/INSTALLATION.md) for the preservation contract.
 
+## Multiple projects and channels
+
+[SYSTEMX PROJECTS](docs/PROJECTS.md) uses
+`.SYSTEMX/Projects/Project-A/.SYSTEMXP` for each child's context, Master Plan,
+tasks, status, sources, decisions, and scoped agent memory. Keep one outer
+installation; never put another `.SYSTEMX` inside it. The registry ships empty.
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
+bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
+bash .SYSTEMX/SYSTEMX.sh projects validate --project Project-A
+```
+
+Omit `--apply` to preview creation. Existing destinations are never replaced.
+Child scopes share the outer version pin; updates preserve all existing project
+records and code. Select every scoped command explicitly with `--project NAME`
+or `--root`. Referenced repositories and cloud locations are not automatically
+connected. Follow the guide for library use, export, and backup/removal boundaries.
+
 ## Project structure
 
 | Path | Purpose |
@@ -76,6 +95,7 @@ launcher. Each project starts pinned with manual updates. See
 | [MEMORY/](MEMORY/README.md) | Verified project facts and session checkpoints |
 | [AGENTS/](AGENTS/README.md) | Coordinator, registered roles, and scoped agent memory |
 | [docs/](docs/) and [AI/](AI/README.md) | Engineering, operations, and collaboration guidance |
+| [Projects/](Projects/README.md) | Registered child projects using exact `.SYSTEMXP` record folders |
 | [templates/](templates/) | Reusable briefs, decisions, evidence, releases, and handoffs |
 | [config/project.example.json](config/project.example.json) | Empty project command configuration |
 

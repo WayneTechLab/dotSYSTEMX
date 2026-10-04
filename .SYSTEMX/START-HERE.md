@@ -14,6 +14,14 @@ uses SYSTEMX. The template ships with empty project records. Populate them only
 with the current project's authorized facts and work; do not carry the template
 repository's build history into every new project.
 
+For a registered child project, explicitly select its name from
+`Projects/REGISTRY.json` and read `Projects/NAME/.SYSTEMXP/START-HERE.md`.
+Use `projects context --project NAME --agent agent.0` from the outer launcher.
+Read child context, plans, tasks, and memory from that `.SYSTEMXP`, while using
+shared standards and tools from the selected outer defaults. Root commands still
+address root records. Do not infer the scope from the last chat, create nested
+`.SYSTEMX` installations, or load sibling memory. See [SYSTEMX PROJECTS](docs/PROJECTS.md).
+
 For a managed installation, inspect the outer `INSTALLATION.json` first. Its
 `activeVersion` selects `.systemx/releases/<version>/` for default instructions,
 templates, and tools. Use `STANDARD.md` and `START-HERE.md` from that release,

@@ -31,6 +31,19 @@ The current objective and task/checkpoint pointers belong in
 and the task ledger. Keep dated execution detail in checkpoints instead of
 accumulating competing current-state narratives in entry points.
 
+## Multiple project scopes
+
+[SYSTEMX PROJECTS](docs/PROJECTS.md) keeps shared workspace coordination in the
+outer records and project-specific context, plans, tasks, status, and memory in
+`Projects/NAME/.SYSTEMXP`. One installation serves all children. `.SYSTEMXP` is
+an exact-case child record marker, not a second runtime. Code may live in the
+chosen child working directory beside the marker or in explicitly referenced
+external locations. Never create `.SYSTEMX` inside `.SYSTEMX`.
+
+Project/task/agent identity is scoped. Require an explicit registry selection
+for writes and assignments; use qualified references for cross-project handoffs.
+Keep the public registry and all blank creation seeds free of adopted work.
+
 ## Source of authority
 
 Follow the instruction hierarchy defined by the active environment. This template

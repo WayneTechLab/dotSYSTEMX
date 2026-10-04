@@ -130,3 +130,14 @@ caches to claim cleanup. For project-specific tools you add later, record owner,
 version, install location, original state, verification, uninstall steps, and log
 location at installation time. A clean handoff names any intentional leftovers
 and the exact scope that was checked.
+
+## SYSTEMX PROJECTS backup scope
+
+If this installation contains `Projects/NAME/.SYSTEMXP`, whole-installation
+uninstall also moves **every child record and any code/documents stored under
+`Projects`** to the external backup. Stop all child writers, inspect the preview,
+and verify the backup inventory before removing the outer folder. Restore
+retains that complete tree. External sources merely listed in `SOURCES.json`
+are not removed or disconnected. No automatic individual-project deletion is
+provided; archive one child only with an explicit backup and reviewed registry
+edit. See [SYSTEMX PROJECTS](PROJECTS.md).

@@ -76,8 +76,8 @@ After reviewing the [published release history](https://github.com/WayneTechLab/
 ```bash
 systemx status --target "/path/to/project"
 systemx policy --target "/path/to/project" --pin none
-systemx update --target "/path/to/project" --version 1.6.0-alpha.1 --dry-run
-systemx update --target "/path/to/project" --version 1.6.0-alpha.1
+systemx update --target "/path/to/project" --version 1.7.0-alpha.1 --dry-run
+systemx update --target "/path/to/project" --version 1.7.0-alpha.1
 systemx policy --target "/path/to/project" --pin current
 ```
 
@@ -135,3 +135,13 @@ manually removing a stale lock. Drive synchronization is not a distributed lock.
 The manager writes installation metadata atomically and retains previous states.
 It cannot guarantee atomicity against a separate, uncooperative program changing
 the same filesystem at the same instant. Coordinate writers for shared folders.
+
+## Multiple child projects
+
+[SYSTEMX PROJECTS](PROJECTS.md) adds `Projects/NAME/.SYSTEMXP` beneath this one
+installation. Child records, source references, code, and the populated project
+registry are user-owned. Updates preserve them, including folders absent from
+new defaults. New children use the selected release's blank creation seeds.
+All children share the outer pin and update policy; do not install or update
+`.SYSTEMX` separately beneath `Projects`. Existing custom child registries need
+an explicit reviewed migration before the generic routing commands can use them.
