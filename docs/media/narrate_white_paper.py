@@ -15,7 +15,10 @@ def spoken(source):
         s=re.sub(r'\[([^\]]+)\]\([^)]+\)',r'\1',s)
         s=re.sub(r'\[(?:\d+(?:[, -]+\d+)*)\]','',s)
         s=s.replace('**','').replace('`','').replace('.SYSTEMXP','Dot System X P').replace('.SYSTEMX','Dot System X').replace('.systemx','lowercase dot system x')
-        s=s.replace('Agent 0','Agent Zero').replace('->',' leads to ').replace(' / ',' or ')
+        s=s.replace('Agent 0','Agent Zero').replace('->',' leads to ').replace(' / ',' slash ')
+        # Native speech engines may interpret angle-bracket placeholders as markup.
+        # Verbalize them so a path such as <version> cannot truncate the reading.
+        s=s.replace('<',' less than ').replace('>',' greater than ').replace('&',' and ')
         return s
     while index<len(lines):
         line=lines[index]
