@@ -39,7 +39,7 @@ macOS/Linux:
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
   "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.7-alpha.1"
-"$HOME/.venvs/dotsystemx/bin/systemx" --help
+"$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx --help
 ```
 
 Windows PowerShell:
@@ -47,22 +47,35 @@ Windows PowerShell:
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
 & "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.7-alpha.1"
-& "$HOME\.venvs\dotsystemx\Scripts\systemx.exe" --help
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -I -B -m systemx --help
 ```
 
-Calling the environment's executable directly avoids changing activation policy
+Calling the environment's Python directly avoids changing activation policy
 or global PATH. Git-based installation requires Git. The release wheel can be
 installed through the same pip command by supplying its downloaded path instead
 of the Git URL; no PyPI publication is implied.
 
 Alternatively, use `python3 -I -B /path/to/reviewed-template/.SYSTEMX/manager.py`
-(Windows: `py -3 -B ...`) in place of `systemx` below. Keep that reviewed checkout
+(Windows: `py -3 -I -B ...`) for the commands below. Keep that reviewed checkout
 outside the target project, especially for later uninstall/restore.
 
 ## 3. Preview and apply first run
 
-In the following commands, `systemx` means the executable in the environment you
-selected above, or the separate reviewed manager entry point.
+In the following examples, `systemx` is a shorthand for the isolated command.
+Define it in each shell session using the virtual environment from step 2:
+
+```bash
+systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
+```
+
+```powershell
+function systemx { & "$HOME\.venvs\dotsystemx\Scripts\python.exe" -I -B -m systemx @args }
+```
+
+If you chose the separate reviewed manager script, replace the function body
+with its `python3 -I -B .../manager.py` invocation. The installed `systemx`
+console entry point is a convenience for trusted Python paths; its package is
+resolved before it can restart in isolated mode.
 
 ```bash
 systemx first-run --target "/path/to/project" --profile project

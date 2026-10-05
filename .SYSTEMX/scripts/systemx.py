@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
 """Standalone SYSTEMX tools. Python standard library only; no shell evaluation."""
 
+import sys
+if __name__ == "__main__" and not sys.flags.isolated:
+    _bootstrap_os = sys.modules.get("os")
+    if _bootstrap_os is None or not sys.executable:
+        sys.exit("SYSTEMX requires Python's initialized OS module to enter isolated mode")
+    try:
+        _bootstrap_os.execv(sys.executable, [sys.executable, "-I", "-B", __file__, *sys.argv[1:]])
+    except OSError as error:
+        sys.exit("SYSTEMX could not enter isolated mode: " + str(error))
+
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -10,7 +21,6 @@ import re
 import shlex
 import shutil
 import subprocess
-import sys
 from urllib.parse import unquote, urlsplit
 
 # Inspection commands must not create bytecode files in a copied distribution.
@@ -21,8 +31,40 @@ if __name__ == "__main__":
             stream.reconfigure(encoding="utf-8")
 DEFAULTS = Path(__file__).resolve().parent.parent
 SCRIPTS = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPTS))
-sys.path.insert(0, str(DEFAULTS))
+
+
+def _load_local(name, path):
+    """Load a named source file without searching local paths or reading pyc."""
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None:
+        raise ImportError("Cannot load SYSTEMX helper: " + name)
+    module = importlib.util.module_from_spec(spec)
+    previous = sys.modules.get(name)
+    sys.modules[name] = module
+    try:
+        exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+    except BaseException:
+        if previous is None:
+            sys.modules.pop(name, None)
+        else:
+            sys.modules[name] = previous
+        raise
+    return module
+
+
+if __name__ == "__main__":
+    # Child workspaces import "systemx" lazily for config validation.
+    sys.modules["systemx"] = sys.modules["__main__"]
+for _name, _path in (
+        ("systemx_paths", DEFAULTS / "systemx_paths.py"),
+        ("versions", DEFAULTS / "versions.py"),
+        ("project_memory", SCRIPTS / "project_memory.py"),
+        ("agent_standards", SCRIPTS / "agent_standards.py"),
+        ("project_workspaces", SCRIPTS / "project_workspaces.py"),
+        ("agent_x", SCRIPTS / "agent_x.py"),
+        ("agent_z", SCRIPTS / "agent_z.py")):
+    _load_local(_name, _path)
+
 import project_memory
 from systemx_paths import inspect_layout, lowercase_alias, record_directory
 from versions import version_id
@@ -44,7 +86,7 @@ REQUIRED = (
     "templates/RELEASE.md", "scripts/systemx.py", "scripts/validate.sh",
     "scripts/quality-check.sh", "tests/test_systemx.py",
     "FORMAT.md", "config/template-records.json",
-    "__init__.py", "__main__.py", "manager.py", "INSTALL.sh", "INSTALL.ps1", "SYSTEMX.ps1",
+    "__init__.py", "__main__.py", "cli.py", "manager.py", "INSTALL.sh", "INSTALL.ps1", "SYSTEMX.ps1",
     "config/distribution.json", "config/profiles.json", "scripts/release.py", "tests/test_manager.py",
     "profiles/project.md", "profiles/directory.md", "profiles/drive.md", "profiles/chat.md",
     "docs/INSTALLATION.md", "docs/LIBRARY.md", "docs/EXACT-CASE.md", "systemx_paths.py", "tests/test_paths.py",
@@ -181,8 +223,7 @@ def distribution_issues(files):
             issues.append("Public template must have empty work/focus and only the agent.0 role")
         if (any(config["project"].values()) or config["checks"] or any(config["commands"].values())):
             issues.append("Public template command configuration must be empty")
-        sys.path.insert(0, str(DEFAULTS))
-        import manager
+        manager = _load_local("manager", DEFAULTS / "manager.py")
         manager.read_bundle(SYSTEMX)
         if project_workspaces.Workspaces(SYSTEMX, DEFAULTS).projects:
             issues.append("Public template must have an empty project registry")
@@ -429,7 +470,7 @@ def dispatch(action, dry_run=False):
         return 0
     if action in {"paths", "alias-create"}:
         if action == "alias-create":
-            import manager
+            manager = _load_local("manager", DEFAULTS / "manager.py")
             result = manager.alias(PROJECT_ROOT, create=True)
         else:
             result = lowercase_alias(PROJECT_ROOT)

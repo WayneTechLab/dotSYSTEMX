@@ -1,21 +1,22 @@
 """Additive, versioned SYSTEMX installs. Python standard library; no shell evaluation."""
 
-# Direct script execution normally puts this directory ahead of the standard
-# library. An adopted project may contain extra files, so remove that search
-# entry before importing anything other than Python's built-in sys module.
+# Direct script execution puts the adopted directory and PYTHONPATH ahead of
+# standard libraries. Restart in isolated mode before importing either one.
 import sys
-if __name__ == "__main__" and not __package__ and not sys.flags.isolated and sys.path:
-    # Python puts the script directory first; PYTHONPATH can also repeat it.
-    # Strip those exact lexical duplicates before loading standard libraries.
-    _script_search_path = sys.path[0].replace("\\", "/").rstrip("/")
-    sys.path[:] = [entry for entry in sys.path if entry and
-                   entry.replace("\\", "/").rstrip("/") != _script_search_path]
+if __name__ == "__main__" and not __package__ and not sys.flags.isolated:
+    _bootstrap_os = sys.modules.get("os")
+    if _bootstrap_os is None or not sys.executable:
+        sys.exit("SYSTEMX manager requires Python's initialized OS module to enter isolated mode")
+    try:
+        _bootstrap_os.execv(sys.executable, [sys.executable, "-I", "-B", __file__, *sys.argv[1:]])
+    except OSError as error:
+        sys.exit("SYSTEMX manager could not enter isolated mode: " + str(error))
 
 import argparse
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import hashlib
-import importlib
+import importlib.util
 import io
 import json
 import os
@@ -35,16 +36,38 @@ if __package__:
     from .systemx_paths import (SystemXPathError, inspect_layout, is_link, lexical_path,
                                lowercase_alias as path_alias, project_directory, record_directory)
 else:
-    # Load only the named local helpers as a private package. Never add the
-    # adopted .SYSTEMX directory to the process-wide module search path.
-    _bootstrap_name = "_systemx_bootstrap_" + hashlib.sha256(str(Path(__file__).resolve().parent).encode()).hexdigest()[:16]
+    # Load only named source files. Neither import search paths nor cached
+    # bytecode from an adopted directory may select executable helpers.
+    _bootstrap_root = Path(__file__).resolve().parent
+    _bootstrap_name = "_systemx_bootstrap_" + hashlib.sha256(str(_bootstrap_root).encode()).hexdigest()[:16]
     if _bootstrap_name not in sys.modules:
         _bootstrap_package = types.ModuleType(_bootstrap_name)
-        _bootstrap_package.__path__ = [str(Path(__file__).resolve().parent)]
+        _bootstrap_package.__path__ = [str(_bootstrap_root)]
         sys.modules[_bootstrap_name] = _bootstrap_package
-    lifecycle = importlib.import_module(_bootstrap_name + ".lifecycle")
-    _versions = importlib.import_module(_bootstrap_name + ".versions")
-    _paths = importlib.import_module(_bootstrap_name + ".systemx_paths")
+
+    def _load_bootstrap(name):
+        path = _bootstrap_root / (name + ".py")
+        fullname = _bootstrap_name + "." + name
+        spec = importlib.util.spec_from_file_location(fullname, path)
+        if spec is None:
+            raise ImportError("Cannot load SYSTEMX helper: " + name)
+        module = importlib.util.module_from_spec(spec)
+        previous = sys.modules.get(fullname)
+        sys.modules[fullname] = module
+        try:
+            exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+        except BaseException:
+            if previous is None:
+                sys.modules.pop(fullname, None)
+            else:
+                sys.modules[fullname] = previous
+            raise
+        setattr(sys.modules[_bootstrap_name], name, module)
+        return module
+
+    _paths = _load_bootstrap("systemx_paths")
+    _versions = _load_bootstrap("versions")
+    lifecycle = _load_bootstrap("lifecycle")
     version_id, version_key = _versions.version_id, _versions.version_key
     release_channel, package_version = _versions.release_channel, _versions.package_version
     SystemXPathError, inspect_layout, is_link = _paths.SystemXPathError, _paths.inspect_layout, _paths.is_link

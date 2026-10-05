@@ -52,8 +52,20 @@ unlisted executable content before invoking its runner; do not work around that
 check by deleting unknown entries without investigating their origin. See
 [installation integrity](INSTALLATION.md#select-lock-or-update-a-version).
 
-Direct `manager.py` execution isolates its own imports from extra files in an
-adopted `.SYSTEMX` root. Fresh adoption rejects conflicting manifest-listed
+Direct manager, standalone validator, and release-script execution enter Python
+isolated mode before importing application helpers. The installed `systemx`
+console script restarts before importing the manager, but Python resolves its
+package first. For an untrusted `PYTHONPATH` or current directory, invoke the
+installed package as `python -I -B -m systemx` from its reviewed virtual
+environment. An install visible only through Python's user site is hidden by
+`-I`.
+Standalone tools load only named local helpers from source bytes, so unlisted
+modules and matching cached bytecode in an adopted folder cannot run before the
+inventory decision. Python startup hooks in an already untrusted interpreter
+environment can run before a direct command restarts; use `python -I -B` from
+the initial invocation when that environment is in doubt. Library calls run in
+the caller's interpreter and inherit its import environment. This does not
+authenticate a source tree supplied by a third party. Fresh adoption rejects conflicting manifest-listed
 executable defaults. Existing managed projects must use a reviewed new external
 manager for any explicit `bootstrap-refresh`; preview conflicts first, retain
 its original-file backup, and inspect customized or unrecognized code manually.

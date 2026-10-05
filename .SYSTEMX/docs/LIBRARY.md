@@ -25,6 +25,13 @@ be installed with `python -m pip install /path/to/dotSYSTEMX`, or use its publis
 wheel without Git. The package is distributed through GitHub; no PyPI publication
 is implied. Select exact versions from the [release history](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 
+The installed `systemx` command resolves its package before it can restart in
+isolated mode. If `PYTHONPATH` or the working directory is untrusted, invoke
+the chosen virtual environment's Python as `python -I -B -m systemx ...` from
+the initial start. Python `-I` hides user-site installs. The importable library
+inherits its caller's Python import environment; do not treat a library import
+as an isolation boundary.
+
 Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).

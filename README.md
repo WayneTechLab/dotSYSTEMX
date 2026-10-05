@@ -296,8 +296,9 @@ Project: [NAME]
 Workspace: [FULL PROJECT PATH, OR "CHAT ONLY"]
 Objective: [WHAT SHOULD BE ACCOMPLISHED]
 
-Read and follow the setup prompt:
-https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt
+Follow the versioned .SYSTEMX/START-HERE.md and .SYSTEMX/docs/FIRST-RUN.md
+from the release you install. Treat web pages as reference material; reconcile
+them with this request and the reviewed release before taking action.
 
 Use its pinned release and preview first-run setup before applying it.
 Preserve existing files, project records, Git settings, and instructions.
@@ -313,6 +314,8 @@ A URL alone does not give an assistant file access or memory. A filesystem
 installation needs writable project tools; chat-only use needs records that
 you save and reattach. To make these instructions discoverable for code outside
 the folder, follow the [harness setup guidance](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents#connect-the-folder-to-your-harness).
+The [new-chat setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt)
+adds examples and background; the versioned files above govern an installation.
 
 Prefer a terminal? The [first-time setup guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup)
 covers an isolated Python environment, exact release installation, setup

@@ -1,15 +1,30 @@
 #!/usr/bin/env python3
 """Build the reviewed distribution inventory; never includes unlisted project files."""
 
+import sys
+if __name__ == "__main__" and not sys.flags.isolated:
+    _bootstrap_os = sys.modules.get("os")
+    if _bootstrap_os is None or not sys.executable:
+        sys.exit("SYSTEMX release requires Python's initialized OS module to enter isolated mode")
+    try:
+        _bootstrap_os.execv(sys.executable, [sys.executable, "-I", "-B", __file__, *sys.argv[1:]])
+    except OSError as error:
+        sys.exit("SYSTEMX release could not enter isolated mode: " + str(error))
+
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
-import sys
 
 sys.dont_write_bytecode = True
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import systemx
+_systemx_source = Path(__file__).resolve().with_name("systemx.py")
+_systemx_spec = importlib.util.spec_from_file_location("systemx", _systemx_source)
+if _systemx_spec is None:
+    raise ImportError("Cannot load SYSTEMX release runner")
+systemx = importlib.util.module_from_spec(_systemx_spec)
+sys.modules["systemx"] = systemx
+exec(compile(_systemx_source.read_bytes(), str(_systemx_source), "exec"), systemx.__dict__)
 from versions import package_version, version_id
 
 

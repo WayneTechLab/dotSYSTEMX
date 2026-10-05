@@ -52,10 +52,14 @@ folder. It is different from the nested manager cache. Follow the
 | `config/template-records.json` | Reviewed blank seed fingerprints |
 
 The library and CLI use the same manager functions. Refreshed stock launchers
-invoke both managed and unmanaged tools in Python isolated mode (`-I`). A direct `manager.py`
-invocation also removes its script directory from Python's global import path and
-loads its named local helpers through a private package, so unlisted root files
-in an adopted `.SYSTEMX` cannot shadow standard-library imports. A managed run
+invoke both managed and unmanaged tools in Python isolated mode (`-I`). Direct
+`manager.py`, `systemx.py`, and `release.py` invocations restart in isolated mode
+before importing standard libraries. The installed console entry point first
+resolves its package, then restarts before importing the manager; invoke
+`python -I -B -m systemx` from a reviewed environment when import paths are
+untrusted. Standalone entry points load only named
+local helpers from source bytes, without adding the unchecked folder to Python's
+global import path or consuming its cached bytecode. A managed run
 verifies its selected default snapshot and invokes its runner with `-I -B` and `--root`
 pointing to the outer project records. Old root guidance remains preserved;
 stock launcher updates require explicit bootstrap refresh. Task state is stored

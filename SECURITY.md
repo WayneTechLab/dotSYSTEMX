@@ -29,6 +29,13 @@ running its Python code. Automatic startup discovery has no independent archive
 pin. Inspect [installation guidance](.SYSTEMX/docs/INSTALLATION.md) before
 enabling it or accepting a new release.
 
+Direct script entry points restart in isolated Python mode, and standalone
+validation loads named local helpers from source bytes. An installed console
+script resolves its package before it can restart; use `python -I -B -m systemx`
+from a reviewed virtual environment when `PYTHONPATH` or the working directory is
+untrusted. Review the source you choose to install; an internal manifest cannot
+establish publisher identity.
+
 Fresh adoption refuses conflicting executable defaults. A managed project's
 older root bootstrap must be explicitly refreshed from a reviewed new external
 tool before a changed-release update; that limited operation backs up and

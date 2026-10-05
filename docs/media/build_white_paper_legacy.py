@@ -5,6 +5,7 @@ Run from any directory: python docs/media/build_white_paper.py
 This builder is documentation tooling, not part of the portable runtime.
 """
 from pathlib import Path
+import os
 import re
 import argparse
 from html import escape
@@ -28,9 +29,12 @@ args = parser.parse_args()
 EDITION = args.edition
 BASELINE = '1.8.2-alpha.1' if EDITION == '1.0' else '1.8.3-alpha.1'
 SOURCE = args.source.resolve()
-OUTPUT = args.output.resolve()
+requested_output = args.output.expanduser()
+OUTPUT = requested_output.parent.resolve()/requested_output.name
 if SOURCE == OUTPUT:
     parser.error('Output must not replace source')
+if OUTPUT.is_symlink():
+    parser.error('Output must not be a symlink')
 W, H = A4
 MARGIN = 48
 WIDTH = W - 2 * MARGIN
@@ -161,21 +165,24 @@ def build():
     text=SOURCE.read_text(encoding='utf-8')
     parts=re.split(r'^## ',text,flags=re.M)[1:]
     front=parts[0];sections=parts[1:]
-    doc=PaperDoc(str(OUTPUT),pagesize=A4,leftMargin=MARGIN,rightMargin=MARGIN,topMargin=58,bottomMargin=54,title='.SYSTEMX: Portable Project Memory for Agentic Work',author='.SYSTEMX Project',subject='Architecture, evidence, lifecycle and evaluation of the .SYSTEMX alpha format',pageCompression=1)
-    frame=Frame(MARGIN,54,WIDTH,H-112,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)
-    doc.addPageTemplates([PageTemplate(id='cover',frames=[frame],onPage=cover,autoNextPageTemplate='body'),PageTemplate(id='body',frames=[frame],onPage=header_footer)])
-    story=[Spacer(1,123),para('Portable project memory<br/>for agentic work','h1'),para('A coordination format for people, AI assistants and the tools that execute their work.'),para('EDITION ' + EDITION + '  |  4 OCTOBER 2026<br/>Technical baseline: v' + BASELINE,'small'),Spacer(1,12)]
-    abstract=front.split('### Abstract\n',1)[1]
-    story.extend(content('### Abstract\n'+abstract))
-    story.extend([PageBreak(),para('Reading this paper','h1'),para('Start with the executive perspective, then follow the records, roles and operating boundaries. The final sections address measurement, adoption and the evidence behind the claims.')])
-    toc = TableOfContents()
-    toc.levelStyles = [ParagraphStyle('toc',parent=STYLES['body'],fontSize=9.2,leading=13,spaceBefore=2,spaceAfter=3,leftIndent=0,rightIndent=22)]
-    story.append(toc)
-    story.extend([Spacer(1,13),para('Interpretation guide','h2'),para('Implemented features are identified through pinned source references. Worked examples illustrate the method. Efficiency benefits are hypotheses for evaluation. Proposed extensions are separate from the current implementation.')])
-    for index,section in enumerate(sections):
-        title,body=section.split('\n',1);heading=para(title,'h1');heading.section_key='section'+str(index)
-        story.extend([PageBreak(),heading]);story.extend(content(body,refs=title.startswith('References')))
-    doc.multiBuild(story)
+    if OUTPUT.is_symlink():raise ValueError('Output must not be a symlink')
+    flags=os.O_WRONLY|os.O_CREAT|os.O_TRUNC|getattr(os,'O_NOFOLLOW',0)|getattr(os,'O_BINARY',0)
+    with os.fdopen(os.open(OUTPUT,flags,0o644),'wb') as output_file:
+        doc=PaperDoc(output_file,pagesize=A4,leftMargin=MARGIN,rightMargin=MARGIN,topMargin=58,bottomMargin=54,title='.SYSTEMX: Portable Project Memory for Agentic Work',author='.SYSTEMX Project',subject='Architecture, evidence, lifecycle and evaluation of the .SYSTEMX alpha format',pageCompression=1)
+        frame=Frame(MARGIN,54,WIDTH,H-112,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)
+        doc.addPageTemplates([PageTemplate(id='cover',frames=[frame],onPage=cover,autoNextPageTemplate='body'),PageTemplate(id='body',frames=[frame],onPage=header_footer)])
+        story=[Spacer(1,123),para('Portable project memory<br/>for agentic work','h1'),para('A coordination format for people, AI assistants and the tools that execute their work.'),para('EDITION ' + EDITION + '  |  4 OCTOBER 2026<br/>Technical baseline: v' + BASELINE,'small'),Spacer(1,12)]
+        abstract=front.split('### Abstract\n',1)[1]
+        story.extend(content('### Abstract\n'+abstract))
+        story.extend([PageBreak(),para('Reading this paper','h1'),para('Start with the executive perspective, then follow the records, roles and operating boundaries. The final sections address measurement, adoption and the evidence behind the claims.')])
+        toc = TableOfContents()
+        toc.levelStyles = [ParagraphStyle('toc',parent=STYLES['body'],fontSize=9.2,leading=13,spaceBefore=2,spaceAfter=3,leftIndent=0,rightIndent=22)]
+        story.append(toc)
+        story.extend([Spacer(1,13),para('Interpretation guide','h2'),para('Implemented features are identified through pinned source references. Worked examples illustrate the method. Efficiency benefits are hypotheses for evaluation. Proposed extensions are separate from the current implementation.')])
+        for index,section in enumerate(sections):
+            title,body=section.split('\n',1);heading=para(title,'h1');heading.section_key='section'+str(index)
+            story.extend([PageBreak(),heading]);story.extend(content(body,refs=title.startswith('References')))
+        doc.multiBuild(story)
     print(OUTPUT)
 
 if __name__=='__main__':build()

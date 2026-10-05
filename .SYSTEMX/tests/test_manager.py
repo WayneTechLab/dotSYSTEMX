@@ -5,14 +5,17 @@ import hashlib
 import importlib.util
 import io
 import json
+import marshal
 import os
 from pathlib import Path
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+import venv
 import zipfile
 
 SOURCE = Path(__file__).resolve().parents[1]
@@ -169,6 +172,83 @@ class ManagerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(marker.exists())
         self.assertTrue(planted.is_file())
+
+    def test_direct_manager_ignores_pythonpath_alias_to_its_directory(self):
+        marker = self.folder / "ALIASED-MODULE-EXECUTED"
+        planted = self.source / "hashlib.py"
+        planted.write_text("from pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('executed')\n")
+        alias = self.source / ".." / self.source.name
+        result = subprocess.run([sys.executable, "-B", str(self.source / "manager.py"), "--version"],
+                                cwd=self.folder, env={**os.environ, "PYTHONPATH": str(alias)},
+                                text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn(".SYSTEMX " + self.version, result.stdout)
+        self.assertFalse(marker.exists())
+
+    def test_direct_manager_ignores_matching_unlisted_helper_bytecode(self):
+        helper = self.source / "systemx_paths.py"
+        marker = self.folder / "HELPER-BYTECODE-EXECUTED"
+        code = compile("from pathlib import Path\nPath(" + repr(str(marker)) +
+                       ").write_text('executed')\n", str(helper), "exec")
+        cache_prefix = self.folder / "python-cache"
+        with patch.object(sys, "pycache_prefix", str(cache_prefix)):
+            cache = Path(importlib.util.cache_from_source(str(helper)))
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_bytes(importlib.util.MAGIC_NUMBER +
+                          struct.pack("<III", 0, int(helper.stat().st_mtime), helper.stat().st_size) +
+                          marshal.dumps(code))
+        result = subprocess.run([sys.executable, "-I", "-B", "-X", "pycache_prefix=" + str(cache_prefix),
+                                 str(self.source / "manager.py"), "--version"],
+                                cwd=self.folder, text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(marker.exists())
+
+    def test_installed_console_entrypoint_isolates_before_manager_import(self):
+        self.assertIn('systemx = "systemx.cli:main"', (SOURCE.parent / "pyproject.toml").read_text())
+        environment = self.folder / "venv"
+        venv.EnvBuilder(with_pip=False).create(environment)
+        interpreter = environment / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        result = subprocess.run([str(interpreter), "-I", "-B", "-c",
+                                 "import sysconfig; print(sysconfig.get_path('purelib'))"],
+                                text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        package = Path(result.stdout.strip()) / "systemx"
+        package.mkdir()
+        for name in ("__init__.py", "__main__.py", "cli.py", "manager.py", "lifecycle.py",
+                     "versions.py", "systemx_paths.py", "VERSION"):
+            shutil.copy2(self.source / name, package / name)
+        stub = self.folder / "systemx-console.py"
+        stub.write_text("from systemx.cli import main\nraise SystemExit(main())\n")
+        marker = self.folder / "CONSOLE-MODULE-EXECUTED"
+        (self.source / "zipfile.py").write_text(
+            "from pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('executed')\n")
+        alias = self.source / ".." / self.source.name
+        environment_vars = {**os.environ, "PYTHONPATH": str(alias)}
+        for command in ((str(stub), "--version"), ("-m", "systemx", "--version")):
+            with self.subTest(command=command):
+                result = subprocess.run([str(interpreter), "-B", *command], cwd=self.folder,
+                                        env=environment_vars, text=True, capture_output=True, timeout=15)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertIn(".SYSTEMX " + self.version, result.stdout)
+                self.assertFalse(marker.exists())
+        result = subprocess.run([str(interpreter), "-I", "-B", "-c",
+                                 "import systemx,sys; assert 'systemx.manager' not in sys.modules; "
+                                 "from systemx import status; assert callable(status)"],
+                                cwd=self.folder, text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+        # A Python console entry point imports its package before it can
+        # restart. Use an explicitly isolated invocation for an untrusted
+        # PYTHONPATH that could otherwise shadow the whole installed package.
+        shadow = self.source / "systemx"
+        shadow.mkdir()
+        (shadow / "__init__.py").write_text(
+            "from pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('shadowed')\n")
+        result = subprocess.run([str(interpreter), "-I", "-B", "-m", "systemx", "--version"],
+                                cwd=self.folder, env=environment_vars,
+                                text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(marker.exists())
 
     def test_initial_adoption_refuses_different_executable_defaults_without_overwriting(self):
         local = self.root / ".SYSTEMX"

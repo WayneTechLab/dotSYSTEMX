@@ -20,8 +20,8 @@ someone else's branch or rewrite released tags.
 From the repository root, after changing distribution files:
 
 ```bash
-python3 -B .SYSTEMX/scripts/release.py
-python3 -B .SYSTEMX/scripts/systemx.py validate --template
+python3 -I -B .SYSTEMX/scripts/release.py
+python3 -I -B .SYSTEMX/scripts/systemx.py validate --template
 python3 -B -m unittest discover -s .SYSTEMX/tests -v
 ```
 
@@ -29,7 +29,8 @@ Use `py -3` in place of `python3` on Windows. Add new distributed files to the
 explicit inventory in `.SYSTEMX/scripts/systemx.py`; regenerate the manifest only
 after reviewing the changes. Never refresh blank-record fingerprints to disguise
 populated project records. Include meaningful regression tests for behavior or
-data-preservation changes. CI covers Linux, macOS, Windows, and packaged installation.
+data-preservation changes. Run checks locally and include the results with the
+pull request; this repository does not run GitHub Actions.
 
 For a release, assign a fresh version, align `VERSION`, provenance, distribution
 manifest, and Python metadata, update the offline changelog and wiki, validate the

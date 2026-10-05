@@ -18,7 +18,7 @@ bash .SYSTEMX/INSTALL.sh --target "/path/to/project" --profile project
 ```
 
 On Windows use `.SYSTEMX\INSTALL.ps1` with the same flags, or invoke
-`py -3 -B .SYSTEMX\manager.py install ...`. Quote paths containing spaces.
+`py -3 -I -B .SYSTEMX\manager.py install ...`. Quote paths containing spaces.
 The target is the containing working directory, not `.SYSTEMX`, any case variant,
 a directory inside it, or a drive root. Use `--lowercase-alias` to request a local
 `.systemx -> .SYSTEMX` link. The installer recognizes case-insensitive paths without

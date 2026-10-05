@@ -14,6 +14,13 @@ This copy travels with the folder for offline use.
   project-owned module cannot shadow Python standard-library imports. Fresh
   adoption now refuses a manifest-listed executable default whose existing
   bytes differ from the reviewed distribution.
+- Direct Python entry points restart in isolated mode before importing
+  application or standard-library modules. The installed console command
+  restarts before importing the manager, after Python resolves the package.
+  Standalone validation and release maintenance load only named local helpers
+  from source bytes, so unlisted modules or matching cached bytecode cannot
+  execute before inventory checks. The PDF publication tools reject output
+  symlinks; the current builder stages output before replacing a regular PDF.
 - Added preview-first `bootstrap-refresh` for eight stock root bootstrap and
   launcher files: four Python helpers and four shell/PowerShell entry points. It
   accepts only recognized contents from intact retained releases, saves the

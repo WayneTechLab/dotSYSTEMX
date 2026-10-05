@@ -52,7 +52,7 @@ From a reviewed template folder:
 bash .SYSTEMX/INSTALL.sh --target "/path/to/project" --profile project
 ```
 
-On Windows use `INSTALL.ps1` or `py -3 -B .SYSTEMX\manager.py install` with the
+On Windows use `INSTALL.ps1` or `py -3 -I -B .SYSTEMX\manager.py install` with the
 same flags. Python 3.9+ is required for command tools; the documentation works
 without a runtime. The [library guide](docs/LIBRARY.md) covers package installation
 and the `systemx` command.

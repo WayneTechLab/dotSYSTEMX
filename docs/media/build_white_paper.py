@@ -318,15 +318,20 @@ def main():
         if not args.source or not args.output:
             p.error('Legacy editions require --source from an archived release and a separate --output')
         if args.font_dir:p.error('Legacy editions do not support --font-dir')
-        return subprocess.call([sys.executable,str(Path(__file__).with_name('build_white_paper_legacy.py')),'--edition',args.edition,'--source',str(args.source.resolve()),'--output',str(args.output.resolve())])
+        return subprocess.call([sys.executable,str(Path(__file__).with_name('build_white_paper_legacy.py')),'--edition',args.edition,'--source',str(args.source.resolve()),'--output',str(args.output.expanduser())])
     config=json.loads(args.template.read_text(encoding='utf-8'))
     configure(config,args.font_dir)
     source=(args.source or ROOT/('.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v'+config['edition']+'.md')).resolve()
-    output=(args.output or source.with_suffix('.pdf')).resolve()
+    requested_output=(args.output or source.with_suffix('.pdf')).expanduser()
+    # Resolve the directory, not the final file: resolving an existing PDF
+    # symlink would turn the atomic replacement into a write to its target.
+    output=requested_output.parent.resolve()/requested_output.name
     if output==source:raise ValueError('Output must not replace the source')
+    if output.is_symlink():raise ValueError('Output must not be a symlink')
     with tempfile.TemporaryDirectory(prefix='systemx-paper-', dir=output.parent) as temp:
         draft=Path(temp)/output.name
         build(source,draft)
+        if output.is_symlink():raise ValueError('Output must not be a symlink')
         draft.replace(output)
     print(json.dumps({'output':str(output),'bytes':output.stat().st_size,'font':FONT,'edition':CONFIG['edition']}))
     return 0

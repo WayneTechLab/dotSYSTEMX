@@ -1,13 +1,17 @@
 """Isolated behavior checks. No real project commands or cloud accounts are used."""
 
 import json
+import importlib.util
+import marshal
 import os
 from pathlib import Path
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 SOURCE = Path(__file__).resolve().parents[1]
 
@@ -82,6 +86,67 @@ class SystemxTests(unittest.TestCase):
             path.unlink()
         self.assert_ok(self.run_cli("init"))
         self.assertIn("extra files", self.run_cli("validate", "--template").stderr)
+
+    def test_unlisted_socket_module_cannot_run_before_template_validation(self):
+        marker = self.root / "socket-module-executed"
+        for relative in ("scripts/socket.py", "socket.py"):
+            with self.subTest(relative=relative):
+                planted = self.systemx / relative
+                planted.write_text("from pathlib import Path\nPath(" + repr(str(marker)) +
+                                   ").write_text('executed')\n")
+                result = self.run_cli("validate", "--template")
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                self.assertIn("extra files", result.stderr)
+                self.assertFalse(marker.exists())
+                planted.unlink()
+        if shutil.which("bash"):
+            planted = self.systemx / "scripts/socket.py"
+            planted.write_text("from pathlib import Path\nPath(" + repr(str(marker)) +
+                               ").write_text('executed')\n")
+            result = subprocess.run(["bash", str(self.systemx / "SYSTEMX.sh"), "validate", "--template"],
+                                    cwd=self.temp.name, text=True, capture_output=True, timeout=15)
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+            self.assertIn("extra files", result.stderr)
+            self.assertFalse(marker.exists())
+
+    def test_unlisted_matching_bytecode_cannot_replace_named_helper(self):
+        helper = self.systemx / "scripts/project_memory.py"
+        marker = self.root / "bytecode-executed"
+        code = compile("from pathlib import Path\nPath(" + repr(str(marker)) +
+                       ").write_text('executed')\n", str(helper), "exec")
+        cache_prefix = self.root / "python-cache"
+        with patch.object(sys, "pycache_prefix", str(cache_prefix)):
+            cache = Path(importlib.util.cache_from_source(str(helper)))
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_bytes(importlib.util.MAGIC_NUMBER +
+                          struct.pack("<III", 0, int(helper.stat().st_mtime), helper.stat().st_size) +
+                          marshal.dumps(code))
+        result = subprocess.run([sys.executable, "-I", "-B", "-X", "pycache_prefix=" + str(cache_prefix),
+                                 str(self.runner), "validate", "--template"],
+                                cwd=self.temp.name, text=True, capture_output=True, timeout=15)
+        self.assert_ok(result)
+        self.assertFalse(marker.exists())
+
+    def test_release_check_rejects_unlisted_module_without_executing_it(self):
+        marker = self.root / "release-module-executed"
+        planted = self.systemx / "scripts/socket.py"
+        planted.write_text("from pathlib import Path\nPath(" + repr(str(marker)) +
+                           ").write_text('executed')\n")
+        release = self.systemx / "scripts/release.py"
+        result = subprocess.run([sys.executable, "-B", str(release), "--check"],
+                                cwd=self.temp.name, text=True, capture_output=True, timeout=15)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("extra files", result.stderr)
+        self.assertFalse(marker.exists())
+
+    def test_release_can_regenerate_manifest_from_a_copied_template(self):
+        release = self.systemx / "scripts/release.py"
+        result = subprocess.run([sys.executable, "-B", str(release)], cwd=self.temp.name,
+                                text=True, capture_output=True, timeout=15)
+        self.assert_ok(result)
+        result = subprocess.run([sys.executable, "-B", str(release), "--check"], cwd=self.temp.name,
+                                text=True, capture_output=True, timeout=15)
+        self.assert_ok(result)
 
     def test_public_template_manifest_requires_all_seed_hashes(self):
         path = self.systemx / "config/template-records.json"
