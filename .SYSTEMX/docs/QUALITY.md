@@ -60,7 +60,7 @@ When changing the command runner, run:
 ```bash
 bash .SYSTEMX/SYSTEMX.sh validate
 bash .SYSTEMX/SYSTEMX.sh validate --template
-python3 -B -m unittest discover -s .SYSTEMX/tests -v
+python3 -I -B -m unittest discover -s .SYSTEMX/tests -v
 ```
 
 These tests use temporary copies and fake project commands. They do not install

@@ -141,7 +141,7 @@ validation and tests locally, then attach the resulting evidence to the release:
 
 ```bash
 python3 -I -B .SYSTEMX/scripts/release.py --check
-python3 -B -m unittest discover -s .SYSTEMX/tests -v
+python3 -I -B -m unittest discover -s .SYSTEMX/tests -v
 bash .SYSTEMX/SYSTEMX.sh validate --template
 ```
 

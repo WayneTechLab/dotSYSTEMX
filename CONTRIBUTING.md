@@ -22,7 +22,7 @@ From the repository root, after changing distribution files:
 ```bash
 python3 -I -B .SYSTEMX/scripts/release.py
 python3 -I -B .SYSTEMX/scripts/systemx.py validate --template
-python3 -B -m unittest discover -s .SYSTEMX/tests -v
+python3 -I -B -m unittest discover -s .SYSTEMX/tests -v
 ```
 
 Use `py -3` in place of `python3` on Windows. Add new distributed files to the

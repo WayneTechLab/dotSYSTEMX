@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Exercise the white paper's local coordination example in disposable storage.
 
-Run: python docs/media/verify_white_paper_example.py --output /path/to/result.json
+Run: python3 -I -B docs/media/verify_white_paper_example.py --output /path/to/result.json
 This fixture simulates role handoffs; it starts no subagents or external jobs.
 """
 import sys

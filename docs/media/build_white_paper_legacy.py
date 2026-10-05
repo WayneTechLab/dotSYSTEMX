@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Typeset the white paper Markdown. Optional maintainer dependency: ReportLab.
 
-Run from any directory: python docs/media/build_white_paper.py
+Run: python3 -I -B /path/to/dotSYSTEMX/docs/media/build_white_paper_legacy.py --source OLD.md --output DRAFT.pdf
 This builder is documentation tooling, not part of the portable runtime.
 """
 import sys
