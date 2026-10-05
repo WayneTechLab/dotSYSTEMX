@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "edition": "1.2",
+  "entries": [
+    {
+      "key": "cite-13-1",
+      "title": "How we built our multi-agent research system",
+      "author": "Anthropic",
+      "label": "Anthropic",
+      "entry": "Anthropic. \"How We Built Our Multi-Agent Research System.\" *Anthropic*, 13 June 2025, [https://www.anthropic.com/engineering/multi-agent-research-system](https://www.anthropic.com/engineering/multi-agent-research-system). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-12-1",
+      "title": "Lost in the Middle: How Language Models Use Long Contexts",
+      "author": "Liu, Nelson F., et al.",
+      "label": "Liu et al. 157",
+      "entry": "Liu, Nelson F., et al. \"Lost in the Middle: How Language Models Use Long Contexts.\" *Transactions of the Association for Computational Linguistics*, vol. 12, 2024, pp. 157-73. [https://doi.org/10.1162/tacl_a_00638](https://doi.org/10.1162/tacl_a_00638)."
+    },
+    {
+      "key": "cite-mla-format",
+      "author": "Modern Language Association",
+      "title": "Formatting Your Research Project",
+      "label": "Modern Language Association, \"Formatting\"",
+      "entry": "Modern Language Association. \"Formatting Your Research Project.\" *MLA Style Center*, [style.mla.org/formatting-papers/](https://style.mla.org/formatting-papers/). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-mla-works",
+      "author": "Modern Language Association",
+      "title": "Works Cited: A Quick Guide",
+      "label": "Modern Language Association, \"Works Cited\"",
+      "entry": "Modern Language Association. \"Works Cited: A Quick Guide.\" *MLA Style Center*, [style.mla.org/works-cited/works-cited-a-quick-guide/](https://style.mla.org/works-cited/works-cited-a-quick-guide/). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-14-1",
+      "title": "Latency optimization",
+      "author": "OpenAI",
+      "label": "OpenAI, \"Latency optimization\"",
+      "entry": "OpenAI. \"Latency optimization.\" *OpenAI API*, [https://developers.openai.com/api/docs/guides/latency-optimization](https://developers.openai.com/api/docs/guides/latency-optimization). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-15-1",
+      "title": "Prompt caching",
+      "author": "OpenAI",
+      "label": "OpenAI, \"Prompt caching\"",
+      "entry": "OpenAI. \"Prompt caching.\" *OpenAI API*, [https://developers.openai.com/api/docs/guides/prompt-caching](https://developers.openai.com/api/docs/guides/prompt-caching). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-2-1",
+      "title": "About and founder's account",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"About and founder's account\"",
+      "entry": ".SYSTEMX Project. \"About and founder's account.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/ABOUT.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/ABOUT.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-4-1",
+      "title": "Agent coordination",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Agent coordination\"",
+      "entry": ".SYSTEMX Project. \"Agent coordination.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/AGENTS/README.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/AGENTS/README.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-19-1",
+      "title": "Agent X and shared record implementation",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Agent X and shared record implementation\"",
+      "entry": ".SYSTEMX Project. \"Agent X and shared record implementation.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/scripts/agent_x.py](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/scripts/agent_x.py). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-5-1",
+      "title": "Agent X specification",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Agent X specification\"",
+      "entry": ".SYSTEMX Project. \"Agent X specification.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/AGENT-X.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/AGENT-X.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-6-1",
+      "title": "Agent Z specification",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Agent Z specification\"",
+      "entry": ".SYSTEMX Project. \"Agent Z specification.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/AGENT-Z.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/AGENT-Z.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-21-1",
+      "title": "AI coordination, connector and recovery standards",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"AI coordination, connector and recovery standards\"",
+      "entry": ".SYSTEMX Project. \"AI coordination, connector and recovery standards.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/AI/README.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/AI/README.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-26-1",
+      "title": "Baseline distribution inventory",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Baseline distribution inventory\"",
+      "entry": ".SYSTEMX Project. \"Baseline distribution inventory.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/config/distribution.json](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/config/distribution.json). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-6-2",
+      "title": "Default policy",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Default policy\"",
+      "entry": ".SYSTEMX Project. \"Default policy.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/config/agent-z-policy.json](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/config/agent-z-policy.json). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-3-2",
+      "title": "Efficiency guide",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Efficiency guide\"",
+      "entry": ".SYSTEMX Project. \"Efficiency guide.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/EFFICIENCY.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/EFFICIENCY.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-24-1",
+      "title": "Exact-case contract",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Exact-case contract\"",
+      "entry": ".SYSTEMX Project. \"Exact-case contract.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/EXACT-CASE.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/EXACT-CASE.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-25-1",
+      "title": "Executable white-paper walkthrough",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Executable white-paper walkthrough\"",
+      "entry": ".SYSTEMX Project. \"Executable white-paper walkthrough.\" *dotSYSTEMX*, version 1.8.4-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.4-alpha.1/docs/media/verify_white_paper_example.py](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.4-alpha.1/docs/media/verify_white_paper_example.py). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-1-2",
+      "title": "Format contract",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Format contract\"",
+      "entry": ".SYSTEMX Project. \"Format contract.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/FORMAT.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/FORMAT.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-10-1",
+      "title": "Four use-case cards and guides",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Four use-case cards and guides\"",
+      "entry": ".SYSTEMX Project. \"Four use-case cards and guides.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.8.3-alpha.1/.SYSTEMX/MEDIA](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.8.3-alpha.1/.SYSTEMX/MEDIA). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-11-1",
+      "title": "Installation",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Installation\"",
+      "entry": ".SYSTEMX Project. \"Installation.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/INSTALLATION.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/INSTALLATION.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-22-1",
+      "title": "Manager implementation",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Manager implementation\"",
+      "entry": ".SYSTEMX Project. \"Manager implementation.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/manager.py](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/manager.py). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-8-1",
+      "title": "One-shot project guide",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"One-shot project guide\"",
+      "entry": ".SYSTEMX Project. \"One-shot project guide.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/ONE-SHOT-PROJECT.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/ONE-SHOT-PROJECT.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-4-2",
+      "title": "Project-memory implementation",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Project-memory implementation\"",
+      "entry": ".SYSTEMX Project. \"Project-memory implementation.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/scripts/project_memory.py](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/scripts/project_memory.py). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-11-2",
+      "title": "Release policy",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Release policy\"",
+      "entry": ".SYSTEMX Project. \"Release policy.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/RELEASE-POLICY.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/RELEASE-POLICY.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-6-3",
+      "title": "Scoring implementation",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Scoring implementation\"",
+      "entry": ".SYSTEMX Project. \"Scoring implementation.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/scripts/agent_z.py](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/scripts/agent_z.py). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-9-1",
+      "title": "Shared workspaces, clouds and bots",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Shared workspaces, clouds and bots\"",
+      "entry": ".SYSTEMX Project. \"Shared workspaces, clouds and bots.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/SHARED-WORKSPACES.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/SHARED-WORKSPACES.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-2-2",
+      "title": "Source provenance",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Source provenance\"",
+      "entry": ".SYSTEMX Project. \"Source provenance.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/SOURCE.json](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/SOURCE.json). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-1-1",
+      "title": "Standard and authority boundaries",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Standard and authority boundaries\"",
+      "entry": ".SYSTEMX Project. \"Standard and authority boundaries.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/STANDARD.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/STANDARD.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-7-1",
+      "title": "SYSTEMX PROJECTS",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"SYSTEMX PROJECTS\"",
+      "entry": ".SYSTEMX Project. \"SYSTEMX PROJECTS.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/PROJECTS.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/PROJECTS.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-3-1",
+      "title": "Technical Guide",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Technical Guide\"",
+      "entry": ".SYSTEMX Project. \"Technical Guide.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/TECHNICAL-GUIDE.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/TECHNICAL-GUIDE.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-11-3",
+      "title": "Uninstall/restore",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"Uninstall/restore\"",
+      "entry": ".SYSTEMX Project. \"Uninstall/restore.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/UNINSTALL.md](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.3-alpha.1/.SYSTEMX/docs/UNINSTALL.md). Accessed 4 Oct. 2026."
+    },
+    {
+      "key": "cite-16-1",
+      "title": "V1.8.3-alpha.1 release verification report",
+      "author": ".SYSTEMX Project",
+      "label": ".SYSTEMX Project, \"V1.8.3-alpha.1 release verification report\"",
+      "entry": ".SYSTEMX Project. \"V1.8.3-alpha.1 release verification report.\" *dotSYSTEMX*, version 1.8.3-alpha.1, *GitHub*, [https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.8.3-alpha.1/PUBLIC-REVIEW-1.8.2-alpha.1.json](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.8.3-alpha.1/PUBLIC-REVIEW-1.8.2-alpha.1.json). Accessed 4 Oct. 2026."
+    }
+  ]
+}

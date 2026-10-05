@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "edition": "1.2",
+  "product": ".SYSTEMX",
+  "title": "Portable Project Memory for Agentic Work",
+  "subtitle": "Architecture, coordination, evidence and implementation",
+  "author": "Lucas (SatoshiUNO)",
+  "runningAuthor": "SatoshiUNO",
+  "publisher": "Wayne Tech Lab LLC",
+  "productCredit": "A product of Wayne Tech Lab LLC",
+  "date": "4 October 2026",
+  "technicalBaseline": "1.8.3-alpha.1",
+  "technicalBaselineCommit": "f7960affed79fd40aebb1aee7ce5948ecba6b06e",
+  "publicationRelease": "1.8.5-alpha.1",
+  "layout": "Branded MLA-style research paper",
+  "pageSize": "LETTER",
+  "marginPoints": 72,
+  "bodySizePoints": 12,
+  "bodyLeadingPoints": 24,
+  "paragraphIndentPoints": 36,
+  "links": [
+    {"label": "Networks.Chat", "role": "Author portfolio", "url": "https://Networks.Chat"},
+    {"label": "WayneTechLab.com", "role": "Business", "url": "https://WayneTechLab.com"},
+    {"label": "GitHub repository", "role": "Source and releases", "url": "https://github.com/WayneTechLab/dotSYSTEMX"},
+    {"label": "Project wiki", "role": "User manual", "url": "https://github.com/WayneTechLab/dotSYSTEMX/wiki"}
+  ]
+}

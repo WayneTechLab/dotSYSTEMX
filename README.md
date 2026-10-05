@@ -4,16 +4,25 @@
 
 **DOT SYSTEMX — project memory and coordination for agentic coding.**
 
+A product of **Wayne Tech Lab LLC**. Created by **Lucas (SatoshiUNO)**.
+[Portfolio: Networks.Chat](https://Networks.Chat) ·
+[Business: WayneTechLab.com](https://WayneTechLab.com)
+
 Keep the objective, plan, tasks, evidence, and next step in one portable folder.
 `.SYSTEMX` helps people and AI assistants continue a project across sessions,
 tools, and agents without repeatedly reconstructing what happened or drifting
 away from what was agreed.
 
 [Read the manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
-[Read the expanded white paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper) ·
+[Read the illustrated research paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
 [Copy a setup prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt) ·
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate)
+
+The [illustrated research paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
+brings the complete implementation reference together with MLA-style citations,
+Agent 0/X/Z coordination diagrams and four workflow infographics. Its PDF has
+clickable contents, figures, references and public project links.
 
 > **ALPHA — USE AT YOUR OWN RISK.** `.SYSTEMX` is experimental and may change daily.
 > Pin a reviewed release, keep recoverable backups, and validate it in your project.

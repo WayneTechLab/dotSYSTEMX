@@ -8,31 +8,36 @@ handoff boundary. The brand is **.SYSTEMX**; provider names describe use cases.
 
 ## White paper
 
-**Portable project memory for agentic work** - expanded edition 1.1,
-4 October 2026. A 50-page implementation reference for founders, engineering
-teams and AI tooling practitioners: 29 chapters, canonical record contracts,
-all 100 Agent Z questions, command families, a complete baseline file inventory,
-and a tested local coordination walkthrough.
+**Portable Project Memory for Agentic Work** - illustrated research edition 1.2,
+4 October 2026. A 96-page reference with the complete 29-chapter implementation
+paper, exact record contracts, all 100 Agent Z questions, command families,
+baseline file inventory, tested local walkthrough and a new four-card visual atlas.
 
-[Expanded PDF](SYSTEMX-White-Paper-v1.1.pdf) ·
-[Editable Markdown](SYSTEMX-White-Paper-v1.1.md) ·
-[Metadata and checksums](SYSTEMX-White-Paper-v1.1.json) ·
-[Wiki and audio reading](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
+**Lucas (SatoshiUNO)** · **A product of Wayne Tech Lab LLC**
+[Portfolio: Networks.Chat](https://Networks.Chat) ·
+[Business: WayneTechLab.com](https://WayneTechLab.com)
 
-Edition 1.0 remains available as the shorter 17-page introduction:
-[original PDF](SYSTEMX-White-Paper-v1.0.pdf) and
-[original Markdown](SYSTEMX-White-Paper-v1.0.md).
+[Illustrated PDF](SYSTEMX-White-Paper-v1.2.pdf) ·
+[Editable Markdown](SYSTEMX-White-Paper-v1.2.md) ·
+[Metadata and checksums](SYSTEMX-White-Paper-v1.2.json) ·
+[Wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper) ·
+[Publication format](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Research-Paper-Format)
 
-Edition 1.1 pins implementation references to v1.8.3-alpha.1 and ships in the
-v1.8.4-alpha.1 documentation patch. The PDF contains selectable text, two vector
-diagrams, numbered contents, bookmarks and clickable references. It is not a
-tagged PDF/UA export; Markdown remains the editable reading alternative.
-Examples do not establish measured savings, AGI or production certification.
+The paper uses an MLA-style research body and 32 alphabetized Works Cited entries,
+with branded front matter and compact technical displays. It includes six numbered
+figures, selectable text, linked contents/figure list, bookmarks, linked citations,
+and portfolio/business/repository/wiki navigation. It is not a tagged PDF/UA export;
+Markdown remains the editable text alternative. It examines v1.8.3-alpha.1 and
+ships in the v1.8.5-alpha.1 documentation patch. No measured savings, AGI or
+production certification is asserted. Original artwork remains unchanged.
 
-The release provides a separate synthetic audio reading and its text transcript.
-Audio is excluded from the portable installer bundle to keep its existing size
-limits. The source PDF/Markdown stay in this exact MEDIA directory. Optional
-publishing, narration and walkthrough tools live in `docs/media/` in the repository.
+Earlier editions remain immutable: [edition 1.0 PDF](SYSTEMX-White-Paper-v1.0.pdf)
+and [source](SYSTEMX-White-Paper-v1.0.md), the 17-page introduction;
+[edition 1.1 PDF](SYSTEMX-White-Paper-v1.1.pdf) and
+[source](SYSTEMX-White-Paper-v1.1.md), the 50-page expanded reference.
+The wiki retains the separately labeled **edition 1.1** synthetic audio and transcript.
+Audio is excluded from the portable bundle. Optional publication tools and the
+reusable format configuration are in `docs/media/` in the repository.
 
 ## Choose a workflow
 

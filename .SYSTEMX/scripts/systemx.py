@@ -55,6 +55,8 @@ REQUIRED = (
     "MEDIA/SYSTEMX-White-Paper-v1.0.json",
     "MEDIA/SYSTEMX-White-Paper-v1.1.md", "MEDIA/SYSTEMX-White-Paper-v1.1.pdf",
     "MEDIA/SYSTEMX-White-Paper-v1.1.json",
+    "MEDIA/SYSTEMX-White-Paper-v1.2.md", "MEDIA/SYSTEMX-White-Paper-v1.2.pdf",
+    "MEDIA/SYSTEMX-White-Paper-v1.2.json",
     "MEDIA/chatgpt-google-drive.md", "MEDIA/chatgpt-google-drive.png", "MEDIA/chatgpt-google-drive-4k.jpg",
     "MEDIA/codex-github-main.md", "MEDIA/codex-github-main.png", "MEDIA/codex-github-main-4k.jpg",
     "MEDIA/dots-codex-cloud.md", "MEDIA/dots-codex-cloud.png", "MEDIA/dots-codex-cloud-4k.jpg",

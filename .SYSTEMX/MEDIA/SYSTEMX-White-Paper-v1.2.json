@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "title": ".SYSTEMX: Portable Project Memory for Agentic Work",
+  "edition": "1.2",
+  "author": "Lucas (SatoshiUNO)",
+  "publisher": "Wayne Tech Lab LLC",
+  "productCredit": "A product of Wayne Tech Lab LLC",
+  "publishedOn": "2026-10-04",
+  "technicalBaseline": "1.8.3-alpha.1",
+  "technicalBaselineCommit": "f7960affed79fd40aebb1aee7ce5948ecba6b06e",
+  "publicationRelease": "1.8.5-alpha.1",
+  "pages": 96,
+  "layout": "Branded MLA-style research paper; US Letter, one-inch text margins, Times New Roman 12/24 body; compact technical displays",
+  "authoring": "Markdown, ReportLab 4.4.9 and Pillow; original graphics retained; embedded raster representations optimized",
+  "figures": 6,
+  "worksCitedEntries": 32,
+  "builder": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.5-alpha.1/docs/media/build_white_paper.py",
+  "formatTemplate": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.8.5-alpha.1/docs/media/publication-template.json",
+  "taggedPdfUa": false,
+  "checksumMethod": "SHA-256 of exact file bytes",
+  "files": [
+    {
+      "file": "SYSTEMX-White-Paper-v1.2.md",
+      "bytes": 120956,
+      "sha256": "cedcab6e9185091c92e2e4dad110706a03dcb2494c68a2b11b2ec920b3f137cf"
+    },
+    {
+      "file": "SYSTEMX-White-Paper-v1.2.pdf",
+      "bytes": 1750374,
+      "sha256": "66aca9fe640f1c0cf932e73c948fb42fe7da0059463ccb76dfbd55467f63611d"
+    }
+  ]
+}
