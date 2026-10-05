@@ -1,5 +1,6 @@
 """Behavioral checks for role activation, event integrity, fixed reviews, and scope."""
 
+from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 import sys
@@ -92,6 +93,7 @@ class StandardAgentTests(unittest.TestCase):
         first = self.value(*self.event())
         self.assertEqual(first["event"]["at"], "2026-01-01T00:00:00Z")
         self.assertNotEqual(first["event"]["at"], first["event"]["recordedAt"])
+        self.assertRegex(first["event"]["recordedAt"], r"\.[0-9]{6}Z$")
         p = self.systemx / "EVENTS/EVENTS.json"; stamp = p.stat().st_mtime_ns
         self.assertFalse(self.value(*self.event())["created"])
         self.assertEqual(stamp, p.stat().st_mtime_ns)
@@ -100,9 +102,22 @@ class StandardAgentTests(unittest.TestCase):
         self.assertEqual(before, p.read_bytes())
         self.assertEqual(self.value("agent-x", "list")["total"], 1)
 
+    def test_ten_parallel_agent_x_writers_share_the_cooperative_lock(self):
+        self.setup_roles()
+        def write(index):
+            return self.run_cli(*self.event("--key", "parallel-" + str(index)))
+        with ThreadPoolExecutor(max_workers=10) as pool:
+            results = list(pool.map(write, range(10)))
+        for result in results:
+            self.assert_ok(result)
+        ledger = json.loads((self.systemx / "EVENTS/EVENTS.json").read_text())
+        self.assertEqual(len(ledger["events"]), 10)
+        self.assert_ok(self.run_cli("validate"))
+
     def test_events_require_original_evidence_valid_time_and_local_tasks(self):
         self.setup_roles()
         for extra in [("--at", "2026-01-01T12:00:00"), ("--at", "0001-01-01T00:00:00+01:00"),
+                      ("--at", "2026-01-01 12:00:00Z"), ("--at", "2026-01-01T12:00:00.1234567Z"),
                       ("--task", "TASK-999"), ("--summary", "")]:
             with self.subTest(extra=extra):
                 self.rejected(*self.event(*extra))
@@ -111,6 +126,16 @@ class StandardAgentTests(unittest.TestCase):
         self.rejected(*args)
         self.assertEqual(self.value("agent-x", "list")["total"], 0)
         self.rejected("agent-x", "list", "--since", "2026-02-01T00:00:00Z", "--until", "2026-01-01T00:00:00Z")
+
+    def test_only_planned_events_may_use_a_future_occurrence_time(self):
+        self.setup_roles()
+        self.rejected(*self.event("--at", "2099-01-01T00:00:00Z", "--stage", "live_verified"))
+        planned = self.value(*self.event("--key", "future-plan", "--at", "2099-01-01T00:00:00Z", "--stage", "planned"))
+        self.assertEqual(planned["event"]["stage"], "planned")
+        path = self.systemx / "EVENTS/EVENTS.json"
+        data = json.loads(path.read_text()); data["events"][0]["stage"] = "checked"
+        path.write_text(json.dumps(data))
+        self.rejected("agent-x", "validate")
 
     def test_bounded_event_listing_does_not_load_history_into_context(self):
         self.setup_roles()
@@ -149,6 +174,9 @@ class StandardAgentTests(unittest.TestCase):
         self.assertEqual(len(policy["categories"]), 10)
         self.assertEqual([len(c["questions"]) for c in policy["categories"]], [10] * 10)
         self.assertEqual(len({q["id"] for c in policy["categories"] for q in c["questions"]}), 100)
+        questions = {q["id"]: q["question"] for c in policy["categories"] for q in c["questions"]}
+        self.assertIn("second independent source", questions["Z03.06"])
+        self.assertIn("known-bad", questions["Z06.06"])
         self.assertEqual(before, self.files())
 
     def test_prepare_preview_and_repeat_preserve_prior_answers(self):
@@ -208,13 +236,58 @@ class StandardAgentTests(unittest.TestCase):
         after = self.value("agent-z", "score", two["request"]["id"], "--apply")
         delta = self.value("agent-z", "compare", before["report"]["id"], after["report"]["id"])
         self.assertEqual(delta["pointDelta"], 1)
+        self.assertEqual(delta["direction"], "improved")
+        self.assertLessEqual(delta["beforeScoredAt"], delta["afterScoredAt"])
         self.assertEqual(len(delta["changes"]), 1)
         self.assertFalse(delta["automaticWork"])
         self.assertTrue(self.value("agent-z", "compare", after["report"]["id"], after["report"]["id"])["sameInputs"])
+        self.rejected("agent-z", "compare", after["report"]["id"], before["report"]["id"])
+        p = self.systemx / after["reportPath"]
+        data = json.loads(p.read_text()); original_scored_at = data["scoredAt"]
+        data["scoredAt"] = before["report"]["scoredAt"]; p.write_text(json.dumps(data))
+        uncertain = self.value("agent-z", "compare", before["report"]["id"], after["report"]["id"])
+        self.assertEqual(uncertain["direction"], "order-unverified")
+        self.assertFalse(uncertain["orderingVerified"])
+        data["scoredAt"] = original_scored_at; p.write_text(json.dumps(data))
         p = self.systemx / after["reportPath"]; data = json.loads(p.read_text()); data["score"]["points"] = 100
         p.write_text(json.dumps(data))
         self.rejected("agent-z", "validate", after["report"]["id"])
         self.rejected("agent-z", "score", two["request"]["id"], "--apply")
+
+    def test_compare_rejects_evidence_stage_regression(self):
+        self.setup_roles(); checked = self.prepare()
+        before = self.value("agent-z", "score", checked["request"]["id"], "--apply")
+        planned = self.value("agent-z", "prepare", "--kind", "change", "--subject", "fixture",
+                             "--revision", "revision-2", "--evidence-revision", "proof-2",
+                             "--stage", "planned", "--apply")
+        after = self.value("agent-z", "score", planned["request"]["id"], "--apply")
+        self.rejected("agent-z", "compare", before["report"]["id"], after["report"]["id"])
+
+    def test_compare_does_not_call_a_changed_applicability_improvement(self):
+        self.setup_roles(); first = self.prepare()
+        self.answers(first, ["pass"] * 10 + ["not_applicable"] * 90)
+        before = self.value("agent-z", "score", first["request"]["id"], "--apply")
+        second = self.prepare("revision-2")
+        self.answers(second, ["pass"] * 20 + ["fail"] * 80)
+        after = self.value("agent-z", "score", second["request"]["id"], "--apply")
+        delta = self.value("agent-z", "compare", before["report"]["id"], after["report"]["id"])
+        self.assertEqual(delta["pointDelta"], 10)
+        self.assertEqual(delta["beforeApplicablePercent"], 100)
+        self.assertEqual(delta["afterApplicablePercent"], 20)
+        self.assertEqual(delta["direction"], "scope-changed")
+
+    def test_compare_detects_swapped_applicability_with_same_denominator(self):
+        self.setup_roles()
+        first = self.prepare()
+        self.answers(first, ["not_applicable", "fail"] + ["fail"] * 98)
+        before = self.value("agent-z", "score", first["request"]["id"], "--apply")
+        second = self.prepare("revision-2")
+        self.answers(second, ["pass", "not_applicable"] + ["fail"] * 98)
+        after = self.value("agent-z", "score", second["request"]["id"], "--apply")
+        delta = self.value("agent-z", "compare", before["report"]["id"], after["report"]["id"])
+        self.assertEqual(delta["applicableMaximumDelta"], 0)
+        self.assertEqual(delta["pointDelta"], 1)
+        self.assertEqual(delta["direction"], "scope-changed")
 
     def test_policy_edits_require_new_version_and_new_comparison_baseline(self):
         self.setup_roles(); one = self.prepare()
@@ -310,7 +383,8 @@ class StandardAgentTests(unittest.TestCase):
         self.setup_roles()
         path = self.systemx / "EVENTS/EVENTS.json"
         before = path.read_bytes()
-        with patch.object(agent_standards, "MAX_RECORD_BYTES", 100):
+        with patch.object(sys, "path", [str(test_systemx.SOURCE), str(test_systemx.SOURCE / "scripts"), *sys.path]), \
+                patch.object(agent_standards, "MAX_RECORD_BYTES", 100):
             with self.assertRaisesRegex(ValueError, "exceed"):
                 agent_standards.write(self.systemx, "EVENTS/EVENTS.json", {"text": "é" * 100})
         self.assertEqual(path.read_bytes(), before)

@@ -6,6 +6,7 @@ from versions import version_id
 
 RESULTS = ("pass", "partial", "fail", "unknown", "not_applicable")
 STAGES = ("planned", "implemented", "checked", "deployed", "live_verified")
+STAGE_ORDER = {stage: index for index, stage in enumerate(STAGES)}
 
 
 def validate_policy(policy):
@@ -194,12 +195,33 @@ def compare(root, before_id, after_id):
         raise ValueError("Policy changed; start a new baseline instead of claiming a comparable score delta")
     if any(before["subject"][key] != after["subject"][key] for key in ("kind", "id", "task")):
         raise ValueError("Compare the same subject and scope")
+    before_time, after_time = memory.timestamp(before["scoredAt"]), memory.timestamp(after["scoredAt"])
+    if after_id != before_id and after_time < before_time:
+        raise ValueError("The after report must be scored later than the before report; reverse the comparison operands or start a new baseline")
+    ordering_verified = after_id == before_id or after_time > before_time
+    before_stage, after_stage = before["subject"]["stage"], after["subject"]["stage"]
+    if STAGE_ORDER[after_stage] < STAGE_ORDER[before_stage]:
+        raise ValueError("The after report uses an earlier evidence stage; start a new baseline or correct the operands")
     changes = [{"id": old["id"], "before": old["result"], "after": new["result"],
                 "evidenceChanged": old["evidence"] != new["evidence"], "noteChanged": old["note"] != new["note"]}
                for old, new in zip(before["answers"], after["answers"]) if old != new]
+    point_delta = after["score"]["points"] - before["score"]["points"]
+    applicable_delta = after["score"]["applicableMaximum"] - before["score"]["applicableMaximum"]
+    applicability_changed = any((old["result"] == "not_applicable") != (new["result"] == "not_applicable")
+                                for old, new in zip(before["answers"], after["answers"]))
+    direction = ("order-unverified" if not ordering_verified else
+                 "scope-changed" if applicable_delta or applicability_changed else
+                 "improved" if point_delta > 0 else "regressed" if point_delta < 0 else "unchanged")
     return {"before": before_id, "after": after_id, "sameInputs": before["sourceHash"] == after["sourceHash"],
+            "beforeScoredAt": before["scoredAt"], "afterScoredAt": after["scoredAt"],
+            "orderingVerified": ordering_verified,
+            "beforeStage": before_stage, "afterStage": after_stage,
             "beforeSubject": before["subject"], "afterSubject": after["subject"],
-            "pointDelta": after["score"]["points"] - before["score"]["points"], "changes": changes,
+            "pointDelta": point_delta, "applicableMaximumDelta": applicable_delta,
+            "beforeApplicablePercent": before["score"]["applicablePercent"],
+            "afterApplicablePercent": after["score"]["applicablePercent"],
+            "direction": direction,
+            "changes": changes,
             "categoryDeltas": [{"id": old["id"], "delta": new["points"] - old["points"]}
                                for old, new in zip(before["score"]["categories"], after["score"]["categories"])],
             "automaticWork": False}

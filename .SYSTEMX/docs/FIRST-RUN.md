@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.4-alpha.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.7-alpha.1"
 "$HOME/.venvs/dotsystemx/bin/systemx" --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.4-alpha.1"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.7-alpha.1"
 & "$HOME\.venvs\dotsystemx\Scripts\systemx.exe" --help
 ```
 
@@ -55,7 +55,7 @@ or global PATH. Git-based installation requires Git. The release wheel can be
 installed through the same pip command by supplying its downloaded path instead
 of the Git URL; no PyPI publication is implied.
 
-Alternatively, use `python3 -B /path/to/reviewed-template/.SYSTEMX/manager.py`
+Alternatively, use `python3 -I -B /path/to/reviewed-template/.SYSTEMX/manager.py`
 (Windows: `py -3 -B ...`) in place of `systemx` below. Keep that reviewed checkout
 outside the target project, especially for later uninstall/restore.
 
@@ -70,10 +70,18 @@ systemx first-run --target "/path/to/project" --profile project --apply
 ```
 
 Without `--apply`, this is a read-only preview for the target; a requested remote
-version may be downloaded for verification. `--dry-run` explicitly selects the
+version may be downloaded for verification. For an exact remote version, you may
+pass `--version REVIEWED_VERSION --archive-sha256 TRUSTED_CODELOAD_ZIP_DIGEST`
+after independently obtaining the 64-hex digest of that exact codeload ZIP.
+Replace both placeholders with real values. The digest is checked before archive
+parsing. The Git-based Python package installation in step 2 is a separate
+download; this manager option does not pin pip's Git fetch or a wheel.
+`--dry-run` explicitly selects the
 same preview behavior. Applying first run:
 
-1. Installs or adopts `.SYSTEMX`, preserving every existing root file.
+1. Installs or adopts `.SYSTEMX`, preserving existing root files. An unmanaged
+   folder with a conflicting manifest-listed `.py`, `.sh`, or `.ps1` executable
+   stops adoption for review instead of using or overwriting that file.
 2. Pins a new installation to its selected release and uses manual updates.
 3. Creates an empty `project.json` only when absent.
 4. Records local installation/first-run operations and prints the remaining steps.

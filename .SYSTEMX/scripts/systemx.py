@@ -20,6 +20,8 @@ if __name__ == "__main__":
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
 DEFAULTS = Path(__file__).resolve().parent.parent
+SCRIPTS = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPTS))
 sys.path.insert(0, str(DEFAULTS))
 import project_memory
 from systemx_paths import inspect_layout, lowercase_alias, record_directory

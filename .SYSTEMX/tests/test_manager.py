@@ -5,6 +5,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -122,6 +123,90 @@ class ManagerTests(unittest.TestCase):
         with self.assertRaisesRegex(manager.InstallError, "fingerprint mismatch"):
             manager.run(self.root, ["status"])
 
+    def test_release_cache_rejects_unlisted_import_content_without_deleting_it(self):
+        version = (self.source / "VERSION").read_text().strip()
+        cases = ("scripts/hashlib.py", "scripts/hashlib/__init__.py", "scripts/tool.pyc",
+                 "scripts/__pycache__/tool.cpython-39.pyc", ".SYSTEMX/redirect.txt", "unexpected/empty.txt")
+        for index, relative in enumerate(cases):
+            with self.subTest(relative=relative):
+                root = self.folder / ("adopted-" + str(index))
+                planted = root / ".SYSTEMX/.systemx/releases" / version / relative
+                planted.parent.mkdir(parents=True)
+                planted.write_bytes(b"preserve untrusted fixture")
+                before = planted.read_bytes()
+                preview = manager.install(root, source=self.source, dry_run=True)
+                self.assertFalse(preview["applied"])
+                self.assertTrue(any("unexpected" in conflict for conflict in preview["conflicts"]), preview)
+                with self.assertRaisesRegex(manager.InstallError, "unexpected"):
+                    manager.install(root, source=self.source)
+                self.assertEqual(planted.read_bytes(), before)
+                self.assertFalse((root / ".SYSTEMX/INSTALLATION.json").exists())
+
+    def test_active_release_rejects_added_module_before_subprocess(self):
+        self.install()
+        snapshot = manager.release_path(self.root, self.version)
+        planted = snapshot / "scripts/hashlib.py"
+        planted.write_text("raise RuntimeError('must not import')")
+        with patch.object(manager.subprocess, "run", side_effect=AssertionError("must not execute")):
+            with self.assertRaisesRegex(manager.InstallError, "unexpected file"):
+                manager.run(self.root, ["status"], offline=True, capture=True)
+        self.assertEqual(planted.read_text(), "raise RuntimeError('must not import')")
+
+    def test_adopted_root_module_cannot_shadow_manager_standard_library_imports(self):
+        local = self.root / ".SYSTEMX"
+        local.mkdir(parents=True)
+        marker = self.folder / "ROOT-MODULE-EXECUTED"
+        planted = local / "hashlib.py"
+        planted.write_text("from pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('executed')\n")
+        self.install()
+        result = subprocess.run(["bash", str(local / "SYSTEMX.sh"), "status"],
+                                cwd=self.folder, env={**os.environ, "PYTHONPATH": str(local)},
+                                text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        result = subprocess.run([sys.executable, "-I", "-B", str(local / "manager.py"), "status", "--target", str(self.root)],
+                                cwd=self.folder, env={**os.environ, "PYTHONPATH": str(local)},
+                                text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(marker.exists())
+        self.assertTrue(planted.is_file())
+
+    def test_initial_adoption_refuses_different_executable_defaults_without_overwriting(self):
+        local = self.root / ".SYSTEMX"
+        local.mkdir(parents=True)
+        planted = local / "lifecycle.py"
+        planted.write_text("raise RuntimeError('preplanted code')\n")
+        preview = self.install(dry_run=True)
+        self.assertTrue(any("Existing executable default differs" in item for item in preview["conflicts"]))
+        with self.assertRaisesRegex(manager.InstallError, "Existing executable default differs"):
+            self.install()
+        self.assertEqual(planted.read_text(), "raise RuntimeError('preplanted code')\n")
+        self.assertFalse((local / "INSTALLATION.json").exists())
+
+    def test_release_cache_rejects_links_and_unexpected_empty_directories(self):
+        version = (self.source / "VERSION").read_text().strip()
+        for kind in ("link", "directory"):
+            with self.subTest(kind=kind):
+                root = self.folder / ("snapshot-" + kind)
+                snapshot = root / ".SYSTEMX/.systemx/releases" / version
+                snapshot.mkdir(parents=True)
+                entry = snapshot / "unexpected"
+                if kind == "link":
+                    entry.symlink_to(self.source, target_is_directory=True)
+                    message = "link or junction"
+                else:
+                    entry.mkdir()
+                    message = "unexpected directory"
+                with self.assertRaisesRegex(manager.InstallError, message):
+                    manager.install(root, source=self.source)
+                self.assertTrue(entry.is_symlink() if kind == "link" else entry.is_dir())
+
+    def test_permissive_source_read_ignores_generated_unlisted_cache(self):
+        generated = self.source / "scripts/__pycache__/generated.pyc"
+        generated.parent.mkdir()
+        generated.write_bytes(b"local generated file")
+        bundle = manager.read_bundle(self.source)
+        self.assertNotIn("scripts/__pycache__/generated.pyc", bundle["files"])
+
     def test_managed_runner_reads_and_changes_project_records_not_blank_snapshot(self):
         self.install()
         (self.root / ".SYSTEMX/templates/AGENT-MEMORY.md").write_text("Old customized default; preserve this file")
@@ -182,44 +267,83 @@ class ManagerTests(unittest.TestCase):
         self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
 
     def test_alpha_update_preserves_records_and_graduates_to_stable(self):
-        self.write_manifest("1.6.0-alpha.2")
+        self.write_manifest("1.8.7-alpha.2")
         self.install()
         manager.set_policy(self.root, pin="none", auto_update="on-start")
         before = self.root_files()
-        self.next_release("1.6.0-alpha.10")
+        self.next_release("1.8.7-alpha.10")
         bundle = manager.read_bundle(self.source)
         with patch.object(manager, "latest_version", return_value=bundle["version"]) as latest, \
              patch.object(manager, "remote_bundle", return_value=bundle), redirect_stderr(io.StringIO()):
             manager.startup_update(self.root)
             latest.assert_called_once_with(manager.DEFAULT_REPOSITORY, channel="alpha")
         self.assertEqual(manager.status(self.root)["releaseChannel"], "alpha")
-        self.write_manifest("1.6.0")
+        self.write_manifest("1.8.7")
         manager.update(self.root, source=self.source)
         self.assertEqual(manager.status(self.root)["releaseChannel"], "stable")
-        self.assertEqual(manager.status(self.root)["retainedVersions"], ["1.6.0-alpha.2", "1.6.0-alpha.10", "1.6.0"])
+        self.assertEqual(manager.status(self.root)["retainedVersions"], ["1.8.7-alpha.2", "1.8.7-alpha.10", "1.8.7"])
         for name, data in before.items():
             self.assertEqual((self.root / ".SYSTEMX" / name).read_bytes(), data)
 
-    def test_implicit_downgrade_rejected_but_explicit_rollback_allowed(self):
-        self.write_manifest("1.6.0-alpha.10")
+    def test_implicit_downgrade_rejected_but_compatible_explicit_rollback_allowed(self):
+        self.write_manifest("1.8.7-alpha.10")
         self.install()
         manager.set_policy(self.root, pin="none")
-        self.next_release("1.6.0-alpha.2")
+        self.next_release("1.8.7-alpha.2")
         bundle = manager.read_bundle(self.source)
         with patch.object(manager, "latest_version", return_value=bundle["version"]), \
              patch.object(manager, "remote_bundle", return_value=bundle):
             with self.assertRaisesRegex(manager.InstallError, "downgrade"):
                 manager.update(self.root)
-            manager.update(self.root, version="1.6.0-alpha.2")
-        self.assertEqual(manager.status(self.root)["activeVersion"], "1.6.0-alpha.2")
+            manager.update(self.root, version="1.8.7-alpha.2")
+        self.assertEqual(manager.status(self.root)["activeVersion"], "1.8.7-alpha.2")
 
     def test_stable_project_discovers_only_stable_channel(self):
-        self.write_manifest("1.5.0")
+        self.write_manifest("1.8.7")
         self.install()
         manager.set_policy(self.root, pin="none", auto_update="on-start")
-        with patch.object(manager, "latest_version", return_value="1.5.0") as latest:
+        with patch.object(manager, "latest_version", return_value="1.8.7") as latest:
             manager.startup_update(self.root)
             latest.assert_called_once_with(manager.DEFAULT_REPOSITORY, channel="stable")
+
+    def test_pre_isolation_release_is_refused_for_new_managed_install(self):
+        self.write_manifest("1.8.6-alpha.1")
+        with self.assertRaisesRegex(manager.InstallError, "predates isolated runner"):
+            self.install(dry_run=True)
+        self.assertFalse((self.root / ".SYSTEMX/INSTALLATION.json").exists())
+
+    def test_retained_legacy_runner_remains_usable_through_isolated_compatibility_shim(self):
+        runner = self.source / "scripts/systemx.py"
+        text = runner.read_text().replace(
+            'SCRIPTS = Path(__file__).resolve().parent\nsys.path.insert(0, str(SCRIPTS))\n', '')
+        runner.write_text(text)
+        self.write_manifest("1.8.6-alpha.1")
+        old = manager.read_bundle(self.source)
+        manager.apply_bundle(self.root, old, None, "project", manager.DEFAULT_REPOSITORY)
+        marker = self.folder / "OLD-RUNNER-MODULE-EXECUTED"
+        planted = self.root / ".SYSTEMX/hashlib.py"
+        planted.write_text("from pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('executed')\n")
+        with patch.dict(os.environ, {"PYTHONPATH": str(planted.parent)}):
+            result = manager.run(self.root, ["status"], offline=True, capture=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(marker.exists())
+
+    def test_bootstrap_refresh_adds_helper_absent_from_all_retained_legacy_releases(self):
+        helper = self.source / "versions.py"
+        current_bytes = helper.read_bytes()
+        helper.unlink()
+        self.write_manifest("1.5.0")
+        old = manager.read_bundle(self.source)
+        manager.apply_bundle(self.root, old, None, "project", manager.DEFAULT_REPOSITORY)
+        self.assertFalse((self.root / ".SYSTEMX/versions.py").exists())
+        helper.write_bytes(current_bytes)
+        self.write_manifest(self.version)
+        preview = manager.bootstrap_refresh(self.root, source=self.source)
+        self.assertIn("versions.py", preview["add"])
+        self.assertFalse(preview["conflicts"])
+        applied = manager.bootstrap_refresh(self.root, source=self.source, apply=True)
+        self.assertTrue(applied["applied"])
+        self.assertEqual((self.root / ".SYSTEMX/versions.py").read_bytes(), current_bytes)
 
     def test_cli_reports_tool_version_without_a_project(self):
         result = subprocess.run([sys.executable, "-B", str(self.source / "manager.py"), "--version"],
@@ -270,10 +394,92 @@ class ManagerTests(unittest.TestCase):
             for name, data in bundle["files"].items():
                 output.writestr("repo-tag/.SYSTEMX/" + name, data)
             output.writestr("repo-tag/application.txt", "Must not install the application")
-        with patch.object(manager, "get_url", return_value=archive.getvalue()):
-            fetched = manager.remote_bundle(self.version)
+        raw_archive = archive.getvalue()
+        expected = hashlib.sha256(raw_archive).hexdigest()
+        with patch.object(manager, "get_url", return_value=raw_archive):
+            fetched = manager.remote_bundle(self.version, expected_archive_sha256=expected)
         self.assertEqual(fetched["manifestSha256"], bundle["manifestSha256"])
+        self.assertEqual(fetched["archiveDigest"], {"sha256": expected, "verifiedBy": "explicit-pin"})
         self.assertNotIn("application.txt", fetched["files"])
+        with patch.object(manager, "get_url", return_value=b"not a zip archive"):
+            with self.assertRaisesRegex(manager.InstallError, "does not match the explicit pin"):
+                manager.remote_bundle(self.version, expected_archive_sha256="0" * 64)
+
+    def test_archive_pin_requires_exact_remote_version_and_is_recorded(self):
+        for kwargs in ({"source": self.source, "archive_sha256": "0" * 64},
+                       {"archive_sha256": "0" * 64}, {"version": self.version, "archive_sha256": "BAD"}):
+            with self.subTest(kwargs=kwargs), self.assertRaises(manager.InstallError):
+                manager.install(self.root, **kwargs)
+        self.install()
+        state_path = self.root / ".SYSTEMX/INSTALLATION.json"
+        state = json.loads(state_path.read_text())
+        self.assertEqual(state["schemaVersion"], 2)
+        self.assertIsNone(state["archiveDigests"][self.version])
+
+    def test_explicit_archive_receipt_survives_same_release_source_retry(self):
+        bundle = manager.read_bundle(self.source)
+        receipt = {"sha256": "a" * 64, "verifiedBy": "explicit-pin"}
+        bundle["archiveDigest"] = receipt
+        with patch.object(manager, "remote_bundle", return_value=bundle):
+            manager.install(self.root, version=self.version, archive_sha256=receipt["sha256"])
+        self.assertEqual(manager.status(self.root)["archiveDigest"], receipt)
+        manager.update(self.root, source=self.source)
+        self.assertEqual(manager.status(self.root)["archiveDigest"], receipt)
+
+    def test_legacy_bootstrap_requires_explicit_backed_up_refresh_before_update(self):
+        old_bytes = (self.source / "manager.py").read_bytes() + b"\n# Previous reviewed bootstrap\n"
+        (self.source / "manager.py").write_bytes(old_bytes)
+        old_launcher = (self.source / "SYSTEMX.sh").read_bytes().replace(
+            b'"$SYSTEMX_PYTHON" -I -B "$SYSTEMX_DIR/manager.py"',
+            b'"$SYSTEMX_PYTHON" -B "$SYSTEMX_DIR/manager.py"')
+        (self.source / "SYSTEMX.sh").write_bytes(old_launcher)
+        self.write_manifest()
+        self.install()
+        root_manager = self.root / ".SYSTEMX/manager.py"
+        root_launcher = self.root / ".SYSTEMX/SYSTEMX.sh"
+        self.assertEqual(root_manager.read_bytes(), old_bytes)
+        self.assertEqual(root_launcher.read_bytes(), old_launcher)
+        state_path = self.root / ".SYSTEMX/INSTALLATION.json"
+        legacy = json.loads(state_path.read_text())
+        legacy["schemaVersion"] = 1
+        legacy.pop("archiveDigests")
+        state_path.write_text(json.dumps(legacy))
+        (self.source / "manager.py").write_bytes((SOURCE / "manager.py").read_bytes())
+        (self.source / "SYSTEMX.sh").write_bytes((SOURCE / "SYSTEMX.sh").read_bytes())
+        self.write_manifest(self.next_version)
+        manager.set_policy(self.root, pin="none")
+        with self.assertRaisesRegex(manager.InstallError, "bootstrap-refresh"):
+            manager.update(self.root, source=self.source)
+        self.assertEqual(root_manager.read_bytes(), old_bytes)
+        preview = manager.bootstrap_refresh(self.root, source=self.source)
+        self.assertEqual(preview["replace"], ["manager.py", "SYSTEMX.sh"])
+        self.assertFalse(preview["applied"])
+        self.assertEqual(root_manager.read_bytes(), old_bytes)
+        refreshed = manager.bootstrap_refresh(self.root, source=self.source, apply=True)
+        self.assertTrue(refreshed["applied"])
+        self.assertEqual((Path(refreshed["backup"]) / "manager.py").read_bytes(), old_bytes)
+        self.assertEqual((Path(refreshed["backup"]) / "SYSTEMX.sh").read_bytes(), old_launcher)
+        self.assertEqual(root_launcher.read_bytes(), (SOURCE / "SYSTEMX.sh").read_bytes())
+        manager.update(self.root, source=self.source)
+        result = subprocess.run(["bash", str(self.root / ".SYSTEMX/SYSTEMX.sh"), "status"],
+                                cwd=self.folder, text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(manager.status(self.root)["activeVersion"], self.next_version)
+
+    def test_schema_one_installation_state_migrates_without_losing_release_history(self):
+        self.install()
+        path = self.root / ".SYSTEMX/INSTALLATION.json"
+        state = json.loads(path.read_text())
+        state["schemaVersion"] = 1
+        state.pop("archiveDigests")
+        path.write_text(json.dumps(state))
+        loaded = manager.load_state(self.root)
+        self.assertEqual(loaded["schemaVersion"], 2)
+        self.assertEqual(loaded["archiveDigests"], {self.version: None})
+        manager.set_policy(self.root, pin="none")
+        persisted = json.loads(path.read_text())
+        self.assertEqual(persisted["schemaVersion"], 2)
+        self.assertEqual(persisted["archiveDigests"], {self.version: None})
 
     def test_chat_export_is_local_bounded_and_never_overwrites(self):
         self.install(profile="chat")

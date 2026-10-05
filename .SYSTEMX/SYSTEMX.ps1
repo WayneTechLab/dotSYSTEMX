@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $manager = Join-Path $PSScriptRoot 'manager.py'
-$parameters = @('-B', $manager, 'run', '--target', $projectRoot, '--') + $args
+$parameters = @('-I', '-B', $manager, 'run', '--target', $projectRoot, '--') + $args
 if (Get-Command py -ErrorAction SilentlyContinue) {
     & py -3 @parameters
 } elseif (Get-Command python3 -ErrorAction SilentlyContinue) {

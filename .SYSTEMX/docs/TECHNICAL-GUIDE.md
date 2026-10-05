@@ -24,10 +24,10 @@ Host project
     ├── Projects/REGISTRY.json      explicit child identities
     ├── Projects/NAME/.SYSTEMXP     isolated child records; no nested installation
     ├── project.json               explicit project command arguments
-    ├── INSTALLATION.json          selected defaults and update policy
+    ├── INSTALLATION.json          selected defaults, update policy, archive receipts
     └── .systemx                   internal manager storage
         ├── releases/<version>     retained, fingerprinted default snapshots
-        ├── history                previous installation metadata
+        ├── history                previous state and explicit bootstrap backups
         └── operations             local installation operation receipts
 ```
 
@@ -39,7 +39,7 @@ folder. It is different from the nested manager cache. Follow the
 
 | Component | Responsibility |
 | --- | --- |
-| `manager.py` | Install/update, release checks, pins, profiles, first run, audit, uninstall, restore, chat export |
+| `manager.py` | Install/update, explicit bootstrap refresh, release checks, pins, profiles, first run, audit, uninstall, restore, chat export |
 | `systemx_paths.py` | Exact stored spelling, project boundaries, case-conflict and alias checks |
 | `lifecycle.py` | File inventories, raw-byte hashes, atomic JSON receipts, backup boundaries |
 | `scripts/systemx.py` | Configuration validation, menu, doctor, explicitly configured commands |
@@ -51,11 +51,22 @@ folder. It is different from the nested manager cache. Follow the
 | `config/distribution.json` | Explicit public file inventory with release fingerprints |
 | `config/template-records.json` | Reviewed blank seed fingerprints |
 
-The library and CLI use the same manager functions. A managed run verifies its
-selected default snapshot and invokes its runner with `--root` pointing to the
-outer project records. Old root defaults are preserved. Task state is stored once
-in `WORK/TASKS.json`; CURRENT and status pages are derived views. The
+The library and CLI use the same manager functions. Refreshed stock launchers
+invoke both managed and unmanaged tools in Python isolated mode (`-I`). A direct `manager.py`
+invocation also removes its script directory from Python's global import path and
+loads its named local helpers through a private package, so unlisted root files
+in an adopted `.SYSTEMX` cannot shadow standard-library imports. A managed run
+verifies its selected default snapshot and invokes its runner with `-I -B` and `--root`
+pointing to the outer project records. Old root guidance remains preserved;
+stock launcher updates require explicit bootstrap refresh. Task state is stored
+once in `WORK/TASKS.json`; CURRENT and status pages are derived views. The
 [format contract](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Standard-Format) defines record fields and transitions.
+The current manager inspects older installation state but refuses to install or
+newly select releases before 1.8.7-alpha.1, where native isolated runner support
+begins. For an already selected, verified older snapshot, it launches an isolated
+child with a compatibility shim that adds only that verified snapshot's scripts
+directory to the child import path. The old code still runs with its historical
+behavior. Reselecting a pre-floor release requires separately reviewed recovery.
 
 ## Installation lifecycle
 
@@ -64,11 +75,35 @@ folder, pins a new installation, and creates an empty `project.json` only when
 absent. It executes no project checks or app setup commands. Existing managed
 versions and policies remain selected. Follow [first-time setup](FIRST-RUN.md).
 
-Updates add snapshots and missing root files. They do not replace project records
-or remove upstream-deleted files. Manual updates remain the default; startup
-checks are opt-in and major upgrades require review. Distribution hashes normalize
-CRLF to LF for portable text checkouts. They check consistency with the manifest;
-they are not independent release signatures.
+Ordinary updates add snapshots and missing root files. They do not replace
+project records or remove upstream-deleted files. Fresh adoption rejects a
+manifest-listed executable default whose existing contents differ from the
+reviewed distribution. A changed-release update also requires the eight root
+bootstrap and launcher files to match the destination release. A separate,
+preview-first
+`bootstrap-refresh` accepts only stock contents from the destination or intact
+retained release snapshots, stores exact backups for recognized replacements,
+and may create a missing stock file only if no retained release ever contained
+it. A file missing from the root despite its presence in a retained release is
+a conflict. It explicitly replaces only recognized files, including stock shell
+and PowerShell launchers. It does
+not update customized launchers or project-owned records. An opted-in startup
+update that needs a bootstrap refresh keeps the old
+verified selection until the refresh is done manually. Manual updates remain the
+default; startup checks are opt-in and major upgrades require review.
+Distribution hashes normalize CRLF to LF for portable text checkouts. They
+check consistency with the manifest;
+they are not independent release signatures. A selected release cache must also
+have exactly the expected files and parent directories: unlisted modules,
+packages, links, special entries, and unexpected directories are rejected before
+the cached runner executes. Partial snapshots can be resumed only when every
+present entry matches the reviewed distribution.
+
+An exact remote tag ZIP can have a separately trusted raw SHA-256 pin checked
+before archive parsing. `INSTALLATION.json` records `explicit-pin`,
+`observed-only`, or no remote digest for each selected release. Startup discovery
+does not have an independent digest pin. Neither the manifest nor an observed
+digest makes a movable tag immutable. See [installation](INSTALLATION.md).
 
 Uninstall is a separate explicit operation: it inventories the complete folder,
 moves it to an external backup on the same filesystem, removes a valid local alias,
@@ -79,7 +114,11 @@ against that receipt and refuses an occupied destination. See
 
 ## Concurrency, integrity, and logs
 
-Install/update and removal use an exclusive local writer lock. Operation receipts
+Install/update and removal use an exclusive local writer lock. Task, Agent X, and
+Agent Z command writes use a separate per-scope coordination lock. Cooperating
+coordination writers wait up to one second; the lock records a token, PID, host,
+and creation time. On a crash it remains for manual inspection and is never
+automatically removed as "stale." Operation receipts
 record started, completed, or failed work; an abrupt process termination can leave
 a started receipt and stale lock. Check the owner before recovery. Installation
 state and lifecycle receipts are written through temporary files and atomic

@@ -15,6 +15,6 @@ if [[ -z "$SYSTEMX_PYTHON" ]]; then
   exit 2
 fi
 if [[ -f "$SYSTEMX_DIR/INSTALLATION.json" ]]; then
-  exec "$SYSTEMX_PYTHON" -B "$SYSTEMX_DIR/manager.py" run --target "$(dirname "$SYSTEMX_DIR")" -- "$@"
+  exec "$SYSTEMX_PYTHON" -I -B "$SYSTEMX_DIR/manager.py" run --target "$(dirname "$SYSTEMX_DIR")" -- "$@"
 fi
-exec "$SYSTEMX_PYTHON" -B "$SYSTEMX_DIR/scripts/systemx.py" "$@"
+exec "$SYSTEMX_PYTHON" -I -B "$SYSTEMX_DIR/scripts/systemx.py" "$@"

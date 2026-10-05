@@ -6,7 +6,10 @@ import json
 import os
 from pathlib import Path
 import re
+import socket
 import tempfile
+import time
+import uuid
 
 VIEWS = {
     "todo": "TODO.md", "in_progress": "WORKING-ON.md", "blocked": "BLOCKED.md",
@@ -33,6 +36,12 @@ REQUIRED = (
     "CURRENT.md", "WORK/FOCUS.json", "docs/EVIDENCE.md", "docs/UPGRADING.md",
     "templates/EVIDENCE.md", "templates/WORKER-REPORT.md",
 ) + tuple("WORK/" + name for name in VIEWS.values())
+TIMESTAMP = re.compile(
+    r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}"
+    r"(?:\.[0-9]{1,6})?(?:Z|[+-][0-9]{2}:[0-9]{2})"
+)
+COORDINATION_WAIT_SECONDS = 1.0
+COORDINATION_POLL_SECONDS = 0.05
 
 
 def managed(root, relative):
@@ -83,6 +92,8 @@ def strings(value, label, nonempty=False):
 
 def timestamp(value):
     string(value, "timestamp")
+    if not TIMESTAMP.fullmatch(value):
+        raise ValueError("Timestamps must use YYYY-MM-DDTHH:MM:SS[.ffffff]Z or an explicit +/-HH:MM offset")
     parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
     if parsed.tzinfo is None:
         raise ValueError("Timestamps must include a timezone")
@@ -351,17 +362,80 @@ def atomic_write(root, relative, content):
             temporary.unlink()
 
 
+def coordination_owner(root):
+    relative = "state/coordination.lock/owner.json"
+    path = managed(root, relative)
+    try:
+        if not path.is_file() or path.stat().st_size > 16384:
+            return None
+        owner = read_json(root, relative)
+        fields(owner, ("schemaVersion", "token", "pid", "host", "createdAt"), "Coordination lock owner")
+        if (type(owner["schemaVersion"]) is not int or owner["schemaVersion"] != 1 or
+                type(owner["pid"]) is not int or owner["pid"] <= 0):
+            return None
+        for key in ("token", "host"):
+            string(owner[key], "Coordination lock " + key)
+        timestamp(owner["createdAt"])
+        return owner
+    except (OSError, UnicodeError, ValueError, TypeError):
+        return None
+
+
 @contextmanager
-def coordination_lock(root):
+def coordination_lock(root, wait_seconds=COORDINATION_WAIT_SECONDS):
+    if not isinstance(wait_seconds, (int, float)) or isinstance(wait_seconds, bool) or wait_seconds < 0:
+        raise ValueError("Coordination lock wait must be a nonnegative number of seconds")
     lock = managed(root, "state/coordination.lock")
     lock.parent.mkdir(parents=True, exist_ok=True)
+    deadline = time.monotonic() + wait_seconds
+    while True:
+        try:
+            lock.mkdir()
+            break
+        except FileExistsError as error:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                owner = coordination_owner(root)
+                detail = ("; owner pid {pid} on {host} since {createdAt}".format(**owner)
+                          if owner else "; owner metadata is absent or invalid")
+                raise ValueError(
+                    "Coordination writer is busy or a stale lock exists" + detail +
+                    "; inspect state/coordination.lock and never delete an active owner's lock") from error
+            time.sleep(min(COORDINATION_POLL_SECONDS, remaining))
+    owner_path = lock / "owner.json"
+    owner_identity = None
     try:
-        lock.mkdir()
-    except FileExistsError as error:
-        raise ValueError("Coordination writer is busy or a stale lock exists; inspect state/coordination.lock") from error
+        owner = {"schemaVersion": 1, "token": uuid.uuid4().hex, "pid": os.getpid(),
+                 "host": socket.gethostname(), "createdAt": now()}
+        with owner_path.open("x", encoding="utf-8") as output:
+            info = os.fstat(output.fileno())
+            owner_identity = (info.st_dev, info.st_ino)
+            json.dump(owner, output, sort_keys=True)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+    except BaseException:
+        # A write failure can leave a partial owner file. Remove only the file
+        # created by this writer; retain any entry another process replaced.
+        if owner_identity is not None:
+            try:
+                info = owner_path.lstat()
+                if (info.st_dev, info.st_ino) == owner_identity:
+                    owner_path.unlink()
+            except FileNotFoundError:
+                pass
+        try:
+            lock.rmdir()
+        except OSError:
+            pass
+        raise
     try:
         yield
     finally:
+        current = coordination_owner(root)
+        if current is None or current["token"] != owner["token"]:
+            raise ValueError("Coordination lock ownership changed; refusing to remove another or unverifiable lock")
+        owner_path.unlink()
         lock.rmdir()
 
 
@@ -379,7 +453,7 @@ def save_ledger(root, ledger, registry):
 
 
 def now():
-    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    return datetime.now(timezone.utc).isoformat(timespec="microseconds").replace("+00:00", "Z")
 
 
 def event(task, note):

@@ -12,6 +12,12 @@ The default [policy](../config/agent-z-policy.json) contains exactly 10 categori
 10 questions per category, and 100 stable question IDs. The same ordered questions
 are presented on every call using that policy version. No model generates new
 questions during a review.
+Default policy **1.1.0** strengthens two existing IDs without expanding the
+question count: `Z03.06` asks whether each decisive claim has a second independent
+source where feasible, with conflicts resolved or flagged; `Z06.06` asks whether
+each decisive check was shown able to fail on a relevant known-bad, negative, or
+refusal input. A project-owned policy is never rewritten by a defaults update.
+Adopt the new wording through an explicit local policy version change.
 
 | Category | Scope |
 | --- | --- |
@@ -108,9 +114,21 @@ authority, and unresolved critical findings override any aggregate score.
 bash .SYSTEMX/SYSTEMX.sh agent-z compare Z_PREVIOUS_ID Z_CURRENT_ID
 ```
 
-Use two complete returned report IDs. Comparison requires the same subject and
-policy fingerprint. It reports total/category point changes, question-level
-result changes, changed evidence/notes, and before/after source/evidence versions.
+Use two complete returned report IDs in **earlier, later** order. Comparison
+requires the same subject and policy fingerprint. A distinct `after` report
+scored earlier than `before` is rejected. If distinct reports share a timestamp,
+the comparison returns `orderingVerified: false` and `direction: order-unverified`:
+point and category differences are shown, but their temporal direction cannot
+be established. The same report may be compared to itself. A comparison also
+rejects a return to an earlier evidence stage. It
+reports total/category point changes, the applicable-maximum change,
+question-level result changes, changed evidence/notes, and before/after
+source/evidence versions. The direction is `scope-changed` whenever any question
+changes applicability, even if the total number of applicable questions stays
+the same. Inspect the before/after applicable percentages and question changes
+rather than calling a changed scope an improvement or regression. With verified
+time order and unchanged applicability, `improved`, `regressed`, or `unchanged`
+describes the raw point change, not an acceptance decision.
 A policy change requires a new baseline; the tool refuses a misleading numeric
 comparison. Historical reports keep their exact question set and answers.
 

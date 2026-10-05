@@ -13,4 +13,4 @@ if [[ -z "$SYSTEMX_PYTHON" ]]; then
     exit 2
   fi
 fi
-exec "$SYSTEMX_PYTHON" -B "$SYSTEMX_DIR/manager.py" install "$@"
+exec "$SYSTEMX_PYTHON" -I -B "$SYSTEMX_DIR/manager.py" install "$@"

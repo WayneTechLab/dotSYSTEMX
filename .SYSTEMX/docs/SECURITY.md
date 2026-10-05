@@ -44,6 +44,32 @@ avoid accidental shell interpolation, but a configured executable can still
 read files, install software, write data, or contact external services. Review
 the command source and scope before running it.
 
+For the SYSTEMX manager itself, select reviewed release versions and prefer an
+independently trusted SHA-256 pin for the exact remote codeload ZIP when using
+`--version`. An internal manifest and a digest observed from the same downloaded
+archive do not prove publisher identity. The selected default cache refuses
+unlisted executable content before invoking its runner; do not work around that
+check by deleting unknown entries without investigating their origin. See
+[installation integrity](INSTALLATION.md#select-lock-or-update-a-version).
+
+Direct `manager.py` execution isolates its own imports from extra files in an
+adopted `.SYSTEMX` root. Fresh adoption rejects conflicting manifest-listed
+executable defaults. Existing managed projects must use a reviewed new external
+manager for any explicit `bootstrap-refresh`; preview conflicts first, retain
+its original-file backup, and inspect customized or unrecognized code manually.
+That operation replaces only eight recognized root bootstrap and launcher files.
+Refreshed stock launchers invoke the manager with Python isolated mode (`-I`).
+It does not authenticate third-party scripts, replace customized wrappers, or
+make an old project safe to run without its own review.
+The current manager refuses to install or newly select a release older than
+1.8.7-alpha.1, the start of native isolated runner support. It can inspect and
+run an already selected verified older snapshot through an isolated compatibility
+shim while an external migration is prepared. Only the verified snapshot's
+scripts directory enters that isolated child's import path; the old runner's
+historical behavior and security limits remain. Do not treat this compatibility
+path as a code upgrade. Reselection below the floor needs a separately reviewed
+backup or legacy recovery path.
+
 ## Data and public artifacts
 
 Collect only needed data, limit access, define retention/deletion, and use

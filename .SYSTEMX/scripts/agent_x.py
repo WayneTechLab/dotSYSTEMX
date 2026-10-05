@@ -26,6 +26,13 @@ def actor(value):
     memory.string(value["id"], "Actor ID")
 
 
+def event_time(event):
+    occurred = memory.timestamp(event["at"])
+    recorded = memory.timestamp(event["recordedAt"])
+    if event["stage"] != "planned" and occurred > recorded:
+        raise ValueError("Only planned events may occur after their recording time")
+
+
 def load_events(root):
     data = records.read(root, EVENTS)
     memory.fields(data, ("schemaVersion", "events"), "Event ledger")
@@ -43,11 +50,10 @@ def load_events(root):
         if event["id"] != "EVT-" + records.fingerprint(event["key"])[:20] or event["id"] in seen:
             raise ValueError("Duplicate or inconsistent event identity")
         seen.add(event["id"])
-        utc(event["at"])
-        utc(event["recordedAt"])
         actor(event["actor"])
         if event["kind"] not in KINDS or event["stage"] not in STAGES:
             raise ValueError("Unknown event kind or evidence stage")
+        event_time(event)
         memory.strings(event["evidence"], "Event evidence")
         memory.strings(event["tasks"], "Event tasks")
         if len(event["tasks"]) != len(set(event["tasks"])) or any(task not in known_tasks for task in event["tasks"]):
@@ -76,6 +82,9 @@ def add_event(root, args):
         for name in ("key", "summary", "revision"):
             memory.string(item[name], "Event " + name)
         actor(item["actor"])
+        if item["kind"] not in KINDS or item["stage"] not in STAGES:
+            raise ValueError("Unknown event kind or evidence stage")
+        event_time(item)
         if item["stage"] in {"checked", "deployed", "live_verified"} and not item["evidence"]:
             raise ValueError("This evidence stage requires --evidence")
         memory.strings(item["evidence"], "Event evidence")

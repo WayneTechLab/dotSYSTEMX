@@ -22,6 +22,25 @@ their manifest; they do not independently authenticate a publisher. Avoid
 administrator privileges, protect project data and operation logs, coordinate
 writers, and keep recoverable backups.
 
+For an exact remote manager install or update, `--archive-sha256` can pin the
+raw codeload tag ZIP to a digest obtained through a separately trusted channel.
+The selected release cache also rejects files absent from the manifest before
+running its Python code. Automatic startup discovery has no independent archive
+pin. Inspect [installation guidance](.SYSTEMX/docs/INSTALLATION.md) before
+enabling it or accepting a new release.
+
+Fresh adoption refuses conflicting executable defaults. A managed project's
+older root bootstrap must be explicitly refreshed from a reviewed new external
+tool before a changed-release update; that limited operation backs up and
+replaces only eight recognized stock bootstrap and launcher files, with the
+refreshed launchers using Python isolated mode (`-I`). It does not replace
+customized wrappers or approve customized local code.
+This manager refuses to install or newly select releases older than
+1.8.7-alpha.1. It can inspect and run an already selected, verified older
+snapshot through an isolated compatibility shim during a reviewed external
+migration. The old code retains its historical behavior and security limits;
+reselection below the floor requires a separately reviewed backup or legacy path.
+
 Project-specific security guidance remains in
 [.SYSTEMX/docs/SECURITY.md](.SYSTEMX/docs/SECURITY.md). Adopting projects must define
 their own security contacts, deployment boundaries, and incident process.

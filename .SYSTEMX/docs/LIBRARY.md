@@ -12,7 +12,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.4-alpha.1"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.7-alpha.1"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -29,7 +29,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.8.4-alpha.1` is spelled `1.8.4a1` in Python package
+The public release ID `1.8.7-alpha.1` is spelled `1.8.7a1` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)
@@ -38,7 +38,7 @@ before upgrading integrations.
 ## Python API
 
 ```python
-from systemx import install, update, status, set_policy, export_chat, alias
+from systemx import install, update, bootstrap_refresh, status, set_policy, export_chat, alias
 
 # Plan without touching the target, using a local reviewed distribution:
 plan = install("/path/to/project", source="/path/to/template/.SYSTEMX",
@@ -48,9 +48,16 @@ plan = install("/path/to/project", source="/path/to/template/.SYSTEMX",
 result = install("/path/to/project", source="/path/to/template/.SYSTEMX")
 print(status("/path/to/project"))
 
+# A changed-release update may require a previewed root bootstrap refresh.
+new_source = "/path/to/new-template/.SYSTEMX"
+refresh_plan = bootstrap_refresh("/path/to/project", source=new_source)
+if refresh_plan["conflicts"]:
+    raise RuntimeError("Review the bootstrap conflict before updating")
+bootstrap_refresh("/path/to/project", source=new_source, apply=True)
+
 # Updates require explicit unlocking of the default pin:
 set_policy("/path/to/project", pin="none")
-update("/path/to/project", source="/path/to/new-template/.SYSTEMX", dry_run=True)
+update("/path/to/project", source=new_source, dry_run=True)
 
 # Export only to a new file; nothing is uploaded:
 export_chat("/path/to/project", "/path/to/new-session.md", agent="agent.0")
@@ -61,14 +68,51 @@ Management functions return structured dictionaries. `run` and `projects` return
 filesystem or network actions. The CLI renders management results as JSON and
 uses exit status 2 for a rejected operation. Project command execution preserves
 the underlying command's exit status. Use `systemx run --target ... -- <command>`
-to invoke the selected defaults against that project's canonical records.
+to invoke the selected defaults against that project's canonical records. The
+managed runner starts in Python isolated mode (`-I`) after verifying its selected
+release cache.
+
+`bootstrap_refresh` is an explicit exception to normal additive updates. It
+previews by default, accepts only eight stock root bootstrap and launcher files
+when existing copies match the intended release or an intact retained release,
+and refuses customized copies. A truly absent stock file may appear in `add` only
+if no intact retained release ever contained it; otherwise its absence is a
+conflict. With `apply=True`, it creates only those absent files, stores
+byte-for-byte originals for recognized replacements under
+`.SYSTEMX/.systemx/history/bootstrap-.../`, and replaces only recognized stock
+files. Refreshed shell/PowerShell launchers invoke the manager with Python
+isolated mode (`-I`). It does not select a version, change a pin, or update user
+records. The CLI command is
+`systemx bootstrap-refresh --target PATH [--source REVIEWED_SYSTEMX] [--apply]`.
+Use a reviewed new external library or manager for this step, not an older copy
+inside the target. See [upgrade sequence](UPGRADING.md#refresh-the-root-bootstrap-before-a-changed-release).
+This library can inspect older managed state with `status`. `install` and `update`
+and `bootstrap_refresh` refuse a target release below **1.8.7-alpha.1**, where native isolated runner
+support begins. `run` can still invoke an already selected, verified older
+snapshot through an isolated compatibility shim. Its code and record behavior
+remain historical. Reselecting an older release requires a separately reviewed
+backup or legacy path, not a library rollback flag.
 
 `install` defaults to the package's bundled version. Supply `version` to fetch a
 specific GitHub release, or `source` for offline installation. `update` uses the
-installation's selected repository unless given a local source. Downloaded files
-are bounded, path-checked, and fingerprint-verified; archives are never blindly
-extracted into a project. Existing root files are opened only for inspection or
-left alone, and missing files are created exclusively.
+installation's selected repository unless given a local source. For an explicit
+remote version, `install`, `update`, and `first_run` accept
+`archive_sha256="<64-hex digest>"`; the CLI spells this `--archive-sha256`.
+Obtain the digest independently for the **exact codeload tag ZIP** that the
+manager downloads. It is checked before ZIP parsing. It cannot be supplied with
+`source` or without `version`; opted-in startup discovery has no independent
+digest pin. A checksum for a separately published archive or wheel is not
+interchangeable. The selected digest and whether it was explicitly pinned appear
+in `status` and manager-owned installation state. See [installation](INSTALLATION.md)
+for the trust and retry boundaries.
+
+Downloaded files are bounded, path-checked, and fingerprint-verified; archives
+are never blindly extracted into a project. The selected release cache also
+rejects unexpected physical entries before executing its runner. Existing root
+files are opened only for inspection or left alone, and missing files are
+created exclusively during ordinary install/update. Fresh adoption refuses any
+manifest-listed executable `.py`, `.sh`, or `.ps1` default that already exists
+with different bytes; it does not execute or overwrite the conflicting file.
 
 These functions are a possible future adapter boundary for MCP or other tools.
 Such an adapter would still need explicit target selection, access controls,

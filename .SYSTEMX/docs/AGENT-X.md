@@ -20,7 +20,11 @@ and role identities, and is idempotent. New definitions travel with the public
 template; only Agent 0 is registered in its blank distribution so older managed
 launchers can still verify a new release. Activate X/Z only with selected defaults
 that support them. Older tools cannot read activated X/Z role IDs; restore a
-pre-activation backup before a deliberate downgrade. Updates alone do not activate
+pre-activation backup before a deliberate downgrade. The current manager cannot
+newly select releases older than 1.8.7-alpha.1, although it can run an already
+selected verified older snapshot with an isolated compatibility shim. That old
+runner still may not understand activated X/Z roles. Reselection below the floor
+requires a separately reviewed backup or legacy path. Updates alone do not activate
 roles or rewrite an existing registry.
 
 Root records live in `.SYSTEMX`; child records live in the selected `.SYSTEMXP`.
@@ -54,10 +58,18 @@ Kinds are `work`, `check`, `deploy`, `runtime`, `communication`, `schedule`,
 A checked/deployed/live-verified claim requires an evidence reference. These are
 attested claims requiring review, not automatically proven states.
 
-Occurrence time (`at`) needs an explicit UTC `Z` or numeric offset and is stored
-in UTC. `recordedAt` is the separate time the record was written. Do not replace
-an old observation's time with the current recording time. Preserve failed runs
-and original events; record corrections as new events referring to their IDs.
+Occurrence time (`at`) and recording time (`recordedAt`) use
+`YYYY-MM-DDTHH:MM:SS[.fraction]Z` or an explicit `+HH:MM`/`-HH:MM` offset, with
+one to six fractional digits when present. Seconds and a timezone are required;
+the parser rejects looser spellings consistently across supported Python
+versions. Times are compared as instants, and occurrence times are stored in UTC.
+New `recordedAt` values include microseconds.
+Only a `planned` event may have an `at` later than `recordedAt`. Completed work,
+checks, deployments, live verification, failures, cancellations, and observations
+must have occurred by the time they are recorded. The validator applies this rule
+to existing ledgers as well as new writes. Do not replace an old observation's
+time with the current recording time. Preserve failed runs and original events;
+record corrections as new events referring to their IDs.
 A repeat with the same key and same facts reuses the original record. Reusing a
 key for different facts is refused, so retries cannot silently change history.
 
@@ -117,7 +129,10 @@ reviewing the remaining delta. Neither role automatically rebuilds or repeatedly
 reviews unchanged work. See [Agent Z](AGENT-Z.md), [evidence](EVIDENCE.md), and
 [SYSTEMX PROJECTS](PROJECTS.md).
 
-Use one cooperating writer per scope. CLI writes use the existing local
-coordination lock; that is not a distributed lock or protection against manual
-editors. Event and schedule facts are private project data when appropriate.
+Use one cooperating writer per scope. CLI writes wait up to one second for the
+local coordination lock, then report the recorded owner process ID, host, and
+creation time. A crash can leave that directory behind. Confirm that the owner
+has stopped before manually removing a stale lock; the CLI never guesses or
+removes one automatically. This is not a distributed lock or protection against
+manual editors. Event and schedule facts are private project data when appropriate.
 Updates preserve these records; whole-installation backup/restore includes them.

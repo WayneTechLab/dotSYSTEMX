@@ -2,11 +2,11 @@
 $ErrorActionPreference = 'Stop'
 $runner = Join-Path $PSScriptRoot 'manager.py'
 if (Get-Command py -ErrorAction SilentlyContinue) {
-    & py -3 -B $runner install @args
+    & py -3 -I -B $runner install @args
 } elseif (Get-Command python3 -ErrorAction SilentlyContinue) {
-    & python3 -B $runner install @args
+    & python3 -I -B $runner install @args
 } elseif (Get-Command python -ErrorAction SilentlyContinue) {
-    & python -B $runner install @args
+    & python -I -B $runner install @args
 } else {
     throw 'Install Python 3.9 or newer, then run this installer again.'
 }

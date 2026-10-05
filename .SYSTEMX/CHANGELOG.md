@@ -4,6 +4,68 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.7-alpha.1 — Release integrity and coordination hardening
+
+- Reject unlisted files, packages, links, and other unexpected entries in a
+  retained default snapshot before its Python runner can execute. A partial
+  interrupted update can still be retried without replacing or deleting local
+  project files.
+- Isolated direct `manager.py` imports from an adopted `.SYSTEMX` root so a
+  project-owned module cannot shadow Python standard-library imports. Fresh
+  adoption now refuses a manifest-listed executable default whose existing
+  bytes differ from the reviewed distribution.
+- Added preview-first `bootstrap-refresh` for eight stock root bootstrap and
+  launcher files: four Python helpers and four shell/PowerShell entry points. It
+  accepts only recognized contents from intact retained releases, saves the
+  original bytes of replacements under local history, and explicitly replaces
+  those files. It may create a missing stock file absent from every intact
+  retained historical release (such as v1.5.0's missing `versions.py`); a file
+  previously present but now missing is a conflict. A changed-release update
+  refuses an older bootstrap or launcher until this
+  reviewed refresh is complete. Refreshed launchers and the selected runner use
+  Python isolated mode (`-I`); customized wrappers require manual review.
+- The current manager refuses installation and new selection of releases older
+  than 1.8.7-alpha.1, the native isolated runner floor. It can inspect and run
+  an already selected verified older snapshot through an isolated compatibility
+  shim during external migration; the old code keeps its historical behavior.
+  Historical reselection needs a separate reviewed backup or legacy path.
+- Added an optional `--archive-sha256` pin for an exact remote tag ZIP. The
+  digest is checked before archive parsing and its verification mode is recorded
+  with the installation. Automatic startup discovery remains opt-in and does not
+  supply an independent archive pin.
+- Agent X now rejects future occurrence times for every non-`planned` event and
+  validates the same rule when reading existing ledgers. Timestamp spelling is
+  consistent across supported Python versions.
+- Coordination writers wait briefly for a local lock. The lock records process,
+  host, and creation time to support manual stale-lock inspection; it is not a
+  distributed lock and is never removed automatically after a crash.
+- Agent Z default policy 1.1.0 asks for independent corroboration of decisive
+  claims and proof that decisive checks can fail on relevant bad inputs. Report
+  comparison rejects reversed time order and evidence-stage regressions, and
+  marks any per-question applicability change as a scope change rather than
+  progress. Distinct reports with equal timestamps return an unverified order
+  instead of a misleading improvement or regression label.
+- Enabled immutable GitHub releases for subsequently published versions,
+  disabled repository GitHub Actions, and removed the workflow. Maintainers run
+  documented validation, tests, package, and release checks locally.
+- The selected-release cache guard and new metadata are manager-owned. Ordinary
+  updates still preserve existing project records and root files; the separate,
+  explicit bootstrap refresh is the limited exception for eight stock files.
+  Agent Z policy copies, task history, and update pins remain preserved.
+
+## 1.8.6-alpha.1 — Curated media library
+
+- Organized the current white paper and four 4K workflow cards into
+  `MEDIA/White-Paper` and `MEDIA/Infographics`, with editing references in
+  `MEDIA/Reference`. Older editions and original images remain available in
+  prior release history.
+
+## 1.8.5-alpha.1 — Illustrated paper and publication format
+
+- Published the illustrated edition 1.2 research paper with a reusable
+  publication template, source bibliography, linked figures, and updated PDF
+  builder. The media edition and template release have separate version IDs.
+
 ## 1.8.4-alpha.1 - Expanded white paper and audio companion
 
 - Added edition 1.1 as a 50-page implementation reference with 29 chapters,

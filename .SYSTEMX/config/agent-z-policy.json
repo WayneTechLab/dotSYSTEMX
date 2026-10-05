@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "policyId": "systemx-agent-z",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "categories": [
     {
       "id": "C01",
@@ -121,7 +121,7 @@
         },
         {
           "id": "Z03.06",
-          "question": "Are conflicting sources reconciled or flagged?"
+          "question": "Was each decisive claim corroborated by a second independent source where feasible, with conflicts reconciled or flagged?"
         },
         {
           "id": "Z03.07",
@@ -259,7 +259,7 @@
         },
         {
           "id": "Z06.06",
-          "question": "Are negative or refusal cases checked where relevant?"
+          "question": "Was each decisive check shown able to fail on a known-bad, negative, or refusal input where relevant?"
         },
         {
           "id": "Z06.07",

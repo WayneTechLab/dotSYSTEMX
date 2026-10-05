@@ -3,7 +3,9 @@
 import json
 import copy
 from pathlib import Path
+import sys
 import unittest
+from unittest.mock import patch
 
 import test_systemx
 
@@ -47,6 +49,23 @@ class ProjectMemoryTests(unittest.TestCase):
         after = {str(path.relative_to(self.systemx)): path.read_bytes()
                  for path in self.systemx.rglob("*") if path.is_file()}
         self.assertEqual(before, after)
+
+    def test_failed_owner_write_does_not_leave_a_permanent_coordination_lock(self):
+        with patch.object(sys, "path", [str(test_systemx.SOURCE), str(test_systemx.SOURCE / "scripts"), *sys.path]):
+            import project_memory
+            with patch.object(project_memory.os, "fsync", side_effect=OSError("fixture disk full")):
+                with self.assertRaisesRegex(OSError, "fixture disk full"):
+                    with project_memory.coordination_lock(self.systemx):
+                        self.fail("The failed lock must not be entered")
+            self.assertFalse((self.systemx / "state/coordination.lock").exists())
+            with patch.object(project_memory.socket, "gethostname", side_effect=OSError("fixture host failure")):
+                with self.assertRaisesRegex(OSError, "fixture host failure"):
+                    with project_memory.coordination_lock(self.systemx):
+                        self.fail("The failed lock must not be entered")
+            self.assertFalse((self.systemx / "state/coordination.lock").exists())
+            with project_memory.coordination_lock(self.systemx):
+                self.assertTrue((self.systemx / "state/coordination.lock/owner.json").is_file())
+            self.assertFalse((self.systemx / "state/coordination.lock").exists())
 
     def test_task_creation_generates_views_and_stable_ids(self):
         self.assertEqual(self.add(), "TASK-001")
@@ -200,12 +219,16 @@ class ProjectMemoryTests(unittest.TestCase):
         self.add()
         lock = self.systemx / "state/coordination.lock"
         lock.mkdir()
+        (lock / "owner.json").write_text(json.dumps({"schemaVersion": 1, "token": "fixture-owner",
+            "pid": 4242, "host": "fixture-host", "createdAt": "2026-01-01T00:00:00Z"}))
         before = (self.systemx / "WORK/TASKS.json").read_bytes()
         result = self.run_cli("task-add", "--title", "Concurrent write", "--acceptance", "proof")
         self.assertEqual(result.returncode, 2)
         self.assertIn("writer is busy", result.stderr)
+        self.assertIn("owner pid 4242 on fixture-host", result.stderr)
         self.assertEqual((self.systemx / "WORK/TASKS.json").read_bytes(), before)
         self.assertTrue(lock.is_dir())
+        (lock / "owner.json").unlink()
         lock.rmdir()
         self.add("Successful retry")
 
