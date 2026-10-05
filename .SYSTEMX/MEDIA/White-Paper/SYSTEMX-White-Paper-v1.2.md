@@ -1202,7 +1202,7 @@ These four existing .SYSTEMX infographics illustrate workflows, not automatic in
 
 ### ChatGPT + Google Drive
 
-![ChatGPT + Google Drive workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](chatgpt-google-drive-4k.jpg)
+![ChatGPT + Google Drive workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](../Infographics/chatgpt-google-drive-4k.jpg)
 
 *Fig. 3. ChatGPT + Google Drive. .SYSTEMX Project, public use-case infographic, 4 Oct. 2026. Click the image for the 4K export.*
 
@@ -1214,7 +1214,7 @@ Use an authorized connection or a current export. Confirm the chosen project, ow
 
 ### Codex + GitHub / main project
 
-![Codex + GitHub / main project workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](codex-github-main-4k.jpg)
+![Codex + GitHub / main project workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](../Infographics/codex-github-main-4k.jpg)
 
 *Fig. 4. Codex + GitHub / main project. .SYSTEMX Project, public use-case infographic, 4 Oct. 2026. Click the image for the 4K export.*
 
@@ -1226,7 +1226,7 @@ Confirm the repository, branch and starting revision. Read the selected .SYSTEMX
 
 ### Dots / Codex Cloud
 
-![Dots / Codex Cloud workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](dots-codex-cloud-4k.jpg)
+![Dots / Codex Cloud workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](../Infographics/dots-codex-cloud-4k.jpg)
 
 *Fig. 5. Dots / Codex Cloud. .SYSTEMX Project, public use-case infographic, 4 Oct. 2026. Click the image for the 4K export.*
 
@@ -1238,7 +1238,7 @@ Begin each cloud task with a reproducible source snapshot and explicit scope. Us
 
 ### Codex / Copilot CLI + local drive
 
-![Codex / Copilot CLI + local drive workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](codex-copilot-cli-local-4k.jpg)
+![Codex / Copilot CLI + local drive workflow: Agent 0 coordination, Agent X event tracking, Agent Z review and durable project records.](../Infographics/codex-copilot-cli-local-4k.jpg)
 
 *Fig. 6. Codex / Copilot CLI + local drive. .SYSTEMX Project, public use-case infographic, 4 Oct. 2026. Click the image for the 4K export.*
 

@@ -22,11 +22,15 @@ from reportlab.platypus import (
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--edition', choices=('1.0', '1.1'), default='1.1')
+parser.add_argument('--source', type=Path, required=True, help='Markdown from the original archived release')
+parser.add_argument('--output', type=Path, required=True, help='Separate local inspection output')
 args = parser.parse_args()
 EDITION = args.edition
 BASELINE = '1.8.2-alpha.1' if EDITION == '1.0' else '1.8.3-alpha.1'
-SOURCE = ROOT / ('.SYSTEMX/MEDIA/SYSTEMX-White-Paper-v' + EDITION + '.md')
-OUTPUT = SOURCE.with_suffix('.pdf')
+SOURCE = args.source.resolve()
+OUTPUT = args.output.resolve()
+if SOURCE == OUTPUT:
+    parser.error('Output must not replace source')
 W, H = A4
 MARGIN = 48
 WIDTH = W - 2 * MARGIN

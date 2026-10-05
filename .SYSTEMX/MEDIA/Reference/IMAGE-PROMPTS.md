@@ -2,7 +2,7 @@
 
 Mode: built-in imagegen. Four independent new-image requests; no input images.
 
-The user's requested 4K export may be resized from the native tool output. See README.md and the asset record for actual pixel dimensions and export details.
+The user's requested 4K export may be resized from the native tool output. See [the media library](../README.md) and [the asset record](ASSETS.json) for actual pixel dimensions and export details.
 
 ## chatgpt-google-drive
 

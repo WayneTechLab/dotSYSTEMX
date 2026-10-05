@@ -1,8 +1,9 @@
 # White-paper publishing template
 
-Edition 1.2 is the illustrated, branded MLA-style research edition. Editions 1.0
-and 1.1 remain immutable in `.SYSTEMX/MEDIA`. Never replace a published edition or
-frozen release asset in place. Paper editions and template versions are distinct.
+Edition 1.2 is the illustrated, branded MLA-style research edition. The current
+`.SYSTEMX/MEDIA/White-Paper` folder holds only that edition. Earlier papers and
+original PNG artwork remain in immutable release history. Never replace a frozen
+release asset in place. Paper editions and template versions are distinct.
 
 ## Build and identity
 
@@ -13,9 +14,11 @@ python docs/media/verify_white_paper_example.py --output /tmp/walkthrough.json
 
 ReportLab and Pillow are optional publishing dependencies, not template runtime
 dependencies. The default source and output are the edition's Markdown and PDF
-in `.SYSTEMX/MEDIA`. `--source`, `--output` and `--template` support local drafts.
+in `.SYSTEMX/MEDIA/White-Paper`. `--source`, `--output` and `--template` support local drafts.
 Use a new edition filename before publishing. The frozen legacy builder remains
-available through `--edition 1.0` or `--edition 1.1` for local reproduction only.
+available through `--edition 1.0` or `--edition 1.1` with explicit `--source`
+from the corresponding archived release and a separate `--output` for inspection.
+There is no automatic download or fallback to missing files.
 
 [publication-template.json](publication-template.json) controls the product,
 author, running author name, company credit, date, edition, baseline, margins,
@@ -60,9 +63,10 @@ long display lines wrap without changing the Markdown. Tables repeat headers.
 The two supported Mermaid diagrams have explicit vector renderers; unknown
 layouts must be implemented and visually checked rather than silently substituted.
 
-Figure lines use `![description](local-file.jpg)` followed by a `*Fig. N. ...*`
+Figure lines use `![description](../Infographics/workflow-4k.jpg)` followed by a `*Fig. N. ...*`
 caption. The four existing atlas cards use the pinned media source; optimize only
-the embedded PDF representation, retaining original artwork and 4K exports.
+the embedded PDF representation. The active tree keeps only the 4K outputs;
+original artwork remains available in pinned release history.
 `<!-- pagebreak -->` starts a deliberate new display page. Keep code, image
 captions and explanatory prose together where practical.
 
@@ -90,8 +94,9 @@ or a complete 100-answer quality assessment. Keep public-template records blank.
 
 ## Audio edition
 
-`python docs/media/narrate_white_paper.py /tmp/reading.txt` remains the **edition
-1.1** narration pipeline. Its existing 107-minute synthetic reading is labeled
+`python docs/media/narrate_white_paper.py /tmp/reading.txt --source /path/to/archived/SYSTEMX-White-Paper-v1.1.md`
+remains the **edition 1.1** narration pipeline. An explicit archived source is
+required; the command rejects a different edition. Its existing 107-minute synthetic reading is labeled
 edition 1.1 in the wiki. It does not narrate the new branded front matter or atlas.
 Do not relabel it as an edition 1.2 recording. Audio and transcripts remain outside
 the size-limited portable bundle. Any new recording needs its own edition,

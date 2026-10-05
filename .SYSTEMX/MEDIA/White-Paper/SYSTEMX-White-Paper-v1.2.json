@@ -21,13 +21,15 @@
   "files": [
     {
       "file": "SYSTEMX-White-Paper-v1.2.md",
-      "bytes": 120956,
-      "sha256": "cedcab6e9185091c92e2e4dad110706a03dcb2494c68a2b11b2ec920b3f137cf"
+      "bytes": 121020,
+      "sha256": "c925e7d9ff85177b521b25c17ea7211770d6522899a36f8926dee6698b37e1dc"
     },
     {
       "file": "SYSTEMX-White-Paper-v1.2.pdf",
       "bytes": 1750374,
       "sha256": "66aca9fe640f1c0cf932e73c948fb42fe7da0059463ccb76dfbd55467f63611d"
     }
-  ]
+  ],
+  "layoutRelease": "1.8.6-alpha.1",
+  "relocationNote": "PDF preserved byte for byte. Markdown image paths now resolve to ../Infographics. Historical wording and baseline describe the original publication; source PNGs and earlier editions remain in pinned releases."
 }

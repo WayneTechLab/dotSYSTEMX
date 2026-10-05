@@ -1,8 +1,8 @@
 # Dots / Codex Cloud
 
-[Gallery](README.md) · [Native PNG](dots-codex-cloud.png) · [4K JPEG](dots-codex-cloud-4k.jpg)
+[Gallery](../README.md) · [4K JPEG](../Infographics/dots-codex-cloud-4k.jpg)
 
-[![Dots / Codex Cloud: six steps connecting project context, work, review and a saved handoff.](dots-codex-cloud.png)](dots-codex-cloud-4k.jpg)
+[![Dots / Codex Cloud: six steps connecting project context, work, review and a saved handoff.](../Infographics/dots-codex-cloud-4k.jpg)](../Infographics/dots-codex-cloud-4k.jpg)
 
 ## Workflow
 
@@ -20,7 +20,7 @@
 - **Agent Z:** the fixed review policy with 10 categories and 100 questions.
 
 These are roles implemented through the available toolchain. The public template
-starts with Agent 0 only; [activate Agent X/Z](../docs/AGENT-X.md) explicitly in
+starts with Agent 0 only; [activate Agent X/Z](../../docs/AGENT-X.md) explicitly in
 the selected scope. A review score is advisory and does not approve external actions.
 
 Treat the dot and its selected coding environment as distinct runtimes. Carry

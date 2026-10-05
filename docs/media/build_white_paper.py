@@ -191,7 +191,8 @@ def content(text, source, kind='body'):
         im=re.fullmatch(r'!\[([^\]]*)\]\(([^)]+)\)',line)
         if im:
             path=(source.parent/im[2]).resolve()
-            if path.parent != source.parent:raise ValueError('Figure must be in the source MEDIA directory')
+            if path.parent != (source.parent.parent / 'Infographics').resolve():
+                raise ValueError('Figure must be in MEDIA/Infographics')
             url='https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.8.3-alpha.1/.SYSTEMX/MEDIA/'+path.name
             result.append(LinkedImage(path,url));i+=1;continue
         if line.startswith('```'):
@@ -314,11 +315,13 @@ def main():
     p.add_argument('--font-dir',type=Path)
     args=p.parse_args()
     if args.edition in ('1.0','1.1'):
-        if args.source or args.output or args.font_dir:p.error('Legacy builds accept only --edition')
-        return subprocess.call([sys.executable,str(Path(__file__).with_name('build_white_paper_legacy.py')),'--edition',args.edition])
+        if not args.source or not args.output:
+            p.error('Legacy editions require --source from an archived release and a separate --output')
+        if args.font_dir:p.error('Legacy editions do not support --font-dir')
+        return subprocess.call([sys.executable,str(Path(__file__).with_name('build_white_paper_legacy.py')),'--edition',args.edition,'--source',str(args.source.resolve()),'--output',str(args.output.resolve())])
     config=json.loads(args.template.read_text(encoding='utf-8'))
     configure(config,args.font_dir)
-    source=(args.source or ROOT/('.SYSTEMX/MEDIA/SYSTEMX-White-Paper-v'+config['edition']+'.md')).resolve()
+    source=(args.source or ROOT/('.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v'+config['edition']+'.md')).resolve()
     output=(args.output or source.with_suffix('.pdf')).resolve()
     if output==source:raise ValueError('Output must not replace the source')
     with tempfile.TemporaryDirectory(prefix='systemx-paper-', dir=output.parent) as temp:

@@ -129,12 +129,12 @@ chat, Git, cloud work and a local terminal. Open a card for its 4K download.
 
 | ChatGPT + Google Drive | Codex + GitHub / main project |
 | --- | --- |
-| [![ChatGPT and Google Drive workflow](.SYSTEMX/MEDIA/chatgpt-google-drive.png)](.SYSTEMX/MEDIA/chatgpt-google-drive-4k.jpg) | [![Codex and GitHub workflow](.SYSTEMX/MEDIA/codex-github-main.png)](.SYSTEMX/MEDIA/codex-github-main-4k.jpg) |
+| [![ChatGPT and Google Drive workflow](.SYSTEMX/MEDIA/Infographics/chatgpt-google-drive-4k.jpg)](.SYSTEMX/MEDIA/Infographics/chatgpt-google-drive-4k.jpg) | [![Codex and GitHub workflow](.SYSTEMX/MEDIA/Infographics/codex-github-main-4k.jpg)](.SYSTEMX/MEDIA/Infographics/codex-github-main-4k.jpg) |
 | Dots / Codex Cloud | Codex / Copilot CLI + local drive |
-| [![Dots and Codex Cloud workflow](.SYSTEMX/MEDIA/dots-codex-cloud.png)](.SYSTEMX/MEDIA/dots-codex-cloud-4k.jpg) | [![Codex and Copilot CLI local-drive workflow](.SYSTEMX/MEDIA/codex-copilot-cli-local.png)](.SYSTEMX/MEDIA/codex-copilot-cli-local-4k.jpg) |
+| [![Dots and Codex Cloud workflow](.SYSTEMX/MEDIA/Infographics/dots-codex-cloud-4k.jpg)](.SYSTEMX/MEDIA/Infographics/dots-codex-cloud-4k.jpg) | [![Codex and Copilot CLI local-drive workflow](.SYSTEMX/MEDIA/Infographics/codex-copilot-cli-local-4k.jpg)](.SYSTEMX/MEDIA/Infographics/codex-copilot-cli-local-4k.jpg) |
 
 [Open the wiki walkthroughs](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Use-Case-Infographics) ·
-[Media library, originals and text guides](.SYSTEMX/MEDIA/README.md).
+[Media library, 4K downloads and text guides](.SYSTEMX/MEDIA/README.md).
 The 4K files are resized JPEG exports; native PNG masters are retained.
 
 ## From one researched brief to a finished project

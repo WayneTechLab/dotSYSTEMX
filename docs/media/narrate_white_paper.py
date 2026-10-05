@@ -51,8 +51,12 @@ def spoken(source):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output',type=Path)
+    parser.add_argument('--source',type=Path,required=True,help='Edition 1.1 Markdown from its archived release')
     args=parser.parse_args()
-    source=Path(__file__).resolve().parents[2]/'.SYSTEMX/MEDIA/SYSTEMX-White-Paper-v1.1.md'
+    source=args.source.resolve()
+    if source==args.output.resolve():parser.error('Output must not replace source')
+    if not re.search(r'^Edition 1\.1 \|',source.read_text(encoding='utf-8'),re.M):
+        parser.error('This historical narration format requires edition 1.1')
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(spoken(source.read_text(encoding='utf-8')),encoding='utf-8')
     print(args.output)

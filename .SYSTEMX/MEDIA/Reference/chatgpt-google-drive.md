@@ -1,8 +1,8 @@
 # ChatGPT + Google Drive
 
-[Gallery](README.md) · [Native PNG](chatgpt-google-drive.png) · [4K JPEG](chatgpt-google-drive-4k.jpg)
+[Gallery](../README.md) · [4K JPEG](../Infographics/chatgpt-google-drive-4k.jpg)
 
-[![ChatGPT + Google Drive: six steps connecting project context, work, review and a saved handoff.](chatgpt-google-drive.png)](chatgpt-google-drive-4k.jpg)
+[![ChatGPT + Google Drive: six steps connecting project context, work, review and a saved handoff.](../Infographics/chatgpt-google-drive-4k.jpg)](../Infographics/chatgpt-google-drive-4k.jpg)
 
 ## Workflow
 
@@ -20,7 +20,7 @@
 - **Agent Z:** the fixed review policy with 10 categories and 100 questions.
 
 These are roles implemented through the available toolchain. The public template
-starts with Agent 0 only; [activate Agent X/Z](../docs/AGENT-X.md) explicitly in
+starts with Agent 0 only; [activate Agent X/Z](../../docs/AGENT-X.md) explicitly in
 the selected scope. A review score is advisory and does not approve external actions.
 
 Use `Project/.SYSTEMX/` as the selected source. Read `START-HERE.md`,
