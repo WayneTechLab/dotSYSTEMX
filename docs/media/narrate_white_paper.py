@@ -5,9 +5,54 @@ Keeps the complete prose, questions, code and inventory; converts tables into
 header/value sentences and diagrams into ordered labels. Omits Markdown markup,
 long link destinations and inline numeric reference markers. No network access.
 """
+import sys
+if __name__ == '__main__' and not sys.flags.isolated:
+    _bootstrap_os = sys.modules.get('os')
+    if _bootstrap_os is None or not sys.executable:
+        sys.exit('White-paper narration requires Python isolated mode')
+    try:
+        _bootstrap_os.execv(sys.executable, [sys.executable, '-I', '-B', __file__, *sys.argv[1:]])
+    except OSError as error:
+        sys.exit('White-paper narration could not enter isolated mode: ' + str(error))
+
 from pathlib import Path
 import argparse
+import os
 import re
+import secrets
+import stat
+
+
+def write_output(path, content):
+    if os.name != 'posix' or not all(hasattr(os,name) for name in ('O_DIRECTORY','O_NOFOLLOW')):
+        raise RuntimeError('Safe narration output requires POSIX directory-descriptor operations')
+    directory_fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    temporary_name=None
+    try:
+        try:
+            existing=os.stat(path.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            existing=None
+        if existing is not None and not stat.S_ISREG(existing.st_mode):
+            raise ValueError('Narration output must be a regular file')
+        candidate_name='.systemx-narration-'+secrets.token_hex(16)+'.txt'
+        flags=os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW
+        temporary_fd=os.open(candidate_name,flags,0o600,dir_fd=directory_fd)
+        temporary_name=candidate_name
+        with os.fdopen(temporary_fd,'w',encoding='utf-8') as draft:
+            draft.write(content)
+        try:
+            current=os.stat(path.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            current=None
+        if current is not None and not stat.S_ISREG(current.st_mode):
+            raise ValueError('Narration output changed to a non-regular file')
+        os.replace(temporary_name,path.name,src_dir_fd=directory_fd,dst_dir_fd=directory_fd)
+        temporary_name=None
+    finally:
+        if temporary_name is not None:
+            os.unlink(temporary_name,dir_fd=directory_fd)
+        os.close(directory_fd)
 
 def spoken(source):
     lines=source.splitlines(); result=[]; index=0
@@ -58,5 +103,6 @@ if __name__=='__main__':
     if not re.search(r'^Edition 1\.1 \|',source.read_text(encoding='utf-8'),re.M):
         parser.error('This historical narration format requires edition 1.1')
     args.output.parent.mkdir(parents=True,exist_ok=True)
-    args.output.write_text(spoken(source.read_text(encoding='utf-8')),encoding='utf-8')
-    print(args.output)
+    output=args.output.parent.resolve()/args.output.name
+    write_output(output,spoken(source.read_text(encoding='utf-8')))
+    print(output)

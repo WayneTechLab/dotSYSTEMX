@@ -4,16 +4,26 @@
 The JSON template controls identity and layout. Legacy editions use their frozen
 builder. Sources and assets are local; the builder performs no network requests.
 """
+import sys
+if __name__ == '__main__' and not sys.flags.isolated:
+    _bootstrap_os = sys.modules.get('os')
+    if _bootstrap_os is None or not sys.executable:
+        sys.exit('White-paper builder requires Python isolated mode')
+    try:
+        _bootstrap_os.execv(sys.executable, [sys.executable, '-I', '-B', __file__, *sys.argv[1:]])
+    except OSError as error:
+        sys.exit('White-paper builder could not enter isolated mode: ' + str(error))
+
 import argparse
-from functools import lru_cache
 from html import escape
 from io import BytesIO
 import json
+import os
 from pathlib import Path
 import re
+import secrets
+import stat
 import subprocess
-import sys
-import tempfile
 
 from PIL import Image as PILImage
 from reportlab.lib import colors
@@ -81,7 +91,12 @@ def configure(config, font_dir=None):
 
 def inline(text, small=False):
     out = escape(text, quote=False).replace('&lt;br/&gt;', '<br/>')
-    out = re.sub(r'\[([^\]]+)\]\(([^\s)]+)\)', lambda m: '<link href="' + escape(m[2], quote=True) + '" color="#007981">' + m[1] + '</link>', out)
+    def safe_link(match):
+        url = match[2]
+        if not (url.startswith('https://') or re.fullmatch(r'#[A-Za-z][\w.-]*', url)):
+            raise ValueError('Paper links must use HTTPS or an internal anchor')
+        return '<link href="' + escape(url, quote=True) + '" color="#007981">' + match[1] + '</link>'
+    out = re.sub(r'\[([^\]]+)\]\(([^\s)]+)\)', safe_link, out)
     out = re.sub(r'`([^`]+)`', lambda m: '<font name="Courier" size="' + ('8' if small else '10') + '">' + m[1] + '</font>', out)
     out = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', out)
     out = re.sub(r'(?<!\*)\*([^*]+)\*(?!\*)', r'<i>\1</i>', out)
@@ -148,10 +163,9 @@ class Diagram(Flowable):
                 if i<5:arrow(x+bw,40,x+bw+gap,40)
 
 
-@lru_cache(maxsize=8)
-def image_data(path):
+def image_data(source):
     # Optimize only the embedded PDF representation. Source artwork stays intact.
-    with PILImage.open(path) as img:
+    with PILImage.open(BytesIO(source) if isinstance(source, bytes) else source) as img:
         img=img.convert('RGB')
         img.thumbnail((1950, 1950), PILImage.Resampling.LANCZOS)
         data=BytesIO(); img.save(data, format='JPEG', quality=78, optimize=True)
@@ -159,8 +173,8 @@ def image_data(path):
 
 
 class LinkedImage(Image):
-    def __init__(self, path, url, width=WIDTH):
-        data, size=image_data(str(path))
+    def __init__(self, source, url, width=WIDTH):
+        data, size=image_data(source)
         super().__init__(BytesIO(data), width=width, height=width*size[1]/size[0])
         self.url=url
     def draw(self):
@@ -190,11 +204,25 @@ def content(text, source, kind='body'):
         if line.startswith('### '):result.append(para(line[4:],'h2'));i+=1;continue
         im=re.fullmatch(r'!\[([^\]]*)\]\(([^)]+)\)',line)
         if im:
-            path=(source.parent/im[2]).resolve()
-            if path.parent != (source.parent.parent / 'Infographics').resolve():
-                raise ValueError('Figure must be in MEDIA/Infographics')
-            url='https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.8.3-alpha.1/.SYSTEMX/MEDIA/'+path.name
-            result.append(LinkedImage(path,url));i+=1;continue
+            figure=re.fullmatch(r'\.\./Infographics/([A-Za-z0-9][A-Za-z0-9._-]*\.(?:jpg|jpeg|png))',im[2],re.I)
+            if figure is None:
+                raise ValueError('Figure must be a direct MEDIA/Infographics image')
+            figure_root=source.parent.parent / 'Infographics'
+            candidate=figure_root / figure[1]
+            if figure_root.is_symlink() or candidate.is_symlink():
+                raise ValueError('Figure path must not use a symlink')
+            directory_fd=os.open(figure_root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+            try:
+                file_fd=os.open(figure[1],os.O_RDONLY|os.O_NOFOLLOW,dir_fd=directory_fd)
+                with os.fdopen(file_fd,'rb') as image_file:
+                    details=os.fstat(image_file.fileno())
+                    if not stat.S_ISREG(details.st_mode) or details.st_nlink != 1 or details.st_size > 16 * 1024 * 1024:
+                        raise ValueError('Figure must be one regular image of at most 16 MiB')
+                    image_bytes=image_file.read()
+            finally:
+                os.close(directory_fd)
+            url='https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.8.3-alpha.1/.SYSTEMX/MEDIA/'+figure[1]
+            result.append(LinkedImage(image_bytes,url));i+=1;continue
         if line.startswith('```'):
             language=line[3:];code=[];i+=1
             while i<len(lines) and not lines[i].startswith('```'):code.append(lines[i]);i+=1
@@ -277,7 +305,7 @@ def build(source,output):
     text=source.read_text(encoding='utf-8')
     sections=re.split(r'^## ',text,flags=re.M)[1:]
     front=sections[0];sections=sections[1:]
-    doc=PaperDoc(str(output),pagesize=letter,leftMargin=MARGIN,rightMargin=MARGIN,topMargin=MARGIN,bottomMargin=MARGIN,title=CONFIG['product']+': '+CONFIG['title'],author=CONFIG['author']+' | '+CONFIG['publisher'],subject=CONFIG['subtitle']+'; '+CONFIG['layout'],pageCompression=1)
+    doc=PaperDoc(output,pagesize=letter,leftMargin=MARGIN,rightMargin=MARGIN,topMargin=MARGIN,bottomMargin=MARGIN,title=CONFIG['product']+': '+CONFIG['title'],author=CONFIG['author']+' | '+CONFIG['publisher'],subject=CONFIG['subtitle']+'; '+CONFIG['layout'],pageCompression=1)
     frame=Frame(MARGIN,MARGIN,WIDTH,H-2*MARGIN,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)
     doc.addPageTemplates([PageTemplate(id='cover',frames=[frame],onPage=cover,autoNextPageTemplate='body'),PageTemplate(id='body',frames=[frame],onPage=navigation)])
     title_style=ParagraphStyle('coverTitle',fontName=BOLD,fontSize=30,leading=36,textColor=NAVY,spaceAfter=18)
@@ -318,7 +346,7 @@ def main():
         if not args.source or not args.output:
             p.error('Legacy editions require --source from an archived release and a separate --output')
         if args.font_dir:p.error('Legacy editions do not support --font-dir')
-        return subprocess.call([sys.executable,str(Path(__file__).with_name('build_white_paper_legacy.py')),'--edition',args.edition,'--source',str(args.source.resolve()),'--output',str(args.output.expanduser())])
+        return subprocess.call([sys.executable,'-I','-B',str(Path(__file__).with_name('build_white_paper_legacy.py')),'--edition',args.edition,'--source',str(args.source.resolve()),'--output',str(args.output.expanduser())])
     config=json.loads(args.template.read_text(encoding='utf-8'))
     configure(config,args.font_dir)
     source=(args.source or ROOT/('.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v'+config['edition']+'.md')).resolve()
@@ -327,13 +355,51 @@ def main():
     # symlink would turn the atomic replacement into a write to its target.
     output=requested_output.parent.resolve()/requested_output.name
     if output==source:raise ValueError('Output must not replace the source')
-    if output.is_symlink():raise ValueError('Output must not be a symlink')
-    with tempfile.TemporaryDirectory(prefix='systemx-paper-', dir=output.parent) as temp:
-        draft=Path(temp)/output.name
-        build(source,draft)
-        if output.is_symlink():raise ValueError('Output must not be a symlink')
-        draft.replace(output)
-    print(json.dumps({'output':str(output),'bytes':output.stat().st_size,'font':FONT,'edition':CONFIG['edition']}))
+    published=ROOT/('.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v'+config['edition']+'.pdf')
+    published=published.parent.resolve()/published.name
+    if os.name!='posix' or not all(hasattr(os,name) for name in ('O_DIRECTORY','O_NOFOLLOW')):
+        raise RuntimeError('Safe PDF publication requires POSIX directory-descriptor operations')
+    directory_flags=os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW
+    directory_fd=os.open(output.parent,directory_flags)
+    temporary_name=None
+    try:
+        try:
+            existing=os.stat(output.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            existing=None
+        if output==published and existing is not None:
+            raise ValueError('Published edition already exists; choose --output for a separate draft')
+        if existing is not None and not stat.S_ISREG(existing.st_mode):
+            raise ValueError('Output must be a regular file')
+        # Open by name relative to the pinned directory, even if its parent
+        # pathname is renamed or replaced while the PDF is being rendered.
+        candidate_name='.systemx-paper-'+secrets.token_hex(16)+'.pdf'
+        flags=os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|getattr(os,'O_BINARY',0)
+        temporary_fd=os.open(candidate_name,flags,0o600,dir_fd=directory_fd)
+        temporary_name=candidate_name
+        with os.fdopen(temporary_fd,'wb') as draft:
+            build(source,draft)
+        try:
+            existing=os.stat(output.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            existing=None
+        if existing is not None and not stat.S_ISREG(existing.st_mode):
+            raise ValueError('Output changed to a non-regular file')
+        pinned_directory=os.fstat(directory_fd)
+        current_directory=os.stat(output.parent,follow_symlinks=False)
+        if (pinned_directory.st_dev,pinned_directory.st_ino)!=(current_directory.st_dev,current_directory.st_ino):
+            raise RuntimeError('Output directory changed during PDF build')
+        os.replace(temporary_name,output.name,src_dir_fd=directory_fd,dst_dir_fd=directory_fd)
+        temporary_name=None
+        size=os.stat(output.name,dir_fd=directory_fd,follow_symlinks=False).st_size
+        current_directory=os.stat(output.parent,follow_symlinks=False)
+        if (pinned_directory.st_dev,pinned_directory.st_ino)!=(current_directory.st_dev,current_directory.st_ino):
+            raise RuntimeError('Output directory changed during PDF publication')
+    finally:
+        if temporary_name is not None:
+            os.unlink(temporary_name,dir_fd=directory_fd)
+        os.close(directory_fd)
+    print(json.dumps({'output':str(output),'bytes':size,'font':FONT,'edition':CONFIG['edition']}))
     return 0
 
 

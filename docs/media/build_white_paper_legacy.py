@@ -4,10 +4,23 @@
 Run from any directory: python docs/media/build_white_paper.py
 This builder is documentation tooling, not part of the portable runtime.
 """
+import sys
+if __name__ == '__main__' and not sys.flags.isolated:
+    _bootstrap_os = sys.modules.get('os')
+    if _bootstrap_os is None or not sys.executable:
+        sys.exit('Legacy paper builder requires Python isolated mode')
+    try:
+        _bootstrap_os.execv(sys.executable, [sys.executable, '-I', '-B', __file__, *sys.argv[1:]])
+    except OSError as error:
+        sys.exit('Legacy paper builder could not enter isolated mode: ' + str(error))
+
+from contextlib import contextmanager
 from pathlib import Path
 import os
 import re
 import argparse
+import secrets
+import stat
 from html import escape
 from reportlab.platypus.tableofcontents import TableOfContents
 from reportlab.lib import colors
@@ -35,6 +48,45 @@ if SOURCE == OUTPUT:
     parser.error('Output must not replace source')
 if OUTPUT.is_symlink():
     parser.error('Output must not be a symlink')
+
+
+@contextmanager
+def safe_output(path):
+    """Publish to one opened directory; never truncate an existing inode."""
+    if os.name != 'posix' or not all(hasattr(os,name) for name in ('O_DIRECTORY','O_NOFOLLOW')):
+        raise RuntimeError('Safe PDF publication requires POSIX directory-descriptor operations')
+    directory_fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    temporary_name=None
+    try:
+        try:
+            existing=os.stat(path.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            existing=None
+        if existing is not None:
+            source_stat=SOURCE.stat()
+            if (not stat.S_ISREG(existing.st_mode) or existing.st_nlink != 1 or
+                    (existing.st_dev,existing.st_ino)==(source_stat.st_dev,source_stat.st_ino)):
+                raise ValueError('Legacy PDF output must be a separate regular file with one link')
+        candidate_name='.systemx-legacy-paper-'+secrets.token_hex(16)+'.pdf'
+        flags=os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|getattr(os,'O_BINARY',0)
+        temporary_fd=os.open(candidate_name,flags,0o600,dir_fd=directory_fd)
+        temporary_name=candidate_name
+        if existing is not None:
+            os.fchmod(temporary_fd,stat.S_IMODE(existing.st_mode))
+        with os.fdopen(temporary_fd,'wb') as output_file:
+            yield output_file
+        try:
+            current=os.stat(path.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            current=None
+        if current is not None and not stat.S_ISREG(current.st_mode):
+            raise ValueError('Legacy PDF output changed to a non-regular file')
+        os.replace(temporary_name,path.name,src_dir_fd=directory_fd,dst_dir_fd=directory_fd)
+        temporary_name=None
+    finally:
+        if temporary_name is not None:
+            os.unlink(temporary_name,dir_fd=directory_fd)
+        os.close(directory_fd)
 W, H = A4
 MARGIN = 48
 WIDTH = W - 2 * MARGIN
@@ -57,7 +109,12 @@ STYLES = {
 
 def inline(text):
     out=escape(text,quote=False).replace('&lt;br/&gt;', '<br/>')
-    out=re.sub(r'\[([^\]]+)\]\(([^\s)]+)\)',lambda m:'<link href="'+escape(m.group(2),quote=True)+'" color="#007e87">'+m.group(1)+'</link>',out)
+    def safe_link(match):
+        url=match.group(2)
+        if not (url.startswith('https://') or re.fullmatch(r'#[A-Za-z][\w.-]*',url)):
+            raise ValueError('Paper links must use HTTPS or an internal anchor')
+        return '<link href="'+escape(url,quote=True)+'" color="#007e87">'+match.group(1)+'</link>'
+    out=re.sub(r'\[([^\]]+)\]\(([^\s)]+)\)',safe_link,out)
     out=re.sub(r'`([^`]+)`',r'<font name="Courier" size="8.8">\1</font>',out)
     out=re.sub(r'\*\*([^*]+)\*\*',r'<b>\1</b>',out)
     return out
@@ -165,9 +222,7 @@ def build():
     text=SOURCE.read_text(encoding='utf-8')
     parts=re.split(r'^## ',text,flags=re.M)[1:]
     front=parts[0];sections=parts[1:]
-    if OUTPUT.is_symlink():raise ValueError('Output must not be a symlink')
-    flags=os.O_WRONLY|os.O_CREAT|os.O_TRUNC|getattr(os,'O_NOFOLLOW',0)|getattr(os,'O_BINARY',0)
-    with os.fdopen(os.open(OUTPUT,flags,0o644),'wb') as output_file:
+    with safe_output(OUTPUT) as output_file:
         doc=PaperDoc(output_file,pagesize=A4,leftMargin=MARGIN,rightMargin=MARGIN,topMargin=58,bottomMargin=54,title='.SYSTEMX: Portable Project Memory for Agentic Work',author='.SYSTEMX Project',subject='Architecture, evidence, lifecycle and evaluation of the .SYSTEMX alpha format',pageCompression=1)
         frame=Frame(MARGIN,54,WIDTH,H-112,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)
         doc.addPageTemplates([PageTemplate(id='cover',frames=[frame],onPage=cover,autoNextPageTemplate='body'),PageTemplate(id='body',frames=[frame],onPage=header_footer)])

@@ -112,7 +112,7 @@ class Workspaces:
         path = self.safe(relative)
         if not path.is_file() or path.stat().st_size > 2 * 1024 * 1024:
             raise ValueError("Workspace metadata must be a regular file of at most 2 MiB: " + relative)
-        return json.loads(path.read_text(encoding="utf-8"))
+        return project_memory.read_json(self.root, relative)
 
     def select(self, name=None, root=False):
         if bool(root) == (name is not None):

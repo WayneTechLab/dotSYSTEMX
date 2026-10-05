@@ -4,19 +4,63 @@
 Run: python docs/media/verify_white_paper_example.py --output /path/to/result.json
 This fixture simulates role handoffs; it starts no subagents or external jobs.
 """
+import sys
+if __name__ == '__main__' and not sys.flags.isolated:
+    _bootstrap_os = sys.modules.get('os')
+    if _bootstrap_os is None or not sys.executable:
+        sys.exit('White-paper example verifier requires Python isolated mode')
+    try:
+        _bootstrap_os.execv(sys.executable, [sys.executable, '-I', '-B', __file__, *sys.argv[1:]])
+    except OSError as error:
+        sys.exit('White-paper example verifier could not enter isolated mode: ' + str(error))
+
 from pathlib import Path
 from datetime import datetime, timezone
 import argparse
 import hashlib
 import json
+import os
+import secrets
+import stat
 import subprocess
-import sys
 import tempfile
 
 REPO = Path(__file__).resolve().parents[2]
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def write_output(path, content):
+    if os.name != 'posix' or not all(hasattr(os,name) for name in ('O_DIRECTORY','O_NOFOLLOW')):
+        raise RuntimeError('Safe example output requires POSIX directory-descriptor operations')
+    directory_fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    temporary_name=None
+    try:
+        try:
+            existing=os.stat(path.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            existing=None
+        if existing is not None and not stat.S_ISREG(existing.st_mode):
+            raise ValueError('Example output must be a regular file')
+        candidate_name='.systemx-example-'+secrets.token_hex(16)+'.json'
+        flags=os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW
+        temporary_fd=os.open(candidate_name,flags,0o600,dir_fd=directory_fd)
+        temporary_name=candidate_name
+        with os.fdopen(temporary_fd,'w',encoding='utf-8') as draft:
+            draft.write(content)
+        try:
+            current=os.stat(path.name,dir_fd=directory_fd,follow_symlinks=False)
+        except FileNotFoundError:
+            current=None
+        if current is not None and not stat.S_ISREG(current.st_mode):
+            raise ValueError('Example output changed to a non-regular file')
+        os.replace(temporary_name,path.name,src_dir_fd=directory_fd,dst_dir_fd=directory_fd)
+        temporary_name=None
+    finally:
+        if temporary_name is not None:
+            os.unlink(temporary_name,dir_fd=directory_fd)
+        os.close(directory_fd)
 
 def run_example():
     commands = []
@@ -29,10 +73,10 @@ def run_example():
         return result.stdout
     with tempfile.TemporaryDirectory(prefix='systemx-white-paper-') as temp:
         target = Path(temp)/'Example Project'
-        command([sys.executable, '-B', REPO/'.SYSTEMX/manager.py', 'install',
+        command([sys.executable, '-I', '-B', REPO/'.SYSTEMX/manager.py', 'install',
                  '--source', REPO/'.SYSTEMX', '--target', target])
         root = target/'.SYSTEMX'
-        launcher = [sys.executable, '-B', root/'manager.py', 'run', '--target', target, '--offline', '--']
+        launcher = [sys.executable, '-I', '-B', root/'manager.py', 'run', '--target', target, '--offline', '--']
         def cli(*args, expected=0):
             return command(launcher + list(args), expected)
         def jcli(*args):
@@ -61,7 +105,7 @@ checks={'title':'<title>Status</title>' in text,'heading':'<h1>Status</h1>' in t
 print(json.dumps({'checks':checks,'passed':all(checks.values())},sort_keys=True))
 sys.exit(0 if all(checks.values()) else 1)
 ''', encoding='utf-8')
-        failed = command([sys.executable, '-B', check], expected=1)
+        failed = command([sys.executable, '-I', '-B', check], expected=1)
         (evidence/'check-fail.json').write_text(failed)
         failed_revision = digest(page.read_bytes())
         at = datetime.now(timezone.utc).isoformat()
@@ -78,7 +122,7 @@ sys.exit(0 if all(checks.values()) else 1)
         cli(*conflict, expected=1)
         assert (root/'EVENTS/EVENTS.json').read_bytes() == events_before
         page.write_text(page.read_text()+'<h1>Status</h1>\n', encoding='utf-8')
-        passed = command([sys.executable, '-B', check]); (evidence/'check-pass.json').write_text(passed)
+        passed = command([sys.executable, '-I', '-B', check]); (evidence/'check-pass.json').write_text(passed)
         revision = digest(page.read_bytes()); evidence_revision = digest(passed.encode())
         jcli('agent-x','event','--key','local-check-passed-002','--at',datetime.now(timezone.utc).isoformat(),
              '--actor-kind','automation','--actor-id','local-check','--kind','check','--stage','checked',
@@ -102,7 +146,7 @@ sys.exit(0 if all(checks.values()) else 1)
         comparison=jcli('agent-z','compare',first['report']['id'],second['report']['id'])
         assert comparison['pointDelta']==2 and comparison['automaticWork'] is False
         jcli('agent-z','validate',second['report']['id'])
-        command([sys.executable,'-B',check])  # Coordinator checks accepted local artifact.
+        command([sys.executable,'-I','-B',check])  # Coordinator checks accepted local artifact.
         cli('task-set','TASK-001','--status','done','--reviewer','agent.0',
             '--evidence','evidence/check-pass.json','--note','Three local HTML criteria verified')
         checkpoint=root/'MEMORY/sessions/local-example.md'
@@ -145,5 +189,7 @@ if __name__=='__main__':
     args=parser.parse_args(); result=run_example()
     encoded=json.dumps(result,indent=2)+'\n'
     if args.output:
-        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(encoded,encoding='utf-8')
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        output=args.output.parent.resolve()/args.output.name
+        write_output(output,encoded)
     print(encoded,end='')

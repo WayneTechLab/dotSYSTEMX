@@ -73,6 +73,19 @@ class WorkspaceTests(unittest.TestCase):
         self.assertEqual(self.cli("add", "Project-B", "--apply").returncode, 2)
         self.assertEqual(before, self.files())
 
+    def test_child_registry_and_config_reject_duplicate_json_fields(self):
+        registry = self.systemx / "Projects/REGISTRY.json"
+        registry.write_text('{"schemaVersion":1,"projects":[],"projects":[]}')
+        self.assertEqual(self.cli("validate").returncode, 2)
+        registry.write_text('{"schemaVersion":1,"projects":[]}')
+        records = self.add()
+        config = records / "project.json"
+        config.write_text('{"schemaVersion":1,"project":{"name":"","description":""},'
+                          '"checks":[],"commands":{"dev":[],"build":[],"deploy":[]},'
+                          '"commands":{"dev":[],"build":[],"deploy":[]}}')
+        self.assertEqual(self.cli("check", "--project", "Project-A").returncode, 2)
+        self.assertEqual(self.cli("validate").returncode, 2)
+
     def test_tasks_roles_focus_and_acceptance_are_isolated(self):
         a = self.add()
         b = self.add("Project-B")

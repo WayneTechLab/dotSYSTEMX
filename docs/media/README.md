@@ -8,17 +8,31 @@ release asset in place. Paper editions and template versions are distinct.
 ## Build and identity
 
 ```bash
-python docs/media/build_white_paper.py --edition 1.2
-python docs/media/verify_white_paper_example.py --output /tmp/walkthrough.json
+draft_dir="$(mktemp -d)"
+python3 -I -B docs/media/build_white_paper.py --edition 1.2 --output "$draft_dir/SYSTEMX-White-Paper-draft.pdf"
+python3 -I -B docs/media/verify_white_paper_example.py --output "$draft_dir/walkthrough.json"
+python3 -I -B docs/media/tests/test_publication_security.py
 ```
 
 ReportLab and Pillow are optional publishing dependencies, not template runtime
-dependencies. The default source and output are the edition's Markdown and PDF
-in `.SYSTEMX/MEDIA/White-Paper`. `--source`, `--output` and `--template` support local drafts.
-Use a new edition filename before publishing. The frozen legacy builder remains
+dependencies. Use a Python interpreter with both installed for the PDF builder
+and publication security tests. The default source is the edition's Markdown in
+`.SYSTEMX/MEDIA/White-Paper`. The existing published PDF cannot be rebuilt in
+place, because PDF timestamps and document IDs can change its checksum even
+when the visible pages do not. Give `--output` a separate draft path, and use a
+new edition filename before publishing. `--source` and `--template` support
+local drafts. The frozen legacy builder remains
 available through `--edition 1.0` or `--edition 1.1` with explicit `--source`
 from the corresponding archived release and a separate `--output` for inspection.
 There is no automatic download or fallback to missing files.
+
+The four direct media commands enter Python isolated mode before imports. Their
+output writes use an opened directory and replace a draft atomically, rejecting
+final symlinks and unsafe PDF link schemes. The legacy renderer also rejects
+hardlinked output and preserves the permissions of a regular existing output.
+These optional publication commands currently require POSIX directory-descriptor
+support (macOS or compatible Linux); they fail closed on native Windows. The
+portable `.SYSTEMX` manager and records have their own platform support.
 
 [publication-template.json](publication-template.json) controls the product,
 author, running author name, company credit, date, edition, baseline, margins,
@@ -94,7 +108,7 @@ or a complete 100-answer quality assessment. Keep public-template records blank.
 
 ## Audio edition
 
-`python docs/media/narrate_white_paper.py /tmp/reading.txt --source /path/to/archived/SYSTEMX-White-Paper-v1.1.md`
+`python3 -I -B docs/media/narrate_white_paper.py "$draft_dir/reading.txt" --source /path/to/archived/SYSTEMX-White-Paper-v1.1.md`
 remains the **edition 1.1** narration pipeline. An explicit archived source is
 required; the command rejects a different edition. Its existing 107-minute synthetic reading is labeled
 edition 1.1 in the wiki. It does not narrate the new branded front matter or atlas.

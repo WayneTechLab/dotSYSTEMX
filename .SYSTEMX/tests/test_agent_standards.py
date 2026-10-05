@@ -342,6 +342,19 @@ class StandardAgentTests(unittest.TestCase):
         self.rejected("context")
         self.assertEqual(outside.read_text(), "private")
 
+    def test_activated_roles_require_their_records_on_validate(self):
+        self.setup_roles()
+        for relative in ("EVENTS/EVENTS.json", "EVENTS/SCHEDULE.json",
+                         "AGENTS/agent.x/MEMORY.md", "REVIEWS/POLICY.json",
+                         "AGENTS/agent.z/MEMORY.md"):
+            with self.subTest(relative=relative):
+                path = self.systemx / relative
+                original = path.read_bytes()
+                path.unlink()
+                self.rejected("validate")
+                path.write_bytes(original)
+        self.assert_ok(self.run_cli("validate"))
+
     def test_invalid_child_command_config_is_a_clean_error(self):
         self.value("projects", "add", "Project-A", "--apply")
         (self.systemx / "Projects/Project-A/.SYSTEMXP/project.json").write_text('{}')

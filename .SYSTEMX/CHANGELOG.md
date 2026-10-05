@@ -19,8 +19,11 @@ This copy travels with the folder for offline use.
   restarts before importing the manager, after Python resolves the package.
   Standalone validation and release maintenance load only named local helpers
   from source bytes, so unlisted modules or matching cached bytecode cannot
-  execute before inventory checks. The PDF publication tools reject output
-  symlinks; the current builder stages output before replacing a regular PDF.
+  execute before inventory checks. The optional white-paper tools also enter
+  isolated mode before imports, reject unapproved PDF link schemes and linked
+  figure roots, and anchor output replacements to an opened directory. Text
+  output cannot follow symlinks or overwrite hardlinked sources. A frozen PDF
+  edition cannot be rebuilt in place; choose a separate draft output.
 - Added preview-first `bootstrap-refresh` for eight stock root bootstrap and
   launcher files: four Python helpers and four shell/PowerShell entry points. It
   accepts only recognized contents from intact retained releases, saves the

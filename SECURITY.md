@@ -36,6 +36,14 @@ from a reviewed virtual environment when `PYTHONPATH` or the working directory i
 untrusted. Review the source you choose to install; an internal manifest cannot
 establish publisher identity.
 
+Optional white-paper maintenance tools restart in Python isolated mode before
+imports. They accept only HTTPS or internal-anchor links in PDF content, reject
+linked figure roots, and publish outputs through opened POSIX directories so a
+swapped parent path cannot redirect a PDF replacement. Existing publication
+editions are preserved; build to a separate draft file. These media commands
+currently fail closed without POSIX directory-descriptor support, including on
+native Windows. See [publishing guidance](docs/media/README.md).
+
 Fresh adoption refuses conflicting executable defaults. A managed project's
 older root bootstrap must be explicitly refreshed from a reviewed new external
 tool before a changed-release update; that limited operation backs up and

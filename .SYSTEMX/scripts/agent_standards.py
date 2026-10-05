@@ -140,6 +140,17 @@ def validate_optional(root):
     """Old scopes without these optional records remain valid after an update."""
     import agent_x
     import agent_z
+    _, registry = memory.load(root)
+    active = {item["id"] for item in registry["agents"]}
+    required = {
+        "agent.x": ("EVENTS/EVENTS.json", "EVENTS/SCHEDULE.json", "AGENTS/agent.x/MEMORY.md"),
+        "agent.z": ("REVIEWS/POLICY.json", "AGENTS/agent.z/MEMORY.md"),
+    }
+    for role, paths in required.items():
+        if role in active:
+            for relative in paths:
+                if not safe(root, relative).is_file():
+                    raise ValueError("Activated " + role + " is missing required record: " + relative)
     if safe(root, "EVENTS/EVENTS.json").exists():
         agent_x.load_events(root)
     if safe(root, "EVENTS/SCHEDULE.json").exists():
