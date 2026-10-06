@@ -21,6 +21,10 @@ questions, record contracts, six figures and clickable research citations.
 The published PDF is unchanged. Its pinned references and historical inventory
 continue to describe its examined baseline. The Markdown image paths follow this
 folder layout. The PDF is selectable and linked; it is not tagged PDF/UA.
+Its installation-state discussion reflects that older baseline: from
+1.8.8-alpha.1, a pinned project may opt into check-only startup release notices
+without automatic selection. Use the current [format](../FORMAT.md) and
+[installation guide](../docs/INSTALLATION.md) for the active contract.
 
 ## 4K workflow infographics
 

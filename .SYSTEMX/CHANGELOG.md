@@ -4,6 +4,22 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.8-alpha.1 — Check-only startup release notices
+
+- Opt-in `--auto on-start` now reads release metadata and reports an available
+  version without downloading its archive, selecting defaults, or changing
+  project-owned files. Checks are cached for up to 24 hours after success;
+  malformed or stale check metadata is retried safely.
+- A pinned installation may enable the startup notice while keeping its pin.
+  Choosing another version still requires an explicit unpin and manual update;
+  an independently obtained `--archive-sha256` remains available for the exact
+  remote ZIP before parsing it.
+- Enabling startup checks refuses an older preserved root manager until its
+  stock bootstrap has been explicitly refreshed with a reviewed external tool.
+  Existing installations should switch old startup selection to manual policy
+  before that migration. Tests cover the notice, cache, pin, migration guard,
+  and digest-pinned update path on Python 3.9 and 3.14.
+
 ## 1.8.7-alpha.1 — Release integrity and coordination hardening
 
 - Reject unlisted files, packages, links, and other unexpected entries in a

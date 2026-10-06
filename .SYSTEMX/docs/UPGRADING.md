@@ -4,7 +4,7 @@ Treat the reusable standard and an active project's records as different kinds
 of content. Review an update in the intended checkout, preserve local changes,
 and merge the standard without replacing the project's accepted plan or memory.
 Each project selects its own defaults; updates do not synchronize project memory
-or configure automatic updates in other projects.
+or configure startup update checks in other projects.
 
 ## Upgrade to the alpha series
 
@@ -41,6 +41,12 @@ reviewed new external `systemx` command or `manager.py` from outside the target
 to select new defaults. Existing old shell and PowerShell scripts are not
 silently replaced and might not expose new commands. The eight stock root
 bootstrap and launcher files have a narrow, explicit refresh path below.
+In particular, an older preserved root manager may still **select a release at
+startup** when `--auto on-start` is enabled. Set `--auto manual` with the reviewed
+external manager before invoking that root launcher, then follow the backed-up
+bootstrap refresh and update sequence below. Re-enable `--auto on-start` only
+after the new root manager and selected defaults are verified; in the new
+contract it reports an available release without downloading or selecting it.
 Review any custom root guidance against the selected release, and use `validate`
 to check the existing records before continuing. Adoption does not migrate or
 clear incompatible legacy ledgers, rewrite old generated views, or assert

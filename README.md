@@ -343,9 +343,9 @@ and [how the workflow limits drift](https://github.com/WayneTechLab/dotSYSTEMX/w
 
 - **Preserved project records.** Managed updates add versioned defaults and
   missing files while preserving existing files, folders, customizations, and
-  earlier snapshots. New installs are pinned with manual updates; startup
-  updates are opt-in. Exact remote releases can also be checked against an
-  independently obtained archive SHA-256.
+  earlier snapshots. New installs are pinned with manual updates; opt-in startup
+  checks only report available releases. Selection remains manual. Exact remote
+  releases can also be checked against an independently obtained archive SHA-256.
   [Installation and updates](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Installation-and-Updates).
 - **Inspectable setup and removal.** Local operation logs, footprint audits,
   preview-first uninstall, a recoverable backup, and verified restore support

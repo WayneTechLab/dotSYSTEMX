@@ -166,17 +166,25 @@ Extract the archive and run `validate --template` there before sharing it. The
 MIT license and source attribution remain part of every copy. Follow the
 [upgrade guide](docs/UPGRADING.md) when merging into an active project.
 
-## Managed installation contract, schema version 1
+## Managed installation contract, schema versions 1 and 2
 
-The optional `INSTALLATION.json` contains exactly `schemaVersion`, `profile`,
-`repository`, `activeVersion`, `pinnedVersion`, `autoUpdate`, `installedAt`,
-`updatedAt`, and `releases`. Profiles are `project`, `directory`, `drive`, or `chat`.
+The current optional `INSTALLATION.json` uses `schemaVersion: 2` and contains
+exactly `schemaVersion`, `profile`, `repository`, `activeVersion`,
+`pinnedVersion`, `autoUpdate`, `installedAt`, `updatedAt`, `releases`, and
+`archiveDigests`. Historical schema-1 state omits `archiveDigests`; the manager
+reads it compatibly and adds null receipts on the next state write. Profiles
+are `project`, `directory`, `drive`, or `chat`.
 Repository is a GitHub `OWNER/REPO`. Version IDs are exact `X.Y.Z` final releases
 or `X.Y.Z-alpha.N` prereleases, with no leading zeroes and alpha N starting at 1.
 The selected ID determines the discovery channel; see [release policy](docs/RELEASE-POLICY.md).
-`pinnedVersion` is either null or the active version; a pin requires
-`autoUpdate: "manual"`. The other policy is explicit opt-in `"on-start"`.
+`pinnedVersion` is either null or the active version. `autoUpdate` is `"manual"`
+or the explicit opt-in `"on-start"` availability check. A pinned project may
+receive check-only notices, but selecting a different release requires an
+explicit unpin and manual update. Startup never fetches a release archive or
+changes the selected version.
 `releases` maps retained version IDs to their distribution-manifest SHA-256 values.
+`archiveDigests` has the same version keys, with either a null receipt or a
+recorded archive SHA-256 and `verifiedBy: "explicit-pin"` or `"observed-only"`.
 
 An update appends a verified default snapshot and creates missing root files.
 It never replaces or deletes an existing project file, folder, or release snapshot.

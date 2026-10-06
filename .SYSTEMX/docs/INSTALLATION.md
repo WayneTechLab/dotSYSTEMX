@@ -87,8 +87,10 @@ After reviewing the [published release history](https://github.com/WayneTechLab/
 ```bash
 systemx status --target "/path/to/project"
 systemx policy --target "/path/to/project" --pin none
-systemx update --target "/path/to/project" --version 1.8.7-alpha.1 --dry-run
-systemx update --target "/path/to/project" --version 1.8.7-alpha.1
+systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
+  --archive-sha256 "<independently obtained codeload ZIP SHA-256>" --dry-run
+systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
+  --archive-sha256 "<independently obtained codeload ZIP SHA-256>"
 systemx policy --target "/path/to/project" --pin current
 ```
 
@@ -97,6 +99,9 @@ on an unpinned update discovers the selected version's channel: stable versions
 select only final releases; alpha versions select newer published alpha or final
 releases. Discovery cannot silently downgrade a project. `--source` selects
 a local reviewed distribution instead; its manifest determines the version.
+The manager still permits an explicit manual update without a digest; its
+receipt marks that archive `observed-only`, so the pinned example above is the
+stronger choice when the digest comes from a separately trusted record.
 This manager installs and newly selects only releases **1.8.7-alpha.1 or newer**,
 where the isolated runner contract begins; `bootstrap-refresh` also requires a
 target release at or above that floor. `status` can still inspect an older
@@ -130,9 +135,9 @@ For an exact remote release, `install`, `update`, and `first-run` accept an
 independent SHA-256 pin for the **exact GitHub codeload tag ZIP** they fetch:
 
 ```bash
-systemx update --target "/path/to/project" --version 1.8.7-alpha.1 \
+systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
   --archive-sha256 "<64-hex SHA-256 of the exact codeload tag ZIP>" --dry-run
-systemx update --target "/path/to/project" --version 1.8.7-alpha.1 \
+systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
   --archive-sha256 "<64-hex SHA-256 of the exact codeload tag ZIP>"
 ```
 
@@ -149,31 +154,46 @@ has no remote archive digest. `systemx status` shows the selected receipt.
 repository's exact release tag; an explicit repository override belongs to that
 installation's trusted source choice.
 
-## Optional startup updates
+## Optional startup update checks
 
 ```bash
-systemx policy --target "/path/to/project" --pin none --auto on-start
+systemx policy --target "/path/to/project" --auto on-start
 systemx run --target "/path/to/project" -- status
 
-# Stop automatic updates and lock the currently selected release:
-systemx policy --target "/path/to/project" --pin current
+# Stop startup checks, while retaining the selected release and any pin:
+systemx policy --target "/path/to/project" --auto manual
 ```
 
-With this opt-in policy, the managed launcher checks at startup, at most once per
-24 hours after a successful check, and selects a newer release in the same
-major version and the selected channel using the additive rules. An alpha project
-follows alpha or final releases; a stable project never opts into alpha automatically. A new major version requires manual review.
-No process runs when SYSTEMX is closed. There are no OS scheduler, login, or Git hooks.
-Automatic startup discovery has no externally supplied archive digest pin. Keep
-manual updates if every new release must be independently pinned; enabling
-`on-start` accepts the repository's current published tag and observed digest.
-If that release changes a root bootstrap or launcher file, automatic selection stops
-at the bootstrap precondition and keeps the verified current release. Review the
-new release and run `bootstrap-refresh` explicitly before retrying the update.
+With this opt-in policy, the managed launcher checks release metadata at startup,
+at most once per 24 hours after a successful check, and **reports** an available
+release. It never downloads that release archive or changes the selected defaults,
+pin, project-owned files, or release cache during the check. A pinned project
+may enable these notices without unpinning. An alpha project checks for alpha or final
+releases; a stable project checks only final releases. A new major version is
+reported for separate review. No process runs when SYSTEMX is closed. There are
+no OS scheduler, login, or Git hooks.
+
+After a notice, review the release and its independently obtained codeload ZIP
+digest, then select an exact version manually. Unpin only when changing the
+selected version; preview the update, apply it, verify the result, and pin the
+current version again if desired. The `--archive-sha256` command above verifies
+the downloaded archive before parsing it. A checksum copied from the same
+mutable location as the archive is not independent trust. If the new release
+changes a root bootstrap or launcher file, use the explicitly reviewed,
+backed-up `bootstrap-refresh` procedure before the update.
+
 An unavailable check leaves the verified installed release usable. A failed check
 can be retried at the next startup. Use `systemx run --offline --target ... -- ...`
 to skip network checks for that invocation. Inspection via manager `status` and
-`export-chat` is always offline. A version pin prevents automatic update selection.
+`export-chat` is always offline. The check records only local manager-owned
+metadata under `.SYSTEMX/.systemx/last-check.json`.
+
+**Existing installations:** their root `manager.py` and launcher are preserved
+by an ordinary update. If they still implement automatic startup selection,
+do not enable `on-start` through that older root launcher. Use the reviewed new
+external tool to perform the [bootstrap refresh](UPGRADING.md#refresh-the-root-bootstrap-before-a-changed-release)
+and select the new release before relying on check-only behavior. Until then,
+keep `--auto manual` or invoke the external tool with `--offline`.
 
 ## Existing installations and recovery
 

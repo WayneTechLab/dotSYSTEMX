@@ -447,8 +447,8 @@ def load_state(root):
     version_id(value["activeVersion"])
     if value["pinnedVersion"] is not None:
         version_id(value["pinnedVersion"])
-        if value["pinnedVersion"] != value["activeVersion"] or value["autoUpdate"] != "manual":
-            raise InstallError("A pinned installation must use its pinned release and manual updates")
+        if value["pinnedVersion"] != value["activeVersion"]:
+            raise InstallError("A pinned installation must use its pinned release")
     if not isinstance(value["releases"], dict) or value["activeVersion"] not in value["releases"]:
         raise InstallError("Missing active release fingerprint")
     for release, fingerprint in value["releases"].items():
@@ -813,7 +813,7 @@ def update(target, *, source=None, version=None, dry_run=False, archive_sha256=N
 
 
 def set_policy(target, *, pin=None, auto_update=None):
-    """pin='current' locks the selected release; pin='none' explicitly unlocks it."""
+    """Pin a release or opt into availability checks without selecting updates."""
     root = project_root(target)
     load_state(root)
     with update_lock(root):
@@ -826,10 +826,17 @@ def set_policy(target, *, pin=None, auto_update=None):
                 state["autoUpdate"] = "manual"
         if auto_update is not None:
             if auto_update not in {"manual", "on-start"}:
-                raise InstallError("Automatic updates must be manual or on-start")
-            if auto_update == "on-start" and state["pinnedVersion"]:
-                raise InstallError("Unpin explicitly before enabling automatic updates")
+                raise InstallError("Startup checks must be manual or on-start")
             state["autoUpdate"] = auto_update
+        if state["autoUpdate"] == "on-start":
+            # Installed shell/PowerShell launchers execute the root manager, not
+            # the package used for this policy command. An older root manager
+            # could still auto-select a release or reject pinned check-only
+            # state, so require an explicit reviewed bootstrap refresh first.
+            installed_manager = safe_path(root / ".SYSTEMX", "manager.py")
+            if (not installed_manager.is_file() or installed_manager.stat().st_size > MAX_FILE or
+                    digest(installed_manager.read_bytes()) != digest((PACKAGE / "manager.py").read_bytes())):
+                raise InstallError("Use this reviewed external tool to preview/apply bootstrap-refresh before enabling startup checks")
         state["updatedAt"] = now()
         with operation_log(root, "policy", {"pinnedVersion": state["pinnedVersion"], "autoUpdate": state["autoUpdate"]}):
             save_state(root, state)
@@ -849,28 +856,50 @@ def status(target):
 
 
 def startup_update(root):
+    """Report a newer published release without downloading or selecting its code."""
     state = load_state(root)
-    if state["autoUpdate"] != "on-start" or state["pinnedVersion"]:
+    if state["autoUpdate"] != "on-start":
         return
+
+    def announce(version):
+        new, old = version_key(version), version_key(state["activeVersion"])
+        if new > old and new[0] == old[0]:
+            print("SYSTEMX release available: " + version + " (installed " + state["activeVersion"] +
+                  "); no update applied. Review it before an explicit manual update.", file=sys.stderr)
+        elif new > old and new[0] != old[0]:
+            print("SYSTEMX release available: " + version + " (installed " + state["activeVersion"] +
+                  "); a different major release needs a manual upgrade review. No update applied.", file=sys.stderr)
+
     marker = safe_path(root / ".SYSTEMX", ".systemx/last-check.json")
     if marker.exists():
         try:
-            age = (datetime.now(timezone.utc) - datetime.fromisoformat(decode(marker.read_bytes())["at"].replace("Z", "+00:00"))).total_seconds()
+            marker_info = marker.lstat()
+            if not stat.S_ISREG(marker_info.st_mode) or marker_info.st_size > 4096:
+                raise ValueError("Startup check metadata must be a small regular file")
+            previous = decode(marker.read_bytes())
+            if (not isinstance(previous, dict) or
+                    set(previous) != {"at", "repository", "activeVersion", "availableVersion"} or
+                    previous["repository"] != state["repository"] or
+                    previous["activeVersion"] != state["activeVersion"] or
+                    not isinstance(previous["at"], str)):
+                raise ValueError("Stale or invalid startup check metadata")
+            checked_at = datetime.fromisoformat(previous["at"].replace("Z", "+00:00"))
+            if checked_at.tzinfo is None:
+                raise ValueError("Startup check time needs a timezone")
+            age = (datetime.now(timezone.utc) - checked_at).total_seconds()
             if 0 <= age < 86400:
+                announce(version_id(previous["availableVersion"]))
                 return
-        except (ValueError, KeyError, TypeError):
+        except (OSError, ValueError, KeyError, TypeError):
             pass
     try:
         version = latest_version(state["repository"], channel=release_channel(state["activeVersion"]))
-        new, old = version_key(version), version_key(state["activeVersion"])
-        if new > old and new[0] == old[0]:
-            update(root, version=version)
-            print("SYSTEMX selected new defaults: " + version, file=sys.stderr)
-        elif new[0] != old[0]:
-            print("SYSTEMX: a different major release needs a manual upgrade review", file=sys.stderr)
+        announce(version)
         # This is manager-owned check metadata, never a user document.
         with update_lock(root):
-            marker.write_text(json.dumps({"at": now(), "availableVersion": version}) + "\n", encoding="utf-8")
+            lifecycle.atomic_json(marker, {"at": now(), "repository": state["repository"],
+                                           "activeVersion": state["activeVersion"],
+                                           "availableVersion": version})
     except (OSError, ValueError, zipfile.BadZipFile) as error:
         print("SYSTEMX update check unavailable; using verified installed defaults: " + str(error), file=sys.stderr)
 

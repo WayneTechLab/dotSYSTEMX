@@ -92,9 +92,10 @@ it. A file missing from the root despite its presence in a retained release is
 a conflict. It explicitly replaces only recognized files, including stock shell
 and PowerShell launchers. It does
 not update customized launchers or project-owned records. An opted-in startup
-update that needs a bootstrap refresh keeps the old
-verified selection until the refresh is done manually. Manual updates remain the
-default; startup checks are opt-in and major upgrades require review.
+check never selects a release. Manual updates remain the default; startup checks
+are opt-in and major upgrades require review. Existing root managers are
+preserved by ordinary updates, so refresh an older stock manager with a reviewed
+external tool before relying on this check-only startup contract.
 Distribution hashes normalize CRLF to LF for portable text checkouts. They
 check consistency with the manifest;
 they are not independent release signatures. A selected release cache must also
@@ -105,9 +106,11 @@ present entry matches the reviewed distribution.
 
 An exact remote tag ZIP can have a separately trusted raw SHA-256 pin checked
 before archive parsing. `INSTALLATION.json` records `explicit-pin`,
-`observed-only`, or no remote digest for each selected release. Startup discovery
-does not have an independent digest pin. Neither the manifest nor an observed
-digest makes a movable tag immutable. See [installation](INSTALLATION.md).
+`observed-only`, or no remote digest for each selected release. Opted-in startup
+discovery reads release metadata only; it never downloads an archive or changes
+the selection. The independent digest pin applies to a later explicit manual
+update. Neither the manifest nor an observed digest makes a movable tag
+immutable. See [installation](INSTALLATION.md).
 
 Uninstall is a separate explicit operation: it inventories the complete folder,
 moves it to an external backup on the same filesystem, removes a valid local alias,

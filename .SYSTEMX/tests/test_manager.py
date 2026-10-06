@@ -306,7 +306,7 @@ class ManagerTests(unittest.TestCase):
         result = manager.run(self.root, ["validate"], capture=True)
         self.assertEqual(result.returncode, 0, result.stderr)
 
-    def test_manual_and_pinned_startup_never_contact_network(self):
+    def test_manual_policy_and_offline_run_never_contact_network(self):
         self.install()
         with patch.object(manager, "get_url", side_effect=AssertionError("No network expected")):
             manager.startup_update(self.root)
@@ -316,21 +316,99 @@ class ManagerTests(unittest.TestCase):
             result = manager.run(self.root, ["status"], offline=True, capture=True)
             self.assertEqual(result.returncode, 0, result.stderr)
         manager.set_policy(self.root, pin="current")
-        with self.assertRaisesRegex(manager.InstallError, "Unpin"):
-            manager.set_policy(self.root, auto_update="on-start")
+        self.assertEqual(manager.status(self.root)["autoUpdate"], "manual")
 
-    def test_opt_in_startup_appends_new_release_and_checks_at_most_daily(self):
+    def test_opt_in_startup_reports_new_release_without_selecting_or_fetching_it(self):
         self.install()
         manager.set_policy(self.root, pin="none", auto_update="on-start")
         self.next_release()
-        bundle = manager.read_bundle(self.source)
         before = self.root_files()
+        state_path = self.root / ".SYSTEMX/INSTALLATION.json"
+        state_before = state_path.read_bytes()
+        notice = io.StringIO()
         with patch.object(manager, "latest_version", return_value=self.next_version) as latest, \
-             patch.object(manager, "remote_bundle", return_value=bundle), redirect_stderr(io.StringIO()):
+             patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not download an archive")), \
+             patch.object(manager, "update", side_effect=AssertionError("Startup must not select a release")), \
+             redirect_stderr(notice):
             manager.startup_update(self.root)
             manager.startup_update(self.root)
             self.assertEqual(latest.call_count, 1)
+        self.assertIn(self.next_version, notice.getvalue())
+        self.assertIn("manual", notice.getvalue().lower())
+        self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
+        self.assertEqual(manager.status(self.root)["retainedVersions"], [self.version])
+        self.assertEqual(state_path.read_bytes(), state_before)
+        marker = json.loads((self.root / ".SYSTEMX/.systemx/last-check.json").read_text())
+        self.assertEqual(marker["availableVersion"], self.next_version)
+        self.assertFalse(manager.release_path(self.root, self.next_version).exists())
+        for name, data in before.items():
+            self.assertEqual((self.root / ".SYSTEMX" / name).read_bytes(), data)
+
+    def test_pinned_project_can_opt_in_to_notice_without_changing_its_pin(self):
+        self.install()
+        manager.set_policy(self.root, auto_update="on-start")
+        notice = io.StringIO()
+        with patch.object(manager, "latest_version", return_value=self.next_version), \
+             patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not fetch an archive")), \
+             redirect_stderr(notice):
+            manager.startup_update(self.root)
+        state = manager.status(self.root)
+        self.assertEqual(state["activeVersion"], self.version)
+        self.assertEqual(state["pinnedVersion"], self.version)
+        self.assertEqual(state["autoUpdate"], "on-start")
+        self.assertIn(self.next_version, notice.getvalue())
+        self.assertFalse(manager.release_path(self.root, self.next_version).exists())
+        with self.assertRaisesRegex(manager.InstallError, "pinned"):
+            manager.update(self.root, version=self.next_version, archive_sha256="a" * 64)
+
+    def test_malformed_cached_startup_marker_is_rechecked_without_selection(self):
+        self.install()
+        manager.set_policy(self.root, auto_update="on-start")
+        marker = self.root / ".SYSTEMX/.systemx/last-check.json"
+        marker.write_text(json.dumps({"at": [], "availableVersion": "2099.0.0"}) + "\n")
+        state_path = self.root / ".SYSTEMX/INSTALLATION.json"
+        state_before = state_path.read_bytes()
+        with patch.object(manager, "latest_version", return_value=self.next_version) as latest, \
+             patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not fetch an archive")), \
+             redirect_stderr(io.StringIO()):
+            manager.startup_update(self.root)
+            latest.assert_called_once()
+        self.assertEqual(state_path.read_bytes(), state_before)
+        self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
+        self.assertEqual(json.loads(marker.read_text())["availableVersion"], self.next_version)
+
+    @unittest.skipUnless(hasattr(os, "mkfifo"), "FIFO fixtures require POSIX")
+    def test_fifo_startup_marker_cannot_block_the_selected_runner(self):
+        self.install()
+        manager.set_policy(self.root, auto_update="on-start")
+        marker = self.root / ".SYSTEMX/.systemx/last-check.json"
+        os.mkfifo(marker)
+        with patch.object(manager, "latest_version", return_value=self.next_version) as latest, \
+             patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not fetch an archive")), \
+             redirect_stderr(io.StringIO()):
+            manager.startup_update(self.root)
+            latest.assert_called_once()
+        self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
+        self.assertTrue(marker.is_file())
+
+    def test_explicit_digest_pinned_update_after_notice_preserves_project_files(self):
+        self.install()
+        manager.set_policy(self.root, auto_update="on-start")
+        self.next_release()
+        before = self.root_files()
+        with patch.object(manager, "latest_version", return_value=self.next_version), \
+             patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not fetch an archive")), \
+             redirect_stderr(io.StringIO()):
+            manager.startup_update(self.root)
+        manager.set_policy(self.root, pin="none")
+        bundle = manager.read_bundle(self.source)
+        pin = "a" * 64
+        bundle["archiveDigest"] = {"sha256": pin, "verifiedBy": "explicit-pin"}
+        with patch.object(manager, "remote_bundle", return_value=bundle) as remote:
+            manager.update(self.root, version=self.next_version, archive_sha256=pin)
+            remote.assert_called_once_with(self.next_version, manager.DEFAULT_REPOSITORY, pin)
         self.assertEqual(manager.status(self.root)["activeVersion"], self.next_version)
+        self.assertEqual(manager.status(self.root)["archiveDigest"], bundle["archiveDigest"])
         for name, data in before.items():
             self.assertEqual((self.root / ".SYSTEMX" / name).read_bytes(), data)
 
@@ -340,10 +418,13 @@ class ManagerTests(unittest.TestCase):
         with patch.object(manager, "latest_version", side_effect=OSError("offline")), redirect_stderr(io.StringIO()):
             result = manager.run(self.root, ["status"], capture=True)
             self.assertEqual(result.returncode, 0)
+        major_notice = io.StringIO()
         with patch.object(manager, "latest_version", return_value="2.0.0"), \
              patch.object(manager, "remote_bundle", side_effect=AssertionError("Major update must be manual")), \
-             redirect_stderr(io.StringIO()):
+             redirect_stderr(major_notice):
             manager.startup_update(self.root)
+        self.assertIn("2.0.0", major_notice.getvalue())
+        self.assertIn("No update applied", major_notice.getvalue())
         self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
 
     def test_alpha_update_preserves_records_and_graduates_to_stable(self):
@@ -354,9 +435,12 @@ class ManagerTests(unittest.TestCase):
         self.next_release("1.8.7-alpha.10")
         bundle = manager.read_bundle(self.source)
         with patch.object(manager, "latest_version", return_value=bundle["version"]) as latest, \
-             patch.object(manager, "remote_bundle", return_value=bundle), redirect_stderr(io.StringIO()):
+             patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not fetch an archive")), \
+             redirect_stderr(io.StringIO()):
             manager.startup_update(self.root)
             latest.assert_called_once_with(manager.DEFAULT_REPOSITORY, channel="alpha")
+        self.assertEqual(manager.status(self.root)["activeVersion"], "1.8.7-alpha.2")
+        manager.update(self.root, source=self.source)
         self.assertEqual(manager.status(self.root)["releaseChannel"], "alpha")
         self.write_manifest("1.8.7")
         manager.update(self.root, source=self.source)
@@ -528,6 +612,10 @@ class ManagerTests(unittest.TestCase):
         (self.source / "SYSTEMX.sh").write_bytes((SOURCE / "SYSTEMX.sh").read_bytes())
         self.write_manifest(self.next_version)
         manager.set_policy(self.root, pin="none")
+        before_policy = state_path.read_bytes()
+        with self.assertRaisesRegex(manager.InstallError, "bootstrap-refresh"):
+            manager.set_policy(self.root, auto_update="on-start")
+        self.assertEqual(state_path.read_bytes(), before_policy)
         with self.assertRaisesRegex(manager.InstallError, "bootstrap-refresh"):
             manager.update(self.root, source=self.source)
         self.assertEqual(root_manager.read_bytes(), old_bytes)
@@ -545,6 +633,8 @@ class ManagerTests(unittest.TestCase):
                                 cwd=self.folder, text=True, capture_output=True, timeout=15)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(manager.status(self.root)["activeVersion"], self.next_version)
+        manager.set_policy(self.root, auto_update="on-start")
+        self.assertEqual(manager.status(self.root)["autoUpdate"], "on-start")
 
     def test_schema_one_installation_state_migrates_without_losing_release_history(self):
         self.install()

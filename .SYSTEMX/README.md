@@ -64,8 +64,9 @@ bash .SYSTEMX/SYSTEMX.sh validate
 bash .SYSTEMX/SYSTEMX.sh context --agent agent.0
 ```
 
-Managed installs select their versioned defaults automatically through the
-launcher. Each project starts pinned with manual updates. See
+Managed installs run their selected versioned defaults through the launcher.
+Each project starts pinned with manual updates. An opt-in startup check can
+report available releases even while pinned; it never selects one. See
 [installation and updates](docs/INSTALLATION.md) for the preservation contract.
 
 ## Multiple projects and channels

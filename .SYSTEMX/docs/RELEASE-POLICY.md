@@ -37,19 +37,21 @@ Changes should document migrations and preserve project-owned data.
 
 - New projects are pinned to their chosen version and use manual updates.
 - An exact alpha tag or reviewed alpha source explicitly selects alpha defaults.
-- Unpinned final-version projects discover only final releases. An alpha tag
-  incorrectly labeled final on GitHub is refused by stable discovery.
-- Unpinned alpha projects discover published alpha and final releases, ordered
-  numerically: `alpha.2 < alpha.10 < final` for the same base version. A final
-  selected version returns the project to final-only discovery.
-- Startup selection still requires `--auto on-start`, stays within the current
-  major version, and checks at most daily after a successful check. Alpha releases
-  can still change interfaces within that major version. Keep manual updates when
-  a review is needed before every change.
-- A new release that changes root bootstrap or launcher files cannot be selected
-  automatically. The current verified version remains selected until an external
-  reviewed tool performs an explicit backed-up `bootstrap-refresh` and the update
-  is retried.
+- Final-version projects discover only final releases, whether the result is a
+  startup notice or an unpinned manual selection. An alpha tag incorrectly
+  labeled final on GitHub is refused by stable discovery.
+- Alpha projects discover published alpha and final releases for notices and
+  unpinned manual selection, ordered numerically: `alpha.2 < alpha.10 < final`
+  for the same base version. A final selected version returns the project to
+  final-only discovery.
+- Opt-in `--auto on-start` checks for a published release at most daily after a
+  successful check and reports it. This works while a project remains pinned.
+  Startup never downloads or selects a release. Alpha releases can change
+  interfaces within a major version; review every version before a manual update.
+- A manual selection of a release that changes root bootstrap or launcher files
+  requires an external reviewed tool to perform an explicit backed-up
+  `bootstrap-refresh` before the update is retried. A notice changes neither
+  the selected version nor those root files.
 - Discovery never silently downgrades a project. This manager can install and
   newly select only releases **1.8.7-alpha.1 or newer**; `bootstrap-refresh`
   targets that same range. It can still run an
@@ -60,7 +62,8 @@ Changes should document migrations and preserve project-owned data.
   roll those files backward. Earlier releases need a separately reviewed
   backup or legacy recovery path.
 
-The channel is derived from `activeVersion`; no new setting is inserted into user
+The channel is derived from `activeVersion`; a startup notice does not change it.
+No new setting is inserted into user
 task or policy records. Schema-1 `INSTALLATION.json` files are read compatibly and
 gain schema-2 archive-digest receipts on a later manager state write. Receipts for
 previously installed releases are `null`; they cannot retroactively prove a
@@ -76,14 +79,14 @@ tool environment first, from outside the project's `.SYSTEMX` folder. Use the
 interpreter belonging to that environment; the example assumes it is activated:
 
 ```bash
-python -m pip --log dotsystemx-alpha-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.7-alpha.1"
+python -m pip --log dotsystemx-alpha-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.8-alpha.1"
 systemx --version
 systemx status --target "/path/to/project"
-systemx bootstrap-refresh --target "/path/to/project" --version 1.8.7-alpha.1
-systemx bootstrap-refresh --target "/path/to/project" --version 1.8.7-alpha.1 --apply
+systemx bootstrap-refresh --target "/path/to/project" --version 1.8.8-alpha.1
+systemx bootstrap-refresh --target "/path/to/project" --version 1.8.8-alpha.1 --apply
 systemx policy --target "/path/to/project" --pin none --auto manual
-systemx update --target "/path/to/project" --version 1.8.7-alpha.1 --dry-run
-systemx update --target "/path/to/project" --version 1.8.7-alpha.1
+systemx update --target "/path/to/project" --version 1.8.8-alpha.1 --dry-run
+systemx update --target "/path/to/project" --version 1.8.8-alpha.1
 systemx policy --target "/path/to/project" --pin current
 systemx run --target "/path/to/project" --offline -- validate
 systemx run --target "/path/to/project" --offline -- context --agent agent.0
@@ -131,9 +134,12 @@ built archive listed in `SHA256SUMS`. The manager verifies it before ZIP parsing
 its receipt records whether that digest was an explicit pin or merely observed.
 The distribution manifest checks internal consistency, not publisher identity.
 The SHA-256 pin also depends on the trustworthiness of the checksum's source;
-it is not a signature or a security audit. Opted-in startup discovery remains
-unpinned because the next archive digest is not known in advance. Keep manual
-updates when independent archive verification is required for every selection.
+it is not a signature or a security audit. Opted-in startup discovery reads
+release metadata but never downloads or selects an archive. A subsequent
+explicit update can use an independently obtained digest. Projects with an
+older preserved root manager may retain its old startup-selection behavior;
+refresh that stock bootstrap with a reviewed external tool before enabling
+`on-start`, or keep `--auto manual` until the migration is complete.
 
 GitHub Actions is disabled for this repository, and no workflow is shipped.
 Maintainers run release

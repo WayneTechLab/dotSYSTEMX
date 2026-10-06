@@ -28,7 +28,7 @@ menu option 11 checks the current layout without changing it.
 
 For a managed project, `systemx run --target "/path/to/project" -- validate`
 uses its selected defaults even if an older root launcher was retained. New
-installations are pinned with manual updates; opt-in startup updates are configured
+installations are pinned with manual updates; opt-in startup update checks are configured
 separately in the installation guide. Existing root default copies remain unchanged.
 
 Before initializing a pristine distribution, `validate --template` additionally

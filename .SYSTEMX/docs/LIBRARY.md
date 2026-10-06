@@ -12,7 +12,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.7-alpha.1"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.8-alpha.1"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -36,7 +36,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.8.7-alpha.1` is spelled `1.8.7a1` in Python package
+The public release ID `1.8.8-alpha.1` is spelled `1.8.8a1` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)
@@ -107,9 +107,10 @@ remote version, `install`, `update`, and `first_run` accept
 `archive_sha256="<64-hex digest>"`; the CLI spells this `--archive-sha256`.
 Obtain the digest independently for the **exact codeload tag ZIP** that the
 manager downloads. It is checked before ZIP parsing. It cannot be supplied with
-`source` or without `version`; opted-in startup discovery has no independent
-digest pin. A checksum for a separately published archive or wheel is not
-interchangeable. The selected digest and whether it was explicitly pinned appear
+`source` or without `version`; opted-in startup discovery only reports release
+metadata and does not fetch an archive. A checksum for a separately published
+archive or wheel is not interchangeable. The selected digest and whether it was
+explicitly pinned appear
 in `status` and manager-owned installation state. See [installation](INSTALLATION.md)
 for the trust and retry boundaries.
 
