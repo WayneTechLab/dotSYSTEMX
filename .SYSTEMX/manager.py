@@ -25,6 +25,7 @@ import re
 import stat
 import subprocess
 import tempfile
+import threading
 import types
 import urllib.request
 import uuid
@@ -86,9 +87,12 @@ SHA256 = re.compile(r"[0-9a-f]{64}")
 SEEDS = ("GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
          "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
          "WORK/FOCUS.json", "config/project.example.json")
+SEEDS_FROM_1_8_9 = ("GLOBAL/ACCESS-MATRIX.md", "PLAN/MAP.md",
+                    "templates/project/GLOBAL/ACCESS-MATRIX.md", "templates/project/PLAN/MAP.md")
 BOOTSTRAP_FILES = ("manager.py", "lifecycle.py", "versions.py", "systemx_paths.py",
                    "SYSTEMX.sh", "SYSTEMX.ps1", "INSTALL.sh", "INSTALL.ps1")
 ISOLATED_RUNNER_FLOOR = "1.8.7-alpha.1"
+STARTUP_CHECK_TIMEOUT_SECONDS = 5.0
 
 
 InstallError = SystemXPathError
@@ -168,6 +172,41 @@ def decode(data):
     return json.loads(data.decode("utf-8"), object_pairs_hook=unique, parse_constant=invalid)
 
 
+def regular_bytes(path, limit=MAX_FILE):
+    """Read one bounded regular file without blocking on a replaced FIFO.
+
+    The caller still checks the path's scope. The descriptor checks close the
+    common gap between inspecting a local source and opening it; a concurrent
+    writer must stop before an install or update can be considered stable.
+    """
+    before = path.lstat()
+    if not stat.S_ISREG(before.st_mode):
+        raise InstallError("Expected a regular file: " + str(path))
+    if before.st_size > limit:
+        raise InstallError("File exceeds the read limit: " + str(path))
+    flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NONBLOCK", 0) | getattr(os, "O_NOFOLLOW", 0)
+    descriptor = os.open(path, flags)
+    try:
+        opened = os.fstat(descriptor)
+        if not stat.S_ISREG(opened.st_mode) or (opened.st_dev, opened.st_ino) != (before.st_dev, before.st_ino):
+            raise InstallError("File changed or is not regular: " + str(path))
+        if opened.st_size > limit:
+            raise InstallError("File exceeds the read limit: " + str(path))
+        with os.fdopen(descriptor, "rb") as stream:
+            descriptor = None
+            data = stream.read(limit + 1)
+            after = os.fstat(stream.fileno())
+        if len(data) > limit:
+            raise InstallError("File exceeds the read limit: " + str(path))
+        identity = lambda info: (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns)
+        if identity(after) != identity(opened):
+            raise InstallError("File changed while being read: " + str(path))
+        return data
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+
+
 def verified_bundle(files):
     if MANIFEST not in files:
         raise InstallError("Source has no distribution manifest; use a managed-install release")
@@ -182,9 +221,10 @@ def verified_bundle(files):
         raise InstallError("Invalid distribution inventory")
     if set(files) != set(inventory) | {MANIFEST}:
         raise InstallError("Distribution inventory does not match the supplied files")
+    seed_names = SEEDS + (SEEDS_FROM_1_8_9 if version_key(manifest["version"])[:3] >= (1, 8, 9) else ())
     required = {"VERSION", "LICENSE", "SOURCE.json", "STANDARD.md", "START-HERE.md",
                 "manager.py", "scripts/systemx.py", "scripts/project_memory.py",
-                "config/template-records.json", *SEEDS}
+                "config/template-records.json", *seed_names}
     base_version = version_key(manifest["version"])[:3]
     if base_version >= (1, 4, 0):
         required.add("systemx_paths.py")
@@ -225,9 +265,9 @@ def verified_bundle(files):
     seeds = decode(files["config/template-records.json"])
     if (not isinstance(seeds, dict) or set(seeds) != {"schemaVersion", "sha256"} or
             type(seeds["schemaVersion"]) is not int or seeds["schemaVersion"] != 1 or
-            not isinstance(seeds["sha256"], dict) or set(seeds["sha256"]) != set(SEEDS)):
+            not isinstance(seeds["sha256"], dict) or set(seeds["sha256"]) != set(seed_names)):
         raise InstallError("Invalid blank-record manifest")
-    if any(digest(files[name]) != seeds["sha256"][name] for name in SEEDS):
+    if any(digest(files[name]) != seeds["sha256"][name] for name in seed_names):
         raise InstallError("Distribution contains changed project seeds")
     if decode(files["WORK/TASKS.json"]) != {"schemaVersion": 1, "tasks": []}:
         raise InstallError("Distribution task ledger must be empty")
@@ -265,9 +305,7 @@ def read_bundle(source, *, exact=False):
         if layout["aliasStatus"] != "not-installed":
             source = source / ".SYSTEMX"
     manifest_path = safe_path(source, MANIFEST)
-    if manifest_path.stat().st_size > MAX_FILE:
-        raise InstallError("Oversized distribution manifest")
-    raw = manifest_path.read_bytes()
+    raw = regular_bytes(manifest_path)
     manifest = decode(raw)
     if not isinstance(manifest, dict):
         raise InstallError("Distribution manifest must be an object")
@@ -277,9 +315,7 @@ def read_bundle(source, *, exact=False):
     files = {MANIFEST: raw}
     for name in names:
         path = safe_path(source, portable_path(name))
-        if not path.is_file() or path.stat().st_size > MAX_FILE:
-            raise InstallError("Missing or oversized distribution file: " + name)
-        files[name] = path.read_bytes()
+        files[name] = regular_bytes(path)
     return verified_bundle(files)
 
 
@@ -428,7 +464,7 @@ def state_path(root):
 
 
 def load_state(root):
-    value = decode(state_path(root).read_bytes())
+    value = decode(regular_bytes(state_path(root)))
     old_required = {"schemaVersion", "profile", "repository", "activeVersion", "pinnedVersion",
                     "autoUpdate", "installedAt", "updatedAt", "releases"}
     new_required = old_required | {"archiveDigests"}
@@ -635,12 +671,14 @@ def bootstrap_differences(root, bundle):
 
 def bootstrap_refresh(target, *, source=None, version=None, archive_sha256=None, apply=False):
     """Explicitly refresh only stock bootstrap code, retaining byte-for-byte backups."""
+    if source == "":
+        raise InstallError("An explicit --source cannot be empty")
     root = project_root(target)
     state = load_state(root)
     archive_sha256 = archive_digest(archive_sha256)
     if archive_sha256 is not None and (source is not None or version is None):
         raise InstallError("An archive SHA-256 pin requires an exact remote --version and no --source")
-    bundle = read_bundle(source or PACKAGE) if source is not None or version is None else remote_bundle(
+    bundle = read_bundle(source if source is not None else PACKAGE) if source is not None or version is None else remote_bundle(
         version, state["repository"], archive_sha256)
     if version is not None and bundle["version"] != version_id(version):
         raise InstallError("Requested version differs from the supplied source")
@@ -731,6 +769,8 @@ def bootstrap_refresh(target, *, source=None, version=None, archive_sha256=None,
 def install(target, *, source=None, version=None, profile="project", repository=DEFAULT_REPOSITORY,
             dry_run=False, lowercase_alias=False, archive_sha256=None):
     """Create only absent files, store immutable defaults, and pin the initial release."""
+    if source == "":
+        raise InstallError("An explicit --source cannot be empty")
     root = project_root(target)
     if profile not in PROFILES:
         raise InstallError("Unknown setup profile")
@@ -740,7 +780,7 @@ def install(target, *, source=None, version=None, profile="project", repository=
         raise InstallError("An archive SHA-256 pin requires an exact remote --version and no --source")
     if state_path(root).exists():
         raise InstallError("Already managed; use update or policy")
-    bundle = (read_bundle(source or PACKAGE) if version is None or source else
+    bundle = (read_bundle(source if source is not None else PACKAGE) if version is None or source is not None else
               remote_bundle(version, repository, archive_sha256))
     if version is not None and bundle["version"] != version_id(version):
         raise InstallError("Requested version differs from the supplied source")
@@ -774,6 +814,8 @@ def alias(target, *, create=False, dry_run=False):
 
 def update(target, *, source=None, version=None, dry_run=False, archive_sha256=None):
     """Append a release and missing root files; never replace or delete existing root files."""
+    if source == "":
+        raise InstallError("An explicit --source cannot be empty")
     root = project_root(target)
     state = load_state(root)
     archive_sha256 = archive_digest(archive_sha256)
@@ -781,11 +823,11 @@ def update(target, *, source=None, version=None, dry_run=False, archive_sha256=N
         raise InstallError("An archive SHA-256 pin requires an exact remote --version and no --source")
     if state["pinnedVersion"] and version not in {None, state["pinnedVersion"]}:
         raise InstallError("Version is pinned; explicitly unpin before selecting another release")
-    desired = version or (state["pinnedVersion"] if not source else None)
-    bundle = read_bundle(source) if source else remote_bundle(
+    desired = version or (state["pinnedVersion"] if source is None else None)
+    bundle = read_bundle(source) if source is not None else remote_bundle(
         desired or latest_version(state["repository"], channel=release_channel(state["activeVersion"])),
         state["repository"], archive_sha256)
-    if not source and version is None and version_key(bundle["version"]) < version_key(state["activeVersion"]):
+    if source is None and version is None and version_key(bundle["version"]) < version_key(state["activeVersion"]):
         raise InstallError("Discovery would downgrade this project; select an exact --version to roll back")
     if version is not None and bundle["version"] != version_id(version):
         raise InstallError("Requested version differs from the supplied source")
@@ -873,10 +915,7 @@ def startup_update(root):
     marker = safe_path(root / ".SYSTEMX", ".systemx/last-check.json")
     if marker.exists():
         try:
-            marker_info = marker.lstat()
-            if not stat.S_ISREG(marker_info.st_mode) or marker_info.st_size > 4096:
-                raise ValueError("Startup check metadata must be a small regular file")
-            previous = decode(marker.read_bytes())
+            previous = decode(regular_bytes(marker, 4096))
             if (not isinstance(previous, dict) or
                     set(previous) != {"at", "repository", "activeVersion", "availableVersion"} or
                     previous["repository"] != state["repository"] or
@@ -893,14 +932,29 @@ def startup_update(root):
         except (OSError, ValueError, KeyError, TypeError):
             pass
     try:
-        version = latest_version(state["repository"], channel=release_channel(state["activeVersion"]))
+        # Discovery is advisory. A slow or trickling API response must never
+        # hold up the selected local runner across multiple release pages.
+        result = {}
+        def discover():
+            try:
+                result["version"] = latest_version(state["repository"], channel=release_channel(state["activeVersion"]))
+            except Exception as error:
+                result["error"] = error
+        worker = threading.Thread(target=discover, daemon=True)
+        worker.start()
+        worker.join(STARTUP_CHECK_TIMEOUT_SECONDS)
+        if worker.is_alive():
+            raise InstallError("Release metadata check timed out; run continues with installed defaults")
+        if "error" in result:
+            raise result["error"]
+        version = result["version"]
         announce(version)
         # This is manager-owned check metadata, never a user document.
         with update_lock(root):
             lifecycle.atomic_json(marker, {"at": now(), "repository": state["repository"],
                                            "activeVersion": state["activeVersion"],
                                            "availableVersion": version})
-    except (OSError, ValueError, zipfile.BadZipFile) as error:
+    except Exception as error:
         print("SYSTEMX update check unavailable; using verified installed defaults: " + str(error), file=sys.stderr)
 
 
@@ -989,6 +1043,7 @@ def first_run(target, *, source=None, version=None, profile="project", lowercase
               "config": "preserve" if safe_path(root / ".SYSTEMX", "project.json").exists() else "create-empty",
               "nextSteps": ["Fill .SYSTEMX/GLOBAL/CONTEXT.md with approved project facts",
                             "Define outcomes and acceptance in .SYSTEMX/PLAN/MASTER-PLAN.md",
+                            "When relevant, record verified access decisions in .SYSTEMX/GLOBAL/ACCESS-MATRIX.md and source/data-flow boundaries in .SYSTEMX/PLAN/MAP.md",
                             "Configure only real project checks in .SYSTEMX/project.json",
                             "Run validate, then load context --agent agent.0"],
               "guide": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup"}
@@ -1019,7 +1074,7 @@ def audit(target):
         if logs.is_dir():
             for path in sorted(logs.glob("*.json")):
                 safe_path(root / ".SYSTEMX", path.relative_to(root / ".SYSTEMX"))
-                value = decode(path.read_bytes())
+                value = decode(regular_bytes(path))
                 result["operationLogs"].append({"file": str(path), "action": value.get("action"), "status": value.get("status")})
                 if value.get("status") != "complete":
                     result["issues"].append("Incomplete operation: " + path.name)
@@ -1093,9 +1148,7 @@ def restore(target, *, backup, apply=False):
         raise InstallError("Restore target must be an existing containing project directory")
     destination = lifecycle.external_backup(root, backup, must_exist=True)
     receipt_path = destination / "UNINSTALL-LOG.json"
-    if is_link(receipt_path):
-        raise InstallError("Refusing a linked uninstall receipt")
-    receipt = decode(receipt_path.read_bytes())
+    receipt = decode(regular_bytes(receipt_path, MAX_ARCHIVE))
     if (not isinstance(receipt, dict) or type(receipt.get("schemaVersion")) is not int or receipt["schemaVersion"] != 1 or
             receipt.get("action") != "uninstall" or receipt.get("status") not in {"prepared", "archived", "complete", "incomplete"} or
             not isinstance(receipt.get("inventory"), dict) or type(receipt.get("aliasWasLinked")) is not bool):

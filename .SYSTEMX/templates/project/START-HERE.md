@@ -16,6 +16,11 @@ guide, then this project's records:
 6. [Agent 0 memory](AGENTS/agent.0/MEMORY.md), or the assigned worker's memory.
 7. [Source references](SOURCES.json) relevant to the selected task.
 
+Open this project's [access matrix](GLOBAL/ACCESS-MATRIX.md) for permission
+decisions and [map](PLAN/MAP.md) when source or system boundaries matter. Both
+start blank and are not loaded into every bounded context packet. The outer
+defaults' `docs/ACCESS-AND-MAP.md` explains their limited role.
+
 Use the outer launcher with projects and an explicit --project selection.
 Task IDs and agent roles belong to this scope; a matching ID elsewhere is a
 different record. Root and sibling memories are not automatically inherited.

@@ -30,6 +30,11 @@ here, without duplicating changing task status or next actions.
 - Applicable acceptance boundaries and evidence categories:
 - Decisions that constrain sequencing:
 
+Link the [project map](MAP.md) when the outcome spans multiple systems or data
+flows. The map is a source-linked navigation record, not another milestone or
+task-status list. Use the [access matrix](../GLOBAL/ACCESS-MATRIX.md) for
+applicable permission decisions; neither document grants access.
+
 ## Risks and changes
 
 | Item | Impact | Mitigation / decision | Owner | Evidence reference |

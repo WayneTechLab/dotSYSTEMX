@@ -15,7 +15,7 @@ if __name__ == '__main__' and not sys.flags.isolated:
         sys.exit('White-paper builder could not enter isolated mode: ' + str(error))
 
 import argparse
-from html import escape
+from html import escape, unescape
 from io import BytesIO
 import json
 import os
@@ -24,6 +24,7 @@ import re
 import secrets
 import stat
 import subprocess
+from urllib.parse import urlsplit
 
 from PIL import Image as PILImage
 from reportlab.lib import colors
@@ -53,6 +54,36 @@ STYLES = {}
 CONFIG = {}
 
 
+def https_url(url):
+    """Accept only unambiguous HTTPS destinations in PDF annotations."""
+    if not isinstance(url, str) or any(ord(ch) < 33 or ch in '\\<>"' for ch in url):
+        raise ValueError('Paper links must use a valid HTTPS URL')
+    parsed = urlsplit(url)
+    try:
+        parsed.port
+    except ValueError as error:
+        raise ValueError('Paper links must use a valid HTTPS URL') from error
+    if (parsed.scheme != 'https' or not parsed.netloc or not parsed.hostname or
+            parsed.username is not None or parsed.password is not None):
+        raise ValueError('Paper links must use a valid HTTPS URL')
+    return url
+
+
+def open_directory(path):
+    """Pin each canonical parent component; reject a symlink planted mid-walk."""
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    directory_fd = os.open(path.anchor, flags)
+    try:
+        for component in path.parts[1:]:
+            next_fd = os.open(component, flags, dir_fd=directory_fd)
+            os.close(directory_fd)
+            directory_fd = next_fd
+        return directory_fd
+    except BaseException:
+        os.close(directory_fd)
+        raise
+
+
 def configure(config, font_dir=None):
     global CONFIG, MARGIN, WIDTH, STYLES, FONT, BOLD, ITALIC
     CONFIG = config
@@ -63,8 +94,7 @@ def configure(config, font_dir=None):
     if not 54 <= MARGIN <= 90:
         raise ValueError('Margin must be between 54 and 90 points')
     for link in config['links']:
-        if not link['url'].startswith('https://'):
-            raise ValueError('Publication links must use HTTPS')
+        https_url(link['url'])
     candidate = Path(font_dir) if font_dir else Path('/System/Library/Fonts/Supplemental')
     names = [('PaperSerif', 'Times New Roman.ttf'), ('PaperSerifBold', 'Times New Roman Bold.ttf'),
              ('PaperSerifItalic', 'Times New Roman Italic.ttf'), ('PaperSerifBoldItalic', 'Times New Roman Bold Italic.ttf')]
@@ -92,9 +122,11 @@ def configure(config, font_dir=None):
 def inline(text, small=False):
     out = escape(text, quote=False).replace('&lt;br/&gt;', '<br/>')
     def safe_link(match):
-        url = match[2]
-        if not (url.startswith('https://') or re.fullmatch(r'#[A-Za-z][\w.-]*', url)):
-            raise ValueError('Paper links must use HTTPS or an internal anchor')
+        # The surrounding text was HTML-escaped first; undo that single pass
+        # before URL validation, then escape once for ReportLab's link markup.
+        url = unescape(match[2])
+        if not re.fullmatch(r'#[A-Za-z][\w.-]*', url):
+            https_url(url)
         return '<link href="' + escape(url, quote=True) + '" color="#007981">' + match[1] + '</link>'
     out = re.sub(r'\[([^\]]+)\]\(([^\s)]+)\)', safe_link, out)
     out = re.sub(r'`([^`]+)`', lambda m: '<font name="Courier" size="' + ('8' if small else '10') + '">' + m[1] + '</font>', out)
@@ -211,7 +243,7 @@ def content(text, source, kind='body'):
             candidate=figure_root / figure[1]
             if figure_root.is_symlink() or candidate.is_symlink():
                 raise ValueError('Figure path must not use a symlink')
-            directory_fd=os.open(figure_root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+            directory_fd=open_directory(figure_root)
             try:
                 file_fd=os.open(figure[1],os.O_RDONLY|os.O_NOFOLLOW,dir_fd=directory_fd)
                 with os.fdopen(file_fd,'rb') as image_file:
@@ -221,6 +253,7 @@ def content(text, source, kind='body'):
                     image_bytes=image_file.read()
             finally:
                 os.close(directory_fd)
+            # The pinned baseline kept artwork in a flat MEDIA directory.
             url='https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.8.3-alpha.1/.SYSTEMX/MEDIA/'+figure[1]
             result.append(LinkedImage(image_bytes,url));i+=1;continue
         if line.startswith('```'):
@@ -357,18 +390,17 @@ def main():
     if output==source:raise ValueError('Output must not replace the source')
     published=ROOT/('.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v'+config['edition']+'.pdf')
     published=published.parent.resolve()/published.name
+    if output==published:
+        raise ValueError('Published edition path is reserved; choose --output for a separate draft')
     if os.name!='posix' or not all(hasattr(os,name) for name in ('O_DIRECTORY','O_NOFOLLOW')):
         raise RuntimeError('Safe PDF publication requires POSIX directory-descriptor operations')
-    directory_flags=os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW
-    directory_fd=os.open(output.parent,directory_flags)
+    directory_fd=open_directory(output.parent)
     temporary_name=None
     try:
         try:
             existing=os.stat(output.name,dir_fd=directory_fd,follow_symlinks=False)
         except FileNotFoundError:
             existing=None
-        if output==published and existing is not None:
-            raise ValueError('Published edition already exists; choose --output for a separate draft')
         if existing is not None and not stat.S_ISREG(existing.st_mode):
             raise ValueError('Output must be a regular file')
         # Open by name relative to the pinned directory, even if its parent

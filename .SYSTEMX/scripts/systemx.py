@@ -77,6 +77,7 @@ REQUIRED = (
     ".gitignore", ".gitattributes", "README.md", "STANDARD.md", "LICENSE", "VERSION",
     "CHANGELOG.md", "SOURCE.json", "SYSTEMX.sh", "WSG-MENU.sh",
     "config/project.example.json", "docs/SETUP.md", "docs/DEVELOPMENT.md",
+    "docs/ACCESS-AND-MAP.md", "GLOBAL/ACCESS-MATRIX.md", "PLAN/MAP.md",
     "docs/SECURITY.md", "docs/QUALITY.md", "docs/OPERATIONS.md",
     "AI/README.md", "AI/AGENT-MESH-STANDARD.md", "AI/agent-mesh.schema.json",
     "AI/TOOLCALLING-AND-BROWSER-AUTOMATION.md",
@@ -110,9 +111,11 @@ REQUIRED = (
     "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf",
 ) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED
 BLANK_RECORDS = (
-    "GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
+    "GLOBAL/CONTEXT.md", "GLOBAL/ACCESS-MATRIX.md",
+    "PLAN/MASTER-PLAN.md", "PLAN/MAP.md", "MEMORY/PROJECT.md",
     "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
     "WORK/FOCUS.json", "config/project.example.json",
+    "templates/project/GLOBAL/ACCESS-MATRIX.md", "templates/project/PLAN/MAP.md",
 )
 IGNORED_DIRS = {"local", "logs", "state", ".git", ".systemx", "__pycache__", "node_modules"}
 LINK = re.compile(r"\]\((?:<([^>]+)>|([^\s)]+))(?:\s+\"[^\"]*\")?\)")

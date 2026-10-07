@@ -21,7 +21,8 @@ KINDS = ("general", "software", "research", "operations", "channel")
 SOURCES = ("repository", "directory", "drive", "chat", "document", "other")
 SEED_FILES = (
     "README.md", "START-HERE.md", "AGENTS.md", "GLOBAL/CONTEXT.md",
-    "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md", "MEMORY/sessions/README.md",
+    "GLOBAL/ACCESS-MATRIX.md", "PLAN/MASTER-PLAN.md", "PLAN/MAP.md",
+    "MEMORY/PROJECT.md", "MEMORY/sessions/README.md",
     "AGENTS/REGISTRY.json", "AGENTS/agent.0/MEMORY.md", "WORK/README.md",
     "WORK/TASKS.json", "WORK/FOCUS.json", "DECISIONS/README.md",
     "SYNC/README.md", "SOURCES.json", "project.json",

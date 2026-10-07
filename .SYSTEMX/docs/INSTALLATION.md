@@ -87,9 +87,9 @@ After reviewing the [published release history](https://github.com/WayneTechLab/
 ```bash
 systemx status --target "/path/to/project"
 systemx policy --target "/path/to/project" --pin none
-systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
+systemx update --target "/path/to/project" --version 1.8.9-alpha.1 \
   --archive-sha256 "<independently obtained codeload ZIP SHA-256>" --dry-run
-systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
+systemx update --target "/path/to/project" --version 1.8.9-alpha.1 \
   --archive-sha256 "<independently obtained codeload ZIP SHA-256>"
 systemx policy --target "/path/to/project" --pin current
 ```
@@ -135,9 +135,9 @@ For an exact remote release, `install`, `update`, and `first-run` accept an
 independent SHA-256 pin for the **exact GitHub codeload tag ZIP** they fetch:
 
 ```bash
-systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
+systemx update --target "/path/to/project" --version 1.8.9-alpha.1 \
   --archive-sha256 "<64-hex SHA-256 of the exact codeload tag ZIP>" --dry-run
-systemx update --target "/path/to/project" --version 1.8.8-alpha.1 \
+systemx update --target "/path/to/project" --version 1.8.9-alpha.1 \
   --archive-sha256 "<64-hex SHA-256 of the exact codeload tag ZIP>"
 ```
 

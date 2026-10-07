@@ -13,6 +13,8 @@ import struct
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 import unittest
 from unittest.mock import patch
 import venv
@@ -42,6 +44,23 @@ class ManagerTests(unittest.TestCase):
             provenance = json.loads((self.source / "SOURCE.json").read_text())
             provenance["templateVersion"] = version
             (self.source / "SOURCE.json").write_text(json.dumps(provenance))
+            seeds_path = self.source / "config/template-records.json"
+            seeds = json.loads(seeds_path.read_text())
+            if manager.version_key(version)[:3] < (1, 8, 9):
+                for name in manager.SEEDS_FROM_1_8_9:
+                    seeds["sha256"].pop(name, None)
+                    path = self.source / name
+                    if path.exists():
+                        path.unlink()
+            else:
+                current = json.loads((SOURCE / "config/template-records.json").read_text())
+                for name in manager.SEEDS_FROM_1_8_9:
+                    path = self.source / name
+                    if not path.exists():
+                        path.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(SOURCE / name, path)
+                    seeds["sha256"][name] = current["sha256"][name]
+            seeds_path.write_text(json.dumps(seeds))
         files = {p.relative_to(self.source).as_posix(): manager.digest(p.read_bytes()) for p in self.source.rglob("*")
                  if p.is_file() and p.relative_to(self.source).as_posix() != manager.MANIFEST}
         (self.source / manager.MANIFEST).write_text(json.dumps({"schemaVersion": 1,
@@ -66,6 +85,10 @@ class ManagerTests(unittest.TestCase):
         preview = self.install(dry_run=True)
         self.assertFalse(self.root.exists())
         self.assertFalse(preview["applied"])
+        onboarding = manager.first_run(self.root, source=self.source, apply=False)
+        self.assertIn(".SYSTEMX/GLOBAL/ACCESS-MATRIX.md", " ".join(onboarding["nextSteps"]))
+        self.assertIn(".SYSTEMX/PLAN/MAP.md", " ".join(onboarding["nextSteps"]))
+        self.assertFalse(self.root.exists())
         result = self.install()
         self.assertTrue(result["applied"])
         state = manager.status(self.root)
@@ -73,6 +96,19 @@ class ManagerTests(unittest.TestCase):
         self.assertEqual(state["autoUpdate"], "manual")
         with self.assertRaisesRegex(manager.InstallError, "Already managed"):
             self.install()
+
+    def test_empty_explicit_source_is_not_reinterpreted_as_a_default_or_remote(self):
+        with self.assertRaisesRegex(manager.InstallError, "cannot be empty"):
+            manager.install(self.root, source="", dry_run=True)
+        with self.assertRaisesRegex(manager.InstallError, "cannot be empty"):
+            manager.first_run(self.root, source="", apply=False)
+        self.assertFalse(self.root.exists())
+        self.write_manifest()
+        self.install()
+        with self.assertRaisesRegex(manager.InstallError, "cannot be empty"):
+            manager.update(self.root, source="", dry_run=True)
+        with self.assertRaisesRegex(manager.InstallError, "cannot be empty"):
+            manager.bootstrap_refresh(self.root, source="", apply=False)
 
     def test_adoption_preserves_all_existing_files_and_adds_missing_only(self):
         local = self.root / ".SYSTEMX"
@@ -391,6 +427,65 @@ class ManagerTests(unittest.TestCase):
         self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
         self.assertTrue(marker.is_file())
 
+    @unittest.skipUnless(hasattr(os, "mkfifo"), "FIFO fixtures require POSIX")
+    def test_special_local_inputs_fail_without_blocking_manager_commands(self):
+        def command(*arguments):
+            return subprocess.run([sys.executable, "-I", "-B", str(SOURCE / "manager.py"), *arguments],
+                                  capture_output=True, text=True, timeout=5)
+
+        self.write_manifest()
+        manifest = self.source / manager.MANIFEST
+        manifest.unlink()
+        os.mkfifo(manifest)
+        result = command("install", "--target", str(self.root), "--source", str(self.source), "--dry-run")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("regular file", result.stderr)
+        self.assertFalse(self.root.exists())
+
+        manifest.unlink()
+        self.write_manifest()
+        payload = self.source / "STANDARD.md"
+        payload.unlink()
+        os.mkfifo(payload)
+        result = command("install", "--target", str(self.root), "--source", str(self.source), "--dry-run")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("regular file", result.stderr)
+        self.assertFalse(self.root.exists())
+
+        payload.unlink()
+        payload.write_text("# Restored standard\n")
+        self.write_manifest()
+        self.install()
+        state = self.root / ".SYSTEMX/INSTALLATION.json"
+        state.unlink()
+        os.mkfifo(state)
+        result = command("status", "--target", str(self.root))
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("regular file", result.stderr)
+
+    @unittest.skipUnless(hasattr(os, "mkfifo"), "FIFO fixtures require POSIX")
+    def test_special_audit_log_and_restore_receipt_fail_without_blocking(self):
+        self.write_manifest()
+        self.install()
+        logs = self.root / ".SYSTEMX/.systemx/operations"
+        os.mkfifo(logs / "special.json")
+        audit = subprocess.run([sys.executable, "-I", "-B", str(SOURCE / "manager.py"),
+                                "audit", "--target", str(self.root)],
+                               capture_output=True, text=True, timeout=5)
+        self.assertEqual(audit.returncode, 2, audit.stderr)
+        self.assertIn("regular file", audit.stdout)
+
+        target = self.folder / "restore-target"
+        target.mkdir()
+        backup = self.folder / "restore-backup"
+        backup.mkdir()
+        os.mkfifo(backup / "UNINSTALL-LOG.json")
+        restore = subprocess.run([sys.executable, "-I", "-B", str(SOURCE / "manager.py"),
+                                  "restore", "--target", str(target), "--backup", str(backup)],
+                                 capture_output=True, text=True, timeout=5)
+        self.assertEqual(restore.returncode, 2, restore.stderr)
+        self.assertIn("regular file", restore.stderr)
+
     def test_explicit_digest_pinned_update_after_notice_preserves_project_files(self):
         self.install()
         manager.set_policy(self.root, auto_update="on-start")
@@ -426,6 +521,30 @@ class ManagerTests(unittest.TestCase):
         self.assertIn("2.0.0", major_notice.getvalue())
         self.assertIn("No update applied", major_notice.getvalue())
         self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
+
+    def test_opted_in_slow_metadata_check_has_a_deadline_and_never_selects(self):
+        self.install()
+        manager.set_policy(self.root, auto_update="on-start")
+        state_path = self.root / ".SYSTEMX/INSTALLATION.json"
+        before = state_path.read_bytes()
+        release_network = threading.Event()
+        def slow_discovery(*args, **kwargs):
+            release_network.wait(2)
+            return self.next_version
+        warning = io.StringIO()
+        start = time.monotonic()
+        try:
+            with patch.object(manager, "latest_version", side_effect=slow_discovery), \
+                 patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not download")), \
+                 patch.object(manager, "STARTUP_CHECK_TIMEOUT_SECONDS", 0.02), redirect_stderr(warning):
+                result = manager.run(self.root, ["status"], capture=True)
+        finally:
+            release_network.set()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertLess(time.monotonic() - start, 1)
+        self.assertIn("timed out", warning.getvalue())
+        self.assertEqual(state_path.read_bytes(), before)
+        self.assertFalse((self.root / ".SYSTEMX/.systemx/last-check.json").exists())
 
     def test_alpha_update_preserves_records_and_graduates_to_stable(self):
         self.write_manifest("1.8.7-alpha.2")
@@ -547,6 +666,20 @@ class ManagerTests(unittest.TestCase):
         with self.assertRaisesRegex(manager.InstallError, "must be empty"):
             self.install()
         self.assertFalse(self.root.exists())
+
+    def test_previous_release_blank_manifest_remains_readable_after_new_seed_paths(self):
+        seeds_path = self.source / "config/template-records.json"
+        seeds = json.loads(seeds_path.read_text())
+        for name in manager.SEEDS_FROM_1_8_9:
+            seeds["sha256"].pop(name, None)
+            path = self.source / name
+            if path.exists():
+                path.unlink()
+        seeds_path.write_text(json.dumps(seeds))
+        self.write_manifest("1.8.8-alpha.1")
+        bundle = manager.read_bundle(self.source)
+        self.assertEqual(bundle["version"], "1.8.8-alpha.1")
+        self.assertEqual(set(seeds["sha256"]), set(manager.SEEDS))
 
     def test_archive_manifest_and_path_checks_reject_untrusted_layouts(self):
         for path in ("../outside", "a/../../escape", "/absolute", "C:/escape", "a\\b", "con.txt", "NUL", "a./b", "local/data"):

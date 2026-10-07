@@ -48,6 +48,12 @@ unknowns as unknowns rather than making up requirements.
 
 Fill [GLOBAL/CONTEXT.md](../GLOBAL/CONTEXT.md) with approved shared context and
 create the accepted milestones in [PLAN/MASTER-PLAN.md](../PLAN/MASTER-PLAN.md).
+If access decisions or multiple system boundaries matter, fill the blank
+[access matrix](../GLOBAL/ACCESS-MATRIX.md) and
+[project map](../PLAN/MAP.md) with source-backed facts. For a named child, use
+that selected `.SYSTEMXP`'s own copies. Follow the
+[access and map guide](ACCESS-AND-MAP.md); these records neither grant access
+nor replace the task ledger.
 Use [WORK/README.md](../WORK/README.md) to create concrete tasks. The coordinator
 is `agent.0`; register other workers only as needed. Begin and end work with the
 [memory protocol](../MEMORY/README.md), keeping records specific to this project.

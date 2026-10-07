@@ -72,6 +72,31 @@ class PathTests(unittest.TestCase):
                 manager.install(self.root / relative, source=self.source)
         self.assertFalse(self.root.exists())
 
+    def test_explicit_blank_paths_are_refused_before_target_install(self):
+        for value in ("", " ", " \t\n ", Path(" ")):
+            with self.subTest(value=repr(value)):
+                with self.assertRaisesRegex(manager.InstallError, "cannot be empty or whitespace"):
+                    manager.lexical_path(value)
+                with self.assertRaisesRegex(manager.InstallError, "cannot be empty or whitespace"):
+                    manager.project_directory(value)
+                with self.assertRaisesRegex(manager.InstallError, "cannot be empty or whitespace"):
+                    manager.inspect_layout(value)
+                with self.assertRaisesRegex(manager.InstallError, "cannot be empty or whitespace"):
+                    manager.record_directory(value)
+                with self.assertRaisesRegex(manager.InstallError, "cannot be empty or whitespace"):
+                    manager.read_bundle(value)
+                result = subprocess.run(
+                    [sys.executable, "-I", "-B", str(test_manager.SOURCE / "manager.py"),
+                     "install", "--target", value, "--source", str(self.source)],
+                    cwd=self.folder, text=True, capture_output=True, timeout=20)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn("cannot be empty or whitespace", result.stderr)
+                self.assertEqual({path.name for path in self.folder.iterdir()}, {"release"})
+
+    def test_space_containing_target_path_remains_valid(self):
+        self.assertEqual(manager.project_directory(self.root), self.root.resolve())
+        self.assertEqual(manager.project_directory(str(self.root)), self.root.resolve())
+
     def test_independent_sibling_blocks_all_manager_actions_and_preserves_files(self):
         self.sensitive_project()
         self.install()

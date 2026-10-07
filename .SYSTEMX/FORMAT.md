@@ -42,6 +42,13 @@ Keep raw/private runtime artifacts in ignored local storage. A role is not a
 running process; a report is not an authorization grant; a generated view is
 not a second editable ledger. Preserve original evidence when superseding it.
 
+`GLOBAL/ACCESS-MATRIX.md` and `PLAN/MAP.md` are blank supporting records in the
+root and in each new `.SYSTEMXP` child. The matrix documents reviewed access
+intent and evidence, while external systems enforce real permissions. The map
+points to source-backed structure and boundaries; it does not discover topology
+or carry a second task status. Open them when relevant rather than loading them
+into every agent context packet. See the [access and map guide](docs/ACCESS-AND-MAP.md).
+
 ## SYSTEMX PROJECTS, schema version 1
 
 `Projects/REGISTRY.json` contains exactly `schemaVersion: 1` and `projects`.
@@ -144,7 +151,7 @@ distribution before publication. The latter also requires:
   project config, extra workers, custom documents, caches, or dependencies.
 - Blank work and focus, Agent 0 only, and empty example command configuration.
 - An empty project registry and blank child creation seeds; no adopted `.SYSTEMXP` folders.
-- Reviewed blank context, plan, and memory seeds matching
+- Reviewed blank context, access matrix, plan, map, and memory seeds matching
   `config/template-records.json` SHA-256 values (UTF-8 text normalized to LF).
 - A complete `config/distribution.json` inventory whose file fingerprints match
   the published release, including its own version and blank-record manifest.

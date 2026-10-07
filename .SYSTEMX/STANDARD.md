@@ -30,6 +30,10 @@ The current objective and task/checkpoint pointers belong in
 [WORK/FOCUS.json](WORK/FOCUS.json); [CURRENT.md](CURRENT.md) is generated from it
 and the task ledger. Keep dated execution detail in checkpoints instead of
 accumulating competing current-state narratives in entry points.
+When applicable, use the [access matrix](GLOBAL/ACCESS-MATRIX.md) to record
+reviewed access decisions and the [project map](PLAN/MAP.md) to locate
+source-backed boundaries. Neither is a permission grant or another task ledger;
+see the [access and map guide](docs/ACCESS-AND-MAP.md).
 
 ## Multiple project scopes
 

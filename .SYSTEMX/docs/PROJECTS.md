@@ -14,7 +14,8 @@ The public template has an empty project registry and blank creation templates.
 workspace/
 └── .SYSTEMX/                         shared tools, standards, version policy
     ├── GLOBAL/                      workspace-wide context
-    ├── PLAN/                        workspace-wide Master Plan
+    │   └── ACCESS-MATRIX.md         blank shared access-decision record
+    ├── PLAN/                        workspace-wide Master Plan and map
     ├── WORK/                        workspace coordination tasks
     ├── AGENTS/agent.0/               workspace coordinator memory
     ├── Projects/
@@ -26,8 +27,8 @@ workspace/
     │   │       ├── START-HERE.md
     │   │       ├── AGENTS.md
     │   │       ├── CURRENT.md        generated selected focus
-    │   │       ├── GLOBAL/CONTEXT.md
-    │   │       ├── PLAN/MASTER-PLAN.md
+    │   │       ├── GLOBAL/          context and blank access matrix
+    │   │       ├── PLAN/            Master Plan and blank map
     │   │       ├── WORK/             ledger, focus, six generated state views
     │   │       ├── AGENTS/           registry and per-agent memory
     │   │       ├── MEMORY/           durable facts and dated checkpoints
@@ -85,6 +86,10 @@ coordination lock. Do not remove a lock until its owner is confirmed stopped.
 Fill the selected child's context, Master Plan, memory, and source references
 with authorized facts. Its tasks and focus start empty; Agent 0 is the only
 registered role. Parent memory is never copied into a new child.
+Its blank `GLOBAL/ACCESS-MATRIX.md` and `PLAN/MAP.md` remain unconfigured until
+the project needs reviewed access decisions or source-linked system navigation.
+See the [access and map guide](ACCESS-AND-MAP.md); neither record grants access
+or duplicates task state.
 
 ## Daily work and explicit selection
 

@@ -44,6 +44,11 @@ and the [setup profiles](config/profiles.json) for the current working location.
 7. Your assigned agent memory. Agent 0 begins at
    [AGENTS/agent.0/MEMORY.md](AGENTS/agent.0/MEMORY.md).
 
+Open the [access matrix](GLOBAL/ACCESS-MATRIX.md) for tasks involving permissions
+and the [project map](PLAN/MAP.md) when source or system boundaries matter. They
+are blank in the public template and are not loaded into every context packet.
+See the [access and map guide](docs/ACCESS-AND-MAP.md).
+
 The command `bash .SYSTEMX/SYSTEMX.sh context --agent agent.0` prints a bounded
 resume packet containing these shared records and the selected agent's memory.
 `task-show TASK-001` reads the complete record for a particular task. Neither

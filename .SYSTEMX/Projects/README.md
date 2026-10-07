@@ -16,3 +16,7 @@ access to, or publish the referenced system.
 The root can list identities without loading project memories. Every project
 command needs an exact selection; there is no remembered active-project pointer.
 Tasks and Agent 0 IDs are local to each record scope.
+
+Each new child also receives a blank access matrix and project map for its own
+scope. These are optional, source-linked records, not inherited grants or a
+second task status. See the [access and map guide](../docs/ACCESS-AND-MAP.md).

@@ -23,10 +23,24 @@ import secrets
 import stat
 
 
+def open_directory(path):
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    directory_fd = os.open(path.anchor, flags)
+    try:
+        for component in path.parts[1:]:
+            next_fd = os.open(component, flags, dir_fd=directory_fd)
+            os.close(directory_fd)
+            directory_fd = next_fd
+        return directory_fd
+    except BaseException:
+        os.close(directory_fd)
+        raise
+
+
 def write_output(path, content):
     if os.name != 'posix' or not all(hasattr(os,name) for name in ('O_DIRECTORY','O_NOFOLLOW')):
         raise RuntimeError('Safe narration output requires POSIX directory-descriptor operations')
-    directory_fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    directory_fd=open_directory(path.parent)
     temporary_name=None
     try:
         try:
@@ -47,6 +61,10 @@ def write_output(path, content):
             current=None
         if current is not None and not stat.S_ISREG(current.st_mode):
             raise ValueError('Narration output changed to a non-regular file')
+        pinned_directory=os.fstat(directory_fd)
+        current_directory=os.stat(path.parent,follow_symlinks=False)
+        if (pinned_directory.st_dev,pinned_directory.st_ino)!=(current_directory.st_dev,current_directory.st_ino):
+            raise RuntimeError('Narration output directory changed during write')
         os.replace(temporary_name,path.name,src_dir_fd=directory_fd,dst_dir_fd=directory_fd)
         temporary_name=None
     finally:

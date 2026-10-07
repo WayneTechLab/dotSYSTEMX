@@ -3,6 +3,13 @@
 .SYSTEMX is experimental alpha software, provided under the [MIT License](LICENSE)
 without warranty. It is not a production-readiness or security certification.
 
+As of 7 October 2026, this public repository has GitHub secret scanning,
+push protection, and Dependabot vulnerability alerts enabled. GitHub Actions
+remains disabled; these repository checks do not run or certify the template's
+local tests. A repository ruleset blocks deletion and force pushes to `main`
+and `Alpha1`. Review the current repository settings rather than relying on
+this dated statement for a later release.
+
 Report suspected vulnerabilities privately through
 [GitHub private vulnerability reporting](https://github.com/WayneTechLab/dotSYSTEMX/security/advisories/new).
 That repository feature is enabled. Include the affected release/tool version,

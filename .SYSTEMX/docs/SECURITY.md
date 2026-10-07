@@ -31,6 +31,11 @@ for sensitive roles as appropriate.
 Test rejection as well as success: unauthenticated, wrong role, wrong tenant,
 expired session, malformed input, replay, and excessive requests where relevant.
 Document how access is granted, reviewed, revoked, and recovered.
+When access decisions apply, use the blank
+[access matrix](../GLOBAL/ACCESS-MATRIX.md) or the selected child's own matrix
+to link actors, resources, actions, environments, decision owners, and evidence.
+The [access and map guide](ACCESS-AND-MAP.md) explains how to keep it scoped.
+The matrix documents review; the actual system still enforces permissions.
 
 ## Dependencies and execution
 

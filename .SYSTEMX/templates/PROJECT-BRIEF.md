@@ -1,6 +1,7 @@
 # Project brief
 
-Copy into `.SYSTEMX/project/` and replace prompts with facts. Use `unknown`,
+Copy into the selected `.SYSTEMX/project/` or `.SYSTEMXP/project/` and replace
+prompts with facts. Use `unknown`,
 `not applicable`, or `deferred` with a reason when appropriate. Do not include secrets.
 
 ## Identity and outcome

@@ -17,19 +17,19 @@ python3 -I -B docs/media/tests/test_publication_security.py
 ReportLab and Pillow are optional publishing dependencies, not template runtime
 dependencies. Use a Python interpreter with both installed for the PDF builder
 and publication security tests. The default source is the edition's Markdown in
-`.SYSTEMX/MEDIA/White-Paper`. The existing published PDF cannot be rebuilt in
-place, because PDF timestamps and document IDs can change its checksum even
-when the visible pages do not. Give `--output` a separate draft path, and use a
-new edition filename before publishing. `--source` and `--template` support
-local drafts. The frozen legacy builder remains
-available through `--edition 1.0` or `--edition 1.1` with explicit `--source`
+`.SYSTEMX/MEDIA/White-Paper`. The published PDF path is reserved even if its
+file is missing: rebuilding there could invalidate its pinned checksum because
+PDF timestamps and document IDs can change when the visible pages do not. Give
+`--output` a separate draft path and use a new edition filename before
+publishing. `--source` and `--template` support local drafts. The frozen legacy
+builder remains available through `--edition 1.0` or `--edition 1.1` with explicit `--source`
 from the corresponding archived release and a separate `--output` for inspection.
 There is no automatic download or fallback to missing files.
 
 The four direct media commands enter Python isolated mode before imports. Their
-output writes use an opened directory and replace a draft atomically, rejecting
-final symlinks and unsafe PDF link schemes. The legacy renderer also rejects
-hardlinked output and preserves the permissions of a regular existing output.
+output writes pin each parent-directory component and replace a draft atomically,
+rejecting final symlinks and unsafe PDF link schemes. The legacy renderer also
+rejects hardlinked output and preserves the permissions of a regular existing output.
 These optional publication commands currently require POSIX directory-descriptor
 support (macOS or compatible Linux); they fail closed on native Windows. The
 portable `.SYSTEMX` manager and records have their own platform support.

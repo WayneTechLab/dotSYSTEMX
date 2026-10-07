@@ -19,3 +19,9 @@ Separate responsibilities:
 
 Agent 0 maintains shared context from accepted project facts. Avoid copying
 task status or entire plans into this file.
+
+When applicable, keep reviewed access decisions in the blank
+[access matrix](ACCESS-MATRIX.md) and open it only for permission work. It does
+not grant real access. A source-backed [project map](../PLAN/MAP.md) can point
+to systems and boundaries without duplicating the task ledger. See the
+[access and map guide](../docs/ACCESS-AND-MAP.md).

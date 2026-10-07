@@ -21,7 +21,8 @@ import re
 import argparse
 import secrets
 import stat
-from html import escape
+from urllib.parse import urlsplit
+from html import escape, unescape
 from reportlab.platypus.tableofcontents import TableOfContents
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
@@ -50,12 +51,40 @@ if OUTPUT.is_symlink():
     parser.error('Output must not be a symlink')
 
 
+def https_url(url):
+    if not isinstance(url, str) or any(ord(ch) < 33 or ch in '\\<>"' for ch in url):
+        raise ValueError('Paper links must use a valid HTTPS URL')
+    parsed = urlsplit(url)
+    try:
+        parsed.port
+    except ValueError as error:
+        raise ValueError('Paper links must use a valid HTTPS URL') from error
+    if (parsed.scheme != 'https' or not parsed.netloc or not parsed.hostname or
+            parsed.username is not None or parsed.password is not None):
+        raise ValueError('Paper links must use a valid HTTPS URL')
+    return url
+
+
+def open_directory(path):
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    directory_fd = os.open(path.anchor, flags)
+    try:
+        for component in path.parts[1:]:
+            next_fd = os.open(component, flags, dir_fd=directory_fd)
+            os.close(directory_fd)
+            directory_fd = next_fd
+        return directory_fd
+    except BaseException:
+        os.close(directory_fd)
+        raise
+
+
 @contextmanager
 def safe_output(path):
     """Publish to one opened directory; never truncate an existing inode."""
     if os.name != 'posix' or not all(hasattr(os,name) for name in ('O_DIRECTORY','O_NOFOLLOW')):
         raise RuntimeError('Safe PDF publication requires POSIX directory-descriptor operations')
-    directory_fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    directory_fd=open_directory(path.parent)
     temporary_name=None
     try:
         try:
@@ -81,6 +110,10 @@ def safe_output(path):
             current=None
         if current is not None and not stat.S_ISREG(current.st_mode):
             raise ValueError('Legacy PDF output changed to a non-regular file')
+        pinned_directory=os.fstat(directory_fd)
+        current_directory=os.stat(path.parent,follow_symlinks=False)
+        if (pinned_directory.st_dev,pinned_directory.st_ino)!=(current_directory.st_dev,current_directory.st_ino):
+            raise RuntimeError('Legacy PDF output directory changed during build')
         os.replace(temporary_name,path.name,src_dir_fd=directory_fd,dst_dir_fd=directory_fd)
         temporary_name=None
     finally:
@@ -110,9 +143,9 @@ STYLES = {
 def inline(text):
     out=escape(text,quote=False).replace('&lt;br/&gt;', '<br/>')
     def safe_link(match):
-        url=match.group(2)
-        if not (url.startswith('https://') or re.fullmatch(r'#[A-Za-z][\w.-]*',url)):
-            raise ValueError('Paper links must use HTTPS or an internal anchor')
+        url=unescape(match.group(2))
+        if not re.fullmatch(r'#[A-Za-z][\w.-]*',url):
+            https_url(url)
         return '<link href="'+escape(url,quote=True)+'" color="#007e87">'+match.group(1)+'</link>'
     out=re.sub(r'\[([^\]]+)\]\(([^\s)]+)\)',safe_link,out)
     out=re.sub(r'`([^`]+)`',r'<font name="Courier" size="8.8">\1</font>',out)

@@ -4,6 +4,34 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.8.9-alpha.1 — Template records and local safety
+
+- Added blank, project-owned `GLOBAL/ACCESS-MATRIX.md` and `PLAN/MAP.md` to the
+  root format and each new `.SYSTEMXP` child. The matrix records reviewed access
+  intent and gaps; the map points to sources, interfaces, and boundaries. They
+  do not grant permissions, scan infrastructure, or replace `WORK/TASKS.json`
+  as the task authority. Existing project files remain preserved during updates.
+- Management reads now require bounded regular files for distribution inputs,
+  installation state, operation logs, and restore receipts. Explicit empty or
+  whitespace target paths and empty `--source` values are rejected rather than
+  silently selecting the current directory or bundled source.
+- The opt-in, check-only startup notice waits at most five seconds for release
+  metadata discovery. On timeout it warns and runs the selected local defaults;
+  no archive is fetched or new release selected. A timed-out metadata request
+  may finish in a daemon thread but cannot write the check record.
+- White-paper and narration tools validate HTTPS links more strictly, keep
+  output operations anchored to reviewed directories, and refuse writing the
+  reserved published PDF path. The existing paper and 4K media are unchanged.
+- Reorganized the public README around a preview-first setup and verification
+  path, with the detailed manual and high-resolution visual gallery linked
+  separately. The alpha and evidence limits remain explicit.
+- On the upstream GitHub repository, secret scanning, secret-scanning push
+  protection, and Dependabot vulnerability alerts are enabled. Automated
+  Dependabot security updates remain disabled. A repository ruleset blocks
+  deletion and force-pushes on `main` and `Alpha1`. GitHub Actions remains
+  disabled. These repository settings do not transfer into projects created
+  from this template.
+
 ## 1.8.8-alpha.1 — Check-only startup release notices
 
 - Opt-in `--auto on-start` now reads release metadata and reports an available

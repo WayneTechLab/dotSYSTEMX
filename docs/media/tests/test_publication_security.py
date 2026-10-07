@@ -59,17 +59,41 @@ class PublicationSecurityTests(unittest.TestCase):
         builder = load_builder()
         self.assertIn('<link', builder.inline('[citation](https://example.org)'))
         self.assertIn('<link', builder.inline('[section](#contents)'))
-        for scheme in ('file:///etc/passwd', 'javascript:alert%281%29', 'data:text/plain,hi'):
+        self.assertIn('href="https://example.org/?a=1&amp;b=2"',
+                      builder.inline('[query](https://example.org/?a=1&b=2)'))
+        for scheme in ('file:///etc/passwd', 'javascript:alert%281%29', 'data:text/plain,hi',
+                       'https://', 'https://user@example.org/', 'https://example.org\\@other.test/',
+                       'https://example.org:invalid/'):
             with self.subTest(scheme=scheme), self.assertRaises(ValueError):
                 builder.inline('[bad](' + scheme + ')')
+        with self.assertRaises(ValueError):
+            builder.https_url('https://example.org/\n/other')
+        config = json.loads((MEDIA / 'publication-template.json').read_text())
+        config['links'][0]['url'] = 'javascript:alert(1)'
+        with self.assertRaises(ValueError):
+            builder.configure(config)
 
     def test_published_edition_is_not_overwritten(self):
         published = ROOT / '.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf'
         before = published.read_bytes()
         result = run_script('build_white_paper.py')
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn('Published edition already exists', result.stderr)
+        self.assertIn('Published edition path is reserved', result.stderr)
         self.assertEqual(published.read_bytes(), before)
+
+    def test_missing_published_path_is_also_reserved(self):
+        builder = load_builder()
+        mock_repo = self.root / 'mock-repo'
+        published = mock_repo / '.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf'
+        published.parent.mkdir(parents=True)
+        source = self.root / 'draft.md'
+        source.write_text('## Front\n### Abstract\nDraft.\n## Section\nContent.\n')
+        with patch.object(builder, 'ROOT', mock_repo), patch.object(
+                sys, 'argv', ['build_white_paper.py', '--source', str(source),
+                              '--output', str(published)]):
+            with self.assertRaisesRegex(ValueError, 'Published edition path is reserved'):
+                builder.main()
+        self.assertFalse(published.exists())
 
     def test_symlinked_figure_root_is_rejected(self):
         builder = load_builder()
@@ -81,6 +105,27 @@ class PublicationSecurityTests(unittest.TestCase):
         (self.root / 'MEDIA/Infographics').symlink_to(outside, target_is_directory=True)
         with self.assertRaisesRegex(ValueError, 'symlink'):
             builder.content('![private](../Infographics/private.jpg)', white_paper / 'paper.md')
+
+    def test_symlinked_figure_ancestor_is_rejected(self):
+        builder = load_builder()
+        real_media = self.root / 'real-media'
+        (real_media / 'White-Paper').mkdir(parents=True)
+        (real_media / 'Infographics').mkdir()
+        (real_media / 'Infographics/private.jpg').write_bytes(b'not a public figure')
+        linked_media = self.root / 'linked-media'
+        linked_media.symlink_to(real_media, target_is_directory=True)
+        with self.assertRaises(OSError):
+            builder.content('![private](../Infographics/private.jpg)',
+                            linked_media / 'White-Paper/paper.md')
+
+    def test_output_directory_ancestor_symlink_is_rejected(self):
+        builder = load_builder()
+        real_dir = self.root / 'real-output'
+        real_dir.mkdir()
+        linked_dir = self.root / 'linked-output'
+        linked_dir.symlink_to(real_dir, target_is_directory=True)
+        with self.assertRaises(OSError):
+            builder.open_directory(linked_dir)
 
     def test_parent_swap_cannot_redirect_pdf(self):
         builder = load_builder()
@@ -123,6 +168,14 @@ class PublicationSecurityTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue(alias.read_bytes().startswith(b'%PDF-'))
         self.assertEqual(stat.S_IMODE(alias.stat().st_mode), 0o600)
+        source.write_text('## Front\n### Abstract\n[bad](file:///etc/passwd)\n'
+                          '## Section\nA local section.\n')
+        bad_output = self.root / 'bad-legacy.pdf'
+        result = run_script('build_white_paper_legacy.py', '--source', source,
+                            '--output', bad_output)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Paper links must use a valid HTTPS URL', result.stderr)
+        self.assertFalse(bad_output.exists())
 
     def test_text_outputs_do_not_follow_aliases(self):
         source = self.root / 'edition-1.1.md'

@@ -46,6 +46,8 @@ Changes should document migrations and preserve project-owned data.
   final-only discovery.
 - Opt-in `--auto on-start` checks for a published release at most daily after a
   successful check and reports it. This works while a project remains pinned.
+  The metadata discovery wait is capped at five seconds; on timeout the run
+  warns and continues with its installed defaults without caching success.
   Startup never downloads or selects a release. Alpha releases can change
   interfaces within a major version; review every version before a manual update.
 - A manual selection of a release that changes root bootstrap or launcher files
@@ -79,14 +81,14 @@ tool environment first, from outside the project's `.SYSTEMX` folder. Use the
 interpreter belonging to that environment; the example assumes it is activated:
 
 ```bash
-python -m pip --log dotsystemx-alpha-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.8-alpha.1"
+python -m pip --log dotsystemx-alpha-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.9-alpha.1"
 systemx --version
 systemx status --target "/path/to/project"
-systemx bootstrap-refresh --target "/path/to/project" --version 1.8.8-alpha.1
-systemx bootstrap-refresh --target "/path/to/project" --version 1.8.8-alpha.1 --apply
+systemx bootstrap-refresh --target "/path/to/project" --version 1.8.9-alpha.1
+systemx bootstrap-refresh --target "/path/to/project" --version 1.8.9-alpha.1 --apply
 systemx policy --target "/path/to/project" --pin none --auto manual
-systemx update --target "/path/to/project" --version 1.8.8-alpha.1 --dry-run
-systemx update --target "/path/to/project" --version 1.8.8-alpha.1
+systemx update --target "/path/to/project" --version 1.8.9-alpha.1 --dry-run
+systemx update --target "/path/to/project" --version 1.8.9-alpha.1
 systemx policy --target "/path/to/project" --pin current
 systemx run --target "/path/to/project" --offline -- validate
 systemx run --target "/path/to/project" --offline -- context --agent agent.0

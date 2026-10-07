@@ -11,8 +11,16 @@ class SystemXPathError(ValueError):
     """A path or installation was refused without replacing user content."""
 
 
+def _require_explicit_path(value):
+    if isinstance(value, (str, os.PathLike)):
+        spelling = os.fspath(value)
+        if isinstance(spelling, str) and not spelling.strip():
+            raise SystemXPathError("An explicit path cannot be empty or whitespace")
+
+
 def lexical_path(value):
     """Make absolute without resolving away spelling or a final symlink."""
+    _require_explicit_path(value)
     return Path(os.path.abspath(Path(value).expanduser()))
 
 
@@ -26,6 +34,7 @@ def is_link(path):
 
 def inspect_layout(project, *, required=False):
     """Inspect real entry names, even on a filesystem that ignores case."""
+    _require_explicit_path(project)
     project = Path(project)
     canonical = project / CANONICAL
     alias = project / ALIAS

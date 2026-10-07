@@ -69,9 +69,11 @@ bash .SYSTEMX/SYSTEMX.sh validate
 
 The lock coordinates CLI writes in one checkout. It is not a distributed lock,
 and direct file edits do not acquire it. Agent 0 owns shared writes. If a process
-crashes and leaves `state/coordination.lock`, establish that no writer is running
-before removing that empty lock directory. Do not delete task or agent records
-to recover a stale lock.
+crashes and leaves `state/coordination.lock`, inspect its `owner.json` for the
+recorded PID, host, and creation time. Cooperating writers wait up to one second
+before reporting contention. Confirm that the owner has stopped before manually
+removing a stale owner file and lock directory; missing or invalid metadata does
+not prove the lock is stale. Do not delete task or agent records to recover it.
 
 ## Current focus and bounded dispatch
 
