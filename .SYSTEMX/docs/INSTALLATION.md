@@ -164,6 +164,12 @@ systemx run --target "/path/to/project" -- status
 systemx policy --target "/path/to/project" --auto manual
 ```
 
+`run` requires a selected managed installation. A trusted external manager
+rejects an unmanaged target rather than executing Python under that target's
+`.SYSTEMX/scripts/` directory. To inspect an untrusted checkout, use the
+trusted manager's read-only `audit` or an install preview; do not run local
+wrappers or scripts until you trust that checkout and its project configuration.
+
 With this opt-in policy, the managed launcher checks release metadata at startup,
 at most once per 24 hours after a successful check, and **reports** an available
 release. It never downloads that release archive or changes the selected defaults,

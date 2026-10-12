@@ -1007,13 +1007,15 @@ def run(target, arguments, *, offline=False, capture=False):
     if arguments and arguments[0].startswith("-") and arguments[0] not in {"-h", "--help"}:
         raise InstallError("Do not override the selected target; use run --target explicitly")
     root = project_root(target)
-    if state_path(root).exists():
-        if not offline:
-            startup_update(root)
-        defaults, selected = active_bundle(root, load_state(root))
-    else:
-        defaults = root / ".SYSTEMX"
-        selected = None
+    if not state_path(root).exists():
+        # A trusted external manager must never cross into an arbitrary
+        # project's Python code just because it was given --target. A plain
+        # folder is not a selected, verified managed release.
+        raise InstallError("Target has no managed .SYSTEMX installation; install reviewed defaults first. "
+                           "Inspect an untrusted checkout without running its local launchers or scripts")
+    if not offline:
+        startup_update(root)
+    defaults, selected = active_bundle(root, load_state(root))
     script = str(defaults / "scripts/systemx.py")
     if selected is not None and version_key(selected["version"]) < version_key(ISOLATED_RUNNER_FLOOR):
         # Historical runners depended on Python adding the script directory to

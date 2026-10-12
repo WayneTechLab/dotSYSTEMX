@@ -79,6 +79,16 @@ to invoke the selected defaults against that project's canonical records. The
 managed runner starts in Python isolated mode (`-I`) after verifying its selected
 release cache.
 
+`systemx run` requires a managed installation at the selected target. It does
+not fall back to running `target/.SYSTEMX/scripts/systemx.py` when
+`INSTALLATION.json` is absent. For a folder-only copy, explicitly run its local
+launcher only after reviewing and trusting that checkout. When inspecting an
+untrusted copy, use a trusted external tool for read-only `audit` or an install
+preview; do not execute that copy's launchers or Python scripts. A manifest and
+installation state stored inside an untrusted checkout are not independent proof
+of its origin. Treat managed `run` as execution of a project you trust, including
+its configuration and selected release cache.
+
 `bootstrap_refresh` is an explicit exception to normal additive updates. It
 previews by default, accepts only eight stock root bootstrap and launcher files
 when existing copies match the intended release or an intact retained release,

@@ -346,6 +346,27 @@ class ManagerTests(unittest.TestCase):
         result = manager.run(self.root, ["validate"], capture=True)
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_external_manager_never_runs_unmanaged_target_python(self):
+        # The selected target can be an unrelated, attacker-controlled checkout.
+        # An absent INSTALLATION.json must not select its scripts/systemx.py.
+        local = self.root / ".SYSTEMX"
+        script = local / "scripts/systemx.py"
+        script.parent.mkdir(parents=True)
+        marker = self.folder / "UNMANAGED-CODE-EXECUTED"
+        script.write_text("from pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('executed')\n")
+        with patch.object(manager.subprocess, "run", side_effect=AssertionError("must not execute")):
+            with self.assertRaisesRegex(manager.InstallError, "no managed .SYSTEMX installation"):
+                manager.run(self.root, ["validate"], offline=True, capture=True)
+        self.assertFalse(marker.exists())
+        self.assertTrue(script.is_file())
+
+        result = subprocess.run([sys.executable, "-I", "-B", str(SOURCE / "manager.py"),
+                                 "run", "--target", str(self.root), "--offline", "--", "validate"],
+                                cwd=self.folder, text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("no managed .SYSTEMX installation", result.stderr)
+        self.assertFalse(marker.exists())
+
     def test_manual_policy_and_offline_run_never_contact_network(self):
         self.install()
         with patch.object(manager, "get_url", side_effect=AssertionError("No network expected")):
