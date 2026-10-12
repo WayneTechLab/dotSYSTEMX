@@ -81,14 +81,14 @@ tool environment first, from outside the project's `.SYSTEMX` folder. Use the
 interpreter belonging to that environment; the example assumes it is activated:
 
 ```bash
-python -m pip --log dotsystemx-alpha-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.2"
+python -m pip --log dotsystemx-alpha-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.3"
 systemx --version
 systemx status --target "/path/to/project"
-systemx bootstrap-refresh --target "/path/to/project" --version 1.9.0-alpha.2
-systemx bootstrap-refresh --target "/path/to/project" --version 1.9.0-alpha.2 --apply
+systemx bootstrap-refresh --target "/path/to/project" --version 1.9.0-alpha.3
+systemx bootstrap-refresh --target "/path/to/project" --version 1.9.0-alpha.3 --apply
 systemx policy --target "/path/to/project" --pin none --auto manual
-systemx update --target "/path/to/project" --version 1.9.0-alpha.2 --dry-run
-systemx update --target "/path/to/project" --version 1.9.0-alpha.2
+systemx update --target "/path/to/project" --version 1.9.0-alpha.3 --dry-run
+systemx update --target "/path/to/project" --version 1.9.0-alpha.3
 systemx policy --target "/path/to/project" --pin current
 systemx run --target "/path/to/project" --offline -- validate
 systemx run --target "/path/to/project" --offline -- context --agent agent.0
