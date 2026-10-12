@@ -130,7 +130,13 @@ bash .SYSTEMX/SYSTEMX.sh agent-x close SCH_RETURNED_ID \
 Use `--state cancelled --note REASON` for cancelled bookkeeping. Completion needs
 evidence. Closure is immutable through the command interface; correcting a due
 time or following up creates a new item after deliberately closing/superseding
-the old one. Closing a due item does not complete a task or cancel a remote job.
+the old one. A planned `dueAt` may be far in the future, but a completed or
+cancelled item's `closedAt` must follow its creation and cannot be more than five
+minutes ahead of the validating machine's UTC clock. This bounded allowance
+handles small clock differences between machines; a larger discrepancy must be
+corrected before recording or accepting the closure. Both Agent X and global
+validation enforce this for existing records. Closing a due item does not
+complete a task or cancel a remote job.
 
 ## Keep the cycle moving
 

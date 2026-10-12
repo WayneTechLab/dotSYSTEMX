@@ -1,6 +1,7 @@
 """Behavioral checks for role activation, event integrity, fixed reviews, and scope."""
 
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
 import json
 import os
 import sys
@@ -167,6 +168,39 @@ class StandardAgentTests(unittest.TestCase):
         self.assertEqual(before, self.files())
         self.rejected("agent-x", "close", identifier, "--state", "cancelled", "--note", "replace")
         self.assertEqual(self.value("agent-x", "due")["totalDue"], 0)
+
+    def test_schedule_closure_rejects_impossible_future_time_but_allows_future_due(self):
+        self.setup_roles()
+        path = self.systemx / "EVENTS/SCHEDULE.json"
+        for state in ("complete", "cancelled"):
+            with self.subTest(state=state):
+                scheduled = self.value("agent-x", "schedule", "--key", "future-due-" + state,
+                                       "--title", "Future fixture", "--owner", "user",
+                                       "--due", "2099-01-01T00:00:00Z")
+                self.assertEqual(scheduled["item"]["dueAt"], "2099-01-01T00:00:00Z")
+                args = ("agent-x", "close", scheduled["item"]["id"], "--state", state,
+                        "--note", "Closed before the deadline")
+                if state == "complete":
+                    args += ("--evidence", "fixture/proof")
+                self.value(*args)
+                self.value("agent-x", "validate")
+                self.assert_ok(self.run_cli("validate"))
+
+                data = json.loads(path.read_text())
+                item = next(entry for entry in data["items"] if entry["id"] == scheduled["item"]["id"])
+                original = item["closedAt"]
+                for future in (datetime.now(timezone.utc) + timedelta(minutes=6),
+                               datetime(2099, 1, 1, tzinfo=timezone.utc)):
+                    item["closedAt"] = future.isoformat().replace("+00:00", "Z")
+                    path.write_text(json.dumps(data))
+                    self.assertIn("beyond the allowed clock skew", self.rejected("agent-x", "validate").stderr)
+                    self.assertIn("beyond the allowed clock skew", self.rejected("validate").stderr)
+                item["closedAt"] = (datetime.now(timezone.utc) + timedelta(minutes=1)).isoformat().replace("+00:00", "Z")
+                path.write_text(json.dumps(data))
+                self.value("agent-x", "validate")
+                self.assert_ok(self.run_cli("validate"))
+                item["closedAt"] = original
+                path.write_text(json.dumps(data))
 
     def test_policy_has_exactly_one_hundred_stable_questions(self):
         before = self.files()
