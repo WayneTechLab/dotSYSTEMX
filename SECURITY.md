@@ -3,7 +3,7 @@
 .SYSTEMX is experimental alpha software, provided under the [MIT License](LICENSE)
 without warranty. It is not a production-readiness or security certification.
 
-As of 7 October 2026, this public repository has GitHub secret scanning,
+As of 11 October 2026, this public repository has GitHub secret scanning,
 push protection, and Dependabot vulnerability alerts enabled. GitHub Actions
 remains disabled; these repository checks do not run or certify the template's
 local tests. A repository ruleset blocks deletion and force pushes to `main`
@@ -29,12 +29,25 @@ their manifest; they do not independently authenticate a publisher. Avoid
 administrator privileges, protect project data and operation logs, coordinate
 writers, and keep recoverable backups.
 
+For releases beginning with 1.9.0-alpha.3, the distribution manifest hashes
+binary and unknown files byte for byte. Older immutable releases retain their
+published format. `systemx run` requires a managed installation and refuses a
+plain folder target, but a target's own installation state is not independent
+proof of origin. Do not execute launchers or scripts from an untrusted checkout.
+
 For an exact remote manager install or update, `--archive-sha256` can pin the
 raw codeload tag ZIP to a digest obtained through a separately trusted channel.
 The selected release cache also rejects files absent from the manifest before
 running its Python code. Automatic startup discovery has no independent archive
 pin. Inspect [installation guidance](.SYSTEMX/docs/INSTALLATION.md) before
 enabling it or accepting a new release.
+
+Agent Y's allowed-path checks and PR transitions are workflow controls, not an
+OS sandbox. An external CLI can use credentials and files available to its host
+account; the controller cannot undo out-of-repository writes or network calls.
+For untrusted provider execution, use a separate OS account or container without
+the controller's GitHub credentials or write access to project `.SYSTEMX`
+records. See [Agent Y's security boundary](.SYSTEMX/docs/AGENT-Y.md).
 
 Direct script entry points restart in isolated Python mode, and standalone
 validation loads named local helpers from source bytes. An installed console

@@ -220,6 +220,14 @@ MCP server. It does not make an existing project production ready. The
 and [Stack Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Stack-Guide)
 explain its current implementation and how to connect real project commands.
 
+Agent Y's worktree, allowed-path checks, and PR gates coordinate work; they are
+not an OS security sandbox. An external CLI can use credentials and files
+available to its host account. For untrusted providers or prompts, isolate that
+CLI under a separate OS identity or container without controller GitHub
+credentials or write access to project `.SYSTEMX` records. Review the
+[Agent Y security boundary](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y)
+before enabling its execution lane.
+
 ## Manual, support, and attribution
 
 The [wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki) is the manual for

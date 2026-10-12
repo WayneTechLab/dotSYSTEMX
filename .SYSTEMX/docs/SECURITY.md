@@ -74,6 +74,9 @@ parallel. The task record and role memory are coordination, not isolation or
 authorization. Remote branch and PR mutations require the actual host account's
 permissions and the task's explicit lifecycle policy. No Agent Z score or
 provider claim grants permission to merge, close, or delete.
+For untrusted provider execution, use a separate OS account or container that
+cannot read the controller's GitHub credentials or write `.SYSTEMX` records.
+An allowed-path packet and post-run diff check cannot enforce that separation.
 The selected repository's
 [Git checkout filters](https://git-scm.com/docs/gitattributes/) may execute
 code while the controller creates its worktree. It suppresses local
@@ -109,6 +112,10 @@ package first. For an untrusted `PYTHONPATH` or current directory, invoke the
 installed package as `python -I -B -m systemx` from its reviewed virtual
 environment. An install visible only through Python's user site is hidden by
 `-I`.
+`systemx run` refuses an unmanaged folder instead of invoking that folder's
+Python runner. A managed target still supplies its own installation state and
+selected cache; those files are not independent proof of origin. Inspect an
+untrusted checkout with trusted external tools before executing its scripts.
 Standalone tools load only named local helpers from source bytes, so unlisted
 modules and matching cached bytecode in an adopted folder cannot run before the
 inventory decision. Python startup hooks in an already untrusted interpreter

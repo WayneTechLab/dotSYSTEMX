@@ -394,6 +394,7 @@ def prepare(root, args):
            "pr": {"number": 0, "url": "", "headOid": ""}, "exitCode": None, "error": "",
            "evidence": [], "runId": ""}
     if args.apply:
+        _private_git_guard(root, identifier)
         with memory.coordination_lock(root):
             current = load_jobs(root)
             if any(item["state"] not in {"failed", "closed", "merged"} and

@@ -110,6 +110,7 @@ REQUIRED = (
     "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.json",
     "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.md",
     "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf",
+    "MEDIA/White-Paper/ERRATA.md",
 ) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "GLOBAL/ACCESS-MATRIX.md",
