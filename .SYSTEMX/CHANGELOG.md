@@ -4,6 +4,39 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.9.0-alpha.3 — Distribution and delegation hardening
+
+- Distribution manifest schema 2 hashes binary and unknown files byte for byte
+  while retaining LF/CRLF equivalence for reviewed UTF-8 text. New 1.9.0-alpha.3
+  bundles cannot downgrade to the older schema. The installer also refuses a
+  1.9 release missing Agent Y's core files, even if its manifest was recomputed.
+  Historical schema-1 releases remain readable; published alpha.2 assets are
+  immutable and were not changed.
+- Agent X rejects a completed or cancelled due item with a closure time far in
+  the future. A future planned due time remains valid.
+- Agent Y cleanup detects ignored material as well as tracked and untracked
+  files before removing its worktree. PR readiness refuses a base branch that
+  moved since the handoff was prepared. Git-backed local sidecars and cleanup
+  archives must be effectively ignored and untracked before Agent Y writes them.
+- Agent Y binds a selected CLI executable's canonical path, SHA-256, and file
+  identity at preparation, then checks it before launch. Older unrun handoffs
+  without that binding cannot start a provider; `agent-y abandon` retires a
+  genuinely unrun handoff so Agent 0 can prepare a reviewed replacement.
+  Already-run older jobs remain readable for their gated PR lifecycle.
+- The trusted external manager refuses `run` against an unmanaged target rather
+  than executing that target's local Python. An untrusted target's own managed
+  state is still not an independent authenticity anchor.
+- Clarified the private original-template provenance, added Windows setup
+  examples, and published a separate erratum for the frozen white-paper edition
+  1.2 release-report link. The original PDF and media bytes were preserved.
+
+This is an alpha hardening release, not production certification. Agent Y's
+provider runs with the host account's effective access; its path and PR rules
+do not isolate credentials or external writes. An optional remote archive pin
+must come from an independently trusted source. See [security](docs/SECURITY.md),
+[release policy](docs/RELEASE-POLICY.md), and the public release report for the
+verified local and remote boundaries.
+
 ## 1.9.0-alpha.2 — Optional Agent Y CLI and PR lane
 
 The earlier `v1.9.0-alpha.1` tag was withdrawn before a release was published:
