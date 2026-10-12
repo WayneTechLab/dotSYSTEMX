@@ -342,6 +342,88 @@ class AgentYTests(unittest.TestCase):
         self.assertEqual(self.git("rev-parse", "HEAD"), base)
         self.assert_ok(self.cli("agent-y", "validate"))
 
+    def test_prepared_cli_identity_survives_path_substitution(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        original_marker = Path(self.temp.name) / "prepared-provider-ran.json"
+        original = self.fake_editing_codex(folder, original_marker)
+        prepared = self.value(*self.prepare_args(), "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        sidecar = json.loads((self.systemx / "state/agent-y" / (identifier + ".json")).read_text())
+        self.assertEqual(sidecar["schemaVersion"], 2)
+        self.assertEqual(sidecar["executable"]["path"], str(original.resolve()))
+        self.assertEqual(sidecar["executable"]["sha256"], hashlib.sha256(original.read_bytes()).hexdigest())
+        self.assertNotIn(str(original), (self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+        replacement_folder = Path(self.temp.name) / "replacement-tools"
+        replacement_folder.mkdir()
+        substituted_marker = Path(self.temp.name) / "path-substitute-ran"
+        self.fake_executable(replacement_folder, "codex", "from pathlib import Path\nPath(" +
+                             repr(str(substituted_marker)) + ").write_text('unsafe provider ran')\n")
+        env["PATH"] = str(replacement_folder) + os.pathsep + env["PATH"]
+        result = self.value("agent-y", "run", identifier, "--apply", env=env)
+        self.assertEqual(result["job"]["state"], "review_pending")
+        self.assertTrue(original_marker.exists())
+        self.assertFalse(substituted_marker.exists())
+
+    def test_changed_prepared_executable_is_rejected_before_worktree_creation(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        marker = Path(self.temp.name) / "changed-provider-ran"
+        original = self.fake_executable(folder, "codex", "pass\n")
+        prepared = self.value(*self.prepare_args(), "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        self.fake_executable(folder, "codex", "from pathlib import Path\nPath(" +
+                             repr(str(marker)) + ").write_text('changed code ran')\n")
+        self.rejected("agent-y", "run", identifier, "--apply", env=env)
+        self.assertFalse(marker.exists())
+        self.assertFalse((Path(self.temp.name) / "systemx-agent-y").exists())
+        self.assertEqual(json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+                         ["jobs"][0]["state"], "prepared")
+
+    def test_configured_provider_cannot_switch_executable_after_prepare(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        adapter = self.fake_executable(folder, "fixture-provider", "pass\n")
+        prepared = self.value(*self.prepare_args(provider="configured"),
+                              "--command", str(adapter), "--apply", env=env)
+        other = self.fake_executable(folder, "different-provider", "pass\n")
+        self.rejected("agent-y", "run", prepared["job"]["id"],
+                      "--command", str(other), "--apply", env=env)
+        self.assertFalse((Path(self.temp.name) / "systemx-agent-y").exists())
+        self.assertEqual(json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+                         ["jobs"][0]["state"], "failed")
+
+    def test_legacy_prepared_sidecar_fails_closed_and_can_be_abandoned_for_reprepare(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_executable(folder, "codex", "pass\n")
+        prepared = self.value(*self.prepare_args(), "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        sidecar_path = self.systemx / "state/agent-y" / (identifier + ".json")
+        sidecar = json.loads(sidecar_path.read_text())
+        sidecar.pop("executable")
+        sidecar["schemaVersion"] = 1
+        sidecar_path.write_text(json.dumps(sidecar))
+        self.rejected("agent-y", "run", identifier, "--apply", env=env)
+        self.assertFalse((Path(self.temp.name) / "systemx-agent-y").exists())
+        self.assertEqual(json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+                         ["jobs"][0]["state"], "prepared")
+        preview = self.value("agent-y", "abandon", identifier, "--reason", "CLI reviewed again", env=env)
+        self.assertFalse(preview["applied"])
+        retired = self.value("agent-y", "abandon", identifier, "--reason", "CLI reviewed again",
+                             "--apply", env=env)
+        self.assertEqual(retired["job"]["state"], "failed")
+        self.assertFalse(retired["branchDeleted"])
+        self.git("add", ".SYSTEMX")
+        self.git("commit", "-m", "Retire old prepared handoff")
+        self.git("push", "origin", "main")
+        self.git("fetch", "origin", "main")
+        replacement = self.value(*self.prepare_args(branch="codex/agent-y/TASK-001-new-attempt"),
+                                 "--apply", env=env)
+        self.assertNotEqual(replacement["job"]["id"], identifier)
+        new_sidecar = self.systemx / "state/agent-y" / (replacement["job"]["id"] + ".json")
+        self.assertEqual(json.loads(new_sidecar.read_text())["schemaVersion"], 2)
+
     def test_prepare_refuses_missing_provider_and_dirty_worktree(self):
         self.ready_task()
         folder, env = self.fake_path()
@@ -659,6 +741,13 @@ class AgentYTests(unittest.TestCase):
         result = self.value("agent-y", "run", identifier, "--apply", env=env)
         self.assertTrue(invocation.exists())
         self.assertEqual(result["job"]["state"], "draft_pr")
+        # Older completed channels must remain manageable without an executable
+        # pin, even though an older prepared channel cannot start a new run.
+        sidecar_path = self.systemx / "state/agent-y" / (identifier + ".json")
+        sidecar = json.loads(sidecar_path.read_text())
+        sidecar.pop("executable")
+        sidecar["schemaVersion"] = 1
+        sidecar_path.write_text(json.dumps(sidecar))
         self.assertFalse(hook_marker.exists())
         head = result["job"]["headOid"]
         self.assertEqual(self.git("ls-remote", "origin", "refs/heads/" + result["job"]["branch"]).split()[0], head)

@@ -69,6 +69,18 @@ executable with explicit
 arguments own its model selection. The command and arguments are retained only in ignored
 host-local execution state, and still must not contain secrets. Provider
 detection is a capability hint, not an execution or authentication test.
+At `prepare`, the controller resolves the selected CLI to a canonical absolute
+regular executable and pins its SHA-256, device, inode, and size in the ignored
+owner-only sidecar. A built-in `codex` or `copilot` command may be found through
+`PATH` at prepare time; `run` uses the pinned absolute target, even if `PATH`
+later points to another program. A configured provider must name an absolute,
+unlinked executable at both steps. If the executable was replaced or updated,
+`run` refuses it before launching a provider; review the new binary and prepare
+a new handoff. The controller verifies the pinned identity again immediately
+before starting the subprocess. This binds the selected CLI file, but does not
+authenticate the provider, pin its interpreter or dependencies, or make the
+provider an OS-isolated sandbox. A same-user process that can mutate the file
+between final verification and process launch remains outside this check.
 The configured adapter receives the task packet on standard input and must
 use exit code zero only for a completed run; the controller still inspects
 the actual changed paths and commit before considering publication.
@@ -91,6 +103,7 @@ execution; it does not remove core `.SYSTEMX` Windows installation and records.
 | `agent-y providers` | Read-only local provider availability. |
 | `agent-y prepare` | Preview a handoff; `--apply` saves it without running the provider. |
 | `agent-y run Y-ID` | Preview; `--apply` invokes the selected provider in an isolated worktree and may create the opted-in draft PR after provider exit zero and controller scope/commit checks. Project checks still remain. |
+| `agent-y abandon Y-ID --reason TEXT` | Preview; `--apply` retires an unrun prepared handoff without deleting a branch, worktree, or PR. |
 | `agent-y list`, `show`, `validate` | Inspect scoped job records; do not start a provider. |
 | `agent-y recover Y-ID --apply` | Mark a stranded same-host run failed only after verifying its controller process is gone; preserve its worktree and any remote state. |
 | `agent-y pr-ready Y-ID --apply` | Mark the owned draft ready after recorded `done` only while the remote base still equals the prepared commit. |
@@ -152,6 +165,18 @@ cannot run a prepared job without its own reviewed local execution state. Do
 not copy another host's sidecar to bypass path, executable, or account checks;
 reconcile the existing job with Agent 0 before preparing any replacement
 handoff for that host.
+Prepared sidecars written by older Agent Y versions have no pinned executable
+identity and fail closed if asked to start a provider with this runner. Agent 0
+can inspect the old job and local state, then run
+`agent-y abandon Y-ID --reason "Reprepare with reviewed CLI" --apply` while
+the job is still `prepared` and has no branch or worktree. Prepare a replacement
+on a new `codex/agent-y/TASK-NNN-short-name` branch after reviewing the current
+provider and reconciling the changed `.SYSTEMX` ledger so the selected Git
+repository is clean. An already-run older job remains readable: PR readiness, closure,
+cleanup, and recovery still use its existing record and sidecar, subject to
+their normal gates. `abandon` never deletes an external artifact or overrides
+an active run, and this runner never silently attaches a newly found binary to
+an older prepared job.
 
 The controller builds a bounded JSON packet from the selected task's ID,
 title, owner, scope, acceptance criteria, dependencies, and next action, plus

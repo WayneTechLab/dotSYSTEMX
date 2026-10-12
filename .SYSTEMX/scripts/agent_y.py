@@ -30,6 +30,8 @@ HANDOFF_FIELDS = ("id", "task", "provider", "model", "repoId", "repoPathSha256",
                   "baseOid", "branch", "promptSha256", "allowPaths", "openDraftPr", "createdAt")
 PR_FIELDS = {"number", "url", "headOid"}
 OWNER_FIELDS = {"pid", "host", "at", "token"}
+EXECUTABLE_FIELDS = {"path", "sha256", "device", "inode", "size"}
+EXECUTABLE_LIMIT = 512 * 1024 * 1024
 BRANCH = re.compile(r"codex/agent-y/TASK-[0-9]{3,}-[a-z0-9](?:[a-z0-9-]{0,39}[a-z0-9])?")
 MODEL = re.compile(r"[A-Za-z0-9][A-Za-z0-9._/-]{0,79}")
 
@@ -68,6 +70,53 @@ def _regular(path, *, cap=None):
     if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or (cap is not None and info.st_size > cap):
         raise ValueError("File must be regular, unlinked and within size limit: " + str(path))
     return path
+
+
+def _executable_identity(candidate, *, configured=False):
+    """Bind one reviewed CLI file, not a mutable PATH lookup at run time."""
+    selected = Path(candidate)
+    if configured and (not selected.is_absolute() or selected.is_symlink()):
+        raise ValueError("Configured provider needs an absolute, unlinked executable")
+    try:
+        path = selected.resolve(strict=True)
+    except (OSError, RuntimeError) as error:
+        raise ValueError("Selected CLI executable is unavailable") from error
+    if not path.is_absolute() or path.is_symlink() or not os.access(path, os.X_OK):
+        raise ValueError("Selected CLI executable must be a regular executable file")
+    _regular(path, cap=EXECUTABLE_LIMIT)
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+    except OSError as error:
+        raise ValueError("Selected CLI executable cannot be opened safely") from error
+    try:
+        before = os.fstat(descriptor)
+        if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or
+                before.st_size > EXECUTABLE_LIMIT):
+            raise ValueError("Selected CLI executable must be regular, unlinked and at most 512 MiB")
+        hasher = hashlib.sha256()
+        while True:
+            chunk = os.read(descriptor, 1024 * 1024)
+            if not chunk:
+                break
+            hasher.update(chunk)
+        after = os.fstat(descriptor)
+        if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns) != (
+                after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns):
+            raise ValueError("Selected CLI executable changed while it was read")
+        return {"path": str(path), "sha256": hasher.hexdigest(), "device": before.st_dev,
+                "inode": before.st_ino, "size": before.st_size}
+    finally:
+        os.close(descriptor)
+
+
+def _checked_executable(sidecar):
+    identity = sidecar.get("executable")
+    if not identity:
+        raise ValueError("This prepared Agent Y job predates executable binding; review and prepare a new handoff")
+    if _executable_identity(identity["path"]) != identity:
+        raise ValueError("Selected CLI executable changed since Agent Y prepare; review and prepare a new handoff")
+    return identity["path"]
 
 
 def _repo(path):
@@ -292,8 +341,13 @@ def _sidecar(root, identifier):
     path = memory.managed(Path(root), _sidecar_path(identifier))
     _regular(path, cap=16384)
     data = memory.read_json(Path(root), _sidecar_path(identifier))
-    memory.fields(data, ("schemaVersion", "repo", "promptFile", "worktree", "command", "runOwner"), "Agent Y local sidecar")
-    if type(data["schemaVersion"]) is not int or data["schemaVersion"] != 1 or not isinstance(data["repo"], str):
+    if not isinstance(data, dict) or data.get("schemaVersion") not in (1, 2):
+        raise ValueError("Invalid Agent Y local sidecar")
+    required = ("schemaVersion", "repo", "promptFile", "worktree", "command", "runOwner")
+    if data["schemaVersion"] == 2:
+        required += ("executable",)
+    memory.fields(data, required, "Agent Y local sidecar")
+    if type(data["schemaVersion"]) is not int or not isinstance(data["repo"], str):
         raise ValueError("Invalid Agent Y local sidecar")
     for key in ("repo", "promptFile"):
         if not Path(data[key]).is_absolute():
@@ -301,6 +355,14 @@ def _sidecar(root, identifier):
     if (not isinstance(data["worktree"], str) or (data["worktree"] and not Path(data["worktree"]).is_absolute()) or
             not isinstance(data["command"], list) or any(not isinstance(item, str) for item in data["command"])):
         raise ValueError("Invalid Agent Y local execution settings")
+    if data["schemaVersion"] == 2:
+        executable = data["executable"]
+        memory.fields(executable, EXECUTABLE_FIELDS, "Agent Y executable identity")
+        if (not isinstance(executable["path"], str) or not Path(executable["path"]).is_absolute() or
+                not isinstance(executable["sha256"], str) or not re.fullmatch(r"[0-9a-f]{64}", executable["sha256"]) or
+                any(type(executable[key]) is not int or executable[key] < 0 for key in ("device", "inode", "size")) or
+                executable["size"] > EXECUTABLE_LIMIT):
+            raise ValueError("Invalid Agent Y executable identity")
     memory.fields(data["runOwner"], OWNER_FIELDS, "Agent Y local run owner")
     if path.stat().st_mode & 0o077:
         raise ValueError("Agent Y local sidecar must be owner-only (0600)")
@@ -357,14 +419,17 @@ def prepare(root, args):
         raise ValueError("Invalid model selector")
     if args.provider == "configured":
         command = []
-        if not args.command or not Path(args.command).is_absolute() or not _regular(args.command):
+        if not args.command:
             raise ValueError("Configured provider needs an explicit absolute executable")
+        executable = _executable_identity(args.command, configured=True)
     else:
         if args.command or args.arg:
             raise ValueError("--command and --arg apply only to configured providers")
         command = []
-        if not shutil.which(args.provider):
+        selected = shutil.which(args.provider)
+        if not selected:
             raise ValueError("Selected CLI provider is not installed")
+        executable = _executable_identity(selected)
     if args.provider == "configured" and args.model:
         raise ValueError("Configured provider owns its model selection in --arg")
     key = {"task": args.task, "provider": args.provider, "repo": str(repo), "baseOid": base_oid,
@@ -403,8 +468,9 @@ def prepare(root, args):
             if any(item["id"] == identifier for item in current["jobs"]):
                 raise ValueError("Agent Y handoff ID appeared concurrently; use a new attempt")
             _task(root, args.task, status="in_progress")
-            _write_sidecar(root, identifier, {"schemaVersion": 1, "repo": str(repo),
+            _write_sidecar(root, identifier, {"schemaVersion": 2, "repo": str(repo),
                                               "promptFile": str(prompt), "worktree": "", "command": command,
+                                              "executable": executable,
                                               "runOwner": {"pid": 0, "host": "", "at": "", "token": ""}})
             current["jobs"].append(job)
             _save(root, current)
@@ -439,18 +505,15 @@ def _packet(root, job, prompt):
 
 
 def _provider_argv(job, worktree, packet_file=None, sidecar=None):
+    executable = _checked_executable(sidecar or {})
     if job["provider"] == "codex":
-        executable = shutil.which("codex")
-        if not executable:
-            raise ValueError("Codex CLI is not installed")
         argv = [executable, "exec", "-c", "approval_policy=never", "-C", str(worktree),
                 "--sandbox", "workspace-write", "--json", "--ephemeral"]
         if job["model"]:
             argv += ["-m", job["model"]]
         return argv + ["-"], True
     if job["provider"] == "copilot":
-        executable = shutil.which("copilot")
-        if not executable or packet_file is None:
+        if packet_file is None:
             raise ValueError("Copilot CLI is unavailable or packet is missing")
         instruction = "Read the local task packet at .agent-y-packet.md; edit only its allowed paths; do not push or alter PRs."
         argv = [executable, "-p", instruction, "--no-ask-user", "--output-format=json",
@@ -459,12 +522,14 @@ def _provider_argv(job, worktree, packet_file=None, sidecar=None):
             argv += ["--model", job["model"]]
         return argv, False
     command = (sidecar or {}).get("command", [])
-    if not command or not Path(command[0]).is_absolute() or not _regular(command[0]):
+    if not command or command[0] != executable:
         raise ValueError("Configured provider executable is missing or changed")
     return command, True
 
 
-def _run_provider(argv, worktree, packet, *, send_stdin):
+def _run_provider(argv, worktree, packet, *, send_stdin, sidecar):
+    if not argv or argv[0] != _checked_executable(sidecar):
+        raise ValueError("Provider launch path differs from its reviewed executable")
     kwargs = {"cwd": str(worktree), "env": _provider_env(), "stdin": subprocess.PIPE if send_stdin else subprocess.DEVNULL,
               "stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
     if os.name != "nt":
@@ -561,6 +626,7 @@ def run(root, args):
     if job["state"] != "prepared":
         raise ValueError("Only a prepared Agent Y channel can be run")
     sidecar = _sidecar(root, args.id)
+    executable = _checked_executable(sidecar)
     repo = _bound_repo(sidecar, job)
     prompt, digest, prompt_bytes = _prompt(sidecar["promptFile"], repo)
     if digest != job["promptSha256"]:
@@ -600,9 +666,11 @@ def run(root, args):
         sidecar["runOwner"] = {"pid": os.getpid(), "host": socket.gethostname(), "at": memory.now(), "token": token}
         _write_sidecar(root, args.id, sidecar)
         if job["provider"] == "configured":
-            if not args.command or not Path(args.command).is_absolute() or not _regular(args.command):
+            if not args.command:
                 raise ValueError("Configured provider needs --command ABSOLUTE_EXE at run time")
-            sidecar["command"] = [args.command, *args.arg]
+            if _executable_identity(args.command, configured=True) != sidecar["executable"]:
+                raise ValueError("Configured provider executable differs from its prepared identity")
+            sidecar["command"] = [executable, *args.arg]
             _write_sidecar(root, args.id, sidecar)
         elif args.command or args.arg:
             raise ValueError("--command and --arg apply only to configured providers")
@@ -617,7 +685,7 @@ def run(root, args):
                 output.write(packet)
         try:
             argv, send_stdin = _provider_argv(job, worktree, packet_file, sidecar)
-            exit_code = _run_provider(argv, worktree, packet, send_stdin=send_stdin)
+            exit_code = _run_provider(argv, worktree, packet, send_stdin=send_stdin, sidecar=sidecar)
         finally:
             if packet_file.exists():
                 packet_file.unlink()
@@ -1015,6 +1083,45 @@ def recover(root, args):
     return {"applied": True, "job": saved}
 
 
+def abandon(root, args):
+    """Retire an unrun handoff without deleting any repository or provider state."""
+    job = _get(load_jobs(root), args.id)
+    if job["state"] != "prepared":
+        raise ValueError("Only an unrun prepared Agent Y job can be abandoned")
+    memory.string(args.reason, "Prepared handoff abandonment reason")
+    if len(args.reason) > 4096:
+        raise ValueError("Prepared handoff abandonment reason must be at most 4096 characters")
+    sidecar = _sidecar(root, args.id)
+    repo = _bound_repo(sidecar, job)
+    worktree = _local_worktree(repo, args.id)
+    def branch_present():
+        return "refs/heads/" + job["branch"] in _git(
+            repo, "for-each-ref", "--format=%(refname)", "refs/heads/" + job["branch"]).splitlines()
+    if worktree.exists() or worktree.is_symlink():
+        raise ValueError("Prepared job has a worktree path; preserve and inspect it manually")
+    if branch_present():
+        raise ValueError("Prepared job has a local branch; preserve and inspect it manually")
+    if not args.apply:
+        return {"applied": False, "job": _public(job),
+                "action": "mark unrun handoff failed; preserve records; prepare a new reviewed branch"}
+    reason_digest = hashlib.sha256(args.reason.encode("utf-8")).hexdigest()
+    with memory.coordination_lock(root):
+        data = load_jobs(root)
+        current = _get(data, args.id)
+        if current != job or current["state"] != "prepared":
+            raise ValueError("Prepared Agent Y handoff changed before abandonment")
+        if worktree.exists() or worktree.is_symlink() or branch_present():
+            raise ValueError("Prepared Agent Y branch or worktree appeared; preserve it")
+        current["state"] = "failed"
+        current["error"] = "Prepared handoff abandoned before provider execution"
+        current["evidence"].append("abandon-reason-sha256:" + reason_digest)
+        current["updatedAt"] = memory.now()
+        _save(root, data)
+        saved = _public(current)
+    return {"applied": True, "job": saved, "branchDeleted": False,
+            "limit": "Existing remote branches or external provider sessions are not changed"}
+
+
 def add_cli(subparsers, scope=None):
     scope = scope or (lambda parser: parser)
     scope(subparsers.add_parser("providers", help="detect installed CLI names; no model or auth probe"))
@@ -1039,6 +1146,10 @@ def add_cli(subparsers, scope=None):
     command.add_argument("id")
     command.add_argument("--command", default="")
     command.add_argument("--arg", action="append", default=[])
+    command.add_argument("--apply", action="store_true")
+    command = scope(subparsers.add_parser("abandon", help="retire an unrun prepared handoff; preserve local artifacts"))
+    command.add_argument("id")
+    command.add_argument("--reason", required=True)
     command.add_argument("--apply", action="store_true")
     for name in ("pr-ready", "pr-cleanup", "recover"):
         command = scope(subparsers.add_parser(name))
@@ -1066,6 +1177,8 @@ def dispatch(root, args):
                 "limit": "Portable record consistency only; provider, local sidecar, GitHub, and task proof are rechecked at action time"}
     if action == "run":
         return run(root, args)
+    if action == "abandon":
+        return abandon(root, args)
     if action == "pr-ready":
         return pr_ready(root, args)
     if action == "pr-close":
