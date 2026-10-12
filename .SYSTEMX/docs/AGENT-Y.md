@@ -124,9 +124,14 @@ The worktree is created under the OS temporary directory's
 `systemx-agent-y/<repo-hash>/<job-id>/` namespace and is recorded in ignored
 host-local `state/agent-y/<Y-ID>.json` keyed to the portable job. This sidecar
 uses owner-only file permissions on POSIX hosts. Windows `chmod` is not a
-complete ACL guarantee, so review that host's file access controls. Git
-ignores the sidecar, but whole-folder backup and external sync tools may still
-copy it.
+complete ACL guarantee, so review that host's file access controls. When this
+`.SYSTEMX` is inside a Git checkout, Agent Y checks that neither sidecars nor
+cleanup archives are tracked and that both paths are ignored before writing
+private state. An adopted, customized `.SYSTEMX/.gitignore` may lack `/state/`;
+`prepare --apply` then stops without creating a sidecar. Restore an appropriate
+ignore rule, verify both paths with `git check-ignore`, and review any already
+tracked private files and Git history before retrying. Git ignores do not stop
+force-adds, whole-folder backups, or external sync tools from copying state.
 
 The worktree itself is outside the `.SYSTEMX` folder backup; inspect it before
 uninstall or manual cleanup. The portable job stores bounded metadata and evidence

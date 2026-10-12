@@ -258,6 +258,56 @@ class AgentYTests(unittest.TestCase):
             with self.subTest(relative=relative):
                 self.git("check-ignore", "--quiet", "--", relative)
 
+    def test_prepare_refuses_adopted_gitignore_that_exposes_sidecar_or_archive(self):
+        # Installation preserves a customized .gitignore, including one that
+        # predates Agent Y. A local sidecar must never be the first warning.
+        (self.systemx / ".gitignore").write_text("# project-specific ignores\n", encoding="utf-8")
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_executable(folder, "codex", "pass\n")
+        before = self.records()
+        rejected = self.rejected(*self.prepare_args(), "--apply", env=env)
+        self.assertIn("not Git-ignored", rejected.stderr)
+        self.assertEqual(before, self.records())
+        self.assertEqual(json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())["jobs"], [])
+        self.assertFalse((self.systemx / "state/agent-y").exists())
+
+    def test_prepare_requires_archive_ignore_even_when_sidecar_is_ignored(self):
+        (self.systemx / ".gitignore").write_text("/state/agent-y/*.json\n", encoding="utf-8")
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_executable(folder, "codex", "pass\n")
+        rejected = self.rejected(*self.prepare_args(), "--apply", env=env)
+        self.assertIn("archives", rejected.stderr)
+        self.assertFalse((self.systemx / "state/agent-y").exists())
+
+    def test_prepare_refuses_previously_tracked_private_agent_y_state(self):
+        self.ready_task()
+        legacy = self.systemx / "state/agent-y/legacy.json"
+        legacy.parent.mkdir(parents=True)
+        legacy.write_text("fixture only\n", encoding="utf-8")
+        self.git("add", "-f", ".SYSTEMX/state/agent-y/legacy.json")
+        self.git("commit", "-m", "Fixture force-added private state")
+        self.git("push", "origin", "main")
+        self.git("fetch", "origin", "main")
+        folder, env = self.fake_path()
+        self.fake_executable(folder, "codex", "pass\n")
+        rejected = self.rejected(*self.prepare_args(), "--apply", env=env)
+        self.assertIn("already Git-tracked", rejected.stderr)
+        self.assertEqual(json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())["jobs"], [])
+
+    def test_existing_sidecar_refuses_later_ignore_removal(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_executable(folder, "codex", "pass\n")
+        prepared = self.value(*self.prepare_args(), "--apply", env=env)
+        sidecar = self.systemx / "state/agent-y" / (prepared["job"]["id"] + ".json")
+        before = sidecar.read_bytes()
+        (self.systemx / ".gitignore").write_text("# removed /state/ rule\n", encoding="utf-8")
+        rejected = self.rejected("agent-y", "run", prepared["job"]["id"], env=env)
+        self.assertIn("not Git-ignored", rejected.stderr)
+        self.assertEqual(sidecar.read_bytes(), before)
+
     def test_prepare_preview_is_read_only_and_apply_records_one_owned_job(self):
         base = self.ready_task()
         folder, env = self.fake_path()

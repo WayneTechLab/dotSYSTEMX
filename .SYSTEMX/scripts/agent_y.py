@@ -261,7 +261,34 @@ def _sidecar_path(identifier):
     return "state/agent-y/" + records.token(identifier, "Y") + ".json"
 
 
+def _private_git_guard(root, identifier):
+    """Refuse private host paths that this checkout could stage with Git."""
+    root = Path(root).resolve()
+    sidecar = _sidecar_path(identifier)
+    archive = "state/agent-y/archives/" + identifier + ".bundle"
+    for name in (sidecar, archive):
+        memory.managed(root, name)
+    # A Drive/chat scope need not be a Git checkout. An existing .git marker,
+    # including a linked-worktree .git file, must be inspected successfully.
+    if not any((parent / ".git").exists() or (parent / ".git").is_symlink()
+               for parent in (root, *root.parents)):
+        return
+    repo = Path(_git(root, "rev-parse", "--show-toplevel")).resolve()
+    if not root.is_relative_to(repo):
+        raise ValueError("Cannot verify the Git repository containing Agent Y local state")
+    prefix = (root / "state" / "agent-y").relative_to(repo).as_posix() + "/"
+    if _git(repo, "ls-files", "-z", "--", prefix):
+        raise ValueError("Agent Y private state is already Git-tracked; remove it from the index and review its history")
+    for name in (sidecar, archive):
+        candidate = (root / name).relative_to(repo).as_posix()
+        try:
+            _git(repo, "check-ignore", "--quiet", "--", candidate)
+        except ValueError as error:
+            raise ValueError("Agent Y private state is not Git-ignored: {}. Add /state/ to this .SYSTEMX/.gitignore and verify both sidecars and archives before retrying".format(candidate)) from error
+
+
 def _sidecar(root, identifier):
+    _private_git_guard(root, identifier)
     path = memory.managed(Path(root), _sidecar_path(identifier))
     _regular(path, cap=16384)
     data = memory.read_json(Path(root), _sidecar_path(identifier))
@@ -281,6 +308,7 @@ def _sidecar(root, identifier):
 
 
 def _write_sidecar(root, identifier, value):
+    _private_git_guard(root, identifier)
     relative = _sidecar_path(identifier)
     path = memory.managed(Path(root), relative)
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -909,6 +937,7 @@ def cleanup(root, args, *, pull_request):
         return {"applied": False, "job": _public(job), "action": "remove verified owned worktree and branch",
                 "remoteBranchPresent": bool(remote_head)}
     archive_dir = memory.managed(Path(root), "state/agent-y/archives")
+    _private_git_guard(root, args.id)
     archive_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
     archive = archive_dir / (args.id + ".bundle")
     if archive.exists() or archive.is_symlink():

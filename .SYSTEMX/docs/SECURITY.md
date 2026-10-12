@@ -58,6 +58,11 @@ in a prompt, CLI argument, PR description, event summary, or transcript.
 provider/model names, PR links, and bounded results. Absolute host paths and
 configured adapter arguments belong only in ignored local execution state with
 owner-only file permissions on POSIX hosts (`state/agent-y/<Y-ID>.json` per job).
+For a Git-backed `.SYSTEMX`, Agent Y refuses to write this sidecar or a cleanup
+archive unless both paths are ignored and no Agent Y state is already tracked.
+Installation preserves customized `.gitignore` files, so an adopted checkout
+may need `/state/` added before `agent-y prepare --apply`. This guard cannot
+remove content already committed to Git history or prevent a later force-add.
 Windows `chmod` does not establish a complete ACL boundary; review host file
 access controls. A merged-PR cleanup bundle in ignored
 `state/agent-y/archives/` is private recovery material and needs verified
