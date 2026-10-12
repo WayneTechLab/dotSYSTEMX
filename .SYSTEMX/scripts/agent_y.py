@@ -854,9 +854,16 @@ def _owned_worktree(repo, identifier, sidecar, job):
         raise ValueError("Agent Y worktree branch changed")
     if job["headOid"] and _git(expected, "rev-parse", "HEAD") != job["headOid"]:
         raise ValueError("Agent Y worktree head changed")
-    if _git(expected, "status", "--porcelain", "--untracked-files=all"):
-        raise ValueError("Agent Y worktree contains uncommitted material; preserve it")
+    _assert_worktree_preserved(expected)
     return expected
+
+
+def _assert_worktree_preserved(worktree):
+    # Default porcelain hides ignored paths, but `git worktree remove` can
+    # discard them. Treat provider caches and user files alike: the controller
+    # has no authority to decide which ignored bytes are safe to delete.
+    if _git(worktree, "status", "--porcelain=v1", "--ignored=matching", "--untracked-files=all", "-z"):
+        raise ValueError("Agent Y worktree contains tracked, untracked, or ignored material; preserve and review it")
 
 
 def _terminal_task(root, job):
@@ -926,6 +933,9 @@ def cleanup(root, args, *, pull_request):
                  "origin", "--delete", "refs/heads/" + current["branch"], timeout=90)
             if _remote_head(repo, current["branch"]):
                 raise ValueError("Remote branch deletion was not confirmed")
+        # Recheck after the remote operation, directly before Git can remove
+        # the directory. A newly written ignored file must stop local cleanup.
+        _assert_worktree_preserved(worktree)
         _git(repo, "worktree", "remove", str(worktree), timeout=90)
         _git(repo, "update-ref", "-d", "refs/heads/" + current["branch"], current["headOid"])
         sidecar["worktree"] = ""

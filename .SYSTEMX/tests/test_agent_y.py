@@ -823,3 +823,85 @@ class AgentYTests(unittest.TestCase):
         local_ref = subprocess.run(["git", "show-ref", "--verify", "--quiet", "refs/heads/" + branch],
                                    cwd=self.root, text=True, capture_output=True)
         self.assertNotEqual(local_ref.returncode, 0)
+
+    def test_merged_cleanup_preserves_ignored_worktree_file(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_github_identity(folder)
+        gh_state, _ = self.fake_gh(folder)
+        self.fake_editing_codex(folder, Path(self.temp.name) / "provider-ran.json")
+        prepared = self.value(*self.prepare_args(), "--open-draft-pr", "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        published = self.value("agent-y", "run", identifier, "--apply", env=env)
+        branch, head = published["job"]["branch"], published["job"]["headOid"]
+        sidecar = self.systemx / "state/agent-y" / (identifier + ".json")
+        worktree = Path(json.loads(sidecar.read_text())["worktree"])
+        ignored = worktree / ".SYSTEMX/local/user-notes.txt"
+        ignored.parent.mkdir(parents=True, exist_ok=True)
+        ignored.write_bytes(b"User material the controller must preserve\n")
+        self.assertEqual(self.git("status", "--porcelain", "--untracked-files=all", cwd=worktree), "")
+        self.assertIn(".SYSTEMX/local/", self.git("status", "--porcelain=v1", "--ignored=matching",
+                                                  "--untracked-files=all", cwd=worktree))
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "needs_review",
+                                "--evidence", "commit:" + head))
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "done", "--owner", "agent.0",
+                                "--reviewer", "agent.0", "--evidence", "reviewed-fixture"))
+        remote_pr = json.loads(gh_state.read_text())
+        remote_pr.update(state="MERGED", isDraft=False, mergedAt="2026-01-01T00:00:00Z")
+        gh_state.write_text(json.dumps(remote_pr))
+        self.rejected("agent-y", "pr-cleanup", identifier, env=env)
+        self.rejected("agent-y", "pr-cleanup", identifier, "--apply", env=env)
+        self.assertEqual(ignored.read_bytes(), b"User material the controller must preserve\n")
+        self.assertEqual(self.git("ls-remote", "origin", "refs/heads/" + branch).split()[0], head)
+        self.assertEqual(self.git("rev-parse", "refs/heads/" + branch), head)
+        self.assertEqual(json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+                         ["jobs"][0]["state"], "draft_pr")
+        self.assertFalse((self.systemx / "state/agent-y/archives" / (identifier + ".bundle")).exists())
+
+    def test_merged_cleanup_rechecks_ignored_files_after_remote_delete(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_github_identity(folder)
+        gh_state, _ = self.fake_gh(folder)
+        self.fake_editing_codex(folder, Path(self.temp.name) / "provider-ran.json")
+        prepared = self.value(*self.prepare_args(), "--open-draft-pr", "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        published = self.value("agent-y", "run", identifier, "--apply", env=env)
+        branch, head = published["job"]["branch"], published["job"]["headOid"]
+        sidecar = self.systemx / "state/agent-y" / (identifier + ".json")
+        worktree = Path(json.loads(sidecar.read_text())["worktree"])
+        ignored = worktree / ".SYSTEMX/local/late-output.txt"
+        marker = Path(self.temp.name) / "late-ignored-file-created"
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "needs_review",
+                                "--evidence", "commit:" + head))
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "done", "--owner", "agent.0",
+                                "--reviewer", "agent.0", "--evidence", "reviewed-fixture"))
+        remote_pr = json.loads(gh_state.read_text())
+        remote_pr.update(state="MERGED", isDraft=False, mergedAt="2026-01-01T00:00:00Z")
+        gh_state.write_text(json.dumps(remote_pr))
+        real_git = shutil.which("git")
+        self.assertIsNotNone(real_git)
+        self.fake_executable(folder, "git",
+                             "import subprocess, sys\n"
+                             "from pathlib import Path\n"
+                             "args = sys.argv[1:]\n"
+                             "if args[-3:] == ['remote', 'get-url', 'origin'] or "
+                             "args[-4:] == ['remote', 'get-url', '--push', 'origin']:\n"
+                             "    print('https://github.com/FixtureOrg/fixture-repo.git')\n"
+                             "else:\n"
+                             "    code = subprocess.call([" + repr(real_git) + ", *args])\n"
+                             "    marker = Path(" + repr(str(marker)) + ")\n"
+                             "    if code == 0 and 'push' in args and '--delete' in args and not marker.exists():\n"
+                             "        ignored = Path(" + repr(str(ignored)) + ")\n"
+                             "        ignored.parent.mkdir(parents=True, exist_ok=True)\n"
+                             "        ignored.write_text('Late provider output\\n')\n"
+                             "        marker.write_text('created')\n"
+                             "    sys.exit(code)\n")
+        self.rejected("agent-y", "pr-cleanup", identifier, "--apply", env=env)
+        self.assertTrue(marker.exists())
+        self.assertEqual(ignored.read_text(), "Late provider output\n")
+        self.assertEqual(self.git("ls-remote", "origin", "refs/heads/" + branch), "")
+        self.assertEqual(self.git("rev-parse", "refs/heads/" + branch), head)
+        self.assertTrue((self.systemx / "state/agent-y/archives" / (identifier + ".bundle")).is_file())
+        self.assertEqual(json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+                         ["jobs"][0]["state"], "draft_pr")

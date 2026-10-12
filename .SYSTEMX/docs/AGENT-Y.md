@@ -232,7 +232,16 @@ to abandon its owned PR; that step preserves the unmerged branch and worktree
 for manual disposition. After a separately authorized merge of an accepted
 task, `agent-y pr-cleanup Y_RETURNED_ID --apply` first preserves a verified
 local bundle and then removes only the exact owned branch/worktree. It verifies
-the merged remote PR and exact branch head. The bundle is saved under ignored
+the merged remote PR and exact branch head. Cleanup inventories tracked,
+untracked, and ignored worktree material, including provider caches, before
+removal and again after any remote branch deletion. If anything remains, it
+leaves the worktree intact; inspect and preserve those files before manually
+removing only expendable artifacts. An early refusal leaves the remote branch
+unchanged and can be retried after review. A late refusal may leave the bundle
+and remote branch deletion completed while the local worktree remains. The
+controller blocks an existing archive; preserve it and manually reconcile the
+exact branch, worktree, PR, and archive states rather than deleting it to force
+a retry. The bundle is saved under ignored
 `state/agent-y/archives/<Y-ID>.bundle`; retain it privately and verify the
 recorded SHA-256 before uninstall or moving hosts. See [Agent X](AGENT-X.md) for
 timestamp/event syntax and [Agent Z](AGENT-Z.md) for the 100-answer review.
@@ -335,6 +344,10 @@ archives and deletes the owned branch/worktree only after verifying that the
 remote PR is merged and the task is accepted. It must preserve a local bundle
 and compare a fresh remote head with the owned head before deleting. A closed
 unmerged PR keeps its branch/worktree until separately reviewed manual action.
+Ignored files are still local data. Cleanup refuses a worktree with any ignored
+or untracked path instead of silently deleting it, even when ordinary
+`git status` appears clean. Review provider caches and outputs before removing them
+yourself; no Agent Y command automatically discards those files.
 The bundle bytes are local recovery material, not part of the portable job
 record or target repository; the job retains only their SHA-256 digest. Keep a
 verified copy outside the folder before removing that installation.
