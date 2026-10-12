@@ -670,6 +670,95 @@ class AgentYTests(unittest.TestCase):
         self.assertFalse(any(json.loads(line)["argv"][:2] == ["pr", "ready"]
                              for line in new_calls.splitlines()))
 
+    def test_pr_ready_refuses_stale_remote_base_without_changing_pr(self):
+        prepared_base = self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_github_identity(folder)
+        gh_state, gh_calls = self.fake_gh(folder)
+        self.fake_editing_codex(folder, Path(self.temp.name) / "provider-ran.json")
+        prepared = self.value(*self.prepare_args(), "--open-draft-pr", "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        published = self.value("agent-y", "run", identifier, "--apply", env=env)
+        head = published["job"]["headOid"]
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "needs_review",
+                                "--evidence", "commit:" + head))
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "done", "--reviewer", "agent.0",
+                                "--evidence", "reviewed-fixture"))
+        self.assertFalse(self.value("agent-y", "pr-ready", identifier, env=env)["applied"])
+
+        clone = Path(self.temp.name) / "external-clone"
+        self.git("clone", str(self.origin), str(clone), cwd=self.temp.name)
+        self.git("config", "user.name", "Concurrent fixture writer", cwd=clone)
+        self.git("config", "user.email", "concurrent@example.invalid", cwd=clone)
+        (clone / "new-remote-file.txt").write_text("Concurrent work\n", encoding="utf-8")
+        self.git("add", "new-remote-file.txt", cwd=clone)
+        self.git("commit", "-m", "Move remote main after Agent Y draft", cwd=clone)
+        moved_base = self.git("rev-parse", "HEAD", cwd=clone)
+        self.git("push", "origin", "main", cwd=clone)
+        self.assertNotEqual(moved_base, prepared_base)
+        self.assertEqual(self.git("rev-parse", "refs/remotes/origin/main"), prepared_base)
+        calls_before = gh_calls.read_text()
+        for apply in ((), ("--apply",)):
+            rejected = self.rejected("agent-y", "pr-ready", identifier, *apply, env=env)
+            self.assertIn("Remote base no longer matches", rejected.stderr)
+        self.assertFalse(any(json.loads(line)["argv"][:2] == ["pr", "ready"]
+                             for line in gh_calls.read_text()[len(calls_before):].splitlines()))
+        self.assertTrue(json.loads(gh_state.read_text())["isDraft"])
+        job = json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())["jobs"][0]
+        self.assertEqual(job["state"], "draft_pr")
+
+    def test_pr_ready_rechecks_base_under_lock_before_gh_mutation(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_github_identity(folder)
+        gh_state, gh_calls = self.fake_gh(folder)
+        self.fake_editing_codex(folder, Path(self.temp.name) / "provider-ran.json")
+        prepared = self.value(*self.prepare_args(), "--open-draft-pr", "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        published = self.value("agent-y", "run", identifier, "--apply", env=env)
+        head = published["job"]["headOid"]
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "needs_review",
+                                "--evidence", "commit:" + head))
+        self.assert_ok(self.cli("task-set", "TASK-001", "--status", "done", "--reviewer", "agent.0",
+                                "--evidence", "reviewed-fixture"))
+        clone = Path(self.temp.name) / "external-clone"
+        self.git("clone", str(self.origin), str(clone), cwd=self.temp.name)
+        self.git("config", "user.name", "Concurrent fixture writer", cwd=clone)
+        self.git("config", "user.email", "concurrent@example.invalid", cwd=clone)
+        (clone / "new-remote-file.txt").write_text("Concurrent work\n", encoding="utf-8")
+        self.git("add", "new-remote-file.txt", cwd=clone)
+        self.git("commit", "-m", "Prepare concurrent base advance", cwd=clone)
+        moved_base = self.git("rev-parse", "HEAD", cwd=clone)
+        self.git("push", "origin", "HEAD:refs/heads/concurrent-candidate", cwd=clone)
+        real_git = shutil.which("git")
+        self.assertIsNotNone(real_git)
+        reads = Path(self.temp.name) / "base-reads"
+        body = (
+            "import subprocess, sys\nfrom pathlib import Path\n"
+            "args = sys.argv[1:]\n"
+            "if args[-3:] == ['remote', 'get-url', 'origin'] or "
+            "args[-4:] == ['remote', 'get-url', '--push', 'origin']:\n"
+            "    print('https://github.com/FixtureOrg/fixture-repo.git')\n"
+            "else:\n"
+            "    marker = Path(" + repr(str(reads)) + ")\n"
+            "    if args[-4:] == ['ls-remote', '--heads', 'origin', 'refs/heads/main']:\n"
+            "        count = int(marker.read_text()) if marker.exists() else 0\n"
+            "        marker.write_text(str(count + 1))\n"
+            "        if count == 1:\n"
+            "            subprocess.run([" + repr(real_git) + ", '--git-dir', " + repr(str(self.origin)) +
+            ", 'update-ref', 'refs/heads/main', " + repr(moved_base) + "], check=True)\n"
+            "    sys.exit(subprocess.call([" + repr(real_git) + ", *args]))\n")
+        self.fake_executable(folder, "git", body)
+        calls_before = gh_calls.read_text()
+        rejected = self.rejected("agent-y", "pr-ready", identifier, "--apply", env=env)
+        self.assertIn("Remote base no longer matches", rejected.stderr)
+        self.assertEqual(reads.read_text(), "2")
+        self.assertFalse(any(json.loads(line)["argv"][:2] == ["pr", "ready"]
+                             for line in gh_calls.read_text()[len(calls_before):].splitlines()))
+        self.assertTrue(json.loads(gh_state.read_text())["isDraft"])
+        job = json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())["jobs"][0]
+        self.assertEqual(job["state"], "draft_pr")
+
     def test_pr_close_reconciles_remote_success_after_local_save_failure(self):
         self.ready_task()
         folder, env = self.fake_path()

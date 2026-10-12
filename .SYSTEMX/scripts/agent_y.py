@@ -765,6 +765,12 @@ def _accepted_task(root, job):
     return task
 
 
+def _require_prepared_base(job, repo):
+    """Do not promote review status after the remote base outgrows this handoff."""
+    if _remote_head(repo, job["base"]) != job["baseOid"]:
+        raise ValueError("Remote base no longer matches the prepared Agent Y commit; reconcile and prepare a new handoff")
+
+
 def pr_ready(root, args):
     job = _get(load_jobs(root), args.id)
     if job["state"] != "draft_pr":
@@ -775,6 +781,7 @@ def pr_ready(root, args):
     remote = _read_pr(job, repo)
     if remote.get("state") != "OPEN" or remote.get("isDraft") not in {True, False}:
         raise ValueError("Recorded PR is not currently open")
+    _require_prepared_base(job, repo)
     if not args.apply:
         return {"applied": False, "job": _public(job), "action": "mark or reconcile exact owned PR ready for review"}
     with memory.coordination_lock(root):
@@ -787,10 +794,12 @@ def pr_ready(root, args):
         remote = _read_pr(current, repo)
         if remote.get("state") != "OPEN" or remote.get("isDraft") not in {True, False}:
             raise ValueError("Recorded PR is not currently open")
+        _require_prepared_base(current, repo)
         if remote["isDraft"] is True:
             _gh(repo, "pr", "ready", str(current["pr"]["number"]), "-R", current["repoId"])
         if _read_pr(current, repo).get("isDraft") is not False:
             raise ValueError("GitHub did not confirm the PR ready transition")
+        _require_prepared_base(current, repo)
         current["state"] = "ready"
         current["updatedAt"] = memory.now()
         _save(root, data)

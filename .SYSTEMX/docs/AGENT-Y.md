@@ -93,7 +93,7 @@ execution; it does not remove core `.SYSTEMX` Windows installation and records.
 | `agent-y run Y-ID` | Preview; `--apply` invokes the selected provider in an isolated worktree and may create the opted-in draft PR after provider exit zero and controller scope/commit checks. Project checks still remain. |
 | `agent-y list`, `show`, `validate` | Inspect scoped job records; do not start a provider. |
 | `agent-y recover Y-ID --apply` | Mark a stranded same-host run failed only after verifying its controller process is gone; preserve its worktree and any remote state. |
-| `agent-y pr-ready Y-ID --apply` | Mark the owned draft ready after recorded `done`. |
+| `agent-y pr-ready Y-ID --apply` | Mark the owned draft ready after recorded `done` only while the remote base still equals the prepared commit. |
 | `agent-y pr-close Y-ID --reason TEXT --apply` | Close the owned unmerged PR after recorded `cancelled`; preserve its branch and worktree for review. |
 | `agent-y pr-cleanup Y-ID --apply` | Separately archive then remove the owned branch/worktree only after verified remote merge and accepted `done`. |
 
@@ -338,6 +338,12 @@ are disabled. GitHub documents [PR workflow triggers](https://docs.github.com/en
 and [Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
 The draft is a reviewable work artifact.
 `pr-ready` is a separate step after Agent 0 or the user records `done`.
+It re-reads the remote base branch before preview, immediately before the
+GitHub ready action, and before saving the ready state. If that branch moved
+from the recorded `baseOid`, it refuses the transition; reconcile the draft,
+review the new base, and prepare a new bounded handoff if needed. These checks
+cannot make a GitHub branch update and a PR ready action atomic, so a base move
+during the GitHub call still requires external review of the PR state.
 `pr-close` abandons an unmerged PR only after the task is recorded `cancelled`
 with a reason, without deleting its branch. Separately invoked `pr-cleanup`
 archives and deletes the owned branch/worktree only after verifying that the
