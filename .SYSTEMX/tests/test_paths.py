@@ -188,7 +188,8 @@ class PathTests(unittest.TestCase):
         files = dict(bundle["files"])
         files["DOCS/other.md"] = b"Conflicting directory case"
         manifest = json.loads(files[manager.MANIFEST])
-        manifest["files"]["DOCS/other.md"] = manager.digest(files["DOCS/other.md"])
+        manifest["files"]["DOCS/other.md"] = manager.distribution_digest(
+            "DOCS/other.md", files["DOCS/other.md"], manifest["schemaVersion"])
         files[manager.MANIFEST] = json.dumps(manifest).encode()
         with self.assertRaisesRegex(manager.InstallError, "conflicting case spellings"):
             manager.verified_bundle(files)

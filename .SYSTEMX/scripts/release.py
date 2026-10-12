@@ -11,7 +11,6 @@ if __name__ == "__main__" and not sys.flags.isolated:
     except OSError as error:
         sys.exit("SYSTEMX release could not enter isolated mode: " + str(error))
 
-import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -26,6 +25,7 @@ systemx = importlib.util.module_from_spec(_systemx_spec)
 sys.modules["systemx"] = systemx
 exec(compile(_systemx_source.read_bytes(), str(_systemx_source), "exec"), systemx.__dict__)
 from versions import package_version, version_id
+manager = systemx._load_local("manager", systemx.DEFAULTS / "manager.py")
 
 
 def check_metadata(root):
@@ -54,6 +54,7 @@ def main():
     if sys.argv[1:]:
         raise ValueError("Usage: release.py [--check]")
     manifest = "config/distribution.json"
+    schema = manager.distribution_schema(version)
     files = {}
     for name in sorted(systemx.REQUIRED):
         if name == manifest:
@@ -61,8 +62,8 @@ def main():
         path = root / name
         if path.is_symlink() or not path.is_file():
             raise ValueError("Missing or non-regular distribution file: " + name)
-        files[name] = hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-    (root / manifest).write_text(json.dumps({"schemaVersion": 1, "version": version,
+        files[name] = manager.distribution_digest(name, path.read_bytes(), schema)
+    (root / manifest).write_text(json.dumps({"schemaVersion": schema, "version": version,
                                            "files": files}, indent=2) + "\n", encoding="utf-8")
     return systemx.validate_template(distribution=True)
 

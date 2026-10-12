@@ -254,8 +254,10 @@ class WorkspaceTests(unittest.TestCase):
         provenance["templateVersion"] = version
         (source / "SOURCE.json").write_text(json.dumps(provenance))
         (source / "templates/project/README.md").write_text("# Changed future seed\n")
-        manifest = {"schemaVersion": 1, "version": version, "files": {
-            p.relative_to(source).as_posix(): manager.digest(p.read_bytes())
+        schema = manager.distribution_schema(version)
+        manifest = {"schemaVersion": schema, "version": version, "files": {
+            p.relative_to(source).as_posix():
+            manager.distribution_digest(p.relative_to(source).as_posix(), p.read_bytes(), schema)
             for p in source.rglob("*") if p.is_file() and p.relative_to(source).as_posix() != manager.MANIFEST}}
         (source / manager.MANIFEST).write_text(json.dumps(manifest))
         manager.set_policy(target, pin="none")

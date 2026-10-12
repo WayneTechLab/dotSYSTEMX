@@ -100,8 +100,11 @@ check never selects a release. Manual updates remain the default; startup checks
 are opt-in and major upgrades require review. Existing root managers are
 preserved by ordinary updates, so refresh an older stock manager with a reviewed
 external tool before relying on this check-only startup contract.
-Distribution hashes normalize CRLF to LF for portable text checkouts. They
-check consistency with the manifest;
+Schema-2 distribution hashes normalize CRLF to LF only for the explicitly
+reviewed UTF-8 text formats; binary media and unknown file types use exact-byte
+SHA-256. Schema 1 retains its historical normalization so installed older
+releases remain readable. Schema 2 is required from `1.9.0-alpha.3` onward.
+These hashes check consistency with the manifest;
 they are not independent release signatures. A selected release cache must also
 have exactly the expected files and parent directories: unlisted modules,
 packages, links, special entries, and unexpected directories are rejected before

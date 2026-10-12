@@ -16,6 +16,13 @@ schema 2 with archive-digest receipts on its next state write; old releases rece
 `null` receipts. Task and role record schemas remain unchanged. Alpha does not
 grant permission to reset or overwrite them.
 
+The distribution manifest is separate from project records and installation
+state. Releases from `1.9.0-alpha.3` use manifest schema 2 so binary and unknown
+files have byte-exact hashes. A preserved manager that only recognizes manifest
+schema 1 cannot select those releases. Use the reviewed external manager and
+backed-up bootstrap refresh below before updating; older retained releases stay
+readable through their historical schema-1 manifests.
+
 The new manager can inspect an older selected installation with `status`, run
 its verified retained snapshot through an isolated compatibility shim, and
 perform the external bootstrap/update migration below. It cannot install or

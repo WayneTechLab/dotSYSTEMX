@@ -61,10 +61,14 @@ class ManagerTests(unittest.TestCase):
                         shutil.copy2(SOURCE / name, path)
                     seeds["sha256"][name] = current["sha256"][name]
             seeds_path.write_text(json.dumps(seeds))
-        files = {p.relative_to(self.source).as_posix(): manager.digest(p.read_bytes()) for p in self.source.rglob("*")
+        selected_version = (self.source / "VERSION").read_text().strip()
+        schema = manager.distribution_schema(selected_version)
+        files = {p.relative_to(self.source).as_posix():
+                 manager.distribution_digest(p.relative_to(self.source).as_posix(), p.read_bytes(), schema)
+                 for p in self.source.rglob("*")
                  if p.is_file() and p.relative_to(self.source).as_posix() != manager.MANIFEST}
-        (self.source / manager.MANIFEST).write_text(json.dumps({"schemaVersion": 1,
-            "version": (self.source / "VERSION").read_text().strip(), "files": files}))
+        (self.source / manager.MANIFEST).write_text(json.dumps({"schemaVersion": schema,
+            "version": selected_version, "files": files}))
 
     def install(self, **kwargs):
         return manager.install(self.root, source=self.source, **kwargs)
@@ -680,6 +684,54 @@ class ManagerTests(unittest.TestCase):
         bundle = manager.read_bundle(self.source)
         self.assertEqual(bundle["version"], "1.8.8-alpha.1")
         self.assertEqual(set(seeds["sha256"]), set(manager.SEEDS))
+
+    def test_schema_two_hashes_binary_and_unknown_files_byte_for_byte(self):
+        unknown = self.source / "MEDIA/fixture-unknown.dat"
+        unknown.write_bytes(b"prefix\x00\r\nsuffix")
+        self.write_manifest("1.9.0-alpha.3")
+        manifest = json.loads((self.source / manager.MANIFEST).read_text())
+        self.assertEqual(manifest["schemaVersion"], 2)
+        known = "MEDIA/Infographics/codex-github-main-4k.jpg"
+        self.assertIn(b"\r\n", (self.source / known).read_bytes())
+        for name in (known, "MEDIA/fixture-unknown.dat"):
+            with self.subTest(name=name):
+                original = (self.source / name).read_bytes()
+                self.assertEqual(manifest["files"][name], hashlib.sha256(original).hexdigest())
+                changed = dict(manager.read_bundle(self.source)["files"])
+                changed[name] = original.replace(b"\r\n", b"\n", 1)
+                self.assertNotEqual(changed[name], original)
+                with self.assertRaisesRegex(manager.InstallError, "fingerprint mismatch"):
+                    manager.verified_bundle(changed)
+        text_name = "STANDARD.md"
+        files = dict(manager.read_bundle(self.source)["files"])
+        files[text_name] = files[text_name].replace(b"\n", b"\r\n")
+        self.assertEqual(manager.verified_bundle(files)["version"], "1.9.0-alpha.3")
+
+    def test_new_release_cannot_downgrade_its_manifest_to_legacy_schema(self):
+        self.write_manifest("1.9.0-alpha.3")
+        path = self.source / manager.MANIFEST
+        manifest = json.loads(path.read_text())
+        manifest["schemaVersion"] = 1
+        manifest["files"] = {
+            name: manager.distribution_digest(name, (self.source / name).read_bytes(), 1)
+            for name in manifest["files"]}
+        path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(manager.InstallError, "requires a byte-exact schema-2"):
+            manager.read_bundle(self.source)
+
+    def test_one_nine_bundle_rejects_missing_agent_y_core_files_even_if_rehashed(self):
+        bundle = manager.read_bundle(self.source)
+        self.assertGreaterEqual(manager.version_key(bundle["version"])[:3], (1, 9, 0))
+        for name in ("scripts/agent_y.py", "AGENTS/agent.y/README.md", "templates/AGENT-Y-MEMORY.md",
+                     "docs/AGENT-Y.md", "tests/test_agent_y.py"):
+            with self.subTest(name=name):
+                files = dict(bundle["files"])
+                files.pop(name)
+                manifest = json.loads(files[manager.MANIFEST])
+                manifest["files"].pop(name)
+                files[manager.MANIFEST] = json.dumps(manifest).encode("utf-8")
+                with self.assertRaisesRegex(manager.InstallError, "missing core files"):
+                    manager.verified_bundle(files)
 
     def test_archive_manifest_and_path_checks_reject_untrusted_layouts(self):
         for path in ("../outside", "a/../../escape", "/absolute", "C:/escape", "a\\b", "con.txt", "NUL", "a./b", "local/data"):

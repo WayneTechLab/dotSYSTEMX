@@ -84,6 +84,12 @@ MAX_ARCHIVE = 32 * 1024 * 1024
 MAX_FILE = 2 * 1024 * 1024
 MAX_FILES = 1000
 SHA256 = re.compile(r"[0-9a-f]{64}")
+BYTE_EXACT_DISTRIBUTION_FLOOR = "1.9.0-alpha.3"
+# Only these reviewed text formats may treat Git's CRLF checkout conversion
+# as equivalent. Unknown paths and media are always hashed byte for byte in
+# schema 2, even when their payload happens to contain valid UTF-8 or CRLF.
+DISTRIBUTION_TEXT_SUFFIXES = frozenset({".json", ".md", ".ps1", ".py", ".sh"})
+DISTRIBUTION_TEXT_NAMES = frozenset({".gitattributes", ".gitignore", "LICENSE", "VERSION"})
 SEEDS = ("GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
          "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
          "WORK/FOCUS.json", "config/project.example.json")
@@ -139,7 +145,35 @@ def safe_path(root, relative):
 
 
 def digest(data):
+    """Hash exact bytes for snapshots, comparisons, and unknown file types."""
+    return hashlib.sha256(data).hexdigest()
+
+
+def text_digest(data):
+    """Preserve the historical LF/CRLF equivalence for reviewed text records."""
     return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
+
+
+def distribution_schema(version):
+    return 2 if version_key(version) >= version_key(BYTE_EXACT_DISTRIBUTION_FLOOR) else 1
+
+
+def distribution_digest(name, data, schema):
+    if schema == 1:
+        # Historical schema-1 assets were published with this normalization,
+        # including binary media. Immutable old snapshots must remain readable.
+        return text_digest(data)
+    if schema != 2:
+        raise InstallError("Unsupported distribution manifest schema")
+    if name in DISTRIBUTION_TEXT_NAMES or PurePosixPath(name).suffix in DISTRIBUTION_TEXT_SUFFIXES:
+        try:
+            data.decode("utf-8")
+        except UnicodeDecodeError as error:
+            raise InstallError("Distribution text is not UTF-8: " + name) from error
+        if b"\x00" in data:
+            raise InstallError("Distribution text contains NUL bytes: " + name)
+        return text_digest(data)
+    return digest(data)
 
 
 def archive_digest(value):
@@ -213,9 +247,12 @@ def verified_bundle(files):
     manifest = decode(files[MANIFEST])
     if not isinstance(manifest, dict) or set(manifest) != {"schemaVersion", "version", "files"}:
         raise InstallError("Invalid distribution manifest fields")
-    if type(manifest["schemaVersion"]) is not int or manifest["schemaVersion"] != 1:
+    schema = manifest["schemaVersion"]
+    if type(schema) is not int or schema not in {1, 2}:
         raise InstallError("Unsupported distribution manifest schema")
     version_id(manifest["version"])
+    if schema < distribution_schema(manifest["version"]):
+        raise InstallError("This release requires a byte-exact schema-2 distribution manifest")
     inventory = manifest["files"]
     if not isinstance(inventory, dict) or not 1 <= len(inventory) <= MAX_FILES:
         raise InstallError("Invalid distribution inventory")
@@ -239,6 +276,9 @@ def verified_bundle(files):
     if base_version >= (1, 8, 0):
         required.update({"scripts/agent_standards.py", "scripts/agent_x.py", "scripts/agent_z.py",
                          "config/agent-z-policy.json", "templates/AGENT-X-MEMORY.md", "templates/AGENT-Z-MEMORY.md"})
+    if base_version >= (1, 9, 0):
+        required.update({"scripts/agent_y.py", "AGENTS/agent.y/README.md", "templates/AGENT-Y-MEMORY.md",
+                         "docs/AGENT-Y.md", "tests/test_agent_y.py"})
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -258,7 +298,7 @@ def verified_bundle(files):
             raise InstallError("Distribution file conflicts with a directory path")
         if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected):
             raise InstallError("Invalid distribution fingerprint")
-        if len(files[name]) > MAX_FILE or digest(files[name]) != expected:
+        if len(files[name]) > MAX_FILE or distribution_digest(name, files[name], schema) != expected:
             raise InstallError("Distribution fingerprint mismatch: " + name)
     if files["VERSION"].decode().strip() != manifest["version"]:
         raise InstallError("Distribution version mismatch")
@@ -267,7 +307,7 @@ def verified_bundle(files):
             type(seeds["schemaVersion"]) is not int or seeds["schemaVersion"] != 1 or
             not isinstance(seeds["sha256"], dict) or set(seeds["sha256"]) != set(seed_names)):
         raise InstallError("Invalid blank-record manifest")
-    if any(digest(files[name]) != seeds["sha256"][name] for name in seed_names):
+    if any(text_digest(files[name]) != seeds["sha256"][name] for name in seed_names):
         raise InstallError("Distribution contains changed project seeds")
     if decode(files["WORK/TASKS.json"]) != {"schemaVersion": 1, "tasks": []}:
         raise InstallError("Distribution task ledger must be empty")
@@ -288,7 +328,7 @@ def verified_bundle(files):
             "project": {"name": "", "description": ""}, "checks": [],
             "commands": {"dev": [], "build": [], "deploy": []}}:
         raise InstallError("Distribution commands must be empty")
-    return {"version": manifest["version"], "manifestSha256": digest(files[MANIFEST]), "files": files}
+    return {"version": manifest["version"], "manifestSha256": text_digest(files[MANIFEST]), "files": files}
 
 
 def read_bundle(source, *, exact=False):
