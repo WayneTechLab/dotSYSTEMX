@@ -72,7 +72,7 @@ detection is a capability hint, not an execution or authentication test.
 The configured adapter receives the task packet on standard input and must
 use exit code zero only for a completed run; the controller still inspects
 the actual changed paths and commit before considering publication.
-Agent Y first appears in the 1.9.0-alpha.1 default format. An older selected
+Agent Y first appears in the 1.9.0-alpha.2 default format. An older selected
 runner that understands only X/Z may reject an activated `agent.y` registry;
 preserve a backup and review compatibility before changing the selected version.
 Running a job needs a local Git repository, the selected installed CLI, and its

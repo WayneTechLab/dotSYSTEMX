@@ -25,7 +25,7 @@ Its installation-state discussion reflects that older baseline: from
 1.8.8-alpha.1, a pinned project may opt into check-only startup release notices
 without automatic selection. Use the current [format](../FORMAT.md) and
 [installation guide](../docs/INSTALLATION.md) for the active contract. The paper
-also predates the optional Agent Y CLI/PR lane introduced in 1.9.0-alpha.1;
+also predates the optional Agent Y CLI/PR lane introduced in 1.9.0-alpha.2;
 read the current [Agent Y guide](../docs/AGENT-Y.md) for that role. The frozen
 edition is not retroactively updated to claim it evaluated the new runtime.
 

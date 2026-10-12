@@ -4,7 +4,13 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
-## 1.9.0-alpha.1 — Optional Agent Y CLI and PR lane
+## 1.9.0-alpha.2 — Optional Agent Y CLI and PR lane
+
+The earlier `v1.9.0-alpha.1` tag was withdrawn before a release was published:
+its source archive failed the distribution fingerprint check for a test file.
+Do not install that tag. This corrected release regenerates the manifest from
+the final source and verifies the exact public tag archive through a pinned
+remote install before publication.
 
 - Added Agent Y (`agent.y`) as an opt-in, per-task CLI handoff under Agent 0.
   The public template still seeds only Agent 0; role activation creates blank

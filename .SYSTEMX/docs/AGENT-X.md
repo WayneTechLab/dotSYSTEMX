@@ -21,7 +21,7 @@ authorize a branch or PR action. Setup preserves all existing files
 and role identities, and is idempotent. New definitions travel with the public
 template; only Agent 0 is registered in its blank distribution so older managed
 launchers can still verify a new release. Activate roles only with selected
-defaults that explicitly support them. Agent Y is introduced in 1.9.0-alpha.1;
+defaults that explicitly support them. Agent Y is introduced in 1.9.0-alpha.2;
 an older X/Z-capable runner may not understand `agent.y`. Restore a
 pre-activation backup before a deliberate downgrade; switching defaults does
 not migrate or deactivate role records. The current manager cannot newly select

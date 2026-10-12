@@ -192,7 +192,7 @@ version pinned. Preview `roles-init` in each intended scope before applying it.
 An update alone preserves registries and does not activate roles. The public seed
 registry remains Agent 0 only so existing managed launchers can verify upgraded
 defaults. A selected tool must support every activated role ID. Agent Y requires
-defaults from 1.9.0-alpha.1 or later; an older X/Z-capable runner may reject
+defaults from 1.9.0-alpha.2 or later; an older X/Z-capable runner may reject
 `agent.y`. Review migration or restore a pre-activation backup before
 historical recovery. The current manager cannot newly select releases below its
 1.8.7-alpha.1 floor, though it can invoke an already selected verified older
