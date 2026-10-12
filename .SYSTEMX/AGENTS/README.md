@@ -74,18 +74,20 @@ completed task. This is a collaboration convention checked by the CLI, not an
 authentication or access-control system. Existing production, financial, and
 external-action authority remains separate from task completion.
 
-## Standard specialist roles: Agent X and Agent Z
+## Standard specialist roles: Agent X, Agent Y, and Agent Z
 
 [Agent X](../docs/AGENT-X.md), ID `agent.x`, owns event/time tracking and due-item
-bookkeeping. [Agent Z](../docs/AGENT-Z.md), ID `agent.z`, owns a repeatable
-100-question evidence review. They support the coordinator and never become a
-second source of task state or external authority.
+bookkeeping. [Agent Y](../docs/AGENT-Y.md), ID `agent.y`, owns a bounded
+user-selected CLI provider handoff and explicitly permitted branch/PR steps.
+[Agent Z](../docs/AGENT-Z.md), ID `agent.z`, owns a repeatable 100-question
+evidence review. They support the coordinator and never become a second source
+of task state or external authority.
 
-Preview `roles-init`, then use `roles-init --apply` in the selected root or child
-scope. The operation registers the reserved `event-time` and `review` roles and
-creates blank memory/records without replacing existing files. The public seed
-registry remains Agent 0 only for compatibility with older managed launchers.
-X/Z are named standard roles, not numeric subagent slots or automatic workers.
+Preview role setup before applying it in the selected root or child scope. It
+creates blank role memory/records without replacing existing files. The public
+seed registry remains Agent 0 only for compatibility with older managed
+launchers. X/Y/Z are named standard roles, not numeric subagent slots or
+automatic workers.
 
 With these roles enabled, use Agent X for meaningful observed events and due
 items. At a task's `needs_review` boundary, use Agent Z once against its original
@@ -95,3 +97,16 @@ fixed for the policy version, even when some are unknown or justified N/A.
 Agent 0 reviews the scorecard, resolves required gaps, and records acceptance.
 Further work or repeated checks need changed inputs or a concrete unresolved
 concern. A score difference alone does not authorize another build/test loop.
+
+For an authorized CLI task, Agent 0 assigns one repository, base revision,
+provider, write scope, and branch/PR policy. Agent Y checks the actual worktree
+and provider before starting, retains the process handle, and reports source
+changes and original evidence. Agent X can log meaningful observed transitions;
+Agent Z reviews the resulting evidence at the requested boundary. A successful
+CLI run does not itself complete the task. Draft PR auto-opening is per-task
+opt-in. Making it ready, closing an abandoned PR, merging, and deleting its
+branch are distinct actions with distinct gates. Closing an unmerged PR needs
+recorded cancellation; deleting its branch needs preserved evidence and a fresh
+head check. Automated cleanup follows only accepted completion, verified
+remote merge, and a retained bundle; a closed unmerged PR keeps its branch.
+Merge itself requires separate authority.

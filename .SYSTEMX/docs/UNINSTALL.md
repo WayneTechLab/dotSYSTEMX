@@ -24,6 +24,10 @@ partially copied backup. Move or copy the verified backup elsewhere later if nee
 Finish active work, checkpoint evidence, and stop project/agent processes that
 write inside `.SYSTEMX`. Wait for cloud synchronization and coordinate other
 computers. The local writer lock cannot stop unrelated programs or remote writers.
+If Agent Y was activated, inspect its [CLI jobs](AGENT-Y.md) before moving the
+folder. A provider subprocess or task worktree can outlive the role record.
+Wait for a terminal result or deliberately stop it through its provider's
+supported control; a timeout is not proof it stopped.
 
 Use the installed library in an external Python environment, or a separate
 reviewed template checkout. Do not invoke removal from the target's own manager
@@ -120,6 +124,7 @@ call the selected environment's `Scripts\python.exe`; on macOS/Linux, its
 | Dedicated virtual environment | After package verification, move the dedicated environment to Trash through the OS if no other tool uses it; preserve external logs |
 | Reviewed template checkout or downloaded ZIP/wheel | Archive or Trash that explicitly selected copy when no longer used; do not touch an upstream source checkout |
 | Manual root agent instructions, editor tasks, aliases, or local Git exclusions | Review the host diff and remove only the exact `.SYSTEMX` integration you added; log the changed paths |
+| Agent Y CLI jobs, task worktrees, branches, and PRs | Audit each scoped job and external artifact as described below; the folder uninstaller does not close PRs, remove branches/worktrees, or terminate provider sessions |
 | Exported chat packets or cloud copies | Review each explicit copy and use that service's normal removal/recovery controls; local uninstall cannot revoke shared attachments |
 | Shared Python/Git/editor/Drive client, caches, or app dependencies | Leave shared tools in place unless separately selected for removal with their own official uninstaller |
 
@@ -142,14 +147,55 @@ are not removed or disconnected. No automatic individual-project deletion is
 provided; archive one child only with an explicit backup and reviewed registry
 edit. See [SYSTEMX PROJECTS](PROJECTS.md).
 
-## Agent X/Z records
+## Agent X/Y/Z records and external CLI cleanup
 
 Event/schedule ledgers, role memory, adopted review policy, frozen questions,
 requests, and scorecards are part of the selected `.SYSTEMX` or child `.SYSTEMXP`
-tree and survive whole-installation backup/restore. These roles install no daemon,
+tree and survive whole-installation backup/restore. Agent Y's portable
+`AGENTS/agent.y/JOBS.json` and memory are included too. Its ignored host-local
+`state/agent-y/<Y-ID>.json` execution state can also enter a whole-folder backup
+even though Git ignores it; inspect and protect that state before copying,
+moving, or deleting the folder. `pr-cleanup` also creates a private bundle at
+`state/agent-y/archives/<Y-ID>.bundle` for an accepted, merged PR. Copy the
+bundle to a reviewed external retention location and verify its recorded
+SHA-256 before uninstall or host migration; the portable job's digest alone
+cannot restore deleted commits. Role setup itself installs no daemon, provider,
 cron job, cloud schedule, model service, or notification integration. References
 to an external scheduler are metadata; deleting or cancelling a local record does
 not uninstall or cancel that external integration.
+
+Before uninstall, use `agent-y list` and `agent-y show Y-ID` in each activated
+root or registered child to inventory pending/running/failed jobs and their
+recorded repository identity, branch, PR URL, head revision, and last result.
+Inspect the ignored local execution state for actual repository, prompt, and
+worktree paths. Compare those records with local Git worktrees/branches, installed
+provider sessions, and remote PR state; a stale record is not proof the resource
+is gone. Inspect retained worktrees for a temporary provider task packet left
+by a crash; it may contain the approved prompt and task details. Keep the
+original task/PR evidence in the backup or a separate retained
+receipt. For each artifact, record its owner, intended disposition, observed
+head/state, action taken, and verification result in a private uninstall log.
+If a push or PR action partly completed, inspect the live branch and PR before
+uninstall: the remote mutation may have succeeded even if the local job was not
+updated. This alpha has no automatic remote-reconciliation command.
+
+Complete only authorized lifecycle transitions while the selected Agent Y tools
+and task records remain available: an accepted task can make its draft ready;
+a cancelled task with a reason can close its owned unmerged PR without deleting
+the branch; separate guarded branch/worktree cleanup can follow verified
+merged-and-accepted state after retaining a verified local bundle. An abandoned
+unmerged branch remains for separately reviewed manual disposition. Do not delete an
+unmerged accepted branch merely because the task is `done`. Manually review any
+provider session, branch, worktree, or PR outside these guarded paths. Folder
+uninstall and `audit` do not inspect or modify them, and no remote cleanup is
+implied by a clean local audit.
+For a no-PR job, preserve the committed work or an archive before manual local
+cleanup; task acceptance alone is not proof that the result was integrated. A
+stranded same-host `running` job can use
+`agent-y recover Y-ID` to record failure only after its controller process is
+confirmed gone; it preserves work and remote resources for manual inspection.
+Native Windows Agent Y `run --apply` is disabled in this alpha; an independently
+started provider is outside this role's cleanup and needs its own process audit.
 
 ## External sync and bot resources
 

@@ -26,8 +26,11 @@ Task IDs and agent roles belong to this scope; a matching ID elsewhere is a
 different record. Root and sibling memories are not automatically inherited.
 Recheck volatile evidence before resuming. An empty ledger is not completion.
 
-Agent X (event/time tracking) and Agent Z (fixed evidence review) can be enabled
-with the outer `projects roles-init --project NAME --apply` command after preview.
+Agent X (event/time tracking), Agent Y (delegated CLI work), and Agent Z (fixed
+evidence review) can be enabled with the outer
+`projects roles-init --project NAME --apply` command after preview.
 Use their guides from the selected shared defaults. Keep events, schedules,
-review policy, reports, and memory in this selected child. Agent 0 accepts tasks;
-unchanged review inputs reuse the existing report without starting more work.
+CLI handoffs, review policy, reports, and memory in this selected child. Agent 0
+accepts tasks; a role record does not start the provider. Select the provider
+and branch/PR policy per task. Unchanged review inputs reuse the existing report
+without starting more work.

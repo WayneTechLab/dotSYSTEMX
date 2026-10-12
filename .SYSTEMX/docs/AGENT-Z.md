@@ -2,9 +2,10 @@
 
 Agent Z is the standard **review** role (`agent.z`). It is a structured peer
 review of a prompt, task, change, or project. Agent 0 coordinates work; Agent X
-tracks time and events; Agent Z reports evidence, gaps, and changes. Agent 0 or
-the user retains acceptance authority. A high score is not production readiness,
-a deployment permission, or a reason to mark a task complete automatically.
+tracks time and events; optional Agent Y returns scoped external CLI work; Agent Z
+reports evidence, gaps, and changes. Agent 0 or the user retains acceptance
+authority. A high score is not production readiness, a deployment permission,
+or a reason to mark a task complete automatically.
 
 ## One fixed 10-by-10 policy
 
@@ -40,7 +41,7 @@ Retain evidence and reviewer reasoning so disagreements can be examined.
 
 ## First review
 
-Activate the two standard roles once with `roles-init --apply` after reviewing
+Activate the three standard roles once with `roles-init --apply` after reviewing
 its preview. For a child project use `projects roles-init --project NAME --apply`.
 See [Agent X setup and compatibility](AGENT-X.md#activate-once-in-the-selected-scope).
 Then select the subject and the exact code/input and evidence versions:
@@ -178,5 +179,6 @@ save the complete scorecard yourself and reattach it when continuing. Never clai
 that an unsaved chat review is persistent project memory.
 
 [Agent X](AGENT-X.md) supplies timestamped event references.
+[Agent Y](AGENT-Y.md) may supply a scoped CLI result and owned draft PR evidence.
 [Evidence and acceptance](EVIDENCE.md) defines verification scope.
 [SYSTEMX PROJECTS](PROJECTS.md) defines project selection and preservation.

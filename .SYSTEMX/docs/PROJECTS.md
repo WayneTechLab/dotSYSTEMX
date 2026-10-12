@@ -136,6 +136,14 @@ cross-project work through the outer coordinator; do not let one worker write
 both ledgers implicitly. Subagent limits belong to the authorized session or
 shared resource budget, not a new automatic allowance for each child.
 
+If a child uses [Agent Y](AGENT-Y.md), select its registered project explicitly
+and delegate only that child's task, context, and owned working files to the
+chosen installed CLI provider. Its branch/PR target and per-task lifecycle
+policy must be explicit. The outer Agent 0 handles cross-project branch or
+repository collisions; a child role record is not a separate GitHub identity.
+The Agent Y job, Agent X events, and Agent Z review records for the result
+remain in that same selected child.
+
 Example prompt:
 
 > Use the existing outer `.SYSTEMX` and select `Project-A` from
@@ -264,7 +272,7 @@ selected ledger and retain original evidence.
 
 ## Standard roles within a child
 
-Use `projects roles-init --project Project-A` to preview Agent X/Z activation,
+Use `projects roles-init --project Project-A` to preview supported role activation,
 then add `--apply`. Their records stay in the selected `.SYSTEMXP`. Examples:
 
 ```bash
@@ -272,7 +280,8 @@ bash .SYSTEMX/SYSTEMX.sh projects agent-x due --project Project-A
 bash .SYSTEMX/SYSTEMX.sh projects agent-z policy --project Project-A
 ```
 
-[Agent X](AGENT-X.md) tracks event/time/schedule facts, while
+[Agent X](AGENT-X.md) tracks event/time/schedule facts;
+[Agent Y](AGENT-Y.md) carries a bounded CLI handoff when explicitly selected;
 [Agent Z](AGENT-Z.md) uses the fixed 100-question review policy. Role IDs and
 record IDs are scoped; do not compare reports from different projects. Outer
 updates preserve each child's adopted policy and history. Merely adding new

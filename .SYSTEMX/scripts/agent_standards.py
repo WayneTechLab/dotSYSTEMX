@@ -8,13 +8,14 @@ import uuid
 
 import project_memory as memory
 
-ROLES = {"agent.x": "event-time", "agent.z": "review"}
-COMMANDS = {"roles-init", "agent-x", "agent-z"}
+ROLES = {"agent.x": "event-time", "agent.y": "cli-worker", "agent.z": "review"}
+COMMANDS = {"roles-init", "agent-x", "agent-y", "agent-z"}
 MAX_RECORD_BYTES = 32 * 1024 * 1024
-REQUIRED = ("scripts/agent_standards.py", "scripts/agent_x.py", "scripts/agent_z.py",
-            "config/agent-z-policy.json", "AGENTS/agent.x/README.md", "AGENTS/agent.z/README.md",
-            "templates/AGENT-X-MEMORY.md", "templates/AGENT-Z-MEMORY.md",
-            "docs/AGENT-X.md", "docs/AGENT-Z.md", "tests/test_agent_standards.py")
+REQUIRED = ("scripts/agent_standards.py", "scripts/agent_x.py", "scripts/agent_y.py", "scripts/agent_z.py",
+            "config/agent-z-policy.json", "AGENTS/agent.x/README.md", "AGENTS/agent.y/README.md",
+            "AGENTS/agent.z/README.md", "templates/AGENT-X-MEMORY.md", "templates/AGENT-Y-MEMORY.md",
+            "templates/AGENT-Z-MEMORY.md", "docs/AGENT-X.md", "docs/AGENT-Y.md", "docs/AGENT-Z.md",
+            "tests/test_agent_standards.py", "tests/test_agent_y.py")
 
 
 def encoded(value):
@@ -96,6 +97,7 @@ def initialize(root, defaults, apply=False):
     policy = agent_z.validate_policy(read(defaults, "config/agent-z-policy.json"))
     seeds = {"EVENTS/EVENTS.json": {"schemaVersion": 1, "events": []},
              "EVENTS/SCHEDULE.json": {"schemaVersion": 1, "items": []},
+             "AGENTS/agent.y/JOBS.json": {"schemaVersion": 1, "jobs": []},
              "REVIEWS/POLICY.json": policy}
     for agent in ROLES:
         name = "templates/AGENT-" + agent[-1].upper() + "-MEMORY.md"
@@ -144,6 +146,7 @@ def validate_optional(root):
     active = {item["id"] for item in registry["agents"]}
     required = {
         "agent.x": ("EVENTS/EVENTS.json", "EVENTS/SCHEDULE.json", "AGENTS/agent.x/MEMORY.md"),
+        "agent.y": ("AGENTS/agent.y/JOBS.json", "AGENTS/agent.y/MEMORY.md"),
         "agent.z": ("REVIEWS/POLICY.json", "AGENTS/agent.z/MEMORY.md"),
     }
     for role, paths in required.items():
@@ -155,29 +158,38 @@ def validate_optional(root):
         agent_x.load_events(root)
     if safe(root, "EVENTS/SCHEDULE.json").exists():
         agent_x.load_schedule(root)
+    if safe(root, "AGENTS/agent.y/JOBS.json").exists():
+        import agent_y
+        agent_y.load_jobs(root)
     if safe(root, "REVIEWS/POLICY.json").exists():
         agent_z.validate_policy(read(root, "REVIEWS/POLICY.json"))
 
 
 def add_cli(subparsers, scope=None):
     import agent_x
+    import agent_y
     import agent_z
     scope = scope or (lambda parser: parser)
-    command = scope(subparsers.add_parser("roles-init", help="preview standard Agent X/Z record setup"))
+    command = scope(subparsers.add_parser("roles-init", help="preview standard Agent X/Y/Z record setup"))
     command.add_argument("--apply", action="store_true")
-    for name, module in (("agent-x", agent_x), ("agent-z", agent_z)):
+    for name, module in (("agent-x", agent_x), ("agent-y", agent_y), ("agent-z", agent_z)):
         parent = subparsers.add_parser(name, help=module.__doc__)
         module.add_cli(parent.add_subparsers(dest="standard_action", required=True), scope)
 
 
 def dispatch(root, defaults, args):
     import agent_x
+    import agent_y
     import agent_z
     if args.action == "roles-init":
         result = initialize(root, defaults, args.apply)
     elif args.action == "agent-x":
         enabled(root, "agent.x")
         result = agent_x.dispatch(root, args)
+    elif args.action == "agent-y":
+        if args.standard_action != "providers":
+            enabled(root, "agent.y")
+        result = agent_y.dispatch(root, args)
     else:
         if args.standard_action != "policy":
             enabled(root, "agent.z")

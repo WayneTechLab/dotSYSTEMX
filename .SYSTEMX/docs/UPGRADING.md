@@ -185,17 +185,19 @@ schemas and occupied destinations without replacing them. Preserve the original
 records, IDs, evidence, and private source references. Do not copy real project
 records into the public template or blank creation seeds.
 
-## Agent X/Z adoption
+## Agent X/Y/Z adoption
 
 Update the selected defaults to a compatible release, verify it, and keep the
 version pinned. Preview `roles-init` in each intended scope before applying it.
 An update alone preserves registries and does not activate roles. The public seed
 registry remains Agent 0 only so existing managed launchers can verify upgraded
-defaults. Once `agent.x` or `agent.z` is registered, older tool versions cannot
-interpret those IDs: review migration or restore a pre-activation backup before
+defaults. A selected tool must support every activated role ID. Agent Y requires
+defaults from 1.9.0-alpha.1 or later; an older X/Z-capable runner may reject
+`agent.y`. Review migration or restore a pre-activation backup before
 historical recovery. The current manager cannot newly select releases below its
 1.8.7-alpha.1 floor, though it can invoke an already selected verified older
-snapshot through the compatibility shim. Never delete events or review records
+snapshot through the compatibility shim. Never delete events, CLI job records,
+or review records
 to make a downgrade
 appear successful. Project `REVIEWS/POLICY.json` is preserved; adopt later default
 questions only through an explicit versioned policy edit.

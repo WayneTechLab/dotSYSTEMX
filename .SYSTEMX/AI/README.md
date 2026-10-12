@@ -34,6 +34,7 @@ coordinates the [master plan](../PLAN/MASTER-PLAN.md),
 | [Agent coordination](AGENT-MESH-STANDARD.md) | Optional scoped delegation, evidence, and handoffs. |
 | [Agent records](../AGENTS/README.md) | Agent 0 ownership, per-worker memory, and acceptance workflow. |
 | [Agent X](../docs/AGENT-X.md) | Human/bot/automation event time and due-item bookkeeping without a scheduler. |
+| [Agent Y](../docs/AGENT-Y.md) | Optional external CLI provider handoffs, task branches, and scoped draft PR lifecycle. |
 | [Agent Z](../docs/AGENT-Z.md) | Fixed 100-question evidence review, retained scorecards, and comparable deltas. |
 | [Tool calling](TOOLCALLING-AND-BROWSER-AUTOMATION.md) | Route work to appropriate tools and verify target surfaces. |
 | [Connectors](EXTERNAL-SERVICE-CONNECTOR-STANDARD.md) | External service boundaries and troubleshooting. |

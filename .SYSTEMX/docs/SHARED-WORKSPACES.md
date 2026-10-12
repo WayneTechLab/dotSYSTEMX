@@ -3,9 +3,9 @@
 ```mermaid
 flowchart TB
   A["Chat / assistant<br/>Selected read access"] --> Owner["CANONICAL WRITER · AGENT 0<br/>Review base revision · integrate accepted changes"]
-  B["Bots / CLI / VM<br/>Bounded run + evidence"] --> Owner
+  B["Bots / optional Agent Y CLI / VM<br/>Bounded run + evidence"] --> Owner
   C["Subagents / other threads<br/>Separate scopes + reports"] --> Owner
-  Owner --> Records["ONE RECORD AUTHORITY PER SCOPE<br/>.SYSTEMX or Projects/NAME/.SYSTEMXP<br/>Context · plan · tasks · X events · Z reviews"]
+  Owner --> Records["ONE RECORD AUTHORITY PER SCOPE<br/>.SYSTEMX or Projects/NAME/.SYSTEMXP<br/>Context · plan · tasks · X events · Y handoffs · Z reviews"]
   Records --> Transport["YOUR AUTHORIZED TRANSPORT<br/>Git · Drive sync / connector · cloud snapshot adapter"]
   Transport --> Verify["VERIFY PUBLICATION<br/>Saved revision + readback + conflict checks"]
   Verify --> Next["NEXT AUTHORIZED RUN<br/>Load the verified snapshot and relevant changes"]
@@ -60,7 +60,7 @@ Workspace/
 **Use `.SYSTEMX/Projects/NAME/.SYSTEMXP`, not `.SYSTEMX/Projects/.SYSTEMXP`.**
 Even one child needs its registered name. Never install a second `.SYSTEMX`
 inside the outer one. `.SYSTEMXP` has scoped context, plan, tasks, focus, memory,
-agent records, sources, decisions, and optional X/Z records; it uses the outer
+agent records, sources, decisions, and optional X/Y/Z records; it uses the outer
 installation's selected tools, defaults, version pin, and update policy.
 
 A hybrid example: `Portfolio:WebApp` owns the launch milestone and external
@@ -133,9 +133,10 @@ serialized write. Report persistence only after successful write and readback.
 
 One chat may research, another implement, and another review. Each receives a
 bounded task packet and returns a uniquely identified report with its base
-revision. Agent 0 integrates accepted facts, task changes, X events, and Z
-scorecards. All roles can run sequentially in one assistant when parallelism is
-unavailable. A thread title, agent ID, or folder name is not an access credential.
+revision. Agent 0 integrates accepted facts, task changes, X events, optional Y
+CLI handoffs, and Z scorecards. All roles can run sequentially in one assistant
+when parallelism is unavailable. A thread title, agent ID, or folder name is not
+an access credential.
 
 ## Google Drive: local synchronization and connector access
 
@@ -212,6 +213,17 @@ OpenAI documents [subagents](https://developers.openai.com/codex/multi-agent/) a
 creates a built-in `.SYSTEMX` connector. Use only supported, authorized tools and
 record the actual runtime job ID in the handoff.
 
+When Agent 0 delegates a selected task from an app or IDE to an installed CLI,
+use the optional [Agent Y lane](AGENT-Y.md). Identify the provider and account,
+canonical task ID, root or child scope, base revision, allowed paths, write owner,
+budget, and stop condition. The app's native subagents and the external CLI are
+different runtime sessions; neither receives the other's chat memory or files
+automatically. They share the same project concurrency and cost budget. Agent Y
+returns the scoped diff and original check evidence for Agent 0 to integrate.
+An isolated task branch/worktree does not synchronize canonical `.SYSTEMX`
+records, and a draft PR is opt-in after a successful run. Read the actual GitHub
+state before any later PR transition; Agent Y does not auto-merge.
+
 A Grok-based bot can expose narrow file/CLI operations through its own tool
 adapter. In xAI's function-calling flow, the model requests a custom tool call,
 the application executes it, and returns the result. Your application must enforce
@@ -275,8 +287,10 @@ For offline chats, clearly label results as pending integration until this happe
 The durable knowledge can improve over successive turns because evidence,
 corrections, and accepted decisions accumulate. Maintain one original source for
 each fact, refresh stale observations, and avoid copying whole sibling histories.
-See [Planning and memory](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory), [Agent X](AGENT-X.md), [Agent Z](AGENT-Z.md),
-and [the Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide) for the shared-context feedback model.
+See [Planning and memory](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Planning-and-Memory),
+[Agent X](AGENT-X.md), [Agent Y](AGENT-Y.md), [Agent Z](AGENT-Z.md), and
+[the Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide)
+for the shared-context feedback model.
 
 ## Recovery, privacy, and removal
 

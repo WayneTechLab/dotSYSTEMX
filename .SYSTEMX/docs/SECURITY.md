@@ -49,6 +49,46 @@ avoid accidental shell interpolation, but a configured executable can still
 read files, install software, write data, or contact external services. Review
 the command source and scope before running it.
 
+For [Agent Y](AGENT-Y.md), an external CLI provider inherits the local process's
+filesystem, network, and credential access. Select the provider and account per
+task; constrain the checkout, paths, time/resource budget, and branch policy.
+Never turn provider text into an unreviewed shell command, or place credentials
+in a prompt, CLI argument, PR description, event summary, or transcript.
+`AGENTS/agent.y/JOBS.json` is a portable coordination record; it may retain
+provider/model names, PR links, and bounded results. Absolute host paths and
+configured adapter arguments belong only in ignored local execution state with
+owner-only file permissions on POSIX hosts (`state/agent-y/<Y-ID>.json` per job).
+Windows `chmod` does not establish a complete ACL boundary; review host file
+access controls. A merged-PR cleanup bundle in ignored
+`state/agent-y/archives/` is private recovery material and needs verified
+retention before uninstall or host migration. Review both records before
+publication or synchronization;
+omission of raw prompts is not a privacy guarantee.
+Prefer a dedicated task worktree when an app subagent and CLI provider run in
+parallel. The task record and role memory are coordination, not isolation or
+authorization. Remote branch and PR mutations require the actual host account's
+permissions and the task's explicit lifecycle policy. No Agent Z score or
+provider claim grants permission to merge, close, or delete.
+The selected repository's
+[Git checkout filters](https://git-scm.com/docs/gitattributes/) may execute
+code while the controller creates its worktree. It suppresses local
+[Git hooks](https://git-scm.com/docs/githooks) for its own Git subprocesses;
+the external provider can invoke Git without that suppression. Review the
+effective Git configuration and provider behavior before dispatch; an
+allowed-path packet alone is not an execution sandbox.
+Codex is invoked with its `workspace-write` sandbox, while Copilot and
+`configured` providers rely on their own permissions and host isolation.
+Controller diff checks can block publication of out-of-scope repository edits,
+but cannot reverse provider writes outside that repository or network calls.
+Native Windows Agent Y `run --apply` is disabled in this alpha before process
+or worktree creation because child-process termination is not verified; core
+Windows installation and record commands remain available.
+Before opting into Agent Y's draft PR, inspect the target repository's workflows,
+webhooks, protection rules, and visibility. Pushing a branch or opening a PR may
+trigger automation with its own permissions and usage; the template repository's
+disabled Actions setting does not control the destination repository. The
+`prepare` preview must be read before applying the handoff or running it.
+
 For the SYSTEMX manager itself, select reviewed release versions and prefer an
 independently trusted SHA-256 pin for the exact remote codeload ZIP when using
 `--version`. An internal manifest and a digest observed from the same downloaded

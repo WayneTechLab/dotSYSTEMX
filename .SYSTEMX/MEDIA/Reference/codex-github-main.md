@@ -17,11 +17,15 @@
 
 - **Agent 0:** scope, tasks, handoffs and acceptance within user authority.
 - **Agent X:** events, timestamps and due items; the host executes schedules.
+- **Agent Y (optional):** executes one selected task through an installed CLI in
+  an isolated branch/worktree and returns evidence for integration.
 - **Agent Z:** the fixed review policy with 10 categories and 100 questions.
 
 These are roles implemented through the available toolchain. The public template
-starts with Agent 0 only; [activate Agent X/Z](../../docs/AGENT-X.md) explicitly in
+starts with Agent 0 only; [activate X/Y/Z](../../docs/AGENT-X.md) explicitly in
 the selected scope. A review score is advisory and does not approve external actions.
+The pictured card focuses on Agent 0/X/Z; [Agent Y](../../docs/AGENT-Y.md) adds
+an optional external CLI branch/PR lane under Agent 0's task assignment.
 
 Keep `.SYSTEMX/` beside the host project code and tests. `main` is a Git branch,
 not a required directory name. Preserve existing local changes. Coordinate
@@ -30,6 +34,10 @@ return changes and evidence to the coordinator. Commit accepted code and record
 updates together when appropriate, then check the actual remote revision after
 an authorized push or merge. Deployment and runtime verification need their own
 evidence when they are part of the task.
+Agent Y can open an owned draft PR only when the task explicitly opts in and the
+CLI run succeeds. Marking that draft ready follows accepted `done`; closing an
+unmerged owned PR follows recorded cancellation and a selected policy. Neither
+transition authorizes a merge, and a PR URL does not prove live behavior.
 
 ## Copyable prompt
 

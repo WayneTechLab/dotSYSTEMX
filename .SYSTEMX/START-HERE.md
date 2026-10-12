@@ -86,16 +86,20 @@ Memory is a versioned project document, not automatic model recall. Each session
 must load it through files or its tools. Existing platform memory and instruction
 policies still apply.
 
-## Standard event and review roles
+## Standard delegated CLI, event, and review roles
 
-If enabled in this scope, read only the assigned [Agent X](docs/AGENT-X.md) or
-[Agent Z](docs/AGENT-Z.md) role memory and the records needed for the current task.
+If enabled in this scope, read only the assigned [Agent X](docs/AGENT-X.md),
+[Agent Y](docs/AGENT-Y.md), or [Agent Z](docs/AGENT-Z.md) role memory and the
+records needed for the current task.
 Do not load all events, schedules, or 100 review questions into every resume
 packet. Agent X separates event time, recording time, due time, and observed
 execution. Agent Z reuses the same versioned questions and existing report when
 source, evidence, and policy are unchanged. Review at the acceptance boundary or
 on request; do not restart work from a score alone. Preview `roles-init` before
-activating these roles in an existing project.
+activating supported roles in an existing project. Agent Y's CLI provider,
+process, branch, and PR policy must be named per task. A role record does not
+start the provider; a successful CLI run or open PR does not accept the task.
+Agent 0 coordinates the result with X event evidence and Z review.
 
 ## Complete projects and shared work
 

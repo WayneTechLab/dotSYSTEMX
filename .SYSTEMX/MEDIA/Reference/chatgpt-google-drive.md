@@ -17,11 +17,15 @@
 
 - **Agent 0:** scope, tasks, handoffs and acceptance within user authority.
 - **Agent X:** events, timestamps and due items; the host executes schedules.
+- **Agent Y (optional):** a bounded task delegated to an installed CLI on an
+  authorized computer. It does not make a Drive URL executable or synchronize chats.
 - **Agent Z:** the fixed review policy with 10 categories and 100 questions.
 
 These are roles implemented through the available toolchain. The public template
-starts with Agent 0 only; [activate Agent X/Z](../../docs/AGENT-X.md) explicitly in
+starts with Agent 0 only; [activate X/Y/Z](../../docs/AGENT-X.md) explicitly in
 the selected scope. A review score is advisory and does not approve external actions.
+The pictured card focuses on Agent 0/X/Z; [Agent Y](../../docs/AGENT-Y.md) is an
+optional external CLI lane, not a native chat subagent.
 
 Use `Project/.SYSTEMX/` as the selected source. Read `START-HERE.md`,
 `GLOBAL/CONTEXT.md`, `PLAN/MASTER-PLAN.md`, `WORK/TASKS.json`, current focus and
@@ -30,6 +34,10 @@ check freshness before saving. When write tools are unavailable, return proposed
 file changes for the owner to save; then read back the resulting files. A folder
 URL does not grant access, recursively load every file, or synchronize chats.
 For child projects, explicitly select `Projects/NAME/.SYSTEMXP`.
+If Agent 0 delegates a task to Agent Y, first confirm that a separate CLI host
+has the intended local files or Git checkout and a current revision. Return its
+result to the canonical Drive writer; a CLI run does not silently publish files
+back to Drive. It shares the project's worker and cost budget.
 
 ## Copyable prompt
 

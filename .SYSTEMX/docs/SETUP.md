@@ -57,6 +57,12 @@ nor replace the task ledger.
 Use [WORK/README.md](../WORK/README.md) to create concrete tasks. The coordinator
 is `agent.0`; register other workers only as needed. Begin and end work with the
 [memory protocol](../MEMORY/README.md), keeping records specific to this project.
+If a task needs a separate terminal AI provider, read [Agent Y](AGENT-Y.md) and
+select the installed provider, repository, write scope, branch, and optional
+draft-PR policy for that task. Role setup does not install or authenticate a CLI.
+App subagents and CLI processes need separate workspaces or coordinated file
+ownership. Agent 0 accepts the result after reviewing evidence; Agent X can log
+observed transitions and Agent Z can score a stable result.
 
 Select the runtime, package manager, build approach, environments, integration
 owners, deployment target, and applicable quality checks. Do not install every

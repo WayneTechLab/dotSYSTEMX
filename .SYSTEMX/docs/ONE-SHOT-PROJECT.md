@@ -5,7 +5,7 @@ flowchart TB
   subgraph Prepare["DEFINE AND BUILD"]
     direction LR
     R["0 · RESEARCH<br/>Brief + 20-route matrix"] --> F["1 · FOUNDATION<br/>Shell + shared contracts"]
-    F --> P["2 · PARALLEL WAVE<br/>Scoped page / API / test tasks"]
+    F --> P["2 · PARALLEL WAVE<br/>Scoped app workers / optional Agent Y CLI"]
   end
   subgraph Complete["INTEGRATE AND ACCEPT"]
     direction LR
@@ -91,6 +91,7 @@ A toolchain is the collection of tools that performs and verifies the work:
 | Human/project owner | Outcome, priorities, constraints, authority, acceptance | You and your organization |
 | AI harness | Model sessions, context limits, subagent/thread support, tool permissions | Your IDE, CLI, app, or bot host |
 | `.SYSTEMX` | Global context, Master Plan, tasks, current focus, evidence pointers, agent memory | This format and optional local tools |
+| Optional Agent Y lane | A bounded task sent by Agent 0 to a separately installed CLI provider | The chosen CLI, account, isolated checkout, and explicit branch/PR policy |
 | Application tools | Language runtime, package manager, framework, database, test runner | The selected application stack |
 | Verification | Unit/integration checks, browser checks, accessibility review, actual live probes | Project-specific tools and reviewers |
 | Delivery and persistence | Git, cloud deployment, storage, credentials, durable volumes | Explicitly configured project infrastructure |
@@ -107,9 +108,11 @@ bash .SYSTEMX/SYSTEMX.sh roles-init --apply
 bash .SYSTEMX/SYSTEMX.sh context --agent agent.0
 ```
 
-Register only workers you plan to use. Registration creates records; the harness
-must separately launch any authorized processes. Agent X/Z responsibilities can
-be performed by the current assistant; they do not require two permanent workers.
+Activate optional role records deliberately. Registration creates records; the
+harness must separately launch any authorized processes. Agent Y registration
+does not install, authenticate, or start a CLI provider. Agent X/Z
+responsibilities can be performed by the current assistant; they do not
+require two permanent workers.
 Use explicit command argument arrays in `project.json`. Leave unimplemented
 checks empty and record that gap. `.SYSTEMX` does not install an application
 framework or turn placeholder commands into verification.
@@ -164,6 +167,7 @@ persistence, correct permissions, or production delivery.
 | Task | A bounded outcome with owner, scope, dependencies, evidence, and history | Canonical `WORK/TASKS.json` |
 | Wave | A selected group of ready, non-conflicting tasks that may run together | Master Plan/coordination notes and current focus |
 | Thread/subagent | An actual harness execution context assigned a task | Harness, referenced by scoped agent notes and reports |
+| Agent Y handoff | One task assigned to a separately installed CLI provider, with an optional branch/PR artifact | Selected scope's `AGENTS/agent.y/JOBS.json`; canonical status remains in `WORK/TASKS.json` |
 
 Phases and waves are planning conventions; there are no `phase` or `wave` CLI
 commands or additional task-schema fields. The CLI enforces local dependency and
@@ -204,10 +208,11 @@ independent test design to `agent.4`. Give the coordinator ownership of shared
 routing, dependency manifests, schema changes, and integration. These assignments
 are examples: choose fewer workers when independence or capacity is limited.
 
-Use up to 10 subagents only when authorized and supported, subject to lower host
-limits. X/Z role records do not increase that allowance. Multiple chat threads
-must name the same canonical scope and revision; they are not automatically
-synchronized because they have similar titles. Worktrees isolate code edits but
+Plan for up to 10 active workers total across native subagents and optional
+Agent Y CLI runs only when authorized and supported, subject to lower host limits.
+Role records do not increase that project concurrency or cost budget. Multiple
+chat threads must name the same canonical scope and revision; similar titles
+do not synchronize them. Worktrees isolate code edits but
 do not merge task ledgers. Workers return evidence-backed reports for the owner
 to integrate. See [Shared workspaces, clouds, and bots](SHARED-WORKSPACES.md).
 
@@ -224,6 +229,16 @@ resource owner, expected report, and stop condition. When finished, collect the
 actual worker result, inspect the diff, integrate, and run the relevant combined
 checks. Do not infer completion from a stopped worker indicator.
 
+For an independent task that Agent 0 assigns to an external CLI, follow the
+[Agent Y handoff](AGENT-Y.md): choose one installed provider, task ID, actual
+repository/base, allowed paths, acceptance checks, budget, and return format.
+Its task branch and worktree isolate edits from app workers, but do not merge
+`.SYSTEMX` records. A draft PR opens only when the task explicitly opts in and
+the run succeeds. Agent 0 integrates the result; Agent Z reviews the matching
+evidence, and Agent X can record actual run and PR events. After accepted `done`,
+an owned draft may be marked ready; after recorded cancellation, an owned PR may
+be closed under the selected policy. Neither operation merges code automatically.
+
 ## 6. Keep each meaningful turn connected
 
 The founder's **“simulated AGI brain”** idea describes the experience of several
@@ -237,8 +252,9 @@ At each meaningful work turn or handoff:
 
 1. Select the scope, read current focus and relevant Global/Master Plan context,
    then check changed inputs and outstanding task dependencies.
-2. Agent 0 selects the next bounded action; the assistant and authorized workers
-   use the actual toolchain within their assigned scopes.
+2. Agent 0 selects the next bounded action and chooses app subagents or an
+   optional Agent Y CLI handoff where authorized. Each worker uses the actual
+   toolchain within its assigned scope and shared project budget.
 3. Agent X records meaningful events with occurrence time, recording time, actor,
    revision, and original evidence. Failed attempts remain part of the timeline.
 4. Update canonical tasks through the CLI. It regenerates TODO, WORKING-ON,
@@ -296,13 +312,19 @@ facts and load only the context needed. Resolve material ambiguity without
 inventing decisions; continue independent authorized work when possible.
 
 Agent 0 coordinates. Organize the accepted outcome into phases, milestone IDs,
-dependency-linked tasks, and bounded waves. I authorize up to 10 subagents for
-independent work, subject to lower harness limits; use fewer when useful.
+dependency-linked tasks, and bounded waves. I authorize up to 10 active workers
+total across app subagents and optional CLI handoffs for independent work,
+subject to lower harness limits; use fewer when useful.
 Give each worker a precise scope, base revision, acceptance criteria, resource
 owner, and report contract. Record actual dispatch/results in the available
 harness; role registration alone is not execution. Keep one integration owner.
 
-Activate Agent X/Z records in this scope if needed after inspecting the preview.
+Optional external CLI lane: [NO / APPROVED PROVIDER + ACCOUNT + TASK ID].
+If approved, include Agent Y within the same ten-worker project budget. Set its
+allowed paths, branch/PR policy, return evidence, and stop condition. Keep draft
+PR creation off unless separately selected for that task. Do not auto-merge.
+
+Activate Agent X/Y/Z records in this scope if needed after inspecting the preview.
 Use Agent X for meaningful event/due facts and original evidence. Use Agent Z's
 versioned 100-question policy for requested prompt review and acceptance boundaries.
 Reuse unchanged reviews; scores do not create a rebuild or deployment loop.

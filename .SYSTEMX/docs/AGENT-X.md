@@ -14,18 +14,22 @@ bash .SYSTEMX/SYSTEMX.sh roles-init --apply
 bash .SYSTEMX/SYSTEMX.sh projects roles-init --project Project-A --apply
 ```
 
-Setup previews first. Applying it registers Agent X and Agent Z, creates their
-blank memory and records, and logs the operation. It preserves all existing files
+Setup previews first. Applying it registers Agent X, [Agent Y](AGENT-Y.md), and
+Agent Z, creates their blank memory and records, and logs the operation. Agent Y
+is an optional external CLI worker; registration does not launch a provider or
+authorize a branch or PR action. Setup preserves all existing files
 and role identities, and is idempotent. New definitions travel with the public
 template; only Agent 0 is registered in its blank distribution so older managed
-launchers can still verify a new release. Activate X/Z only with selected defaults
-that support them. Older tools cannot read activated X/Z role IDs; restore a
-pre-activation backup before a deliberate downgrade. The current manager cannot
-newly select releases older than 1.8.7-alpha.1, although it can run an already
-selected verified older snapshot with an isolated compatibility shim. That old
-runner still may not understand activated X/Z roles. Reselection below the floor
-requires a separately reviewed backup or legacy path. Updates alone do not activate
-roles or rewrite an existing registry.
+launchers can still verify a new release. Activate roles only with selected
+defaults that explicitly support them. Agent Y is introduced in 1.9.0-alpha.1;
+an older X/Z-capable runner may not understand `agent.y`. Restore a
+pre-activation backup before a deliberate downgrade; switching defaults does
+not migrate or deactivate role records. The current manager cannot newly select
+releases older than 1.8.7-alpha.1, although it can run an already selected
+verified older snapshot with an isolated compatibility shim. That historical
+selection floor does not imply Agent Y compatibility. Reselection below it
+requires a separately reviewed backup or legacy path. Updates alone do not
+activate roles or rewrite an existing registry.
 
 Root records live in `.SYSTEMX`; child records live in the selected `.SYSTEMXP`.
 Use `projects agent-x COMMAND --project NAME` for a child, or `--root` for the
@@ -51,6 +55,14 @@ Replace the example with real timestamps, revisions, existing task IDs, and
 original evidence. References are recorded data; the command does not inspect,
 execute, or fetch them. Actor kinds are `human`, `agent`, `bot`, `automation`, and
 `system`. IDs describe observed actors; they do not authenticate them.
+
+For an [Agent Y](AGENT-Y.md) handoff, record the observed CLI run, check,
+draft-PR publication, review transition, cancellation, or cleanup only when it
+actually occurs. Reference the selected task, job/run ID, source revision, and
+original provider or GitHub evidence. A proposed PR URL or successful CLI exit
+alone is not evidence of publication, merge, deployment, or task acceptance.
+Agent Y's `JOBS.json` tracks its bounded handoff; this event ledger records
+observations and never becomes a second PR or task-state authority.
 
 Kinds are `work`, `check`, `deploy`, `runtime`, `communication`, `schedule`,
 `review`, `decision`, and `incident`. Stages are `planned`, `implemented`,
@@ -125,8 +137,9 @@ the old one. Closing a due item does not complete a task or cancel a remote job.
 Agent X records when the idea was accepted, implementation changed, checks ran,
 a revision was delivered, and the actual live state was rechecked. Every event
 keeps its scope and original revision. Agent Z can cite these records when
-reviewing the remaining delta. Neither role automatically rebuilds or repeatedly
-reviews unchanged work. See [Agent Z](AGENT-Z.md), [evidence](EVIDENCE.md), and
+reviewing the remaining delta. Agent Y may perform a selected external CLI task,
+but none of these roles automatically rebuilds or repeatedly reviews unchanged
+work. See [Agent Y](AGENT-Y.md), [Agent Z](AGENT-Z.md), [evidence](EVIDENCE.md), and
 [SYSTEMX PROJECTS](PROJECTS.md).
 
 Use one cooperating writer per scope. CLI writes wait up to one second for the

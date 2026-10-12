@@ -147,16 +147,22 @@ The public [versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/w
 contains release details. The folder also retains offline release metadata and
 [source provenance](SOURCE.json). Keep the [license](LICENSE) in every copy.
 
-## Standard event and review roles
+## Standard CLI, event, and review roles
 
 [Agent X](docs/AGENT-X.md) tracks events, time, actors, and due items.
+[Agent Y](docs/AGENT-Y.md) takes a bounded Agent 0 task through a selected,
+installed CLI provider and can create an opted-in draft PR from its isolated task
+branch. It is separate from app/IDE subagents and shares the same project
+concurrency and cost budget. Agent 0 still owns acceptance and branch/PR policy.
 [Agent Z](docs/AGENT-Z.md) applies the fixed 100-question policy across ten
 categories, retains scorecards, and compares revision/evidence deltas. Preview
-`roles-init`, then use `roles-init --apply` to enable both in this scope. For a
+`roles-init`, then use `roles-init --apply` to enable all three in this scope. For a
 child, use `projects roles-init --project NAME --apply`. Activation preserves
-existing records. Neither role launches workers, schedules jobs, accepts tasks,
-or repeats unchanged reviews automatically. The public seed registry stays
-Agent 0 only; standard X/Z definitions and blank activation templates are included.
+existing records. Role setup does not launch workers, install providers, schedule
+jobs, accept tasks, or repeat unchanged reviews. The public seed registry stays
+Agent 0 only; standard X/Y/Z definitions and blank activation templates are
+included. PR ready, close, merge, and branch cleanup have separate gates;
+Agent Y never merges automatically.
 
 ## Complete projects and shared work
 

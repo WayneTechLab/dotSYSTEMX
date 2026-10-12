@@ -17,11 +17,15 @@
 
 - **Agent 0:** scope, tasks, handoffs and acceptance within user authority.
 - **Agent X:** events, timestamps and due items; the host executes schedules.
+- **Agent Y (optional):** a bounded external CLI task on an authorized connected
+  computer. It is separate from a cloud app worker.
 - **Agent Z:** the fixed review policy with 10 categories and 100 questions.
 
 These are roles implemented through the available toolchain. The public template
-starts with Agent 0 only; [activate Agent X/Z](../../docs/AGENT-X.md) explicitly in
+starts with Agent 0 only; [activate X/Y/Z](../../docs/AGENT-X.md) explicitly in
 the selected scope. A review score is advisory and does not approve external actions.
+The pictured card focuses on Agent 0/X/Z; [Agent Y](../../docs/AGENT-Y.md) adds
+an optional separate CLI runtime when the chosen host actually supports it.
 
 Treat the dot and its selected coding environment as distinct runtimes. Carry
 the task ID, root or named child scope, source revision, actual run IDs, evidence,
@@ -30,6 +34,10 @@ canonical Git/Drive source and verify them before ending or replacing a runtime.
 A cloud task does not automatically see unsaved local files. Local execution
 depends on the connected computer being available. Configure scheduling in the
 host separately; Agent X records intended occurrences and observed outcomes.
+Agent Y receives only the approved task packet and returns run ID, diff, checks,
+and any owned draft PR for Agent 0 to reconcile. A dot or cloud session does not
+install or authenticate the CLI, mount local files, or sync its `.SYSTEMX`
+automatically. Count the CLI run in the same project worker and cost budget.
 
 ## Copyable prompt
 

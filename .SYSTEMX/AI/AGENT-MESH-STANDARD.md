@@ -30,6 +30,15 @@ Keep concurrent edits separate or coordinate ownership explicitly. Avoid shared
 state mutations that can invalidate another worker's evidence. Review delegated
 findings against source and tests before integration.
 
+An optional [Agent Y](../docs/AGENT-Y.md) lane sends one Agent 0 task to a
+separately installed CLI provider selected for that task. It is an external
+process, not a native app/IDE subagent or another source of task state. Assign
+an isolated task branch/worktree and include its token, time, and cost use in
+the same project worker budget. Agent 0 checks the CLI result before integration;
+Agent X can record observed transitions and Agent Z can review retained proof.
+Opening a draft PR requires task-specific opt-in. Ready, abandon, merge, and
+branch cleanup remain separate operations with their own gates.
+
 ## Optional durable format
 
 Projects needing machine-readable coordination can use the

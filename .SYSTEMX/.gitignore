@@ -2,6 +2,9 @@
 /local/
 /logs/
 /state/
+/Projects/*/.SYSTEMXP/local/
+/Projects/*/.SYSTEMXP/logs/
+/Projects/*/.SYSTEMXP/state/
 /.systemx/update.lock
 /.systemx/last-check.json
 /.systemx/history/

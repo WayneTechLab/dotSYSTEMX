@@ -57,7 +57,7 @@ class StandardAgentTests(unittest.TestCase):
     def test_activation_is_explicit_preserving_and_idempotent(self):
         before = self.files()
         preview = self.value("roles-init")
-        self.assertEqual(preview["register"], ["agent.x", "agent.z"])
+        self.assertEqual(preview["register"], ["agent.x", "agent.y", "agent.z"])
         self.assertEqual(before, self.files())
         self.rejected("agent-x", "due")
         self.assertEqual(before, self.files())

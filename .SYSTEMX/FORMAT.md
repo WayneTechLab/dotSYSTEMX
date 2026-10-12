@@ -4,8 +4,10 @@
 
 SYSTEMX defines a reusable project operating format. It is a project-maintained
 convention, not a certification or an externally ratified industry standard.
-Documentation can be used without the CLI. The CLI validates the JSON records
-and generated views described here; it does not execute an agent runtime.
+Documentation can be used without the CLI. The core CLI validates the JSON
+records and generated views described here. Only an explicitly applied Agent Y
+job may invoke an installed external CLI provider; role setup and context reads
+do not start one.
 
 ## File and version conventions
 
@@ -125,9 +127,11 @@ pointers are rejected. Selection replaces the whole focus; it never changes task
 
 `AGENTS/REGISTRY.json` contains exactly `schemaVersion` and `agents`. Each agent
 has `id`, `role`, and `memory`. IDs are unique `agent.0`, `agent.1`, etc., without
-leading zeroes, plus reserved standard roles `agent.x` (`event-time`) and
-`agent.z` (`review`) when explicitly activated using compatible tools. Agent 0 must have role `coordinator`; other roles are nonempty
-descriptions. Memory must exist at `AGENTS/<id>/MEMORY.md`, without symlinks.
+leading zeroes, plus reserved standard roles `agent.x` (`event-time`),
+`agent.y` (`cli-worker`), and `agent.z` (`review`) when explicitly activated
+using compatible tools. Agent 0 must have role `coordinator`; other roles are
+nonempty descriptions. Memory must exist at `AGENTS/<id>/MEMORY.md`, without
+symlinks.
 
 ## Commands and optional messages
 
@@ -209,13 +213,14 @@ Fingerprints detect changed artifacts relative to the selected source; they are
 not independent publisher signatures. See [installation](docs/INSTALLATION.md)
 for policy, local locking, interrupted writes, and filesystem limits.
 
-## Agent X and Agent Z records
+## Agent X, Agent Y, and Agent Z records
 
-The public registry remains Agent 0 only. `roles-init --apply` explicitly adds
-standard role entries and project-owned records while preserving existing bytes.
-Activated `agent.x`/`agent.z` IDs require tools that support them; older readers
-are not compatible with those added IDs. Record schema version 1 is otherwise
-unchanged. A downgrade after activation requires a reviewed migration or backup.
+The public registry remains Agent 0 only. Explicit role setup adds standard
+role entries and project-owned records while preserving existing bytes.
+Activated `agent.x`/`agent.y`/`agent.z` IDs require tools that support each
+one; a reader predating an activated ID is incompatible. Record schema version
+1 is otherwise unchanged. A downgrade after activation requires a reviewed
+migration or backup.
 
 `EVENTS/EVENTS.json` contains `schemaVersion: 1` and `events`. Each event has `id`,
 `key`, `at`, `recordedAt`, `actor` (`kind`, `id`), `kind`, `stage`, `summary`,
@@ -237,3 +242,36 @@ Normal validation checks current optional event/schedule ledgers and review
 policy when present. Historical review requests/reports have explicit selected-ID
 validation; they are not all loaded into context. None of these records replaces
 `WORK/TASKS.json`, authenticates a worker, or proves evidence independently.
+
+Agent Y's scoped `AGENTS/agent.y/JOBS.json` contains `schemaVersion: 1` and a
+`jobs` array. Each portable job records its ID, canonical task ID, selected
+provider, repository identity, observed remote base commit, owned branch,
+prompt digest, allowed paths, draft-PR opt-in, state and timestamps, head/PR
+references, and bounded result evidence. Host-specific absolute repository,
+prompt, and worktree paths and configured adapter arguments belong in ignored
+`state/agent-y/<Y-ID>.json` execution state, keyed to the job and created with
+owner-only file permissions on POSIX hosts. Windows access controls need a
+separate review. The
+prompt text and provider transcript belong in neither record. A job's
+state is one of `prepared`, `running`, `failed`, `review_pending`, `draft_pr`,
+`ready`, `closed`, or `merged`; this is a delivery state, never a replacement for
+the canonical task's `todo`/`in_progress`/`needs_review`/`done` status. Its
+memory is a concise resume aid, and neither the portable job nor host-local
+execution state replaces GitHub's actual PR state. The provider and branch/PR
+lifecycle are selected per task; activating
+`agent.y` does not run a CLI, install a provider, or grant GitHub permission. A
+draft PR may be opened only under that task's opt-in policy after a successful
+provider exit and controller scope/commit checks; project tests and acceptance
+remain separate.
+Ready-for-review, close, merge, and branch deletion are distinct actions.
+An unmerged PR can close only after recorded cancellation; cleanup after merge
+requires accepted completion and remote merge evidence. Closing an unmerged PR
+retains its branch for manual disposition. Automated branch deletion needs
+exact ownership/head verification and a retained local bundle. Merge requires
+separate authorization. See
+[Agent Y](docs/AGENT-Y.md).
+
+Merged-PR cleanup writes a verified bundle to ignored
+`state/agent-y/archives/<Y-ID>.bundle` before removing owned refs. The portable
+job retains its SHA-256 digest, not the bundle bytes; preserve a verified
+private copy separately before uninstalling or moving hosts.

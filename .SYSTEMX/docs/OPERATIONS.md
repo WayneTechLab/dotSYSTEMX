@@ -9,9 +9,28 @@ the task calls for synchronization; choose a merge strategy consistent with
 the repository's policy. Preserve unrelated local work.
 
 Do not silently reset, clean, force-push, stage everything, install hooks, or
-overwrite configuration. Prefer explicit, reviewable changes. The SYSTEMX
-runner performs no Git mutations and cannot guarantee a clean release revision;
-the project release process must establish that evidence.
+overwrite configuration. Prefer explicit, reviewable changes. The ordinary
+`check`, `build`, and `deploy` runner does not create Git commits or PRs and
+cannot guarantee a clean release revision; the project release process must
+establish that evidence. An explicitly applied Agent Y job has a separate
+scoped Git/PR lifecycle.
+
+For a delegated CLI task, [Agent Y](AGENT-Y.md) records the intended repository,
+base, task branch, PR target, and lifecycle policy before a process starts.
+Draft PR auto-opening after successful scoped work is per-task opt-in. Pushing a
+branch or opening a draft PR can trigger the target repository's configured
+Actions, webhooks, checks, and associated usage. Inspect those settings and
+review the Agent Y preview before opting in; disabling Actions on the
+dotSYSTEMX source repository does not disable them in an adopted project's
+repository. Marking a draft ready for review is separate from closing an
+abandoned PR, merging, or
+deleting the owned branch. Close requires recorded cancellation and leaves that
+unmerged branch intact. Automated cleanup requires verified merge and accepted
+completion; it preserves a local bundle before an exact-head branch deletion.
+Merging needs separate authorization and repository checks.
+Inspect the observed remote head and PR state before
+retrying a partially completed operation. A local success is not proof of
+publication, and an open PR is not proof of deployment or live verification.
 
 ## Local development
 

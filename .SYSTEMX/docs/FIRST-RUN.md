@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.9-alpha.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.1"
 "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.9-alpha.1"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.1"
 & "$HOME\.venvs\dotsystemx\Scripts\python.exe" -I -B -m systemx --help
 ```
 
@@ -149,10 +149,11 @@ bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
 bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
 ```
 
-## Optional: activate standard Agent X and Agent Z roles
+## Optional: activate standard Agent X, Agent Y, and Agent Z roles
 
 Preview `bash .SYSTEMX/SYSTEMX.sh roles-init`, then add `--apply` to create
-project-owned event/schedule ledgers, a review policy, and X/Z memory. Use the
+project-owned event/schedule ledgers, CLI job records, a review policy, and X/Y/Z memory. Use the
 scoped variant for a child. This activation is separate from installing defaults
-and starts no worker or scheduler. Follow [Agent X](AGENT-X.md) and
-[Agent Z](AGENT-Z.md); existing projects remain unchanged until activation.
+and starts no worker, provider, or scheduler. Follow [Agent X](AGENT-X.md),
+[Agent Y](AGENT-Y.md), and [Agent Z](AGENT-Z.md); existing projects remain
+unchanged until activation. Choose a provider and branch/PR policy per task.

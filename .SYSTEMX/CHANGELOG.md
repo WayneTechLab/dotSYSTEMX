@@ -4,6 +4,25 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.9.0-alpha.1 — Optional Agent Y CLI and PR lane
+
+- Added Agent Y (`agent.y`) as an opt-in, per-task CLI handoff under Agent 0.
+  The public template still seeds only Agent 0; role activation creates blank
+  Agent Y records without starting a worker or changing an adopted project.
+- Added preview-first task packets with an explicit project task, selected
+  installed CLI provider, repository/base, allowed paths, and PR policy.
+  Agent Y runs separately from app/IDE subagents, so it must receive context
+  explicitly and return recorded source revision and evidence.
+- Added a task-owned Git worktree and branch path for CLI work. Successful,
+  authorized runs can push and open a **draft** GitHub PR when the task opted in.
+  Agent 0 acceptance, Agent Z review, Agent X events, PR readiness, cancellation,
+  merge, and branch cleanup remain separate facts and transitions. No model
+  output or score grants merge authority; GitHub Actions remains disabled.
+- Extended role validation, tests, public instructions, and the wiki for the
+  four-role coordination loop. The historical white-paper edition 1.2 and 4K
+  images remain frozen at their earlier Agent 0/X/Z baseline; current Agent Y
+  guidance lives in the manual.
+
 ## 1.8.9-alpha.1 — Template records and local safety
 
 - Added blank, project-owned `GLOBAL/ACCESS-MATRIX.md` and `PLAN/MAP.md` to the

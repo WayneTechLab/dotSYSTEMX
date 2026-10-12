@@ -18,9 +18,12 @@ Host project
 └── .SYSTEMX                       exact stored directory name
     ├── GLOBAL, PLAN, MEMORY       project context, outcomes, durable facts
     ├── WORK                       canonical tasks and current focus
-    ├── AGENTS                     Agent 0, optional X/Z, and scoped worker memory
+    ├── AGENTS                     Agent 0, optional X/Y/Z, and scoped worker memory
     ├── EVENTS                     event and due ledgers after activation
     ├── REVIEWS                    policy, requests, scorecards after activation
+    ├── AGENTS/agent.y/JOBS.json    scoped CLI handoffs after activation
+    ├── state/agent-y/<Y-ID>.json    ignored, owner-only local execution state
+    ├── state/agent-y/archives/      ignored bundles after merged PR cleanup
     ├── Projects/REGISTRY.json      explicit child identities
     ├── Projects/NAME/.SYSTEMXP     isolated child records; no nested installation
     ├── project.json               explicit project command arguments
@@ -45,8 +48,9 @@ folder. It is different from the nested manager cache. Follow the
 | `scripts/systemx.py` | Configuration validation, menu, doctor, explicitly configured commands |
 | `scripts/project_memory.py` | Task ledger, focus, generated views, agent records, bounded context |
 | `scripts/project_workspaces.py` | Explicit child scope routing, blank creation, scoped commands, local snapshots |
-| `scripts/agent_standards.py` | Explicit X/Z setup, safe records, common scope dispatch |
+| `scripts/agent_standards.py` | Explicit X/Y/Z setup, safe records, common scope dispatch |
 | `scripts/agent_x.py` | Event occurrence/recording time and due-item tracking |
+| `scripts/agent_y.py` | Bounded CLI handoffs, isolated task worktrees, post-run checks, and owned draft PR operations |
 | `scripts/agent_z.py` | Fixed 100-question policy, request/report validation, score math and deltas |
 | `config/distribution.json` | Explicit public file inventory with release fingerprints |
 | `config/template-records.json` | Reviewed blank seed fingerprints |
@@ -121,8 +125,8 @@ against that receipt and refuses an occupied destination. See
 
 ## Concurrency, integrity, and logs
 
-Install/update and removal use an exclusive local writer lock. Task, Agent X, and
-Agent Z command writes use a separate per-scope coordination lock. Cooperating
+Install/update and removal use an exclusive local writer lock. Task, Agent X,
+Agent Y, and Agent Z command writes use a separate per-scope coordination lock. Cooperating
 coordination writers wait up to one second; the lock records a token, PID, host,
 and creation time. On a crash it remains for manual inspection and is never
 automatically removed as "stale." Operation receipts
@@ -144,6 +148,9 @@ The optional CLI requires Python 3.9+ and its standard library. Configured proje
 commands are explicit argument arrays and run with `shell=False` from the project
 root. Integrations should preserve that boundary and canonical records. Consult
 the [Stack Guide](STACK-GUIDE.md) and [library API](LIBRARY.md).
+Native Windows still supports the core folder and record tools, but optional
+Agent Y `run --apply` fails closed before worktree/provider execution in this
+alpha because descendant process termination is unverified there.
 
 An MCP adapter could later expose bounded read/write operations over this library.
 No MCP server, daemon, remote agent mesh, OAuth registration, or cloud sync engine
@@ -205,16 +212,22 @@ outer installation. A scope selector is not an OS sandbox or distributed lock.
 
 `agent_standards.py` supplies explicit setup, exact-case contained paths, strict
 JSON reads, stable fingerprints, and common scope dispatch. `agent_x.py` owns
-append-by-command events and due-item bookkeeping. `agent_z.py` owns the fixed
+append-by-command events and due-item bookkeeping. `agent_y.py` records one
+task/provider/branch handoff at a time, verifies the chosen provider, runs it
+in an isolated worktree, checks its resulting diff against the allowed scope,
+and can publish an opted-in draft PR. `agent_z.py` owns the fixed
 policy, review requests, deterministic scoring arithmetic, immutable scorecards,
-and comparable deltas. All are Python standard-library modules with no runtime
-model, scheduler, cloud, or database dependency. Agent judgment and original
-proof remain external inputs; arithmetic and hashes do not establish their truth.
+and comparable deltas. The controller uses Python standard-library code plus
+installed external CLI/Git/GitHub tools for an explicitly run Agent Y job. Role
+setup itself has no runtime model, scheduler, cloud, or database dependency.
+Agent judgment and original proof remain external inputs; arithmetic and hashes
+do not establish their truth.
 
 `roles-init` preserves the existing registry and creates missing records only.
 The release's seed registry remains Agent 0 only for older bootstrap-manager
-compatibility. Activating named X/Z roles is an explicit record-format adoption;
-older selected tools cannot interpret those new role IDs. Shared updates keep
+compatibility. Activating named X/Y/Z roles is an explicit record-format adoption;
+selected tools must understand every activated ID; X/Z-capable older versions
+may reject Agent Y. Shared updates keep
 project-owned question policies and past reports unchanged.
 
 ## Toolchain and shared context

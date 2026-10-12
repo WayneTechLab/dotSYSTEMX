@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.8.9-alpha.1` release and leaves updates manual.
+example selects the reviewed `v1.9.0-alpha.1` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.8.9-alpha.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.1"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.8.9-alpha.1
-systemx first-run --target "$PWD" --profile project --version 1.8.9-alpha.1 --apply
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.1
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.1 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -85,15 +85,34 @@ create a lowercase compatibility link where supported; see
 
 ## How the system coordinates work
 
-[![Flow from project context and Agent 0 through bounded work, Agent X events, Agent Z review, acceptance, and saved state.](docs/assets/systemx-coordination.png)](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide)
+```mermaid
+flowchart LR
+  H[Human objective and authority] --> R[.SYSTEMX context, plan, and task ledger]
+  R --> A0[Agent 0: scope and coordination]
+  A0 --> W[App or IDE subagents]
+  A0 --> Y[Agent Y: selected external CLI lane]
+  Y --> P[Isolated branch and optional draft PR]
+  W --> X[Agent X: events and time]
+  Y --> X
+  P --> Z[Agent Z: evidence review]
+  X --> Z
+  Z --> A0
+  A0 --> R
+```
+
+Agent Y is a separate CLI run, even when its provider shares configuration with
+an app or IDE. Agent 0 passes an explicit task packet and accepts its evidence;
+the folder does not grant a model, GitHub account, or worker process authority.
 
 1. **Define and plan:** record the purpose, constraints, milestones, and acceptance
    criteria. Agent 0 turns the next part of the plan into bounded tasks.
-2. **Execute and log:** a person, assistant, or authorized subagent works within
-   scope. Agent X can record meaningful actor, time, revision, and due-item events.
+2. **Execute and log:** a person or authorized app/IDE subagent works within scope.
+   Optional Agent Y can run a per-task selected Codex, Copilot, or configured CLI
+   provider in an isolated Git worktree. Agent X records meaningful actor, time,
+   revision, and due-item events.
 3. **Check and accept:** Agent Z can score evidence against a versioned set of 100
    questions in 10 categories. Agent 0 and the user decide whether the original
-   acceptance criteria were met, then save the next step or completion evidence.
+   acceptance criteria were met and what happens to the draft PR and branch.
 
 | Responsibility | Canonical record |
 | --- | --- |
@@ -104,18 +123,19 @@ create a lowercase compatibility link where supported; see
 | Task status, ownership, dependencies, and evidence | `.SYSTEMX/WORK/TASKS.json` |
 | Current focus and reviewed facts | `.SYSTEMX/WORK/FOCUS.json`, `.SYSTEMX/MEMORY/PROJECT.md` |
 | Agent handoffs and checkpoints | `.SYSTEMX/AGENTS/<id>/MEMORY.md` and session records |
-| Optional events and reviews | `.SYSTEMX/EVENTS/`, `.SYSTEMX/REVIEWS/` after role activation |
+| Optional CLI task/PR lane, events, and reviews | `.SYSTEMX/AGENTS/agent.y/`, `.SYSTEMX/EVENTS/`, `.SYSTEMX/REVIEWS/` after role activation |
 
 The task ledger generates TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED
 views. The public template starts with blank project records and only the
-`agent.0` coordinator. Role activation registers Agent X or Z records; it does
+`agent.0` coordinator. Role activation registers Agent X, Y, and Z records; it does
 not start a worker, schedule a job, or grant permissions. The AI app, IDE, CLI,
 or other harness supplies actual models and tools. See the
 [access matrix and map guide](.SYSTEMX/docs/ACCESS-AND-MAP.md) for the two
 optional blank records; they are navigation and reviewed intent, not live IAM
 or an automatic system inventory. See the
 [Agent 0](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents),
-[Agent X](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-X), and
+[Agent X](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-X),
+[Agent Y](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y), and
 [Agent Z](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Z) manuals.
 
 For multiple named projects, one outer `.SYSTEMX` can hold separate
@@ -142,6 +162,20 @@ capacity. The folder does not launch agents. The
 [prompt cookbook](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Prompt-Cookbook)
 and [new-chat setup prompt](https://github.com/WayneTechLab/dotSYSTEMX/wiki/New-Chat-Setup-Prompt)
 show longer examples and chat-only handoffs.
+
+For a task that benefits from another installed CLI model, ask Agent 0 to assign
+one bounded Agent Y packet with its task ID, project scope, chosen provider,
+acceptance checks, and branch/PR policy. The CLI run has its own context and
+history; it does not inherit the app's chat or native subagent pool. With the
+opt-in PR policy, successful work opens a **draft** PR for review. Agent Z's
+scorecard and Agent X's event log can inform Agent 0's acceptance decision, but
+neither merges code. Marking a draft ready, merging it, abandoning it, and
+removing its branch are distinct actions with explicit authority and recorded
+outcomes. See the [Agent Y manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y)
+for the task packet and safe lifecycle.
+An opened PR may trigger the target repository's workflows or webhooks; review
+their cost and effects before enabling this option. This template's own GitHub
+Actions remain disabled.
 
 ## Work across tools and environments
 
@@ -191,7 +225,9 @@ explain its current implementation and how to connect real project commands.
 The [wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki) is the manual for
 setup, record formats, roles, prompts, operations, and release history. The
 [illustrated white paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
-contains the deeper coordination diagrams and implementation discussion.
+contains the deeper coordination diagrams and implementation discussion for its
+published Agent 0/X/Z baseline. The [Agent Y manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y)
+documents the newer external CLI lane.
 
 [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) ·
 [Security](SECURITY.md) · [MIT License](LICENSE)

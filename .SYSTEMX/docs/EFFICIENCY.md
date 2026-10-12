@@ -87,7 +87,9 @@ Store sanitized measurements in the adopted project, never in the blank template
 Compare total usage across Agent 0 and every worker, including failed runs,
 retries, integration, review, and checkpoint maintenance. Parallel work can
 finish sooner while costing more. A requested ten-worker ceiling is a capacity
-limit, not an efficiency target. Start with the workers the task needs.
+limit, not an efficiency target. Agent Y external CLI runs share that project
+budget with app/IDE subagents; a separate provider may incur separate charges
+and its own context-loading cost. Start with the workers the task needs.
 
 | Measure | Record for both approaches |
 | --- | --- |
@@ -131,7 +133,8 @@ task. More raw information is not automatically better: unrelated, stale, or
 contradictory input consumes attention and tokens. Record uncertainty explicitly.
 
 Phases and waves give the coordinator useful checkpoints; bounded workers return
-reviewable summaries; X timestamps and Z scorecards preserve meaningful evidence.
+reviewable summaries; X timestamps, Y CLI handoffs when selected, and Z
+scorecards preserve meaningful evidence.
 This can make later turns better informed without retraining the model. Measure
 research, coordination, integration, and review costs together. Compare accepted
 outcomes, not agent count or prompt length. See [the one-shot guide](ONE-SHOT-PROJECT.md).

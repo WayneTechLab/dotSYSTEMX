@@ -104,11 +104,16 @@ work remains a blocker; it is not equivalent to passing a check.
 The written standard describes responsibilities. Only the explicitly configured
 checks enforce project behavior automatically.
 
-## Events, reviews, and the remaining delta
+## Delegation, events, reviews, and the remaining delta
 
 Use [Agent X](docs/AGENT-X.md) to link meaningful events to exact revisions,
 original evidence, and timezone-aware occurrence times. Planned schedules,
 recorded due items, actual execution, and verified live state are different facts.
+When a user-selected CLI provider is useful, [Agent Y](docs/AGENT-Y.md) takes a
+bounded task from Agent 0 through that installed provider. Separate write
+scopes and source revisions prevent an app subagent and CLI process from silently
+editing the same checkout. A task-specific draft PR is optional and requires an
+explicit lifecycle policy; it does not change task acceptance.
 Use [Agent Z](docs/AGENT-Z.md) for the same 100 evidence questions at a completion
 boundary or when requested. Preserve its policy version and original reports.
 
@@ -116,7 +121,8 @@ Track the difference between the accepted idea, implementation, checked revision
 delivered revision, and observed live behavior. Agent 0 chooses the next bounded
 action from that difference. Reuse valid evidence and unchanged reviews. Neither
 a due item nor a score automatically creates work, changes task state, repeats
-checks, or grants authority. Company policies may refine the versioned review
+checks, or grants authority. Agent Y never infers merge permission or branch
+cleanup from a score. Company policies may refine the versioned review
 questions; they do not override environment or user instructions.
 
 ## Research, phases, and shared-source handoffs

@@ -62,6 +62,7 @@ for _name, _path in (
         ("agent_standards", SCRIPTS / "agent_standards.py"),
         ("project_workspaces", SCRIPTS / "project_workspaces.py"),
         ("agent_x", SCRIPTS / "agent_x.py"),
+        ("agent_y", SCRIPTS / "agent_y.py"),
         ("agent_z", SCRIPTS / "agent_z.py")):
     _load_local(_name, _path)
 
@@ -429,7 +430,7 @@ def menu():
               "11) Check exact .SYSTEMX casing and alias\n12) Enable local .systemx -> .SYSTEMX alias\n"
               "13) First-time setup guide\n14) Uninstall, restore, and cleanup guide\n"
               "15) SYSTEMX PROJECTS setup and selection\n16) List registered projects\n"
-              "17) Agent X and Agent Z setup and review guide\n0) Exit")
+              "17) Agent X, Agent Y, and Agent Z setup and review guide\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -458,7 +459,7 @@ def menu():
 def dispatch(action, dry_run=False):
     record_directory(SYSTEMX)
     if action == "standard-roles-guide":
-        for name in ("AGENT-X.md", "AGENT-Z.md"):
+        for name in ("AGENT-X.md", "AGENT-Y.md", "AGENT-Z.md"):
             print((DEFAULTS / "docs" / name).read_text(encoding="utf-8"))
         return 0
     if action == "projects-guide":

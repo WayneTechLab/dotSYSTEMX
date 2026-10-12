@@ -17,11 +17,15 @@
 
 - **Agent 0:** scope, tasks, handoffs and acceptance within user authority.
 - **Agent X:** events, timestamps and due items; the host executes schedules.
+- **Agent Y (optional):** carries one Agent 0 task into a selected installed CLI,
+  returns a scoped diff and evidence, and may own an authorized task branch/PR.
 - **Agent Z:** the fixed review policy with 10 categories and 100 questions.
 
 These are roles implemented through the available toolchain. The public template
-starts with Agent 0 only; [activate Agent X/Z](../../docs/AGENT-X.md) explicitly in
+starts with Agent 0 only; [activate X/Y/Z](../../docs/AGENT-X.md) explicitly in
 the selected scope. A review score is advisory and does not approve external actions.
+The pictured card focuses on Agent 0/X/Z; [Agent Y](../../docs/AGENT-Y.md) is
+the optional separate CLI handoff when an app or IDE coordinates the project.
 
 Example locations are `/path/to/project/.SYSTEMX/` and
 `C:\Projects\App\.SYSTEMX`. Start either CLI in the intended project; keep
@@ -29,6 +33,10 @@ its existing instruction discovery and permissions in force. Use `.SYSTEMX`
 exactly. An optional `.systemx` alias must resolve to that same directory.
 The two CLIs reuse explicit saved files rather than hidden model memory.
 Record what checks actually ran and keep Git/backup synchronization explicit.
+Select one CLI provider for each Agent Y task and verify its executable, account,
+working tree, allowed paths, and budget. App subagents and the CLI share the same
+project worker budget; neither session automatically inherits the other's context.
+Draft PR creation is opt-in after a successful run; no CLI process auto-merges.
 
 ## Copyable prompt
 
