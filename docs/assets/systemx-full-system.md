@@ -1,9 +1,12 @@
 # .SYSTEMX full-system map — text equivalent
 
-This companion explains the public infographic without relying on its colors,
-icons, or raster text. The standard roles are **Agent 0, Agent X, and Agent Z**.
-Numeric subagents are registered for specific assignments. Role records do not
-start processes; the authorized IDE, CLI, chat, or bot harness supplies execution.
+This companion explains the original public infographic without relying on its
+colors, icons, or raster text. That poster depicts the **pre-Agent Y** baseline:
+Agent 0, Agent X, and Agent Z. Since 1.9.0-alpha.2, the optional standard roles
+also include **Agent Y**. Its current workflow is described below, but it is
+not drawn on the frozen poster. Numeric subagents are registered for specific
+assignments. Role records do not start processes; the authorized IDE, CLI, chat,
+or bot harness supplies execution.
 
 ## 1. Shared context
 
@@ -54,13 +57,30 @@ The same questions are assessed at meaningful boundaries or on request; unchange
 inputs reuse existing reports. Scores are advisory. Agent 0/user decides whether
 the original acceptance is met or a concrete gap needs another bounded task.
 
+## Current extension, not shown on the poster: Agent Y
+
+Since 1.9.0-alpha.2, Agent Y (`agent.y`) can carry one explicitly assigned,
+in-progress Agent 0 task to a **per-task selected** installed Codex, Copilot, or
+configured CLI provider. Scoped role activation adds its blank
+`AGENTS/agent.y/JOBS.json` record; a private, ignored `state/agent-y/` sidecar
+holds host-local execution paths. Agent Y uses a task branch and isolated Git
+worktree. A successful run may open a **draft** PR only when that task opted in.
+Agent X can record events and Agent Z can assess returned evidence, but Agent 0
+must independently check the project result and record acceptance or cancellation.
+Ready, close, merge, and branch cleanup are distinct decisions: Agent Y cannot
+merge, closing an unmerged PR requires recorded cancellation, and automated
+branch cleanup requires verified merged-and-accepted state plus a retained
+bundle. A role record does not grant CLI or GitHub authority. See the current
+[Agent Y guide](../../.SYSTEMX/docs/AGENT-Y.md) for the complete controls and
+native Windows execution limit.
+
 ## 6. Toolchain and actual execution
 
 The host supplies model sessions, authorized processes, tools, and permissions.
 `.SYSTEMX` exposes shell/PowerShell entry points (`SYSTEMX.sh`, `SYSTEMX.ps1`,
 and the compatible `WSG-MENU.sh`), a Python library, and the external `systemx` CLI.
 `manager.py` and `lifecycle.py` handle installation/lifecycle operations;
-`scripts/` supplies task records, project routing, role activation, Agent X/Z,
+`scripts/` supplies task records, project routing, role activation, Agent X/Y/Z,
 validation, and distribution checks. `project.json` names explicit application
 command arrays for checks, builds, and authorized deployments. Record actual run
 IDs and artifacts; verify the live target when that delivery scope is authorized.
@@ -71,7 +91,7 @@ The folder does not supply a model, application framework, cloud service, or bot
 `Projects/REGISTRY.json` selects named children at
 `.SYSTEMX/Projects/NAME/.SYSTEMXP`. Each child has scoped `GLOBAL/`, `PLAN/`,
 `WORK/`, `MEMORY/`, `AGENTS/`, `SOURCES.json`, `DECISIONS/`, and `SYNC/` records,
-with optional `EVENTS/` and `REVIEWS/` after activation. Examples such as
+with optional `EVENTS/`, Agent Y jobs, and `REVIEWS/` after activation. Examples such as
 `WebApp/.SYSTEMXP` and `Research/.SYSTEMXP` are separate record scopes using one
 outer tool installation and selected version. Do not nest another `.SYSTEMX` or
 combine sibling task ledgers. Source references do not establish a live connection.
@@ -98,5 +118,6 @@ does not grant access or synchronize concurrent writes.
 
 See the [Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide),
 [command reference](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Command-Reference),
+[Agent Y guide](../../.SYSTEMX/docs/AGENT-Y.md),
 and [shared-workspace guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Shared-Workspaces-Cloud-and-Bots)
 for executable instructions and operational limits. This remains an alpha template.

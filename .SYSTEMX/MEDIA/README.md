@@ -16,9 +16,12 @@ questions, record contracts, six figures and clickable research citations.
 [Read the PDF](White-Paper/SYSTEMX-White-Paper-v1.2.pdf) ·
 [Editable text](White-Paper/SYSTEMX-White-Paper-v1.2.md) ·
 [Metadata and checksums](White-Paper/SYSTEMX-White-Paper-v1.2.json) ·
+[Edition 1.2 citation erratum](White-Paper/ERRATA.md) ·
 [Wiki guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
 
-The published PDF is unchanged. Its pinned references and historical inventory
+The published PDF and Markdown are unchanged. The erratum corrects one broken
+release-report URL in their Works Cited without altering either frozen file.
+Their other pinned references and historical inventory
 continue to describe its examined baseline. The Markdown image paths follow this
 folder layout. The PDF is selectable and linked; it is not tagged PDF/UA.
 Its installation-state discussion reflects that older baseline: from
@@ -50,7 +53,7 @@ and do not imply endorsement.
 ```text
 MEDIA/
   README.md       Media index
-  White-Paper/    Latest PDF, editable text and document metadata
+  White-Paper/    Latest PDF, editable text, metadata and a separate erratum
   Infographics/  Four 4K JPEG outputs
   Reference/     Workflow guides, image prompts and asset provenance
 ```

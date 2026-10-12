@@ -4,6 +4,9 @@ Edition 1.2 is the illustrated, branded MLA-style research edition. The current
 `.SYSTEMX/MEDIA/White-Paper` folder holds only that edition. Earlier papers and
 original PNG artwork remain in immutable release history. Never replace a frozen
 release asset in place. Paper editions and template versions are distinct.
+The published PDF and Markdown have a separately maintained
+[citation erratum](../../.SYSTEMX/MEDIA/White-Paper/ERRATA.md); do not edit either
+frozen edition file merely to repair its outbound link.
 
 ## Build and identity
 

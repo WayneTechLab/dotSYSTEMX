@@ -23,5 +23,5 @@
     "duplicate setup packets and edition manifests",
     "historical status, research, logs, and application releases"
   ],
-  "note": "Curated standalone derivative, not a byte-for-byte mirror. License notice is included inside .SYSTEMX so the folder is self-contained."
+  "note": "Curated standalone derivative, not a byte-for-byte mirror. The source repository is private and not publicly readable; https://github.com/WayneTechLab/dotSYSTEMX is the public standalone source. License notice is included inside .SYSTEMX so the folder is self-contained."
 }

@@ -149,6 +149,16 @@ bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
 bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
 ```
 
+Windows PowerShell, using the `systemx` function from step 3 and the containing
+project directory you selected:
+
+```powershell
+$projectRoot = 'C:\Projects\Example'
+systemx run --target $projectRoot --offline -- projects add Project-A --kind software
+systemx run --target $projectRoot --offline -- projects add Project-A --kind software --apply
+systemx run --target $projectRoot --offline -- projects context --project Project-A --agent agent.0
+```
+
 ## Optional: activate standard Agent X, Agent Y, and Agent Z roles
 
 Preview `bash .SYSTEMX/SYSTEMX.sh roles-init`, then add `--apply` to create
@@ -157,3 +167,10 @@ scoped variant for a child. This activation is separate from installing defaults
 and starts no worker, provider, or scheduler. Follow [Agent X](AGENT-X.md),
 [Agent Y](AGENT-Y.md), and [Agent Z](AGENT-Z.md); existing projects remain
 unchanged until activation. Choose a provider and branch/PR policy per task.
+
+On Windows PowerShell, using the same `$projectRoot` and `systemx` function:
+
+```powershell
+systemx run --target $projectRoot --offline -- roles-init
+systemx run --target $projectRoot --offline -- roles-init --apply
+```

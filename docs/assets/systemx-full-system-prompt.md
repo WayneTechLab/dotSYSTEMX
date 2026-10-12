@@ -1,8 +1,16 @@
-# Full-system infographic generation prompt
+# Historical pre-Agent Y infographic generation prompt
+
+This is the original production prompt and correction record for the poster
+created before Agent Y joined the format in 1.9.0-alpha.2. References below to
+“no Agent Y” are **historical artwork constraints**, not a description of the
+current standard. Do not reuse this prompt unchanged to depict the current
+system. The [poster text equivalent](systemx-full-system.md#current-extension-not-shown-on-the-poster-agent-y)
+and [Agent Y guide](../../.SYSTEMX/docs/AGENT-Y.md) describe the newer CLI/PR
+lane. The frozen raster artwork is not being redrawn by this note.
 
 Mode: built-in imagegen. Use case: `infographic-diagram`.
 Requested canvas: 3840 × 2160, landscape. Inspect actual output dimensions before publication.
-The standard roles are Agent 0, Agent X, and Agent Z; there is no standard Agent Y.
+At generation time, the depicted standard roles were Agent 0, Agent X, and Agent Z.
 
 ```text
 Use case: infographic-diagram

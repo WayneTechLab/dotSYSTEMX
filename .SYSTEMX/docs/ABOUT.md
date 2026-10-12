@@ -36,10 +36,12 @@ must supply requirements, actual checks, and acceptance evidence.
 
 Maintained by [Wayne Tech Lab LLC](https://github.com/WayneTechLab), `.SYSTEMX` is
 published under the [MIT License](../LICENSE). The standalone format was curated
-from the operating folder in
-[SFWA-WTL-TEMPLATE](https://github.com/WayneTechLab/SFWA-WTL-TEMPLATE).
-[SOURCE.json](../SOURCE.json) records the original scope and revision. The public
-template excludes the original application's content and historical project state.
+from the operating folder in the private `SFWA-WTL-TEMPLATE` repository. Public
+readers cannot open that source repository; the public
+[dotSYSTEMX repository](https://github.com/WayneTechLab/dotSYSTEMX) contains
+the released standalone format. [SOURCE.json](../SOURCE.json) records the original
+scope and revision. The public template excludes the original application's
+content and historical project state.
 Preserve the license and attribution when redistributing it.
 
 The repository is [WayneTechLab/dotSYSTEMX](https://github.com/WayneTechLab/dotSYSTEMX).
@@ -50,3 +52,6 @@ Begin with [first-time setup](FIRST-RUN.md). Read the [Technical Guide](TECHNICA
 for architecture and the [Stack Guide](STACK-GUIDE.md) for integration boundaries.
 Release IDs and history live in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
+The historical white paper has a separate
+[edition 1.2 citation erratum](../MEDIA/White-Paper/ERRATA.md); its published PDF
+and Markdown remain unchanged.

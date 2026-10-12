@@ -226,15 +226,17 @@ The [wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki) is the manual for
 setup, record formats, roles, prompts, operations, and release history. The
 [illustrated white paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
 contains the deeper coordination diagrams and implementation discussion for its
-published Agent 0/X/Z baseline. The [Agent Y manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y)
+published Agent 0/X/Z baseline. Read its
+[edition 1.2 erratum](.SYSTEMX/MEDIA/White-Paper/ERRATA.md) for a corrected
+release-report citation. The [Agent Y manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y)
 documents the newer external CLI lane.
 
 [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) ·
 [Security](SECURITY.md) · [MIT License](LICENSE)
 
 Maintained by **[Wayne Tech Lab LLC](https://github.com/WayneTechLab)**. This
-standalone template was extracted from
-[SFWA-WTL-TEMPLATE](https://github.com/WayneTechLab/SFWA-WTL-TEMPLATE);
-[source provenance](.SYSTEMX/SOURCE.json) records that relationship. Keep
-private project records out of public exports and retain the license and
+standalone template was extracted from the private `SFWA-WTL-TEMPLATE`
+repository, which public readers cannot open. [Source provenance](.SYSTEMX/SOURCE.json)
+records that relationship; this repository is the public standalone source.
+Keep private project records out of public exports and retain the license and
 attribution when redistributing the folder.
