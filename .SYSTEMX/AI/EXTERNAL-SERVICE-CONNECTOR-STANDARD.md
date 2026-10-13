@@ -65,3 +65,12 @@ not a requirement to run every step or install a specific framework:
 
 The public template should teach the pattern. Individual projects own the actual
 vendor details.
+
+## Optional Gusto reference package
+
+The [GUSTO package](../GUSTO/README.md) supplies optional HR route/role/capability
+contracts, synthetic account-free fixtures and a pinned SDK endpoint inventory.
+It does not make a vendor or cloud platform mandatory. Hosts own their actual
+adapters, credentials, application code and permission enforcement. Its mock
+mode corresponds to local testing and its demo mode to an authorized staging
+provider environment; neither provisions an account or grants API access.

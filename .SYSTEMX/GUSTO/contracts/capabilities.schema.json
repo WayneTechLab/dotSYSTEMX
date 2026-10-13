@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/GUSTO/contracts/capabilities.schema.json",
+  "title": "SYSTEMX optional HR capability ownership",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "status": {
+      "const": "portable-specification"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "backing": {
+            "enum": [
+              "gusto-sdk",
+              "gusto-api",
+              "systemx-native",
+              "composite"
+            ]
+          },
+          "ownership": {
+            "enum": [
+              "gusto",
+              "systemx",
+              "shared"
+            ]
+          },
+          "deliveryStatus": {
+            "enum": [
+              "specification",
+              "mock",
+              "live-gated"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "providerWorkflowExports": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "providerApiAreas": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "mockFixtureCollections": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "livePrerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "backing",
+          "ownership",
+          "deliveryStatus",
+          "description",
+          "providerWorkflowExports",
+          "providerApiAreas",
+          "mockFixtureCollections",
+          "livePrerequisites"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "status",
+    "capabilities"
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "uuid": "00000000-0000-4000-8000-000000000101",
+    "first_name": "Avery",
+    "last_name": "Example",
+    "email": "avery@example.invalid",
+    "company_uuid": "00000000-0000-4000-8000-000000000001",
+    "payment_method": "Check",
+    "onboarded": true,
+    "onboarding_status": "onboarding_completed",
+    "terminated": false,
+    "jobs": [
+      {
+        "uuid": "00000000-0000-4000-8000-000000000201",
+        "primary": true,
+        "title": "Design lead",
+        "hire_date": "2026-01-05"
+      }
+    ],
+    "terminations": []
+  }
+]

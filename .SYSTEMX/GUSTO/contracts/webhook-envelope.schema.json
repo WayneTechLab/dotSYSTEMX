@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/GUSTO/contracts/webhook-envelope.schema.json",
+  "title": "Host normalized webhook receipt; verify provider wire shape separately",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "companyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eventType": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resourceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "receivedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sourceEnvironment": {
+      "enum": [
+        "mock",
+        "demo",
+        "production"
+      ]
+    },
+    "verificationStatus": {
+      "enum": [
+        "verified",
+        "rejected"
+      ]
+    },
+    "payloadDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "processedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "attempts": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "id",
+    "companyId",
+    "eventType",
+    "resourceId",
+    "receivedAt",
+    "sourceEnvironment",
+    "verificationStatus",
+    "payloadDigest",
+    "processedAt",
+    "attempts"
+  ]
+}

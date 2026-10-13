@@ -4,6 +4,28 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.9.0-alpha.6 — Optional portable Gusto HR contracts
+
+- Added optional `.SYSTEMX/GUSTO/` with 64 employer/employee/manager/contractor
+  page contracts, 33 provider/native/shared capabilities and seven reference roles.
+- Added authored adoption, account setup, permission, architecture, page and
+  migration guidance plus a proposed WebAppX/Firebase host mapping. Product
+  runtime, credentials and infrastructure remain host-owned.
+- Added synthetic account-free host fixtures and a bounded SDK employee-list
+  wire sample. They do not create an account or prove real sandbox behavior.
+- Pinned the reviewed `@gusto/embedded-react-sdk` 0.56.6 package provenance,
+  its API alias/version and exact exported endpoint inventory (106 blocks,
+  22 flows, 25 hooks), with Apache 2.0 attribution for third-party material.
+- Added portable contract integrity tests and wheel inventory declarations.
+  Existing core context/plan/task/memory/project seeds remain blank.
+
+The connector defaults disabled. A real demo API needs a developer application
+and environment-specific credentials; hosted-flow demonstrations do not provide
+a public API key. Native HR features require a host implementation and their own
+acceptance. No Gusto account, Firebase service, payroll or production connection
+is created by this release. Existing retained releases remain immutable; imports
+continue to preserve adopted records and custom files.
+
 ## 1.9.0-alpha.5 — CLI tools and explicit .SYSTEMXP routing
 
 - Added direct installed-CLI project routing:

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "connectorId": "gusto",
+  "mode": "disabled",
+  "authMethod": "oauth2-server",
+  "providerProgram": "embedded-payroll",
+  "companyId": "",
+  "allowedActions": [],
+  "readOnlyActions": [],
+  "writeActions": [],
+  "secrets": [
+    "GUSTO_CLIENT_ID",
+    "GUSTO_CLIENT_SECRET",
+    "GUSTO_WEBHOOK_VERIFICATION_TOKEN"
+  ],
+  "webhookEvents": [],
+  "evidence": [],
+  "denyReasons": [
+    "Integration disabled by default",
+    "No trusted company membership",
+    "No approved endpoint/action mapping",
+    "No environment-specific credential",
+    "No production authorization"
+  ],
+  "mockFixture": "mock/fixtures/demo-company.json"
+}

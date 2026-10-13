@@ -1,0 +1,651 @@
+{
+  "schemaVersion": 1,
+  "status": "portable-specification",
+  "capabilities": [
+    {
+      "id": "hr-overview",
+      "title": "HR overview",
+      "backing": "composite",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Aggregate approved company, onboarding and task summaries without exposing bank or tax values.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [
+        "companies",
+        "onboarding"
+      ],
+      "mockFixtureCollections": [
+        "company",
+        "employees",
+        "native.tasks"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "company-setup",
+      "title": "Company setup",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Gusto company onboarding with host connection state and ownership controls.",
+      "providerWorkflowExports": [
+        "CompanyOnboarding.OnboardingFlow"
+      ],
+      "providerApiAreas": [
+        "companies"
+      ],
+      "mockFixtureCollections": [
+        "company"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "company-locations",
+      "title": "Work locations",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Employer work locations and registration prerequisites.",
+      "providerWorkflowExports": [
+        "CompanyOnboarding.OnboardingFlow"
+      ],
+      "providerApiAreas": [
+        "locations"
+      ],
+      "mockFixtureCollections": [
+        "locations"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "company-taxes",
+      "title": "Company tax setup",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Employer federal/state tax setup; production values remain within approved provider workflows.",
+      "providerWorkflowExports": [
+        "CompanyOnboarding.OnboardingFlow"
+      ],
+      "providerApiAreas": [
+        "company federal taxes",
+        "company state taxes"
+      ],
+      "mockFixtureCollections": [
+        "company"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "company-banking",
+      "title": "Company bank setup",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Employer bank account onboarding and verification using a privileged provider flow.",
+      "providerWorkflowExports": [
+        "CompanyOnboarding.OnboardingFlow"
+      ],
+      "providerApiAreas": [
+        "company bank accounts"
+      ],
+      "mockFixtureCollections": [
+        "company"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "pay-schedules",
+      "title": "Pay schedules",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Payroll schedules, assignment and readiness; company management components are alpha.",
+      "providerWorkflowExports": [
+        "CompanyOnboarding.OnboardingFlow"
+      ],
+      "providerApiAreas": [
+        "pay schedules"
+      ],
+      "mockFixtureCollections": [
+        "paySchedules"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "employee-directory",
+      "title": "Employee directory",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Employee list with host role filtering and department navigation.",
+      "providerWorkflowExports": [
+        "EmployeeManagement.EmployeeListFlow"
+      ],
+      "providerApiAreas": [
+        "employees"
+      ],
+      "mockFixtureCollections": [
+        "employees"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "employee-profile",
+      "title": "Employee profile",
+      "backing": "composite",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Provider employee attributes plus host job, team and profile summaries; allow only reviewed blocks per actor.",
+      "providerWorkflowExports": [
+        "EmployeeManagement.DashboardFlow"
+      ],
+      "providerApiAreas": [
+        "employees",
+        "jobs",
+        "addresses"
+      ],
+      "mockFixtureCollections": [
+        "employees"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "employee-onboarding",
+      "title": "Employee onboarding",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Employer and employee self-onboarding; invitations and identity binding belong to the host.",
+      "providerWorkflowExports": [
+        "EmployeeOnboarding.OnboardingFlow",
+        "EmployeeOnboarding.OnboardingExecutionFlow",
+        "EmployeeOnboarding.SelfOnboardingFlow"
+      ],
+      "providerApiAreas": [
+        "employee onboarding"
+      ],
+      "mockFixtureCollections": [
+        "employees"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "employee-compensation",
+      "title": "Employee compensation",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Privileged pay configuration; exclude it from ordinary manager and HR views.",
+      "providerWorkflowExports": [
+        "EmployeeManagement.DashboardFlow"
+      ],
+      "providerApiAreas": [
+        "jobs",
+        "compensations"
+      ],
+      "mockFixtureCollections": [
+        "employees"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "contractor-directory",
+      "title": "Contractor directory",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Contractor list and lifecycle restricted to an approved company.",
+      "providerWorkflowExports": [
+        "ContractorManagement.ContractorListFlow"
+      ],
+      "providerApiAreas": [
+        "contractors"
+      ],
+      "mockFixtureCollections": [
+        "contractors"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "contractor-profile",
+      "title": "Contractor profile",
+      "backing": "composite",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Individual/business contractor details plus host task references.",
+      "providerWorkflowExports": [
+        "ContractorManagement.DashboardFlow"
+      ],
+      "providerApiAreas": [
+        "contractors"
+      ],
+      "mockFixtureCollections": [
+        "contractors"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "contractor-onboarding",
+      "title": "Contractor onboarding",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Employer and contractor self-onboarding with host identity binding.",
+      "providerWorkflowExports": [
+        "ContractorOnboarding.OnboardingFlow",
+        "ContractorOnboarding.SelfOnboardingFlow"
+      ],
+      "providerApiAreas": [
+        "contractor onboarding"
+      ],
+      "mockFixtureCollections": [
+        "contractors"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "payroll",
+      "title": "Payroll preparation and execution",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Regular, off-cycle, dismissal and transition payroll; preview/calculation is distinct from submission.",
+      "providerWorkflowExports": [
+        "Payroll.PayrollFlow",
+        "Payroll.PayrollExecutionFlow",
+        "Payroll.OffCycleFlow",
+        "Payroll.DismissalFlow",
+        "Payroll.TransitionFlow"
+      ],
+      "providerApiAreas": [
+        "payrolls"
+      ],
+      "mockFixtureCollections": [
+        "payrolls"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "paystubs",
+      "title": "Pay statements",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Employee paystub display/download is self-scoped or explicitly payroll-authorized.",
+      "providerWorkflowExports": [
+        "EmployeeManagement.DashboardFlow"
+      ],
+      "providerApiAreas": [
+        "paystubs"
+      ],
+      "mockFixtureCollections": [
+        "paystubs"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "contractor-payments",
+      "title": "Contractor payments",
+      "backing": "gusto-sdk",
+      "ownership": "gusto",
+      "deliveryStatus": "specification",
+      "description": "Payment history and approved contractor payment flows.",
+      "providerWorkflowExports": [
+        "ContractorManagement.PaymentFlow",
+        "ContractorManagement.CreatePaymentFlow",
+        "ContractorManagement.ViewPaymentFlow"
+      ],
+      "providerApiAreas": [
+        "contractor payments"
+      ],
+      "mockFixtureCollections": [
+        "contractorPayments"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "documents",
+      "title": "Employment and tax documents",
+      "backing": "composite",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Provider forms/signatures are separate from host policy and document storage.",
+      "providerWorkflowExports": [
+        "EmployeeManagement.DashboardFlow",
+        "ContractorManagement.DashboardFlow"
+      ],
+      "providerApiAreas": [
+        "employee documents",
+        "contractor documents",
+        "company documents"
+      ],
+      "mockFixtureCollections": [
+        "documents"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "benefits",
+      "title": "Benefits administration and enrollment",
+      "backing": "gusto-api",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Custom host benefits pages using authorized provider benefit APIs where available; no dedicated benefits flow exists in this pinned SDK inventory.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [
+        "company benefits",
+        "employee benefits"
+      ],
+      "mockFixtureCollections": [
+        "benefits"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "time-tracking",
+      "title": "Time tracking",
+      "backing": "composite",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Host time entry and approval, followed by separately reviewed payroll-hour/time synchronization for the approved provider program; no dedicated SDK time-entry flow is claimed.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [
+        "payroll hours",
+        "approved-program time synchronization"
+      ],
+      "mockFixtureCollections": [
+        "timeEntries"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "time-off",
+      "title": "Time off",
+      "backing": "composite",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Provider PTO policies/balances plus host employee requests and manager approval.",
+      "providerWorkflowExports": [
+        "TimeOff.TimeOffFlow"
+      ],
+      "providerApiAreas": [
+        "paid time off"
+      ],
+      "mockFixtureCollections": [
+        "timeOffRequests"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "reporting",
+      "title": "HR and payroll reporting",
+      "backing": "composite",
+      "ownership": "shared",
+      "deliveryStatus": "specification",
+      "description": "Host read models and role-filtered exports with provider data only when authorized; no dedicated reporting SDK flow is claimed.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [
+        "payrolls",
+        "employees",
+        "contractor payments"
+      ],
+      "mockFixtureCollections": [
+        "reports"
+      ],
+      "livePrerequisites": [
+        "Authorized Gusto program, developer application and environment-specific credentials",
+        "Server-verified company membership and narrowly reviewed endpoint permissions",
+        "Reviewed onboarding and sandbox acceptance before production approval"
+      ]
+    },
+    {
+      "id": "recruiting",
+      "title": "Recruiting",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host jobs, candidates, interviews and offers; not a Gusto SDK workflow.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.jobs"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "organization",
+      "title": "Organization and teams",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host departments, reporting lines and team visibility.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "employees"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "tasks",
+      "title": "People tasks",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host checklists and assigned tasks independent of SYSTEMX agent work records.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.tasks"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "policies",
+      "title": "Policies and acknowledgments",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host policy editions, acknowledgments and effective dates.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.policies"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "assets",
+      "title": "Assets and equipment",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host equipment assignments, return records and custody.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.assets"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "access",
+      "title": "Access and invitations",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host IAM/membership, invitations and reviewed permissions; provider access is configured separately.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.access"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "training",
+      "title": "Training",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host courses, assignments and completion evidence.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.training"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "performance",
+      "title": "Performance and goals",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host review cycles, goals and private feedback.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.performance"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "cases",
+      "title": "People cases",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host restricted HR cases, owner routing and retention; no payroll API is needed.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.cases"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "surveys",
+      "title": "People surveys",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host survey delivery and privacy-preserving summaries; anonymity requires explicit implementation.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.surveys"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "automation",
+      "title": "People automation",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host proposed rules and execution receipts; fixture schedules do not start jobs or authorize payroll.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "native.automations"
+      ],
+      "livePrerequisites": []
+    },
+    {
+      "id": "provider-connection",
+      "title": "Gusto connection",
+      "backing": "systemx-native",
+      "ownership": "systemx",
+      "deliveryStatus": "specification",
+      "description": "Host environment, partner application, OAuth/company linkage and health controls; no public test credential.",
+      "providerWorkflowExports": [],
+      "providerApiAreas": [],
+      "mockFixtureCollections": [
+        "company"
+      ],
+      "livePrerequisites": []
+    }
+  ]
+}

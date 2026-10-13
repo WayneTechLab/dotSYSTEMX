@@ -4,3 +4,6 @@
 *.png binary
 *.jpg binary
 *.pdf binary
+# Preserve byte-exact third-party inventory and license provenance across hosts.
+GUSTO/sdk/endpoint-inventory.json -text
+GUSTO/sdk/LICENSE-APACHE-2.0.txt -text

@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.9.0-alpha.5` release and leaves updates manual.
+example selects the reviewed `v1.9.0-alpha.6` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.5"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.6"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.5
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.5 --apply
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.6
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.6 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -282,3 +282,30 @@ repository, which public readers cannot open. [Source provenance](.SYSTEMX/SOURC
 records that relationship; this repository is the public standalone source.
 Keep private project records out of public exports and retain the license and
 attribution when redistributing the folder.
+
+## Optional Gusto HR integration package
+
+An optional [GUSTO package](.SYSTEMX/GUSTO/README.md) defines employer, employee, manager and
+contractor page contracts, seven reference roles, provider/native capability
+ownership and account-free synthetic fixtures. It records the exact Gusto React
+SDK 0.56.6 endpoint inventory and preserves provider credentials outside release
+files. The host builds its own UI/server adapters; this package does not deploy
+HR services or submit payroll. Real demo API testing requires an approved
+developer application; no shared public test key is supplied.
+
+Read [Gusto setup and account-free testing](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Gusto-HR-Integration)
+or the [portable getting-started guide](.SYSTEMX/GUSTO/docs/GETTING-STARTED.md).
+Validate the catalogs and synthetic fixtures without credentials:
+
+```bash
+python3 -I -B -m unittest discover -s .SYSTEMX/tests -p test_gusto_contracts.py -v
+bash .SYSTEMX/SYSTEMX.sh validate --template
+```
+
+For a running React/Firebase preview, use
+[WebAppX's Gusto setup](https://github.com/WayneTechLab/WebAppX/blob/main/docs/GUSTO-SETUP.md).
+Its full template supplies `/hr/demo` and a development-only SDK directory at
+`/hr/demo/sdk`; dotSYSTEMX itself contains no web runtime. Gusto's
+[hosted Flows showcase](https://docs.gusto.com/embedded-payroll/docs/try-it-now)
+is available without API keys. An application's real Demo access uses its own
+credentials from the [Developer Portal setup](https://docs.gusto.com/embedded-payroll/docs/getting-started).

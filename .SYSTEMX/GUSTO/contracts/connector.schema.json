@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/GUSTO/contracts/connector.schema.json",
+  "title": "Adopted Gusto connector configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "connectorId": {
+      "const": "gusto"
+    },
+    "mode": {
+      "enum": [
+        "disabled",
+        "mock",
+        "demo",
+        "production"
+      ]
+    },
+    "authMethod": {
+      "const": "oauth2-server"
+    },
+    "providerProgram": {
+      "enum": [
+        "embedded-payroll",
+        "app-integration"
+      ]
+    },
+    "companyId": {
+      "type": "string"
+    },
+    "allowedActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "readOnlyActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "writeActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "secrets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "webhookEvents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "denyReasons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "mockFixture": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "connectorId",
+    "mode",
+    "authMethod",
+    "providerProgram",
+    "companyId",
+    "allowedActions",
+    "readOnlyActions",
+    "writeActions",
+    "secrets",
+    "webhookEvents",
+    "evidence",
+    "denyReasons",
+    "mockFixture"
+  ]
+}

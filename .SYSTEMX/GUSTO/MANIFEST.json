@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "packageId": "systemx-gusto",
+  "packageVersion": "1.0.0-alpha.1",
+  "standardVersion": "1.9.0-alpha.6",
+  "optional": true,
+  "defaultMode": "disabled",
+  "portableStatus": "specification-and-synthetic-fixtures",
+  "runtimeIncluded": false,
+  "canonicalFiles": {
+    "capabilities": "CAPABILITIES.json",
+    "routes": "ROUTES.json",
+    "roles": "ROLES.json",
+    "versionPin": "VERSION-PIN.json",
+    "fixture": "mock/fixtures/demo-company.json",
+    "endpointInventory": "sdk/endpoint-inventory.json"
+  },
+  "dataBoundary": "No credentials or real employee, bank, tax, health or payroll records. Adopted data is host-owned and does not populate SYSTEMX agent task/memory seeds.",
+  "hostImplementation": "The host application owns authentication, adapters, storage, pages, infrastructure and execution checks. This portable package supplies contracts and authored guidance."
+}

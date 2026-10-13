@@ -184,3 +184,13 @@ delivery. Use [shared workspaces, clouds, and bots](docs/SHARED-WORKSPACES.md)
 for repositories, named `.SYSTEMXP` children, authorized Drive/cloud access,
 multi-chat handoffs, and persistent local/VM bot context. The harness supplies
 execution and transport; the records preserve the objective, proof, and next step.
+
+## Optional Gusto HR integration package
+
+An optional [GUSTO package](GUSTO/README.md) defines employer, employee, manager and
+contractor page contracts, seven reference roles, provider/native capability
+ownership and account-free synthetic fixtures. It records the exact Gusto React
+SDK 0.56.6 endpoint inventory and preserves provider credentials outside release
+files. The host builds its own UI/server adapters; this package does not deploy
+HR services or submit payroll. Real demo API testing requires an approved
+developer application; no shared public test key is supplied.

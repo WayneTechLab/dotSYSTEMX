@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.9.0a5"
+version = "1.9.0a6"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
-license-files = [".SYSTEMX/LICENSE"]
+license-files = [".SYSTEMX/LICENSE", ".SYSTEMX/GUSTO/sdk/LICENSE-APACHE-2.0.txt"]
 dependencies = []
 keywords = ["systemx", "project-memory", "llm", "project-template"]
 classifiers = [
@@ -33,7 +33,10 @@ package-dir = {systemx = ".SYSTEMX"}
 include-package-data = false
 
 [tool.setuptools.package-data]
-systemx = [".gitignore", ".gitattributes", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",
+systemx = ["GUSTO/*.md", "GUSTO/*.json", "GUSTO/docs/*.md", "GUSTO/contracts/*.md", "GUSTO/contracts/*.json",
+           "GUSTO/mock/*.md", "GUSTO/mock/fixtures/*.json", "GUSTO/sdk/*.md", "GUSTO/sdk/*.json", "GUSTO/sdk/*.txt",
+           "GUSTO/webhooks/*.md", "GUSTO/webhooks/*.json", "GUSTO/examples/*.md", "GUSTO/examples/*.json",
+           ".gitignore", ".gitattributes", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",
            "config/*.json", "AI/*.md", "AI/*.json", "GLOBAL/*.md", "PLAN/*.md",
            "WORK/*.md", "WORK/*.json", "MEMORY/*.md", "MEMORY/sessions/*.md",
            "AGENTS/*.md", "AGENTS/*.json", "AGENTS/agent.0/*.md", "AGENTS/agent.x/*.md", "AGENTS/agent.y/*.md", "AGENTS/agent.z/*.md", "templates/*.md",

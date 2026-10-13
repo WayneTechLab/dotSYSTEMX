@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-13",
+  "sdk": {
+    "package": "@gusto/embedded-react-sdk",
+    "version": "0.56.6",
+    "registryUrl": "https://registry.npmjs.org/@gusto%2fembedded-react-sdk/0.56.6",
+    "sourceRepository": "https://github.com/Gusto/embedded-react-sdk",
+    "license": "Apache-2.0",
+    "tarballSha256": "1de0774a53a78635eac43abcad9aa7a4b850607a1c36241e7f4c4187601eb7c3",
+    "inventoryPath": "sdk/endpoint-inventory.json",
+    "inventoryExport": "@gusto/embedded-react-sdk/endpoint-inventory.json",
+    "inventorySha256": "42912e7c02fa0367ae92d2c8225f4ecfa3f62f5c9508604be2e3125a06fd4074",
+    "inventoryCounts": {
+      "blocks": 106,
+      "flows": 22,
+      "hooks": 25
+    },
+    "reactPeerRange": "^18.0.0 || ^19.0.0",
+    "typescriptPeerRange": "^5.8.3",
+    "reactQueryPeerRange": "^5",
+    "sourceCommit": "9e8b5cc94846cc95fc1a4acb0a7458035d54d170",
+    "licenseSource": "https://github.com/Gusto/embedded-react-sdk/blob/9e8b5cc94846cc95fc1a4acb0a7458035d54d170/LICENSE",
+    "licenseSha256": "a6ad08e686f41404a8689dd566dbb8972f68fefbce5a8603d1b7cb6817475541"
+  },
+  "embeddedApi": {
+    "dependencyName": "@gusto/embedded-api",
+    "npmAlias": "npm:@gusto/embedded-api-v-2026-06-15@0.3.1",
+    "apiVersion": "2026-06-15"
+  },
+  "runtimeIncluded": false,
+  "upgradePolicy": "Review published package metadata, workflow exports and endpoint inventory; use a new portable release for changed distribution files. Do not infer production approval from a package version."
+}

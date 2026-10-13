@@ -1,0 +1,405 @@
+{
+  "schemaVersion": 1,
+  "mode": "mock",
+  "synthetic": true,
+  "notice": "Entirely invented training/demo records. No provider account, payroll submission, legal identity, bank account or tax identifier is represented.",
+  "company": {
+    "id": "company-demo-001",
+    "name": "Example Harbor Studio",
+    "status": "mock",
+    "providerMode": "mock",
+    "onboardingStatus": "in-progress"
+  },
+  "actors": {
+    "managerEmployeeId": "employee-001",
+    "selfEmployeeId": "employee-002",
+    "selfContractorId": "contractor-001"
+  },
+  "employees": [
+    {
+      "id": "employee-001",
+      "name": "Morgan Example",
+      "firstName": "Morgan",
+      "lastName": "Example",
+      "email": "morgan@example.invalid",
+      "workEmail": "morgan@example.invalid",
+      "department": "Operations",
+      "job": "Operations Manager",
+      "jobTitle": "Operations Manager",
+      "status": "active",
+      "employmentStatus": "active",
+      "onboardingStatus": "complete",
+      "managerId": null,
+      "payCents": 7200000,
+      "onboarding": [
+        {
+          "id": "intro",
+          "title": "Welcome checklist",
+          "status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "employee-002",
+      "name": "Avery Sample",
+      "firstName": "Avery",
+      "lastName": "Sample",
+      "email": "avery@example.invalid",
+      "workEmail": "avery@example.invalid",
+      "department": "Design",
+      "job": "Product Designer",
+      "jobTitle": "Product Designer",
+      "status": "active",
+      "employmentStatus": "active",
+      "onboardingStatus": "in-progress",
+      "managerId": "employee-001",
+      "payCents": 6800000,
+      "onboarding": [
+        {
+          "id": "profile",
+          "title": "Profile review",
+          "status": "complete"
+        },
+        {
+          "id": "policy",
+          "title": "Read welcome policy",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "employee-003",
+      "name": "Jordan Demo",
+      "firstName": "Jordan",
+      "lastName": "Demo",
+      "email": "jordan@example.invalid",
+      "workEmail": "jordan@example.invalid",
+      "department": "Engineering",
+      "job": "Software Developer",
+      "jobTitle": "Software Developer",
+      "status": "onboarding",
+      "employmentStatus": "onboarding",
+      "onboardingStatus": "pending",
+      "managerId": "employee-001",
+      "payCents": 8000000,
+      "onboarding": [
+        {
+          "id": "profile",
+          "title": "Complete own profile",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "contractors": [
+    {
+      "id": "contractor-001",
+      "name": "Taylor Fixture",
+      "email": "taylor@example.invalid",
+      "type": "individual",
+      "onboardingStatus": "in-progress",
+      "status": "active",
+      "onboarding": [
+        {
+          "id": "profile",
+          "title": "Review contractor profile",
+          "status": "complete"
+        },
+        {
+          "id": "documents",
+          "title": "Review document requirements",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "contractor-002",
+      "name": "Demo Consulting Company",
+      "email": "consulting@example.invalid",
+      "type": "business",
+      "onboardingStatus": "complete",
+      "status": "active",
+      "onboarding": []
+    }
+  ],
+  "locations": [
+    {
+      "id": "location-001",
+      "name": "Demo office",
+      "state": "CA",
+      "status": "synthetic"
+    }
+  ],
+  "paySchedules": [
+    {
+      "id": "schedule-001",
+      "title": "Demo twice-monthly schedule",
+      "frequency": "twice-monthly",
+      "status": "mock"
+    }
+  ],
+  "payrolls": [
+    {
+      "id": "payroll-001",
+      "title": "October demo payroll",
+      "payPeriodStart": "2026-10-01",
+      "payPeriodEnd": "2026-10-15",
+      "payDate": "2026-10-20",
+      "status": "draft",
+      "employeeCount": 3,
+      "grossPayCents": 910000,
+      "netPayCents": 700000
+    },
+    {
+      "id": "payroll-002",
+      "title": "September demo payroll",
+      "payPeriodStart": "2026-09-16",
+      "payPeriodEnd": "2026-09-30",
+      "payDate": "2026-10-05",
+      "status": "mock-complete",
+      "employeeCount": 2,
+      "grossPayCents": 570000,
+      "netPayCents": 450000
+    }
+  ],
+  "paystubs": [
+    {
+      "id": "paystub-001",
+      "title": "Demo September statement",
+      "employeeId": "employee-002",
+      "payrollId": "payroll-002",
+      "payDate": "2026-10-05",
+      "grossPayCents": 280000,
+      "netPayCents": 220000,
+      "status": "synthetic",
+      "downloadAvailable": false
+    }
+  ],
+  "contractorPayments": [
+    {
+      "id": "payment-001",
+      "title": "Demo design services",
+      "contractorId": "contractor-001",
+      "amountCents": 150000,
+      "date": "2026-10-08",
+      "status": "synthetic",
+      "name": "Demo design services",
+      "paymentDate": "2026-10-08"
+    },
+    {
+      "id": "payment-002",
+      "title": "Demo advisory services",
+      "contractorId": "contractor-002",
+      "amountCents": 200000,
+      "date": "2026-10-10",
+      "status": "pending",
+      "name": "Demo advisory services",
+      "paymentDate": "2026-10-10"
+    }
+  ],
+  "timeEntries": [
+    {
+      "id": "time-001",
+      "employeeId": "employee-002",
+      "date": "2026-10-09",
+      "hours": 8,
+      "status": "submitted"
+    },
+    {
+      "id": "time-002",
+      "employeeId": "employee-003",
+      "date": "2026-10-09",
+      "hours": 6,
+      "status": "draft"
+    }
+  ],
+  "timeOffRequests": [
+    {
+      "id": "pto-001",
+      "employeeId": "employee-002",
+      "startDate": "2026-10-22",
+      "endDate": "2026-10-23",
+      "type": "vacation",
+      "hours": 16,
+      "status": "pending"
+    }
+  ],
+  "benefits": [
+    {
+      "id": "benefit-001",
+      "name": "Demo health plan",
+      "title": "Demo health plan",
+      "type": "health",
+      "status": "illustrative",
+      "employeeIds": [
+        "employee-002"
+      ]
+    },
+    {
+      "id": "benefit-002",
+      "name": "Demo retirement plan",
+      "title": "Demo retirement plan",
+      "type": "retirement",
+      "status": "illustrative",
+      "employeeIds": [
+        "employee-002",
+        "employee-003"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "document-001",
+      "title": "Demo welcome acknowledgment",
+      "type": "policy",
+      "employeeId": "employee-002",
+      "status": "pending",
+      "downloadAvailable": false
+    },
+    {
+      "id": "document-002",
+      "title": "Demo tax document placeholder",
+      "type": "tax",
+      "employeeId": "employee-002",
+      "status": "placeholder",
+      "downloadAvailable": false
+    },
+    {
+      "id": "document-003",
+      "title": "Contractor document placeholder",
+      "type": "tax",
+      "contractorId": "contractor-001",
+      "status": "placeholder",
+      "downloadAvailable": false
+    }
+  ],
+  "reports": [
+    {
+      "id": "report-001",
+      "title": "Demo workforce summary",
+      "category": "workforce",
+      "status": "mock"
+    },
+    {
+      "id": "report-002",
+      "title": "Demo payroll status",
+      "category": "payroll",
+      "status": "mock"
+    }
+  ],
+  "native": {
+    "jobs": [
+      {
+        "id": "job-001",
+        "title": "Demo support specialist",
+        "department": "Operations",
+        "status": "draft",
+        "candidateCount": 2
+      }
+    ],
+    "policies": [
+      {
+        "id": "policy-001",
+        "title": "Demo welcome policy",
+        "version": "example-1",
+        "status": "published",
+        "employeeId": "employee-002"
+      }
+    ],
+    "assets": [
+      {
+        "id": "asset-001",
+        "name": "Demo laptop",
+        "title": "Demo laptop",
+        "employeeId": "employee-002",
+        "status": "assigned"
+      },
+      {
+        "id": "asset-002",
+        "name": "Demo monitor",
+        "title": "Demo monitor",
+        "employeeId": "employee-003",
+        "status": "pending"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "task-001",
+        "title": "Review welcome policy",
+        "employeeId": "employee-002",
+        "status": "pending",
+        "dueDate": "2026-10-16"
+      },
+      {
+        "id": "task-002",
+        "title": "Complete starter training",
+        "employeeId": "employee-003",
+        "status": "pending",
+        "dueDate": "2026-10-19"
+      },
+      {
+        "id": "task-003",
+        "title": "Review services brief",
+        "contractorId": "contractor-001",
+        "status": "pending",
+        "dueDate": "2026-10-16"
+      }
+    ],
+    "access": [
+      {
+        "id": "access-001",
+        "title": "Demo employee access",
+        "employeeId": "employee-002",
+        "role": "employee",
+        "status": "mock"
+      }
+    ],
+    "training": [
+      {
+        "id": "training-001",
+        "title": "Demo workplace orientation",
+        "employeeId": "employee-002",
+        "status": "in-progress"
+      },
+      {
+        "id": "training-002",
+        "title": "Demo starter training",
+        "employeeId": "employee-003",
+        "status": "pending"
+      }
+    ],
+    "performance": [
+      {
+        "id": "performance-001",
+        "title": "Demo quarterly goal",
+        "employeeId": "employee-002",
+        "status": "draft"
+      }
+    ],
+    "cases": [
+      {
+        "id": "case-001",
+        "title": "Demo equipment request",
+        "status": "open",
+        "classification": "synthetic-general-request"
+      }
+    ],
+    "surveys": [
+      {
+        "id": "survey-001",
+        "title": "Demo onboarding feedback",
+        "status": "draft",
+        "responseCount": 0
+      }
+    ],
+    "automations": [
+      {
+        "id": "automation-001",
+        "title": "Demo onboarding reminder",
+        "status": "disabled",
+        "action": "mock-reminder",
+        "runs": 0
+      }
+    ]
+  }
+}

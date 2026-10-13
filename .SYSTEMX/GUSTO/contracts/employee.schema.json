@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/GUSTO/contracts/employee.schema.json",
+  "title": "Host employee directory projection; not a provider payload",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "companyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "providerEmployeeId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "departmentId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "managerEmployeeId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "employmentStatus": {
+      "enum": [
+        "onboarding",
+        "active",
+        "on-leave",
+        "terminated"
+      ]
+    },
+    "onboardingStatus": {
+      "enum": [
+        "pending",
+        "in-progress",
+        "complete",
+        "blocked"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "id",
+    "companyId",
+    "providerEmployeeId",
+    "displayName",
+    "departmentId",
+    "managerEmployeeId",
+    "employmentStatus",
+    "onboardingStatus",
+    "updatedAt"
+  ]
+}

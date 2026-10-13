@@ -1,0 +1,2030 @@
+{
+  "schemaVersion": 1,
+  "routes": [
+    {
+      "id": "admin-hr-home",
+      "path": "/admin/hr",
+      "portal": "admin",
+      "title": "People workspace",
+      "capabilityId": "hr-overview",
+      "backing": "composite",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin",
+        "auditor"
+      ],
+      "description": "Aggregate approved company, onboarding and task summaries without exposing bank or tax values.",
+      "sections": [
+        "Company readiness",
+        "Employee onboarding",
+        "Open HR tasks",
+        "Provider mode"
+      ],
+      "actions": [
+        {
+          "id": "admin-hr-home-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-hr-home-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No people workspace records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-company-setup",
+      "path": "/admin/hr/company",
+      "portal": "admin",
+      "title": "Company setup",
+      "capabilityId": "company-setup",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Gusto company onboarding with host connection state and ownership controls.",
+      "sections": [
+        "Legal entity readiness",
+        "Industry",
+        "Signer",
+        "Setup checklist"
+      ],
+      "actions": [
+        {
+          "id": "admin-company-setup-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-company-setup-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No company setup records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-company-locations",
+      "path": "/admin/hr/company/locations",
+      "portal": "admin",
+      "title": "Work locations",
+      "capabilityId": "company-locations",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Employer work locations and registration prerequisites.",
+      "sections": [
+        "Worksites",
+        "Jurisdiction readiness",
+        "Location detail"
+      ],
+      "actions": [
+        {
+          "id": "admin-company-locations-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-company-locations-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No work locations records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-company-taxes",
+      "path": "/admin/hr/company/taxes",
+      "portal": "admin",
+      "title": "Company taxes",
+      "capabilityId": "company-taxes",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Employer federal/state tax setup; production values remain within approved provider workflows.",
+      "sections": [
+        "Federal setup",
+        "State setup",
+        "Provider readiness"
+      ],
+      "actions": [
+        {
+          "id": "admin-company-taxes-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-company-taxes-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No company taxes records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-company-banking",
+      "path": "/admin/hr/company/banking",
+      "portal": "admin",
+      "title": "Company banking",
+      "capabilityId": "company-banking",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Employer bank account onboarding and verification using a privileged provider flow.",
+      "sections": [
+        "Verification status",
+        "Provider bank workflow",
+        "Account authorization"
+      ],
+      "actions": [
+        {
+          "id": "admin-company-banking-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-company-banking-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No company banking records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-pay-schedules",
+      "path": "/admin/hr/company/pay-schedules",
+      "portal": "admin",
+      "title": "Pay schedules",
+      "capabilityId": "pay-schedules",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Payroll schedules, assignment and readiness; company management components are alpha.",
+      "sections": [
+        "Schedule calendar",
+        "Assignments",
+        "Effective dates"
+      ],
+      "actions": [
+        {
+          "id": "admin-pay-schedules-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-pay-schedules-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No pay schedules records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-employees",
+      "path": "/admin/hr/employees",
+      "portal": "admin",
+      "title": "Employees",
+      "capabilityId": "employee-directory",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin",
+        "auditor"
+      ],
+      "description": "Employee list with host role filtering and department navigation.",
+      "sections": [
+        "Searchable roster",
+        "Status filters",
+        "Scoped profile links"
+      ],
+      "actions": [
+        {
+          "id": "admin-employees-1",
+          "label": "Filter roster",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-employees-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No employees records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-employee-profile",
+      "path": "/admin/hr/employees/:employeeId",
+      "portal": "admin",
+      "title": "Employee profile",
+      "capabilityId": "employee-profile",
+      "backing": "composite",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin"
+      ],
+      "description": "Provider employee attributes plus host job, team and profile summaries; allow only reviewed blocks per actor.",
+      "sections": [
+        "Employment summary",
+        "Team and location",
+        "Approved profile sections"
+      ],
+      "actions": [
+        {
+          "id": "admin-employee-profile-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-employee-profile-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No employee profile records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-employee-onboarding",
+      "path": "/admin/hr/employees/:employeeId/onboarding",
+      "portal": "admin",
+      "title": "Employee onboarding",
+      "capabilityId": "employee-onboarding",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin"
+      ],
+      "description": "Employer and employee self-onboarding; invitations and identity binding belong to the host.",
+      "sections": [
+        "Readiness checklist",
+        "Invitation status",
+        "Provider workflow status"
+      ],
+      "actions": [
+        {
+          "id": "admin-employee-onboarding-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-employee-onboarding-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No employee onboarding records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-employee-compensation",
+      "path": "/admin/hr/employees/:employeeId/compensation",
+      "portal": "admin",
+      "title": "Employee compensation",
+      "capabilityId": "employee-compensation",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Privileged pay configuration; exclude it from ordinary manager and HR views.",
+      "sections": [
+        "Compensation summary",
+        "Pay history",
+        "Reviewed changes"
+      ],
+      "actions": [
+        {
+          "id": "admin-employee-compensation-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-employee-compensation-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No employee compensation records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-contractors",
+      "path": "/admin/hr/contractors",
+      "portal": "admin",
+      "title": "Contractors",
+      "capabilityId": "contractor-directory",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin",
+        "auditor"
+      ],
+      "description": "Contractor list and lifecycle restricted to an approved company.",
+      "sections": [
+        "Individual and business roster",
+        "Onboarding status",
+        "Profile links"
+      ],
+      "actions": [
+        {
+          "id": "admin-contractors-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-contractors-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No contractors records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-contractor-profile",
+      "path": "/admin/hr/contractors/:contractorId",
+      "portal": "admin",
+      "title": "Contractor profile",
+      "capabilityId": "contractor-profile",
+      "backing": "composite",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin"
+      ],
+      "description": "Individual/business contractor details plus host task references.",
+      "sections": [
+        "Contractor identity",
+        "Service summary",
+        "Payment readiness"
+      ],
+      "actions": [
+        {
+          "id": "admin-contractor-profile-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-contractor-profile-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No contractor profile records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-contractor-onboarding",
+      "path": "/admin/hr/contractors/:contractorId/onboarding",
+      "portal": "admin",
+      "title": "Contractor onboarding",
+      "capabilityId": "contractor-onboarding",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin"
+      ],
+      "description": "Employer and contractor self-onboarding with host identity binding.",
+      "sections": [
+        "Invitation",
+        "Profile readiness",
+        "Provider onboarding"
+      ],
+      "actions": [
+        {
+          "id": "admin-contractor-onboarding-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-contractor-onboarding-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No contractor onboarding records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-payroll",
+      "path": "/admin/hr/payroll",
+      "portal": "admin",
+      "title": "Payroll workspace",
+      "capabilityId": "payroll",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Regular, off-cycle, dismissal and transition payroll; preview/calculation is distinct from submission.",
+      "sections": [
+        "Upcoming run",
+        "Readiness blockers",
+        "Previous runs"
+      ],
+      "actions": [
+        {
+          "id": "admin-payroll-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-payroll-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No payroll workspace records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-payroll-run",
+      "path": "/admin/hr/payroll/:payrollId",
+      "portal": "admin",
+      "title": "Payroll run",
+      "capabilityId": "payroll",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Regular, off-cycle, dismissal and transition payroll; preview/calculation is distinct from submission.",
+      "sections": [
+        "Pay period",
+        "Approved hours",
+        "Calculation preview",
+        "Submission readiness"
+      ],
+      "actions": [
+        {
+          "id": "admin-payroll-run-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-payroll-run-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No payroll run records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-payroll-history",
+      "path": "/admin/hr/payroll/history",
+      "portal": "admin",
+      "title": "Payroll history",
+      "capabilityId": "payroll",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "auditor"
+      ],
+      "description": "Regular, off-cycle, dismissal and transition payroll; preview/calculation is distinct from submission.",
+      "sections": [
+        "Run status",
+        "Periods",
+        "Role-filtered totals"
+      ],
+      "actions": [
+        {
+          "id": "admin-payroll-history-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-payroll-history-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No payroll history records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-contractor-payments",
+      "path": "/admin/hr/contractor-payments",
+      "portal": "admin",
+      "title": "Contractor payments",
+      "capabilityId": "contractor-payments",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Payment history and approved contractor payment flows.",
+      "sections": [
+        "Payments",
+        "Status",
+        "Approved payment setup"
+      ],
+      "actions": [
+        {
+          "id": "admin-contractor-payments-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-contractor-payments-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No contractor payments records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-benefits",
+      "path": "/admin/hr/benefits",
+      "portal": "admin",
+      "title": "Benefits",
+      "capabilityId": "benefits",
+      "backing": "gusto-api",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin"
+      ],
+      "description": "Custom host benefits pages using authorized provider benefit APIs where available; no dedicated benefits flow exists in this pinned SDK inventory.",
+      "sections": [
+        "Plans",
+        "Eligibility",
+        "Enrollment status"
+      ],
+      "actions": [
+        {
+          "id": "admin-benefits-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-benefits-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No benefits records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-time",
+      "path": "/admin/hr/time",
+      "portal": "admin",
+      "title": "Time tracking",
+      "capabilityId": "time-tracking",
+      "backing": "composite",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin"
+      ],
+      "description": "Host time entry and approval, followed by separately reviewed payroll-hour/time synchronization for the approved provider program; no dedicated SDK time-entry flow is claimed.",
+      "sections": [
+        "Timesheets",
+        "Approval queues",
+        "Payroll handoff"
+      ],
+      "actions": [
+        {
+          "id": "admin-time-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-time-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No time tracking records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-time-off",
+      "path": "/admin/hr/time-off",
+      "portal": "admin",
+      "title": "Time off",
+      "capabilityId": "time-off",
+      "backing": "composite",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin"
+      ],
+      "description": "Provider PTO policies/balances plus host employee requests and manager approval.",
+      "sections": [
+        "Policies and balances",
+        "Request queue",
+        "Coverage calendar"
+      ],
+      "actions": [
+        {
+          "id": "admin-time-off-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-time-off-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No time off records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-documents",
+      "path": "/admin/hr/documents",
+      "portal": "admin",
+      "title": "Documents",
+      "capabilityId": "documents",
+      "backing": "composite",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin",
+        "auditor"
+      ],
+      "description": "Provider forms/signatures are separate from host policy and document storage.",
+      "sections": [
+        "Document categories",
+        "Signature status",
+        "Scoped access"
+      ],
+      "actions": [
+        {
+          "id": "admin-documents-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-documents-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No documents records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-reports",
+      "path": "/admin/hr/reports",
+      "portal": "admin",
+      "title": "Reports",
+      "capabilityId": "reporting",
+      "backing": "composite",
+      "roles": [
+        "employer-owner",
+        "payroll-admin",
+        "hr-admin",
+        "auditor"
+      ],
+      "description": "Host read models and role-filtered exports with provider data only when authorized; no dedicated reporting SDK flow is claimed.",
+      "sections": [
+        "Report catalog",
+        "Filters",
+        "Export scope"
+      ],
+      "actions": [
+        {
+          "id": "admin-reports-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "admin-reports-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No reports records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-recruiting",
+      "path": "/admin/hr/recruiting",
+      "portal": "admin",
+      "title": "Recruiting",
+      "capabilityId": "recruiting",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host jobs, candidates, interviews and offers; not a Gusto SDK workflow.",
+      "sections": [
+        "Jobs",
+        "Candidates",
+        "Interview stages",
+        "Offers"
+      ],
+      "actions": [
+        {
+          "id": "admin-recruiting-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No recruiting records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-organization",
+      "path": "/admin/hr/organization",
+      "portal": "admin",
+      "title": "Organization",
+      "capabilityId": "organization",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host departments, reporting lines and team visibility.",
+      "sections": [
+        "Departments",
+        "Teams",
+        "Reporting lines"
+      ],
+      "actions": [
+        {
+          "id": "admin-organization-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No organization records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-tasks",
+      "path": "/admin/hr/tasks",
+      "portal": "admin",
+      "title": "People tasks",
+      "capabilityId": "tasks",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host checklists and assigned tasks independent of SYSTEMX agent work records.",
+      "sections": [
+        "Assigned work",
+        "Due dates",
+        "Completion evidence"
+      ],
+      "actions": [
+        {
+          "id": "admin-tasks-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No people tasks records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-policies",
+      "path": "/admin/hr/policies",
+      "portal": "admin",
+      "title": "Policies",
+      "capabilityId": "policies",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host policy editions, acknowledgments and effective dates.",
+      "sections": [
+        "Published editions",
+        "Acknowledgments",
+        "Effective dates"
+      ],
+      "actions": [
+        {
+          "id": "admin-policies-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No policies records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-assets",
+      "path": "/admin/hr/assets",
+      "portal": "admin",
+      "title": "Assets",
+      "capabilityId": "assets",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host equipment assignments, return records and custody.",
+      "sections": [
+        "Inventory",
+        "Assignments",
+        "Returns"
+      ],
+      "actions": [
+        {
+          "id": "admin-assets-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No assets records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-access",
+      "path": "/admin/hr/access",
+      "portal": "admin",
+      "title": "Access",
+      "capabilityId": "access",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host IAM/membership, invitations and reviewed permissions; provider access is configured separately.",
+      "sections": [
+        "Memberships",
+        "Invitations",
+        "Role decisions"
+      ],
+      "actions": [
+        {
+          "id": "admin-access-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No access records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-training",
+      "path": "/admin/hr/training",
+      "portal": "admin",
+      "title": "Training",
+      "capabilityId": "training",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host courses, assignments and completion evidence.",
+      "sections": [
+        "Courses",
+        "Assignments",
+        "Completion"
+      ],
+      "actions": [
+        {
+          "id": "admin-training-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No training records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-performance",
+      "path": "/admin/hr/performance",
+      "portal": "admin",
+      "title": "Performance",
+      "capabilityId": "performance",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host review cycles, goals and private feedback.",
+      "sections": [
+        "Goals",
+        "Review cycles",
+        "Scoped feedback"
+      ],
+      "actions": [
+        {
+          "id": "admin-performance-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No performance records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-cases",
+      "path": "/admin/hr/cases",
+      "portal": "admin",
+      "title": "People cases",
+      "capabilityId": "cases",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host restricted HR cases, owner routing and retention; no payroll API is needed.",
+      "sections": [
+        "Restricted case queue",
+        "Assigned owner",
+        "Retention"
+      ],
+      "actions": [
+        {
+          "id": "admin-cases-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No people cases records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-surveys",
+      "path": "/admin/hr/surveys",
+      "portal": "admin",
+      "title": "Surveys",
+      "capabilityId": "surveys",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host survey delivery and privacy-preserving summaries; anonymity requires explicit implementation.",
+      "sections": [
+        "Campaigns",
+        "Response status",
+        "Aggregate results"
+      ],
+      "actions": [
+        {
+          "id": "admin-surveys-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No surveys records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-automation",
+      "path": "/admin/hr/automation",
+      "portal": "admin",
+      "title": "Automation",
+      "capabilityId": "automation",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "hr-admin"
+      ],
+      "description": "Host proposed rules and execution receipts; fixture schedules do not start jobs or authorize payroll.",
+      "sections": [
+        "Proposed rules",
+        "Approvals",
+        "Execution receipts"
+      ],
+      "actions": [
+        {
+          "id": "admin-automation-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No automation records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "admin-gusto-connection",
+      "path": "/admin/hr/integrations/gusto",
+      "portal": "admin",
+      "title": "Gusto connection",
+      "capabilityId": "provider-connection",
+      "backing": "systemx-native",
+      "roles": [
+        "employer-owner",
+        "payroll-admin"
+      ],
+      "description": "Host environment, partner application, OAuth/company linkage and health controls; no public test credential.",
+      "sections": [
+        "Disabled/mock/demo/production mode",
+        "Application readiness",
+        "Company linkage",
+        "Health status"
+      ],
+      "actions": [
+        {
+          "id": "admin-gusto-connection-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No gusto connection records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-home",
+      "path": "/employee",
+      "portal": "employee",
+      "title": "My workspace",
+      "capabilityId": "hr-overview",
+      "backing": "composite",
+      "roles": [
+        "employee"
+      ],
+      "description": "Aggregate approved company, onboarding and task summaries without exposing bank or tax values.",
+      "sections": [
+        "My onboarding",
+        "My tasks",
+        "Pay summary readiness"
+      ],
+      "actions": [
+        {
+          "id": "employee-home-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-home-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my workspace records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-profile",
+      "path": "/employee/profile",
+      "portal": "employee",
+      "title": "My profile",
+      "capabilityId": "employee-profile",
+      "backing": "composite",
+      "roles": [
+        "employee"
+      ],
+      "description": "Provider employee attributes plus host job, team and profile summaries; allow only reviewed blocks per actor.",
+      "sections": [
+        "Own contact details",
+        "Employment summary",
+        "Approved changes"
+      ],
+      "actions": [
+        {
+          "id": "employee-profile-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-profile-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my profile records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-onboarding",
+      "path": "/employee/onboarding",
+      "portal": "employee",
+      "title": "My onboarding",
+      "capabilityId": "employee-onboarding",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employee"
+      ],
+      "description": "Employer and employee self-onboarding; invitations and identity binding belong to the host.",
+      "sections": [
+        "Own checklist",
+        "Provider self-onboarding",
+        "Completion status"
+      ],
+      "actions": [
+        {
+          "id": "employee-onboarding-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-onboarding-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my onboarding records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-pay",
+      "path": "/employee/pay",
+      "portal": "employee",
+      "title": "My pay",
+      "capabilityId": "paystubs",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employee"
+      ],
+      "description": "Employee paystub display/download is self-scoped or explicitly payroll-authorized.",
+      "sections": [
+        "Own pay summary",
+        "Latest pay statement",
+        "Pay dates"
+      ],
+      "actions": [
+        {
+          "id": "employee-pay-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-pay-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my pay records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-paystubs",
+      "path": "/employee/paystubs",
+      "portal": "employee",
+      "title": "My paystubs",
+      "capabilityId": "paystubs",
+      "backing": "gusto-sdk",
+      "roles": [
+        "employee"
+      ],
+      "description": "Employee paystub display/download is self-scoped or explicitly payroll-authorized.",
+      "sections": [
+        "Own statements",
+        "Periods",
+        "Provider download readiness"
+      ],
+      "actions": [
+        {
+          "id": "employee-paystubs-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-paystubs-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my paystubs records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-tax-documents",
+      "path": "/employee/tax-documents",
+      "portal": "employee",
+      "title": "My tax documents",
+      "capabilityId": "documents",
+      "backing": "composite",
+      "roles": [
+        "employee"
+      ],
+      "description": "Provider forms/signatures are separate from host policy and document storage.",
+      "sections": [
+        "Own tax documents",
+        "Delivery status",
+        "Provider form access"
+      ],
+      "actions": [
+        {
+          "id": "employee-tax-documents-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-tax-documents-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my tax documents records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-benefits",
+      "path": "/employee/benefits",
+      "portal": "employee",
+      "title": "My benefits",
+      "capabilityId": "benefits",
+      "backing": "gusto-api",
+      "roles": [
+        "employee"
+      ],
+      "description": "Custom host benefits pages using authorized provider benefit APIs where available; no dedicated benefits flow exists in this pinned SDK inventory.",
+      "sections": [
+        "Own eligibility",
+        "Plans",
+        "Enrollment status"
+      ],
+      "actions": [
+        {
+          "id": "employee-benefits-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-benefits-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my benefits records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-time",
+      "path": "/employee/time",
+      "portal": "employee",
+      "title": "My time",
+      "capabilityId": "time-tracking",
+      "backing": "composite",
+      "roles": [
+        "employee"
+      ],
+      "description": "Host time entry and approval, followed by separately reviewed payroll-hour/time synchronization for the approved provider program; no dedicated SDK time-entry flow is claimed.",
+      "sections": [
+        "Own entries",
+        "Submission status",
+        "Corrections"
+      ],
+      "actions": [
+        {
+          "id": "employee-time-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-time-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my time records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-time-off",
+      "path": "/employee/time-off",
+      "portal": "employee",
+      "title": "My time off",
+      "capabilityId": "time-off",
+      "backing": "composite",
+      "roles": [
+        "employee"
+      ],
+      "description": "Provider PTO policies/balances plus host employee requests and manager approval.",
+      "sections": [
+        "Own requests",
+        "Balances",
+        "Request status"
+      ],
+      "actions": [
+        {
+          "id": "employee-time-off-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-time-off-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my time off records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-documents",
+      "path": "/employee/documents",
+      "portal": "employee",
+      "title": "My documents",
+      "capabilityId": "documents",
+      "backing": "composite",
+      "roles": [
+        "employee"
+      ],
+      "description": "Provider forms/signatures are separate from host policy and document storage.",
+      "sections": [
+        "Own documents",
+        "Signatures",
+        "Acknowledgments"
+      ],
+      "actions": [
+        {
+          "id": "employee-documents-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "employee-documents-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my documents records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-tasks",
+      "path": "/employee/tasks",
+      "portal": "employee",
+      "title": "My tasks",
+      "capabilityId": "tasks",
+      "backing": "systemx-native",
+      "roles": [
+        "employee"
+      ],
+      "description": "Host checklists and assigned tasks independent of SYSTEMX agent work records.",
+      "sections": [
+        "Assigned checklist",
+        "Due dates",
+        "Completion"
+      ],
+      "actions": [
+        {
+          "id": "employee-tasks-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No my tasks records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-training",
+      "path": "/employee/training",
+      "portal": "employee",
+      "title": "My training",
+      "capabilityId": "training",
+      "backing": "systemx-native",
+      "roles": [
+        "employee"
+      ],
+      "description": "Host courses, assignments and completion evidence.",
+      "sections": [
+        "Assigned courses",
+        "Progress",
+        "Completion evidence"
+      ],
+      "actions": [
+        {
+          "id": "employee-training-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No my training records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-performance",
+      "path": "/employee/performance",
+      "portal": "employee",
+      "title": "My goals and reviews",
+      "capabilityId": "performance",
+      "backing": "systemx-native",
+      "roles": [
+        "employee"
+      ],
+      "description": "Host review cycles, goals and private feedback.",
+      "sections": [
+        "Own goals",
+        "Shared reviews",
+        "Feedback access"
+      ],
+      "actions": [
+        {
+          "id": "employee-performance-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No my goals and reviews records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "manager-home",
+      "path": "/manager/hr",
+      "portal": "manager",
+      "title": "Team workspace",
+      "capabilityId": "hr-overview",
+      "backing": "composite",
+      "roles": [
+        "manager"
+      ],
+      "description": "Aggregate approved company, onboarding and task summaries without exposing bank or tax values.",
+      "sections": [
+        "Direct reports",
+        "Team onboarding",
+        "Approval queues"
+      ],
+      "actions": [
+        {
+          "id": "manager-home-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "manager-home-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No team workspace records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "manager-team",
+      "path": "/manager/hr/team",
+      "portal": "manager",
+      "title": "My team",
+      "capabilityId": "organization",
+      "backing": "systemx-native",
+      "roles": [
+        "manager"
+      ],
+      "description": "Host departments, reporting lines and team visibility.",
+      "sections": [
+        "Direct reports",
+        "Job summaries",
+        "Team availability"
+      ],
+      "actions": [
+        {
+          "id": "manager-team-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No my team records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "manager-time",
+      "path": "/manager/hr/time",
+      "portal": "manager",
+      "title": "Team time",
+      "capabilityId": "time-tracking",
+      "backing": "composite",
+      "roles": [
+        "manager"
+      ],
+      "description": "Host time entry and approval, followed by separately reviewed payroll-hour/time synchronization for the approved provider program; no dedicated SDK time-entry flow is claimed.",
+      "sections": [
+        "Direct-report timesheets",
+        "Approval decisions",
+        "Corrections"
+      ],
+      "actions": [
+        {
+          "id": "manager-time-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "manager-time-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No team time records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "manager-time-off",
+      "path": "/manager/hr/time-off",
+      "portal": "manager",
+      "title": "Team time off",
+      "capabilityId": "time-off",
+      "backing": "composite",
+      "roles": [
+        "manager"
+      ],
+      "description": "Provider PTO policies/balances plus host employee requests and manager approval.",
+      "sections": [
+        "Direct-report requests",
+        "Coverage",
+        "Approval decisions"
+      ],
+      "actions": [
+        {
+          "id": "manager-time-off-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "manager-time-off-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No team time off records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "manager-tasks",
+      "path": "/manager/hr/tasks",
+      "portal": "manager",
+      "title": "Team tasks",
+      "capabilityId": "tasks",
+      "backing": "systemx-native",
+      "roles": [
+        "manager"
+      ],
+      "description": "Host checklists and assigned tasks independent of SYSTEMX agent work records.",
+      "sections": [
+        "Scoped assignments",
+        "Due dates",
+        "Completion evidence"
+      ],
+      "actions": [
+        {
+          "id": "manager-tasks-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No team tasks records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "manager-performance",
+      "path": "/manager/hr/performance",
+      "portal": "manager",
+      "title": "Team performance",
+      "capabilityId": "performance",
+      "backing": "systemx-native",
+      "roles": [
+        "manager"
+      ],
+      "description": "Host review cycles, goals and private feedback.",
+      "sections": [
+        "Direct-report goals",
+        "Review cycle",
+        "Shared feedback"
+      ],
+      "actions": [
+        {
+          "id": "manager-performance-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No team performance records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "manager-assets",
+      "path": "/manager/hr/assets",
+      "portal": "manager",
+      "title": "Team assets",
+      "capabilityId": "assets",
+      "backing": "systemx-native",
+      "roles": [
+        "manager"
+      ],
+      "description": "Host equipment assignments, return records and custody.",
+      "sections": [
+        "Assigned equipment",
+        "Returns",
+        "Owner handoff"
+      ],
+      "actions": [
+        {
+          "id": "manager-assets-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No team assets records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "contractor-home",
+      "path": "/contractor",
+      "portal": "contractor",
+      "title": "Contractor workspace",
+      "capabilityId": "hr-overview",
+      "backing": "composite",
+      "roles": [
+        "contractor"
+      ],
+      "description": "Aggregate approved company, onboarding and task summaries without exposing bank or tax values.",
+      "sections": [
+        "Own onboarding",
+        "Own tasks",
+        "Payment readiness"
+      ],
+      "actions": [
+        {
+          "id": "contractor-home-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "contractor-home-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No contractor workspace records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "contractor-profile",
+      "path": "/contractor/profile",
+      "portal": "contractor",
+      "title": "My contractor profile",
+      "capabilityId": "contractor-profile",
+      "backing": "composite",
+      "roles": [
+        "contractor"
+      ],
+      "description": "Individual/business contractor details plus host task references.",
+      "sections": [
+        "Own profile",
+        "Address readiness",
+        "Approved changes"
+      ],
+      "actions": [
+        {
+          "id": "contractor-profile-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "contractor-profile-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my contractor profile records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "contractor-onboarding",
+      "path": "/contractor/onboarding",
+      "portal": "contractor",
+      "title": "My contractor onboarding",
+      "capabilityId": "contractor-onboarding",
+      "backing": "gusto-sdk",
+      "roles": [
+        "contractor"
+      ],
+      "description": "Employer and contractor self-onboarding with host identity binding.",
+      "sections": [
+        "Own checklist",
+        "Provider self-onboarding",
+        "Completion status"
+      ],
+      "actions": [
+        {
+          "id": "contractor-onboarding-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "contractor-onboarding-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my contractor onboarding records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "contractor-payments",
+      "path": "/contractor/payments",
+      "portal": "contractor",
+      "title": "My payments",
+      "capabilityId": "contractor-payments",
+      "backing": "gusto-sdk",
+      "roles": [
+        "contractor"
+      ],
+      "description": "Payment history and approved contractor payment flows.",
+      "sections": [
+        "Own payment history",
+        "Statements",
+        "Status"
+      ],
+      "actions": [
+        {
+          "id": "contractor-payments-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "contractor-payments-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my payments records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "contractor-documents",
+      "path": "/contractor/documents",
+      "portal": "contractor",
+      "title": "My contractor documents",
+      "capabilityId": "documents",
+      "backing": "composite",
+      "roles": [
+        "contractor"
+      ],
+      "description": "Provider forms/signatures are separate from host policy and document storage.",
+      "sections": [
+        "Own tax documents",
+        "Signatures",
+        "Delivery status"
+      ],
+      "actions": [
+        {
+          "id": "contractor-documents-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        },
+        {
+          "id": "contractor-documents-provider",
+          "label": "Open approved provider workflow",
+          "mode": "live-gated",
+          "description": "Requires a trusted live membership, configured server adapter and explicit permitted workflow. Disabled in mock mode."
+        }
+      ],
+      "emptyState": "No my contractor documents records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "contractor-tasks",
+      "path": "/contractor/tasks",
+      "portal": "contractor",
+      "title": "My contractor tasks",
+      "capabilityId": "tasks",
+      "backing": "systemx-native",
+      "roles": [
+        "contractor"
+      ],
+      "description": "Host checklists and assigned tasks independent of SYSTEMX agent work records.",
+      "sections": [
+        "Assigned work",
+        "Due dates",
+        "Completion"
+      ],
+      "actions": [
+        {
+          "id": "contractor-tasks-1",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No my contractor tasks records are available for this actor and company. Show a scoped next step without inventing completion.",
+      "errorState": "Show an accessible error with a retry or owner handoff. Deny unknown membership, company mismatch and unavailable provider modes before reading sensitive records."
+    },
+    {
+      "id": "employee-policies",
+      "path": "/employee/policies",
+      "portal": "employee",
+      "title": "My policies",
+      "capabilityId": "policies",
+      "backing": "systemx-native",
+      "roles": [
+        "employee"
+      ],
+      "description": "Host policy editions, acknowledgments and effective dates.",
+      "sections": [
+        "Published policy editions",
+        "Own acknowledgments",
+        "Effective dates"
+      ],
+      "actions": [
+        {
+          "id": "employee-policies-review",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No assigned records are available for this actor. Show only a scoped next step.",
+      "errorState": "Deny company/self/direct-report mismatches and show a sanitized accessible retry or owner handoff."
+    },
+    {
+      "id": "employee-assets",
+      "path": "/employee/assets",
+      "portal": "employee",
+      "title": "My equipment",
+      "capabilityId": "assets",
+      "backing": "systemx-native",
+      "roles": [
+        "employee"
+      ],
+      "description": "Host equipment assignments, return records and custody.",
+      "sections": [
+        "Own assigned equipment",
+        "Custody",
+        "Return handoff"
+      ],
+      "actions": [
+        {
+          "id": "employee-assets-review",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No assigned records are available for this actor. Show only a scoped next step.",
+      "errorState": "Deny company/self/direct-report mismatches and show a sanitized accessible retry or owner handoff."
+    },
+    {
+      "id": "employee-surveys",
+      "path": "/employee/surveys",
+      "portal": "employee",
+      "title": "My surveys",
+      "capabilityId": "surveys",
+      "backing": "systemx-native",
+      "roles": [
+        "employee"
+      ],
+      "description": "Host survey delivery and privacy-preserving summaries; anonymity requires explicit implementation.",
+      "sections": [
+        "Assigned campaigns",
+        "Own response status",
+        "Privacy information"
+      ],
+      "actions": [
+        {
+          "id": "employee-surveys-review",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No assigned records are available for this actor. Show only a scoped next step.",
+      "errorState": "Deny company/self/direct-report mismatches and show a sanitized accessible retry or owner handoff."
+    },
+    {
+      "id": "manager-training",
+      "path": "/manager/hr/training",
+      "portal": "manager",
+      "title": "Team training",
+      "capabilityId": "training",
+      "backing": "systemx-native",
+      "roles": [
+        "manager"
+      ],
+      "description": "Host courses, assignments and completion evidence.",
+      "sections": [
+        "Direct-report assignments",
+        "Progress",
+        "Completion evidence"
+      ],
+      "actions": [
+        {
+          "id": "manager-training-review",
+          "label": "Review demo records",
+          "mode": "mock",
+          "description": "Changes only isolated synthetic demo state; it does not call Gusto or persist employee data."
+        }
+      ],
+      "emptyState": "No assigned records are available for this actor. Show only a scoped next step.",
+      "errorState": "Deny company/self/direct-report mismatches and show a sanitized accessible retry or owner handoff."
+    }
+  ]
+}

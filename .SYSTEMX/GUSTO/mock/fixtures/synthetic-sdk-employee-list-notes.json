@@ -1,0 +1,15 @@
+{
+  "sdkVersion": "0.56.6",
+  "apiVersion": "2026-06-15",
+  "fixtureAuthored": "fictional values; published API schema tested by bounded inspection; no provider or React mount test",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "expectedFirstRequest": "GET /api/gusto/v1/companies/00000000-0000-4000-8000-000000000001/employees?onboarded_active=true&page=1&per=5",
+  "responseHeaders": {
+    "Content-Type": "application/json",
+    "X-Gusto-API-Version": "2026-06-15",
+    "x-total-pages": "1",
+    "x-total-count": "1"
+  },
+  "unsupportedEndpoints": "explicit mock 501/404, no fallthrough Gusto network",
+  "wireFormat": "bare array of snake_case API objects"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "events": [
+    {
+      "id": "event-demo-001",
+      "receivedAt": "2026-10-13T00:00:00Z",
+      "provider": "mock",
+      "companyId": "company-demo-001",
+      "eventType": "mock.employee.updated",
+      "resourceId": "employee-002",
+      "deliveryStatus": "verified-fixture",
+      "duplicate": false
+    }
+  ],
+  "note": "These are host replay envelopes, not claims about Gusto wire event names. Map only currently documented provider subscriptions in an authorized app."
+}
