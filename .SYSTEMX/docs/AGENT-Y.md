@@ -242,8 +242,12 @@ same handoff contract; provider availability and model choices vary by host.
 `configured` requires an explicitly reviewed executable/argument adapter.
 For `configured`, supply `--command ABSOLUTE_EXE` when preparing and again
 when running; pass its reviewed `--arg VALUE` entries at run time. Preparation
-validates the executable but does not pin it or save those arguments in the
-portable job. Review the actual run-time executable and arguments again.
+pins that executable's canonical absolute path, SHA-256, device, inode, and
+size in the ignored local sidecar. Run checks the supplied executable against
+that saved identity and refuses a replaced or updated file. The portable job
+does not store the executable path or adapter arguments. Review the run-time
+arguments separately; executable pinning does not pin an interpreter,
+dependencies, authentication, or permissions.
 
 After the run, Agent X may record an observed work/check/communication event
 using the returned task revision and separately obtained original evidence.
@@ -307,6 +311,31 @@ action; do not mark it `done` or make a draft PR ready merely because the
 scorecard exists.
 
 ## One task through the lane
+
+```mermaid
+flowchart TB
+  A0["Agent 0: one owned task + acceptance criteria"] --> Prep["Prepare: selected CLI identity + base commit + allowed paths"]
+  Prep --> Run["Run: separate CLI in task worktree"]
+  Run --> Local["Local result + controller exit/commit/scope checks"]
+  Local --> Draft["Optional: publish owned branch + draft PR"]
+  Local --> Check["Agent 0: project checks + original evidence"]
+  Draft --> Check
+  Check --> X["Agent X: observed events + time + revisions"]
+  Check --> Z["Agent Z: fixed evidence review"]
+  X --> Decision{"Agent 0 / user: task disposition"}
+  Z --> Decision
+  Decision -->|Accepted done + owned draft| Ready["Separate pr-ready: prepared base still current"]
+  Decision -->|Cancelled + unmerged PR| Close["Separate pr-close: preserve unmerged work"]
+  Decision -->|Concrete gap| Next["Next bounded action; inspect partial remote state"]
+  Ready --> Merge["Separately authorized merge"]
+  Merge --> Cleanup["Separate pr-cleanup: verify merge/head + archive + safe removal"]
+```
+
+The optional PR path requires an opted-in handoff and the selected account's
+actual permissions. Agent X and Agent Z provide observations and review; Agent
+0/user owns acceptance. Local-only results require the same project checks and
+review, with manual integration and preserved work. This diagram does not start
+a provider or authorize a merge.
 
 1. Agent 0 assigns the dependency-ready task to `agent.y`, marks it
    `in_progress` when work begins, and records its scope and branch owner.

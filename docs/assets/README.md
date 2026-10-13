@@ -4,21 +4,27 @@ The standalone logo remains `.SYSTEMX`; attribution belongs in project informati
 
 | Asset | Purpose | Editable source |
 | --- | --- | --- |
-| `systemx-full-system.png` / `systemx-full-system-4k.png` | Complete Agent 0/X/Z, record, toolchain, project and lifecycle map | [Imagegen prompt](systemx-full-system-prompt.md) · [text equivalent](systemx-full-system.md) |
+| `systemx-full-system.png` | Current 4K Agent 0/X/Y/Z, record, toolchain, project and lifecycle map | [Imagegen prompt](systemx-full-system-prompt.md) · [text equivalent](systemx-full-system.md) · [portable 4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg) |
 | `systemx-logo.png` | Current brand logo | Imagegen provenance in [IMAGE-PROMPTS.md](IMAGE-PROMPTS.md) |
-| `systemx-coordination.png` / `.svg` | Global/Master Plan, Agent 0/X/Z, acceptance and checkpoint | [Mermaid](systemx-coordination.mmd) |
+| `systemx-coordination.png` / `.svg` | Global/Master Plan, Agent 0/X/Y/Z, acceptance and checkpoint | [Mermaid](systemx-coordination.mmd) |
 | `systemx-project-waves.png` / `.svg` | Research through accepted delivery | [Mermaid](systemx-project-waves.mmd) |
 | `systemx-shared-workspace.png` / `.svg` | Readers/workers, canonical writer, transport, verified snapshot | [Mermaid](systemx-shared-workspace.mmd) |
 | `systemx-workflow.png` | Legacy six-step artwork retained for existing URLs | Historical imagegen prompt |
 
-The three focused coordination, project-wave, and shared-workspace diagrams are
-rendered from Mermaid 11 source into SVG and PNG with
+The three focused coordination, project-wave, and shared-workspace diagrams were
+rendered on 2026-10-12 with `@mermaid-js/mermaid-cli` **11.12.0** into SVG and PNG with
 a white background, readable text labels, and distinct role/data/decision colors.
 Documentation includes alt text and prose equivalents; meaning does not depend
 on color. Mermaid is an optional documentation renderer, not a template runtime
 dependency. Use a compatible Mermaid renderer, preserve the labels/relationships,
 and review SVG/PNG output when changing the sources. The portable guides embed
 readable Mermaid source so their meaning remains available without image downloads.
+
+Current focused PNG dimensions are 1358 × 3048 (coordination), 1968 × 1268
+(project waves), and 1676 × 2044 (shared workspace). Each was exported at scale
+2 with a white background and visually checked against its source. Rendering
+used a temporary tool invocation outside the repository; no renderer dependency
+is installed by `.SYSTEMX` setup.
 
 Keep `.SYSTEMX` and `.SYSTEMXP` exact casing. The diagrams describe responsibilities,
 not automatic workers, model training, a cloud sync service, or a scheduler.
@@ -28,6 +34,10 @@ and generation/edit prompts are maintained alongside it. Click the image in the
 README or wiki to inspect small path labels at full resolution. The editable
 Mermaid diagrams remain available for focused technical views.
 
-The full-system native master is **1672 × 941**. The separately named **3840 ×
-2160** PNG is a local upscale made with macOS `sips`, with user approval. It adds
-canvas pixels, not native image detail. The original remains available.
+The current full-system PNG and portable JPEG are **3840 × 2160** exports.
+Imagegen returned a **1672 × 941** native output; macOS `sips` resized the selected
+export to 4K. Upscaling adds canvas pixels, not native image detail. The
+generation/edit prompt and portable asset metadata retain this provenance.
+Current documentation links one selected PNG and the portable JPEG. The four
+retained use-case cards and edition 1.2 white paper
+describe their older Agent 0/X/Z baseline; current text guides explain Agent Y.

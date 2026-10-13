@@ -74,9 +74,46 @@
         "sha256": "14772356fbbc8cc87d408d6a61a3d29fa24feedfacfc0d9b988070e2892ea7ed",
         "url": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.8.5-alpha.1/.SYSTEMX/MEDIA/codex-copilot-cli-local.png"
       }
+    },
+    {
+      "id": "systemx-full-system",
+      "generatedOn": "2026-10-12",
+      "roles": [
+        "agent.0",
+        "agent.x",
+        "agent.y",
+        "agent.z"
+      ],
+      "baseline": "1.9.0-alpha.4",
+      "prompt": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.9.0-alpha.4/docs/assets/systemx-full-system-prompt.md",
+      "tool": "built-in imagegen edit",
+      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 90",
+      "upscaled": true,
+      "export": {
+        "file": "../Infographics/systemx-full-system-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 2066062,
+        "sha256": "78be159877e015c2bbb98848267665b7c171cbd15b8bf3a8f2f780dfa65cddfa"
+      },
+      "web": {
+        "url": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.9.0-alpha.4/docs/assets/systemx-full-system.png",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 6685147,
+        "sha256": "8c003e1d638c5fcea6702410539ea9e0deec79253e7f5b4d2298335de6dcff84"
+      },
+      "source": {
+        "width": 1672,
+        "height": 941,
+        "bytes": 2059577,
+        "sha256": "5b6fc1f3e9241c079940a15483ce1adcd1b4ffaf1d7f20397aeb997cb661321d",
+        "note": "Native built-in imagegen original retained outside the repository; only latest 4K outputs ship."
+      }
     }
   ],
   "layoutRelease": "1.8.6-alpha.1",
   "sourceArchive": "v1.8.5-alpha.1",
-  "note": "Only 4K outputs are shipped. Original PNG sources remain in the pinned historical release; no output image bytes were changed."
+  "note": "Four historical workflow cards retain their exact bytes and examined baseline. The full-system map is a new Agent 0/X/Y/Z export for 1.9.0-alpha.4. Per-asset metadata describes generation and export provenance. Only selected 4K outputs ship.",
+  "updatedOn": "2026-10-12"
 }

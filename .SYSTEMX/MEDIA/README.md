@@ -1,6 +1,7 @@
 # .SYSTEMX media library
 
-Latest public paper and one 4K image per workflow. **.SYSTEMX** is a product of
+Current full-system map, latest public paper, and one retained 4K image per workflow.
+**.SYSTEMX** is a product of
 **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 
 [Portfolio: Networks.Chat](https://Networks.Chat) ·
@@ -10,8 +11,8 @@ Latest public paper and one 4K image per workflow. **.SYSTEMX** is a product of
 ## White paper
 
 **Portable Project Memory for Agentic Work** - edition 1.2, 96 pages.
-The complete implementation reference includes 29 chapters, all 100 Agent Z
-questions, record contracts, six figures and clickable research citations.
+The reference for its examined Agent 0/X/Z baseline includes 29 chapters, all
+100 Agent Z questions, record contracts, six figures and clickable research citations.
 
 [Read the PDF](White-Paper/SYSTEMX-White-Paper-v1.2.pdf) ·
 [Editable text](White-Paper/SYSTEMX-White-Paper-v1.2.md) ·
@@ -36,13 +37,19 @@ edition is not retroactively updated to claim it evaluated the new runtime.
 
 | Workflow | 3840 × 2160 image | Text guide |
 | --- | --- | --- |
+| Full-system map: Agent 0 / X / Y / Z | [4K JPEG](Infographics/systemx-full-system-4k.jpg) | [Current guide](Reference/full-system.md) |
 | ChatGPT + Google Drive | [4K JPEG](Infographics/chatgpt-google-drive-4k.jpg) | [Guide](Reference/chatgpt-google-drive.md) |
 | Codex + GitHub / main project | [4K JPEG](Infographics/codex-github-main-4k.jpg) | [Guide](Reference/codex-github-main.md) |
 | Dots / Codex Cloud | [4K JPEG](Infographics/dots-codex-cloud-4k.jpg) | [Guide](Reference/dots-codex-cloud.md) |
 | Codex / Copilot CLI + local drive | [4K JPEG](Infographics/codex-copilot-cli-local-4k.jpg) | [Guide](Reference/codex-copilot-cli-local.md) |
 
-These are the existing resized 4K exports, preserved byte for byte. They were
-created with imagegen; upscaling adds canvas pixels, not native image detail.
+The full-system map includes the optional Agent Y CLI/branch/PR lane and its
+separate acceptance gates. The four use-case cards are retained Agent 0/X/Z
+baseline artwork, preserved byte for byte; their text guides describe the
+current Agent Y option. Read the [Agent Y manual](../docs/AGENT-Y.md) for
+provider identity, project checks, cancellation, merge, and cleanup details.
+The map and cards were created with imagegen; 4K describes their export canvas.
+Upscaling adds canvas pixels, not native image detail.
 [Asset metadata](Reference/ASSETS.json) records dimensions, raw-byte SHA-256 hashes
 and archived source locations. [Generation prompts](Reference/IMAGE-PROMPTS.md)
 retain the original production instructions. Provider names describe use cases
@@ -54,7 +61,7 @@ and do not imply endorsement.
 MEDIA/
   README.md       Media index
   White-Paper/    Latest PDF, editable text, metadata and a separate erratum
-  Infographics/  Four 4K JPEG outputs
+  Infographics/  Full-system map and four use-case 4K JPEG outputs
   Reference/     Workflow guides, image prompts and asset provenance
 ```
 

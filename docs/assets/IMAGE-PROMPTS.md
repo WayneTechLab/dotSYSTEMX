@@ -8,7 +8,7 @@ Only the selected final PNGs are included here; the drafts are not distributed.
 
 - `systemx-logo.png`: standalone monochrome folder/branch mark and wordmark.
 - `systemx-workflow.png`: legacy six-step illustration, retained for existing links.
-  Current documentation uses the full-system poster and Agent 0/X/Z diagrams
+  Current documentation uses the full-system poster and Agent 0/X/Y/Z diagrams
   listed in [asset notes](README.md).
 
 Both files have an opaque white background. They are raster assets, not editable
@@ -42,9 +42,14 @@ imagegen edits. Their source and maintenance notes are in [README.md](README.md)
 with the built-in imagegen tool. The exact initial and correction prompts are in
 [systemx-full-system-prompt.md](systemx-full-system-prompt.md), and the accessible
 [text equivalent](systemx-full-system.md) explains every section and boundary.
-It uses the standard Agent 0, Agent X, and Agent Z roles; no Agent Y is introduced.
+It shows Agent 0, Agent X, optional Agent Y, and Agent Z. Agent Y's separate CLI
+lane includes an opted-in draft PR, project checks and review, recorded task
+disposition, separately authorized merge, and gated cleanup.
 
-The native master is 1672 × 941 pixels. `systemx-full-system-4k.png` is the
-3840 × 2160 upscaled export requested by the user; it was resized locally with
-`sips` after imagegen creation and correction. Both files are retained, and the
-4K export is not represented as native 4K generation.
+The selected `systemx-full-system.png` and portable
+[4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg) are
+3840 × 2160 exports. See the current [prompt/provenance record](systemx-full-system-prompt.md)
+for native dimensions and export steps. Earlier releases retained a 1672 × 941
+master and a separately named upscaled PNG; that earlier provenance does not
+describe the current selected asset. Historical use-case card prompts are
+retained unchanged in the [portable media library](../../.SYSTEMX/MEDIA/Reference/IMAGE-PROMPTS.md).

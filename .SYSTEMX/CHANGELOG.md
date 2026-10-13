@@ -4,6 +4,31 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.9.0-alpha.4 — Agent Y visual and manual refresh
+
+- Replaced the public full-system poster with the current Agent 0/X/Y/Z
+  workflow, including separate app/IDE subagents and per-task external CLI
+  work, event records, fixed reviews, and Agent 0 acceptance.
+- Added one latest 4K full-system JPEG and its accessible guide to the portable
+  media library. The public web PNG is also 3840 × 2160; metadata records the
+  native 1672 × 941 generation, resize method, and exact-byte hashes. Removed
+  the duplicate web 4K file. Earlier artwork remains in tagged history.
+- Refreshed the README, technical diagrams, current wiki guidance, and workflow
+  guides for optional draft PR creation, separate ready/close actions, and
+  merged-and-accepted archival cleanup. Agent Y has no merge command.
+- Corrected configured-provider guidance to describe preparation-time
+  executable path/SHA-256/file-identity binding and launch-time checks. Reviewed
+  run arguments and interpreter/dependency trust remain separate.
+- Updated exact-version setup examples. The four earlier workflow cards and
+  white-paper edition 1.2 retain their examined baseline and original bytes;
+  current four-role material is clearly identified alongside them.
+
+This release updates documentation and media plus their distribution inventory;
+it does not change Agent Y execution or PR semantics. Updates stay additive and
+preserve existing user files and older local media. Prior alpha.3 test/security
+evidence remains tied to that reviewed source; see this release's review report
+for its actual publication checks and inherited limits.
+
 ## 1.9.0-alpha.3 — Distribution and delegation hardening
 
 - Distribution manifest schema 2 hashes binary and unknown files byte for byte

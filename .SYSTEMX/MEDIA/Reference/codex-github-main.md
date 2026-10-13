@@ -4,6 +4,10 @@
 
 [![Codex + GitHub / main project: six steps connecting project context, work, review and a saved handoff.](../Infographics/codex-github-main-4k.jpg)](../Infographics/codex-github-main-4k.jpg)
 
+**Artwork baseline:** the retained card depicts Agent 0/X/Z. See the current
+[full-system map](full-system.md) for all four roles and the optional Agent Y
+CLI lane. This text guide follows the current format.
+
 ## Workflow
 
 1. **Inspect.** Confirm the project path, branch, local changes and remote revision.
@@ -22,7 +26,7 @@
 - **Agent Z:** the fixed review policy with 10 categories and 100 questions.
 
 These are roles implemented through the available toolchain. The public template
-starts with Agent 0 only; [activate X/Y/Z](../../docs/AGENT-X.md) explicitly in
+starts with Agent 0 only; [activate X/Y/Z](../../docs/AGENT-Y.md#activate-and-inspect) explicitly in
 the selected scope. A review score is advisory and does not approve external actions.
 The pictured card focuses on Agent 0/X/Z; [Agent Y](../../docs/AGENT-Y.md) adds
 an optional external CLI branch/PR lane under Agent 0's task assignment.
@@ -38,6 +42,11 @@ Agent Y can open an owned draft PR only when the task explicitly opts in and the
 CLI run succeeds. Marking that draft ready follows accepted `done`; closing an
 unmerged owned PR follows recorded cancellation and a selected policy. Neither
 transition authorizes a merge, and a PR URL does not prove live behavior.
+Preparation pins the chosen CLI file and base commit. The controller verifies
+exit, changed paths, and commit state; Agent 0 separately runs or verifies project
+checks and original evidence. `pr-ready` refuses a changed remote base. After a
+separately authorized merge and accepted task, cleanup verifies the owned head
+and a recovery bundle before removal; ignored files can block that removal.
 
 ## Copyable prompt
 

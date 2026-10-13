@@ -1,152 +1,109 @@
-# Historical pre-Agent Y infographic generation prompt
+# Current four-role full-system infographic prompt
 
-This is the original production prompt and correction record for the poster
-created before Agent Y joined the format in 1.9.0-alpha.2. References below to
-“no Agent Y” are **historical artwork constraints**, not a description of the
-current standard. Do not reuse this prompt unchanged to depict the current
-system. The [poster text equivalent](systemx-full-system.md#current-extension-not-shown-on-the-poster-agent-y)
-and [Agent Y guide](../../.SYSTEMX/docs/AGENT-Y.md) describe the newer CLI/PR
-lane. The frozen raster artwork is not being redrawn by this note.
-
-Mode: built-in imagegen. Use case: `infographic-diagram`.
-Requested canvas: 3840 × 2160, landscape. Inspect actual output dimensions before publication.
-At generation time, the depicted standard roles were Agent 0, Agent X, and Agent Z.
+Mode: built-in imagegen edit. Use case: `infographic-diagram`.
+The previous Agent 0/X/Z poster served as the edit target and style reference.
+This artwork depicts the current Agent 0/X/Y/Z workflow; previous art remains
+available in tagged Git history. Company attribution is separate from the mark.
+The selected public exports and actual generation dimensions are recorded in
+the [media asset metadata](../../.SYSTEMX/MEDIA/Reference/ASSETS.json).
 
 ```text
 Use case: infographic-diagram
-Asset type: a single public GitHub README/wiki systems architecture infographic, downloadable as a large HD poster.
-Primary request: Show the complete .SYSTEMX operating model, standard folders, Agent 0 / X / Z and subagents, logging, toolchain and project lifecycle in ONE exceptionally clear, detailed infographic. Render at 3840 x 2160 pixels, landscape 16:9, 4K. Do not substitute a screenshot, mockup, photographed poster, or tiny low-resolution thumbnail.
-Style: professional editorial technical infographic, crisp near-vector raster artwork, precise readable sans-serif typography, monospace file paths, disciplined modular grid, clean white opaque background, black/graphite branding like the existing monochrome folder-with-branch .SYSTEMX mark. Restrained functional accent colors distinguish records, agents, external tools and evidence; not a rainbow. Simple folder, document, terminal, clock and checklist line icons. Content is the hero. No decorative robots, heads, glowing brain, circuit-board wallpaper, stock art or oversized empty areas.
-Typography: meticulously spell all labels below. Legibility and exact text take priority. All text horizontal, no clipped boxes or crossing arrows. Make section titles large, body readable at full resolution. Leading dot and uppercase .SYSTEMX and .SYSTEMXP must remain exact. Agent Z is the reviewer; there is NO Agent Y in this standard. Do not print Wayne Tech Lab or any other company attribution. No brand logos for third-party tools.
-
-Composition: top title and a thin workflow band; a broad central Agent 0 hub connecting orderly surrounding storage, worker, time, review and toolchain panels; lower portfolio and lifecycle panels; small clear legend and footer. All of this must read as one connected architecture, not disconnected slides. Use short numbered process nodes, arrows with small labels (read, assign, report, record, assess, accept, checkpoint), and dashed boundaries for optional or externally supplied capabilities. Ensure arrows reflect the relationships described below rather than inventing automatic synchronization.
-
-Title verbatim: ".SYSTEMX"
-Subtitle verbatim: "THE COMPLETE WORKSPACE • CONTEXT, AGENTS, TOOLS & EVIDENCE"
-
-Top process strip, exact labels in order:
-"RESEARCH" → "PHASES & MILESTONES" → "TASKS & WAVES" → "WORK & INTEGRATE" → "VERIFY & REVIEW" → "ACCEPT & CHECKPOINT"
-Small strip caption: "Resume the next accepted step • Stop when the agreed outcome is met"
-
-Panel: "1  SHARED CONTEXT"
+Asset type: current public .SYSTEMX GitHub README/wiki architecture infographic.
+Input image: existing .SYSTEMX full-system poster, EDIT TARGET and visual style reference. Update and reorganize it to include Agent Y as a first-class standard role alongside Agent 0, Agent X, Agent Z. The old image is out of date. Preserve its white editorial technical style, black folder-branch .SYSTEMX product mark, clean line icons, colored section bars, precise horizontal typography. Re-layout as necessary for equal readable panels, a prominent Agent 0 hub and coherent labeled arrows. Produce a landscape 3840 x 2160 4K image.
+Product title exactly ".SYSTEMX".
+Subtitle "CONTEXT • AGENTS 0 / X / Y / Z • TOOLS • EVIDENCE".
+No Wayne Tech Lab text, company logos, robots, AI brains, AGI claims, automatic cloud sync, automatic merge, or guaranteed savings.
+Use all these concise numbered panels with exact capitalization and accurate path labels:
+1 SHARED CONTEXT
 ".SYSTEMX/"
 "START-HERE.md • AGENTS.md • STANDARD.md"
-"GLOBAL/CONTEXT.md — intent and constraints"
-"PLAN/MASTER-PLAN.md — outcomes and milestones"
-"MEMORY/PROJECT.md — reviewed durable facts"
-"MEMORY/sessions/ — saved checkpoints"
-"Read the selected scope and relevant changes"
-Arrow from this panel to Agent 0 labeled "read".
-
-Central prominent panel: "2  AGENT 0 • COORDINATOR"
+"GLOBAL/CONTEXT.md — intent & constraints"
+"GLOBAL/ACCESS-MATRIX.md — reviewed authority"
+"PLAN/MASTER-PLAN.md — outcomes & milestones"
+"PLAN/MAP.md — sources & toolchain"
+"MEMORY/PROJECT.md • MEMORY/sessions/"
+2 AGENT 0 • COORDINATOR
 "agent.0"
-"Decompose • route • integrate • accept"
+"Plan • assign • integrate • accept"
 "One canonical writer per scope"
 "AGENTS/REGISTRY.json"
 "AGENTS/<id>/MEMORY.md"
-Connect to a small fan of three worker cards titled "AUTHORIZED SUBAGENTS" with labels "agent.1", "agent.2", "agent.N".
-Worker caption: "Scoped tasks • dependencies • separate write areas"
-"Up to 10 by request, subject to harness limits"
-Arrows Agent 0 to workers "assign"; workers to Agent 0 "report + evidence". Worker execution connects to external toolchain. Do not imply registering an agent starts a process.
-
-Panel: "3  CANONICAL WORK"
+"APP / IDE SUBAGENTS: agent.1 • agent.2 • agent.N"
+"Up to 10 by request; harness limits apply"
+3 CANONICAL WORK
 "WORK/TASKS.json — task authority"
 "WORK/FOCUS.json — current objective"
-A small process: "todo → in_progress → needs_review → done"
-"Generated views:"
-"TODO • WORKING-ON • BLOCKED"
-"REVIEW • DONE • CANCELLED"
-"CURRENT.md — current summary"
-Agent 0 updates canonical work; canonical work generates views. Do not draw separate writable ledgers for the views.
-
-Panel: "4  AGENT X • TIME & EVENTS"
+"todo → in_progress → needs_review → done"
+"Blocked / cancelled remain explicit"
+"Generated: TODO • WORKING-ON • BLOCKED"
+"REVIEW • DONE • CANCELLED • CURRENT.md"
+4 AGENT X • TIME & EVENTS
 "agent.x"
 "EVENTS/EVENTS.json"
 "EVENTS/SCHEDULE.json"
 "Actor • occurrence time • recorded time"
-"Revision • evidence • retry key • due item"
-"Tracks schedules; does not execute them"
-Dashed label: "After roles-init activation"
-Connect actual work/check results to Agent X with "record"; Agent X writes EVENTS records.
-
-Panel: "5  AGENT Z • FIXED REVIEW"
+"Revision • evidence • retry key"
+"Tracks due items; host executes schedules"
+5 AGENT Y • EXTERNAL CLI & PR
+"agent.y"
+"AGENTS/agent.y/JOBS.json"
+"Selected per task: Codex / Copilot / configured CLI"
+"Task packet → isolated Git worktree"
+"Run → scoped commit → optional DRAFT PR"
+"Agent 0 accepts → separate READY step"
+"Cancelled → CLOSE; preserve unmerged work"
+"Merged + accepted → archive → CLEANUP"
+"No merge command • host permissions apply"
+6 AGENT Z • FIXED REVIEW
 "agent.z"
-"10 categories × 10 questions = 100 checks"
 "REVIEWS/POLICY.json"
+"10 categories × 10 questions = 100 checks"
 "REVIEWS/policies/ • requests/ • reports/"
-"Scorecard • unknowns • evidence • delta"
-"Reuse unchanged reviews"
-"Advisory score; Agent 0 / user accepts"
-Dashed label: "After roles-init activation"
-Arrow evidence from work and events into review "assess". Arrow review to Agent 0 "findings". At acceptance branch show "Met → checkpoint / finish" and "Gap → next bounded task"; no endless automatic rebuild cycle.
-
-Panel: "6  TOOLCHAIN & EXECUTION"
+"Evidence • unknowns • scorecard • delta"
+"Reuse unchanged reviews; scores advise"
+7 TOOLCHAIN & EXECUTION
 "Your IDE / CLI / chat / bot harness"
-"Model sessions • authorized subagents • permissions"
-"SYSTEMX.sh / SYSTEMX.ps1 • WSG-MENU.sh"
-"Python library / systemx CLI"
-"manager.py • lifecycle.py — setup and receipts"
-"scripts/ — tasks, scope routing, Agent X/Z"
-"project.json — explicit command arrays"
-"Checks • builds • authorized deploys"
-"Actual run IDs, artifacts and live probes"
-Clearly mark harness and application tools as "EXTERNAL TOOLS"; .SYSTEMX stores records and invokes configured tools, it does not contain a model or install a cloud automatically.
-
-Lower wide panel: "7  SYSTEMX PROJECTS"
-"Projects/REGISTRY.json — explicit selection"
+"Models • tools • permissions • real processes"
+"SYSTEMX.sh • SYSTEMX.ps1 • systemx CLI"
+"Python library • scripts/ • project.json"
+"Checks • builds • authorized delivery"
+"Role records do not start agents"
+8 SYSTEMX PROJECTS
 ".SYSTEMX/Projects/NAME/.SYSTEMXP"
-"Each child: GLOBAL/ • PLAN/ • WORK/ • MEMORY/ • AGENTS/"
-"SOURCES.json • DECISIONS/ • SYNC/"
-"Optional child EVENTS/ and REVIEWS/"
-"One outer tool installation • isolated child records"
-Show two small named examples "WebApp/.SYSTEMXP" and "Research/.SYSTEMXP", both attached through Projects, never nest .SYSTEMX.
-
-Lower panel: "8  DEFAULTS, SETUP & RECOVERY"
+"Projects/REGISTRY.json — explicit selection"
+"Each child: GLOBAL/ • PLAN/ • WORK/"
+"MEMORY/ • AGENTS/ • SOURCES.json"
+"DECISIONS/ • SYNC/ • optional EVENTS/ & REVIEWS/"
+"One outer tool installation; separate child records"
+"Never nest a second .SYSTEMX"
+9 DEFAULTS, SETUP & RECOVERY
 "config/ • profiles/ • templates/ • AI/ • docs/ • tests/"
 "VERSION • SOURCE.json • LICENSE"
 "INSTALLATION.json — selected defaults"
-".SYSTEMX/.systemx/ — internal versions and logs"
+".SYSTEMX/.systemx/ — versions & logs"
 "Install → pin → preview update → audit"
-"Additive updates preserve existing project files"
-"Uninstall / restore with receipts"
-"Manual updates by default • startup checks opt-in"
-Label managed metadata/cache "After installation".
-Tiny exact-case note: "Optional sibling alias: .systemx → .SYSTEMX"
-
-Transport line separate from core record arrows:
-"Git • local folders • Drive • cloud storage • VMs"
-"Authorized access + verified snapshots; a URL alone does not sync records"
-
-Footer exact text:
-"Your tools run the work. .SYSTEMX keeps intent, state, time, evidence and memory connected."
-"ALPHA • Role definitions are not running agents • Evidence supports acceptance"
-
-Constraints: One coherent 4K infographic. Include all eight numbered sections, major paths, Agent 0/X/Z responsibilities and correct logging/review/acceptance direction. Do not invent Agent Y, built-in schedulers, cloud adapters, AGI, consciousness, automatic model learning, guaranteed savings or automatic deployment. No task history, private data or organization-specific setup. Preserve all exact path capitalization.
+"Additive updates preserve user files"
+"Uninstall / restore with backups & receipts"
+"Manual by default; startup notices opt-in"
+"Siblings: optional .systemx → .SYSTEMX alias"
+Top slim process strip: "RESEARCH → PHASES & MILESTONES → TASKS & WAVES → WORK & INTEGRATE → VERIFY & REVIEW → ACCEPT & CHECKPOINT".
+Small separate storage strip: "Git • local folders • Drive • cloud storage • VMs — authorized access and verified snapshots".
+Connections must show Context → Agent 0 → app/IDE workers AND separately Agent Y task CLI; both execution lanes return evidence to Agent 0. X records meaningful events across lanes; Z reviews evidence and returns findings to Agent 0/user acceptance. Do not show X or Z as automatically executing work. Include acceptance caption "Met → checkpoint / finish • Gap → next bounded task".
+Footer: "ALPHA • Roles do not grant permissions • Evidence supports acceptance • URLs do not synchronize records".
+Most important: spell Agent Y correctly and include its full optional draft/ready/close/cleanup lifecycle. All leading dots and uppercase .SYSTEMX and .SYSTEMXP exact. Do not cram unreadable tiny footnotes, overlap boxes, clip text, cross arrows over labels or invent folders. Maximize text accuracy and clear visual hierarchy.
 ```
 
-## Correction pass
+## Targeted correction
 
-The first pass was 1672 × 941 pixels and had a reversed review arrow and an unclear
-acceptance heading. This targeted edit requested the corrected flow and 4K size.
+The first output's Agent 0 → X arrow used an assignment label. The final edit
+replaced that label with `record observed events`, preserving all other panels:
 
 ```text
-Edit the supplied .SYSTEMX infographic. Preserve its entire eight-panel layout, current wording and paths, all folder and tool icons, role colors, hierarchy, .SYSTEMX-only branding and opaque white background. Make ONLY these corrections:
-1. Reverse the red "assess evidence" arrow between panel 3 CANONICAL WORK and panel 5 AGENT Z. It must point DOWN from work evidence into the Agent Z reviewer, not up from the reviewer into tasks.
-2. Replace the garbled heading on the lower-right acceptance decision box with exactly "AGENT 0 / USER • ACCEPTANCE". Preserve both branches "Met → checkpoint / finish" and "Gap → next bounded task". The Agent Z "findings" arrow should continue to end at this acceptance box.
-3. Deliver the final corrected image at EXACTLY 3840 × 2160 pixels, a genuine 4K landscape output, with all small lettering carefully regenerated sharp enough to read at full resolution. The previous result was only 1672 × 941. This explicit pixel dimension is a requirement; do not simply return that smaller dimension again. Preserve the framing and proportions across the full 16:9 canvas.
-Correct spelling is critical: .SYSTEMX, .SYSTEMXP, Agent 0, Agent X, Agent Z, SOURCES.json. No Agent Y. No added claims or logos. Do not remove any of the eight sections or reduce the content.
+Correct only the green downward arrow from AGENT 0 to AGENT X: replace its label 'assign via IDE/API' with 'record observed events'. Agent X records events, never executes an assignment. Preserve every panel, all file paths, exact role labels, entire Agent Y lifecycle, white design, colors, icons, layout and other arrows. Do not add any new claims or decoration. Fix any obvious spelling typo in 'in_progress' if necessary. Maintain landscape 16:9. Export as 3840x2160 if possible.
 ```
 
-## Output inspection
-
-Both built-in generations returned 1672 × 941 pixels despite the explicit 4K
-request. The corrected native master is `systemx-full-system.png`. Its review
-arrow points from work evidence into Agent Z, and the acceptance owner is
-explicitly Agent 0/user. No fallback API or CLI generation was used.
-
-## Approved 4K export
-
-The user explicitly selected “Export a 4K PNG and retain the original.” The
-corrected master was exported with macOS `sips -z 2160 3840` into
-`systemx-full-system-4k.png`. Its PNG header verifies **3840 × 2160** pixels.
-This is an upscaled delivery copy, not additional generated detail.
+The tool produced 1672 × 941 pixels. The public exports use a 3840 × 2160
+canvas, resized with macOS `sips`; resizing adds no native detail. Only the
+latest 4K web PNG and portable JPEG ship; the native source is retained outside
+the repository. Exact-byte checksums are in the media asset metadata.

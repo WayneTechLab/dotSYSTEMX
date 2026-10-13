@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.9.0-alpha.3` release and leaves updates manual.
+example selects the reviewed `v1.9.0-alpha.4` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.3"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.4"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.3
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.3 --apply
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.4
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.4 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -85,6 +85,12 @@ create a lowercase compatibility link where supported; see
 
 ## How the system coordinates work
 
+[![.SYSTEMX full-system map: Agent 0 coordinates scoped app workers and the optional Agent Y CLI lane; Agent X records events and Agent Z reviews evidence against the canonical project records.](docs/assets/systemx-full-system.png)](.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg)
+
+[Download the 4K full-system map](.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg) ·
+[Accessible text equivalent](docs/assets/systemx-full-system.md) ·
+[Media library](.SYSTEMX/MEDIA/README.md)
+
 ```mermaid
 flowchart LR
   H[Human objective and authority] --> R[.SYSTEMX context, plan, and task ledger]
@@ -103,6 +109,8 @@ flowchart LR
 Agent Y is a separate CLI run, even when its provider shares configuration with
 an app or IDE. Agent 0 passes an explicit task packet and accepts its evidence;
 the folder does not grant a model, GitHub account, or worker process authority.
+The selected CLI file is pinned at preparation and checked before execution;
+provider authentication and host permissions still need their own review.
 
 1. **Define and plan:** record the purpose, constraints, milestones, and acceptance
    criteria. Agent 0 turns the next part of the plan into bounded tasks.
@@ -187,7 +195,9 @@ identify a location; they do not connect a service by themselves.
 
 [Four use-case walkthroughs and 4K graphics](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Use-Case-Infographics)
 cover ChatGPT with Google Drive, Codex with a GitHub project, Dots/Codex Cloud,
-and Codex/Copilot CLI with a local drive. The
+and Codex/Copilot CLI with a local drive. Those retained cards show the earlier
+Agent 0/X/Z baseline; their text guides and the full-system map above include
+the current optional Agent Y lane. The
 [media library](.SYSTEMX/MEDIA/README.md) holds the downloads and text guides.
 For a researched brief that becomes phases, milestones, tasks, and review waves,
 see the [one-shot project guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/One-Shot-Project-Guide).

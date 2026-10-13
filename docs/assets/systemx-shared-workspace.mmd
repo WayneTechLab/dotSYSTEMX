@@ -1,8 +1,8 @@
 flowchart TB
   A["Chat / assistant<br/>Selected read access"] --> Owner["CANONICAL WRITER · AGENT 0<br/>Review base revision · integrate accepted changes"]
-  B["Bots / CLI / VM<br/>Bounded run + evidence"] --> Owner
+  B["Bots / optional Agent Y CLI / VM<br/>Bounded run + evidence"] --> Owner
   C["Subagents / other threads<br/>Separate scopes + reports"] --> Owner
-  Owner --> Records["ONE RECORD AUTHORITY PER SCOPE<br/>.SYSTEMX or Projects/NAME/.SYSTEMXP<br/>Context · plan · tasks · X events · Z reviews"]
+  Owner --> Records["ONE RECORD AUTHORITY PER SCOPE<br/>.SYSTEMX or Projects/NAME/.SYSTEMXP<br/>Context · plan · tasks · X events · Y handoffs · Z reviews"]
   Records --> Transport["YOUR AUTHORIZED TRANSPORT<br/>Git · Drive sync / connector · cloud snapshot adapter"]
   Transport --> Verify["VERIFY PUBLICATION<br/>Saved revision + readback + conflict checks"]
   Verify --> Next["NEXT AUTHORIZED RUN<br/>Load the verified snapshot and relevant changes"]
