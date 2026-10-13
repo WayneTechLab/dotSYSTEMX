@@ -304,8 +304,25 @@ bash .SYSTEMX/SYSTEMX.sh validate --template
 
 For a running React/Firebase preview, use
 [WebAppX's Gusto setup](https://github.com/WayneTechLab/WebAppX/blob/main/docs/GUSTO-SETUP.md).
-Its full template supplies `/hr/demo` and a development-only SDK directory at
+Its full template supplies `/hr/demo` and selected development-only SDK flows at
 `/hr/demo/sdk`; dotSYSTEMX itself contains no web runtime. Gusto's
 [hosted Flows showcase](https://docs.gusto.com/embedded-payroll/docs/try-it-now)
 is available without API keys. An application's real Demo access uses its own
 credentials from the [Developer Portal setup](https://docs.gusto.com/embedded-payroll/docs/getting-started).
+
+WebAppX 3.4.0 extends the native account-free workspace with onboarding review
+and completion, submitted timesheet approval linked to a payroll preview,
+fictional payroll calculation/review/submission receipts, and benefit election
+review/confirmation. These host UI journeys use browser memory and reset on
+reload; they do not call Gusto, persist to cloud services or execute payroll.
+The selected SYSTEMX release remains **1.9.0-alpha.6** with its original portable
+fingerprints.
+
+The host also mounts genuine SDK directory, admin onboarding and payroll
+components against isolated local mock sessions. Onboarding adds explicit
+simulated form/new-hire review and completion readback; payroll uses local
+calculate/poll/review/synthetic submission through the SDK submitted summary.
+The host guide documents the bounded, account-free sample steps. Benefits/time remain native because
+SDK 0.56.6 has no corresponding React UI flows. This selected coverage does not
+establish full SDK support, I-9, legal signatures, tax filing, payroll funding
+or provider acceptance. Native and SDK state remain separate.

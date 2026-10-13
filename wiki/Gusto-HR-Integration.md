@@ -41,21 +41,64 @@ Use the full WebAppX template for its React/Firebase host adapters:
 gh repo create my-hr-app --template WayneTechLab/WebAppX --private --clone
 cd my-hr-app
 npm ci
-npm run dev
 npm run hr:test
+npm run dev
 ```
 
 Open Vite's printed URL at `/hr/demo`. It provides fictional management,
-employee, manager and contractor portals. Mock actions include employee search,
-profile edits, onboarding checklists, time entries, time-off requests/approvals,
-policy/training acknowledgements and payroll/payment previews. Browser state
-resets on refresh. Real payroll execution is unavailable.
+employee, manager and contractor portals.
 
-At `/hr/demo/sdk`, the genuine SDK **0.56.6** renders the employee directory
-using development-only local wire-format fixtures. Active, Onboarding and
-Dismissed reads are covered. Credentials, writes, foreign companies and unknown
-operations are refused. This is a limited SDK contract test, not full SDK coverage.
-The mock middleware is not a deployed API. See
+WebAppX 3.4.0 supports these native account-free journeys:
+
+| Journey | Host preview sequence |
+| --- | --- |
+| Onboarding | Review the fictional profile/job, complete the checklist, review the summary and confirm simulated completion. |
+| Benefits | In the employee self preview, elect sample enrollment/waiver, review and confirm it; management remains read-only. |
+| Time tracking | Submit a timesheet, obtain its scoped manager approval and link approved hours to mock payroll. |
+| Payroll | Prepare approved hours, calculate fictional totals, review and simulate submission with a mock receipt. |
+
+Use the same fictional employee and confirm elections before preparing payroll.
+The fixed sample period is 2026-10-01 through 2026-10-15. Only active employees'
+approved, unpaid entries in that period qualify, and a simulated receipt consumes
+those entries once.
+
+Employee search/profile edits, time-off requests/approvals, policy/training
+acknowledgements and contractor previews remain available. All native workflow state
+lives in browser memory and resets on refresh or Reset. These flows do not
+create an account, call a provider, persist HR data to the cloud, enroll insurance
+or execute payroll. The portable alpha.6 specification and its fingerprints
+are unchanged by this host workflow update.
+
+At `/hr/demo/sdk`, SDK **0.56.6** renders genuine components against isolated
+development-only synthetic sessions:
+
+| Selected component | Local mock path |
+| --- | --- |
+| `EmployeeManagement.EmployeeList` | Active, Onboarding and Dismissed directory queries. |
+| `EmployeeOnboarding.OnboardingExecutionFlow` | Admin profile, compensation, federal/state tax, Check payment, deductions and Summary screens. |
+| `Payroll.PayrollExecutionFlow` | Configuration/prepare, calculate/poll, review and synthetic submission/poll. |
+
+SDK onboarding Summary/Done is navigation rather than completion. The host
+requires explicit simulated employee-form and new-hire review before local
+status update/readback. I-9, legal signatures, tax filing and eligibility
+verification are outside this selected mock path.
+The [host setup guide](https://github.com/WayneTechLab/WebAppX/blob/main/docs/GUSTO-SETUP.md)
+walks the verified fictional Jordan/Texas/Check case, using prefilled masked
+identity data and no real SSN, bank credentials or Gusto account. It also covers
+the SDK payroll sample: edit **Regular Hours** `80` → `8`, save, **Calculate
+and review**, inspect its separate fictional `$200` zero-tax totals, then
+**Submit** through the genuine **Payroll submitted** summary and host
+**Simulated payroll processed** banner. Downloads, check/paystub and cancellation
+actions are outside that selected mock journey.
+
+Supported writes mutate only local fictional fixtures. Credentials, foreign
+companies and unsupported operations remain refused. Benefits/time have native
+interfaces because this SDK version has no corresponding UI flows. Native state
+and SDK sessions remain separate; the host does not export native approved hours
+to Gusto or the SDK fixture. SDK Reset/refresh clears its sample session, and
+native Reset clears its own fixture. These paths do not establish full SDK,
+all onboarding scenarios, real payroll/tax accuracy or provider acceptance.
+The mock middleware is absent from Hosting and production preview. See
 [WebAppX setup](https://github.com/WayneTechLab/WebAppX/blob/main/docs/GUSTO-SETUP.md)
 and [its HR wiki guide](https://github.com/WayneTechLab/WebAppX/wiki/Gusto-HR-and-Employee-Management).
 
@@ -94,6 +137,10 @@ forwarding, token rotation, reconciliation and financial execution require
 separately implemented and accepted adapters.
 
 ## Migration
+
+The native timesheet-to-mock-payroll link is synthetic. A future App Integrations
+time export must follow Gusto's [shift-level time-tracking contract](https://docs.gusto.com/app-integrations/docs/syncing-time-tracking-data),
+including UTC timestamps, a named time zone and classified hours.
 
 Move through contracts → synthetic fixtures/UI → authenticated native HR →
 application-specific Gusto Demo → provider workflow/permission checks → approved
