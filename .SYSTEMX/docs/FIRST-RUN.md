@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.4"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.5"
 "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.4"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.5"
 & "$HOME\.venvs\dotsystemx\Scripts\python.exe" -I -B -m systemx --help
 ```
 
@@ -134,7 +134,9 @@ Use focused context to avoid redundant loading; see [efficiency](EFFICIENCY.md).
 Save the [uninstall/restore instructions](UNINSTALL.md) with the handoff.
 
 Menu option 13 opens this guide. Option 14 opens the removal guide. Selecting
-these guide entries makes no setup or removal changes.
+these guide entries makes no setup or removal changes. Option 18 opens the
+[CLI and tools guide](CLI-TOOLS.md), also available as `tools-guide` through
+the local launcher or managed `run` command.
 
 ## Optional: initialize multiple projects
 
@@ -144,19 +146,26 @@ command. Each new project starts blank with Agent 0 only; existing folders are
 never replaced. Do not run a second installer inside `.SYSTEMX`.
 
 ```bash
-bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software
-bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
-bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
+systemx projects --target "/path/to/project" -- add Project-A --kind software
+systemx projects --target "/path/to/project" -- add Project-A --kind software --apply
+systemx projects --target "/path/to/project" -- context --project Project-A --agent agent.0
 ```
+
+`--target` still selects the containing outer directory. Direct `projects`
+defaults to offline startup; add `--online` before `--` only when you want to
+permit the independently opted-in startup release check. The compatible
+`systemx run --target PATH --offline -- projects ...` form and reviewed local
+launchers remain available. A child's `.SYSTEMXP` shares the outer defaults
+and keeps its own records; it is never a second installer target.
 
 Windows PowerShell, using the `systemx` function from step 3 and the containing
 project directory you selected:
 
 ```powershell
 $projectRoot = 'C:\Projects\Example'
-systemx run --target $projectRoot --offline -- projects add Project-A --kind software
-systemx run --target $projectRoot --offline -- projects add Project-A --kind software --apply
-systemx run --target $projectRoot --offline -- projects context --project Project-A --agent agent.0
+systemx projects --target $projectRoot -- add Project-A --kind software
+systemx projects --target $projectRoot -- add Project-A --kind software --apply
+systemx projects --target $projectRoot -- context --project Project-A --agent agent.0
 ```
 
 ## Optional: activate standard Agent X, Agent Y, and Agent Z roles
@@ -174,3 +183,17 @@ On Windows PowerShell, using the same `$projectRoot` and `systemx` function:
 systemx run --target $projectRoot --offline -- roles-init
 systemx run --target $projectRoot --offline -- roles-init --apply
 ```
+
+For a named child, select it explicitly. This creates role records without
+starting any CLI provider:
+
+```bash
+systemx projects --target "/path/to/project" -- roles-init --project Project-A
+systemx projects --target "/path/to/project" -- roles-init --project Project-A --apply
+systemx projects --target "/path/to/project" -- agent-y providers --project Project-A
+```
+
+Configure a child's application commands in its `.SYSTEMXP/project.json`.
+Their working directory is `.SYSTEMX/Projects/Project-A/`, so explicitly address
+`code/` or the intended project script. Read the [CLI and tools guide](CLI-TOOLS.md)
+before connecting provider, repository, or cloud tooling.

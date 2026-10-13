@@ -67,6 +67,64 @@ class SystemxTests(unittest.TestCase):
         self.assert_ok(self.run_cli("validate", "--template"))
         self.assertFalse((self.systemx / "project.json").exists())
 
+    def test_tools_guide_and_menu_option_are_read_only(self):
+        before = {p.relative_to(self.systemx).as_posix(): p.read_bytes()
+                  for p in self.systemx.rglob("*") if p.is_file()}
+        guide = (self.systemx / "docs/CLI-TOOLS.md").read_text(encoding="utf-8")
+        result = self.run_cli("tools-guide")
+        self.assert_ok(result)
+        self.assertEqual(result.stdout, guide + "\n")
+        menu = self.run_cli("menu", input_text="18\n0\n")
+        self.assert_ok(menu)
+        self.assertIn("18) CLI, tools, and .SYSTEMXP routing guide", menu.stdout)
+        self.assertIn(guide, menu.stdout)
+        after = {p.relative_to(self.systemx).as_posix(): p.read_bytes()
+                 for p in self.systemx.rglob("*") if p.is_file()}
+        self.assertEqual(before, after)
+
+    @unittest.skipUnless(shutil.which("pwsh"), "PowerShell launcher requires pwsh")
+    def test_powershell_folder_launcher_matches_bash_without_managed_state(self):
+        result = subprocess.run([shutil.which("pwsh"), "-NoProfile", "-File",
+                                 str(self.systemx / "SYSTEMX.ps1"), "validate", "--template"],
+                                cwd=self.temp.name, text=True, capture_output=True, timeout=15)
+        self.assert_ok(result)
+        self.assertFalse((self.systemx / "INSTALLATION.json").exists())
+        self.assertFalse((self.systemx / "project.json").exists())
+
+    def test_launchers_refuse_malformed_installation_markers_without_fallback(self):
+        commands = []
+        if shutil.which("bash"):
+            commands.append([shutil.which("bash"), str(self.systemx / "SYSTEMX.sh")])
+        if shutil.which("pwsh"):
+            commands.append([shutil.which("pwsh"), "-NoProfile", "-File", str(self.systemx / "SYSTEMX.ps1")])
+        if not commands:
+            self.skipTest("Launcher tests require Bash or PowerShell")
+        state = self.systemx / "INSTALLATION.json"
+        marker = self.root / "UNMANAGED-FALLBACK-EXECUTED"
+        self.runner.write_text("from pathlib import Path\nPath(" + repr(str(marker)) +
+                               ").write_text('executed')\n")
+        for kind in ("file", "directory", "dangling-link"):
+            if kind == "file":
+                state.write_text("malformed managed state\n")
+            elif kind == "directory":
+                state.mkdir()
+            else:
+                try:
+                    state.symlink_to(self.root / "absent-state")
+                except (NotImplementedError, OSError):
+                    continue
+            for command in commands:
+                with self.subTest(kind=kind, command=command[0]):
+                    result = subprocess.run([*command, "status"], cwd=self.temp.name,
+                                            text=True, capture_output=True, timeout=15)
+                    self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                    self.assertFalse(marker.exists())
+                    self.assertTrue(state.exists() or state.is_symlink())
+            if kind == "directory":
+                state.rmdir()
+            else:
+                state.unlink()
+
     def test_public_template_rejects_populated_project_records_without_affecting_normal_use(self):
         memory = self.systemx / "MEMORY/PROJECT.md"
         memory.write_text(memory.read_text() + "\nProject-specific fixture fact\n")

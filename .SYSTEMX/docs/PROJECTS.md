@@ -55,18 +55,24 @@ transcripts or silently import sibling memory.
 ## First-time setup
 
 Install or update the outer `.SYSTEMX` using the [installation guide](INSTALLATION.md).
-Run these commands from the directory containing that outer folder:
+Use a reviewed external `systemx` CLI with `--target` pointing to the directory
+containing that outer folder. Direct `projects` runs the managed selected
+defaults and defaults to offline startup:
 
 ```bash
 # Preview without changing files, then create blank local project records.
-bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software
-bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
-bash .SYSTEMX/SYSTEMX.sh projects add Project-B --kind channel --apply
-bash .SYSTEMX/SYSTEMX.sh projects list
-bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software --apply
+systemx projects --target "/path/to/workspace" -- add Project-B --kind channel --apply
+systemx projects --target "/path/to/workspace" -- list
+systemx projects --target "/path/to/workspace" -- context --project Project-A --agent agent.0
 ```
 
-On Windows use `powershell -File .SYSTEMX/SYSTEMX.ps1` with the same arguments.
+The compatible longer form is `systemx run --target PATH --offline -- projects
+COMMAND ...`. A reviewed copied folder or managed installation also supports
+`bash .SYSTEMX/SYSTEMX.sh projects COMMAND ...` from the containing directory;
+Windows uses `& .\.SYSTEMX\SYSTEMX.ps1 projects COMMAND ...`.
+See the [CLI and tools guide](CLI-TOOLS.md) for the entry-point boundaries.
 The interactive launcher also offers **SYSTEMX PROJECTS guide** and **List projects**.
 Supported kinds are `general`, `software`, `research`, `operations`, and `channel`;
 they are descriptive labels and do not provision a stack.
@@ -215,6 +221,14 @@ bash .SYSTEMX/SYSTEMX.sh projects build --project Project-A
 External source references do not redirect execution. Routing is not an OS sandbox;
 a configured program has the user's normal filesystem and network permissions.
 
+The same operations through the direct managed CLI are:
+
+```bash
+systemx projects --target "/path/to/workspace" -- check --project Project-A --dry-run
+systemx projects --target "/path/to/workspace" -- check --project Project-A
+systemx projects --target "/path/to/workspace" -- build --project Project-A
+```
+
 ```python
 import systemx
 
@@ -276,8 +290,11 @@ Use `projects roles-init --project Project-A` to preview supported role activati
 then add `--apply`. Their records stay in the selected `.SYSTEMXP`. Examples:
 
 ```bash
-bash .SYSTEMX/SYSTEMX.sh projects agent-x due --project Project-A
-bash .SYSTEMX/SYSTEMX.sh projects agent-z policy --project Project-A
+systemx projects --target "/path/to/workspace" -- roles-init --project Project-A
+systemx projects --target "/path/to/workspace" -- roles-init --project Project-A --apply
+systemx projects --target "/path/to/workspace" -- agent-x due --project Project-A
+systemx projects --target "/path/to/workspace" -- agent-y providers --project Project-A
+systemx projects --target "/path/to/workspace" -- agent-z policy --project Project-A
 ```
 
 [Agent X](AGENT-X.md) tracks event/time/schedule facts;

@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.9.0-alpha.4` release and leaves updates manual.
+example selects the reviewed `v1.9.0-alpha.5` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.4"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.5"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.4
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.4 --apply
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.5
+systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.5 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -85,16 +85,28 @@ create a lowercase compatibility link where supported; see
 
 ## How the system coordinates work
 
-[![.SYSTEMX full-system map: Agent 0 coordinates scoped app workers and the optional Agent Y CLI lane; Agent X records events and Agent Z reviews evidence against the canonical project records.](docs/assets/systemx-full-system.png)](.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg)
+[![.SYSTEMX full-system map: CLI, launchers, and library select root or named .SYSTEMXP records; Agent 0 coordinates app workers and Agent Y's external CLI lane, Agent X records events, and Agent Z reviews evidence.](docs/assets/systemx-full-system.png)](.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg)
 
-[Download the 4K full-system map](.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg) ·
+[Download the 4K full-system map](.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg) ·
 [Accessible text equivalent](docs/assets/systemx-full-system.md) ·
+[CLI and tools guide](.SYSTEMX/docs/CLI-TOOLS.md) ·
 [Media library](.SYSTEMX/MEDIA/README.md)
+
+Use the CLI to select one outer workspace and one named project. Each
+`.SYSTEMX/Projects/Project-A/.SYSTEMXP` keeps its own plan, ledger, memory, and
+agent records while sharing the outer tools and version pin. The external CLI,
+local shell/PowerShell launchers, Python library, app/IDE subagents, and Agent Y's
+selected provider have distinct entry points; the [CLI and tools guide](.SYSTEMX/docs/CLI-TOOLS.md)
+shows how they connect.
 
 ```mermaid
 flowchart LR
-  H[Human objective and authority] --> R[.SYSTEMX context, plan, and task ledger]
+  H[Human objective and authority] --> S[Explicit root or child scope]
+  CLI[CLI, local launchers, or Python API] --> S
+  S --> R[Root .SYSTEMX context, plan, and task ledger]
+  S --> C[Projects/NAME/.SYSTEMXP records]
   R --> A0[Agent 0: scope and coordination]
+  C --> A0
   A0 --> W[App or IDE subagents]
   A0 --> Y[Agent Y: selected external CLI lane]
   Y --> P[Isolated branch and optional draft PR]
@@ -103,7 +115,7 @@ flowchart LR
   P --> Z[Agent Z: evidence review]
   X --> Z
   Z --> A0
-  A0 --> R
+  A0 --> S
 ```
 
 Agent Y is a separate CLI run, even when its provider shares configuration with
@@ -151,6 +163,18 @@ For multiple named projects, one outer `.SYSTEMX` can hold separate
 plan, tasks, and memory, and scoped commands require explicit project selection.
 Do not nest a second `.SYSTEMX` inside `.SYSTEMX`. See
 [SYSTEMX PROJECTS](https://github.com/WayneTechLab/dotSYSTEMX/wiki/SYSTEMX-Projects).
+
+```bash
+# Use the containing workspace directory as --target; preview before --apply.
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software --apply
+systemx projects --target "/path/to/workspace" -- context --project Project-A --agent agent.0
+```
+
+The direct `projects` command defaults to offline startup and uses the managed
+workspace's verified selected defaults. The compatible `systemx run --target
+PATH --offline -- projects ...` form and reviewed folder-only launchers remain
+available. Source URLs do not connect cloud services or synchronize records.
 
 ## Try it with an AI assistant
 

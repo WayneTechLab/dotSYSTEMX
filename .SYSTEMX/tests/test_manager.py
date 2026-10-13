@@ -1,6 +1,6 @@
 """Install/update preservation and boundary tests; no live network or user project writes."""
 
-from contextlib import redirect_stderr
+from contextlib import redirect_stderr, redirect_stdout
 import hashlib
 import importlib.util
 import io
@@ -366,6 +366,99 @@ class ManagerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
         self.assertIn("no managed .SYSTEMX installation", result.stderr)
         self.assertFalse(marker.exists())
+
+    def projects_cli(self, *arguments):
+        return subprocess.run([sys.executable, "-I", "-B", str(SOURCE / "manager.py"),
+                               "projects", "--target", str(self.root), "--", *arguments],
+                              cwd=self.folder, text=True, capture_output=True, timeout=15)
+
+    def test_public_projects_cli_selects_managed_scope_and_preserves_output_and_exit(self):
+        self.write_manifest()
+        self.install()
+        manager.set_policy(self.root, auto_update="on-start")
+        preview = self.projects_cli("add", "Project A")
+        self.assertEqual(preview.returncode, 0, preview.stderr)
+        self.assertFalse((self.root / ".SYSTEMX/Projects/Project A").exists())
+        added = self.projects_cli("add", "Project A", "--apply")
+        self.assertEqual(added.returncode, 0, added.stderr)
+        listed = self.projects_cli("list")
+        self.assertEqual(json.loads(listed.stdout)["projects"][0]["name"], "Project A")
+        for scope, title in ((["--root"], "Root fixture"), (["--project", "Project A"], "Child fixture")):
+            result = self.projects_cli("task-add", *scope, "--title", title, "--acceptance", "Fixture proof")
+            self.assertEqual(result.returncode, 0, result.stderr)
+        root_context = self.projects_cli("context", "--root")
+        child_context = self.projects_cli("context", "--project", "Project A")
+        self.assertIn("Root fixture", root_context.stdout)
+        self.assertNotIn("Child fixture", root_context.stdout)
+        self.assertIn("Child fixture", child_context.stdout)
+        self.assertNotIn("Root fixture", child_context.stdout)
+        self.assertEqual(self.projects_cli("status").returncode, 2)
+        self.assertFalse((self.root / ".SYSTEMX/.systemx/last-check.json").exists())
+
+        config = self.root / ".SYSTEMX/Projects/Project A/.SYSTEMXP/project.json"
+        value = json.loads(config.read_text())
+        value["checks"] = [{"name": "known-failing", "command": [sys.executable, "-c", "raise SystemExit(7)"]}]
+        config.write_text(json.dumps(value))
+        failed = self.projects_cli("check", "--project", "Project A")
+        self.assertEqual(failed.returncode, 7, failed.stdout + failed.stderr)
+        self.assertIn("Selected scope: Project A", failed.stdout)
+        self.assertIn("failed (exit 7)", failed.stderr)
+        compatible = subprocess.run([sys.executable, "-I", "-B", str(SOURCE / "manager.py"),
+                                     "run", "--target", str(self.root), "--offline", "--", "projects", "list"],
+                                    cwd=self.folder, text=True, capture_output=True, timeout=15)
+        self.assertEqual(json.loads(compatible.stdout), json.loads(listed.stdout))
+
+    def test_public_projects_cli_is_offline_by_default_and_online_respects_policy(self):
+        result = subprocess.CompletedProcess([], 9)
+        cases = (([], True), (["--offline"], True), (["--online"], False))
+        for flags, offline in cases:
+            with self.subTest(flags=flags), patch.object(manager, "projects", return_value=result) as selected:
+                self.assertEqual(manager.main(["projects", "--target", str(self.root), *flags, "--", "list"]), 9)
+                selected.assert_called_once_with(str(self.root), ["--", "list"], offline=offline, capture=False)
+        self.write_manifest()
+        self.install()
+        # Allowing the startup hook retains its manual default and cannot select a release.
+        with patch.object(manager, "get_url", side_effect=AssertionError("Manual policy must not contact network")):
+            actual = manager.projects(self.root, ["list"], offline=False)
+            self.assertEqual(actual.returncode, 0, actual.stderr)
+
+    def test_public_projects_cli_refuses_unmanaged_targets_and_target_overrides(self):
+        local = self.root / ".SYSTEMX"
+        script = local / "scripts/systemx.py"
+        script.parent.mkdir(parents=True)
+        marker = self.folder / "UNMANAGED-PROJECTS-EXECUTED"
+        script.write_text("from pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('executed')\n")
+        result = self.projects_cli("list")
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("no managed .SYSTEMX installation", result.stderr)
+        self.assertFalse(marker.exists())
+        shutil.rmtree(local)
+        self.write_manifest()
+        self.install()
+        for arguments in (("--root", str(self.folder), "list"), ("--target", str(self.folder), "list"),
+                          ("status", "--project", "../other"), ("status", "--root", "--project", "Other")):
+            with self.subTest(arguments=arguments):
+                result = self.projects_cli(*arguments)
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertFalse((self.folder / ".SYSTEMX").exists())
+        empty = self.projects_cli()
+        self.assertEqual(empty.returncode, 2)
+        self.assertIn("include a projects subcommand", empty.stderr)
+        wrong_target = subprocess.run([sys.executable, "-I", "-B", str(SOURCE / "manager.py"), "projects",
+                                      "--target", str(local), "--", "list"],
+                                     cwd=self.folder, text=True, capture_output=True, timeout=15)
+        self.assertEqual(wrong_target.returncode, 2, wrong_target.stdout + wrong_target.stderr)
+
+    @unittest.skipUnless(shutil.which("pwsh"), "PowerShell launcher requires pwsh")
+    def test_powershell_managed_launcher_uses_selected_verified_defaults(self):
+        self.write_manifest()
+        self.install()
+        (self.root / ".SYSTEMX/scripts/systemx.py").write_text("raise RuntimeError('retained runner must not execute')\n")
+        result = subprocess.run([shutil.which("pwsh"), "-NoProfile", "-File",
+                                 str(self.root / ".SYSTEMX/SYSTEMX.ps1"), "status"],
+                                cwd=self.folder, text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertNotIn("retained runner must not execute", result.stderr)
 
     def test_manual_policy_and_offline_run_never_contact_network(self):
         self.install()

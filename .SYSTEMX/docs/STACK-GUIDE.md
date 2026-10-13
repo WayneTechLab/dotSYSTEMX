@@ -18,12 +18,15 @@ your project chooses its languages, frameworks, data stores, and deployment tool
 | VS Code | Optional editor | No extension or global settings changes |
 | Google Drive profile | Locally available regular files, or explicit browser uploads | No Drive client, OAuth, or account setup |
 | LLM chat | Explicit attachments or authorized file tools | No model subscription or API calls |
+| Optional Agent Y CLI execution | Git and a chosen installed provider CLI; `gh` for its GitHub PR operations | No provider installation, sign-in, or credentials are supplied |
 
 There are no third-party Python runtime dependencies, database requirements,
 Node.js requirements, background daemons, system services, login jobs, or automatic
 Git hooks in the standard installation. Building a wheel uses setuptools as a
 build dependency in the build environment. The GitHub release wheel avoids a
 local source build.
+The [CLI and tools guide](CLI-TOOLS.md) distinguishes the external manager,
+managed/local launchers, Python API, selected provider, and application tools.
 
 ## Fit it to your project
 
@@ -57,6 +60,13 @@ do not rely on Git, Drive, or archives preserving them. Prefer an isolated Pytho
 environment for the library so its package and logs are easy to identify and
 remove. Start with [first-time setup](FIRST-RUN.md), then keep the
 [uninstall guide](UNINSTALL.md) with the project handoff.
+
+For multiple projects, use one outer `.SYSTEMX` toolchain and separate
+`Projects/NAME/.SYSTEMXP` records. Direct `systemx projects --target
+OUTER_DIRECTORY -- ...` selects the outer managed installation; choose the
+child with `--project NAME`. Child application commands run from
+`Projects/NAME/`, so configure paths to code/scripts relative to that directory.
+See [SYSTEMX PROJECTS](PROJECTS.md) for shared defaults and update boundaries.
 
 ## Full-project and bot toolchains
 

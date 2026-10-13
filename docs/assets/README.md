@@ -4,7 +4,7 @@ The standalone logo remains `.SYSTEMX`; attribution belongs in project informati
 
 | Asset | Purpose | Editable source |
 | --- | --- | --- |
-| `systemx-full-system.png` | Current 4K Agent 0/X/Y/Z, record, toolchain, project and lifecycle map | [Imagegen prompt](systemx-full-system-prompt.md) · [text equivalent](systemx-full-system.md) · [portable 4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg) |
+| `systemx-full-system.png` | Current 4K Agent 0/X/Y/Z, CLI and tools, explicit `.SYSTEMXP` child scopes, records, and lifecycle map | [Imagegen prompt](systemx-full-system-prompt.md) · [text equivalent](systemx-full-system.md) · [portable 4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg) |
 | `systemx-logo.png` | Current brand logo | Imagegen provenance in [IMAGE-PROMPTS.md](IMAGE-PROMPTS.md) |
 | `systemx-coordination.png` / `.svg` | Global/Master Plan, Agent 0/X/Y/Z, acceptance and checkpoint | [Mermaid](systemx-coordination.mmd) |
 | `systemx-project-waves.png` / `.svg` | Research through accepted delivery | [Mermaid](systemx-project-waves.mmd) |
@@ -28,6 +28,10 @@ is installed by `.SYSTEMX` setup.
 
 Keep `.SYSTEMX` and `.SYSTEMXP` exact casing. The diagrams describe responsibilities,
 not automatic workers, model training, a cloud sync service, or a scheduler.
+The [CLI and tools guide](../../.SYSTEMX/docs/CLI-TOOLS.md) supplies executable
+examples for the poster's external CLI, managed/local launcher, Python API,
+provider, and child-project lanes. Child `.SYSTEMXP` records share one outer
+default version; select each scoped command explicitly by registered project name.
 
 The full-system poster is a built-in imagegen raster asset. Its text equivalent
 and generation/edit prompts are maintained alongside it. Click the image in the

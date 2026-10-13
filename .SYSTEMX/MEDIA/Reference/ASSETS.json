@@ -84,36 +84,37 @@
         "agent.y",
         "agent.z"
       ],
-      "baseline": "1.9.0-alpha.4",
-      "prompt": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.9.0-alpha.4/docs/assets/systemx-full-system-prompt.md",
+      "baseline": "1.9.0-alpha.5",
+      "prompt": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.9.0-alpha.5/docs/assets/systemx-full-system-prompt.md",
       "tool": "built-in imagegen edit",
-      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 90",
+      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 80",
       "upscaled": true,
       "export": {
-        "file": "../Infographics/systemx-full-system-4k.jpg",
+        "file": "../Infographics/systemx-cli-projects-4k.jpg",
         "width": 3840,
         "height": 2160,
-        "bytes": 2066062,
-        "sha256": "78be159877e015c2bbb98848267665b7c171cbd15b8bf3a8f2f780dfa65cddfa"
+        "bytes": 1867015,
+        "sha256": "cc09f9cde7aba3bb77c109257a937b031254d599b81479ad96b05909a617e1b1"
       },
       "web": {
-        "url": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.9.0-alpha.4/docs/assets/systemx-full-system.png",
+        "url": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.9.0-alpha.5/docs/assets/systemx-full-system.png",
         "width": 3840,
         "height": 2160,
-        "bytes": 6685147,
-        "sha256": "8c003e1d638c5fcea6702410539ea9e0deec79253e7f5b4d2298335de6dcff84"
+        "bytes": 7334619,
+        "sha256": "48d0a9f413da3d30c8f6853f8fa3d30ce2639c2bf4a300edae1680b322065e2e"
       },
       "source": {
         "width": 1672,
         "height": 941,
-        "bytes": 2059577,
-        "sha256": "5b6fc1f3e9241c079940a15483ce1adcd1b4ffaf1d7f20397aeb997cb661321d",
-        "note": "Native built-in imagegen original retained outside the repository; only latest 4K outputs ship."
-      }
+        "bytes": 2141747,
+        "sha256": "21c5b8c7a0ffd48653d5bf1c7689d47c3c941ea8aa1ca311b2eef87faf995584",
+        "note": "Native built-in imagegen original retained outside the repository; only selected latest 4K outputs ship."
+      },
+      "focus": "CLI and .SYSTEMXP routing"
     }
   ],
   "layoutRelease": "1.8.6-alpha.1",
   "sourceArchive": "v1.8.5-alpha.1",
-  "note": "Four historical workflow cards retain their exact bytes and examined baseline. The full-system map is a new Agent 0/X/Y/Z export for 1.9.0-alpha.4. Per-asset metadata describes generation and export provenance. Only selected 4K outputs ship.",
+  "note": "Four historical cards retain their exact bytes and examined baseline. The latest full-system map emphasizes CLI/tools and .SYSTEMXP routing for alpha.5; its new filename is additive for existing projects. Per-asset generation/export provenance is recorded; only selected 4K outputs ship.",
   "updatedOn": "2026-10-12"
 }

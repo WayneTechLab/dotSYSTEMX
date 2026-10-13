@@ -4,6 +4,8 @@ SYSTEMX can be copied as a self-contained folder or installed as the `dotsystemx
 Python distribution, which exposes the `systemx` command and importable module.
 The package includes the same template files and uses no third-party runtime
 dependencies. A package installation does not initialize or alter any project.
+The [CLI and tools guide](CLI-TOOLS.md) compares the manager, local launchers,
+runtime commands, Python API, and Agent Y's external Git/provider tools.
 
 ## Install into a chosen Python environment
 
@@ -12,7 +14,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.4"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.5"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -36,7 +38,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.9.0-alpha.4` is spelled `1.9.0a4` in Python package
+The public release ID `1.9.0-alpha.5` is spelled `1.9.0a5` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)
@@ -170,6 +172,22 @@ removal/restore from an external environment or checkout. Preserve the receipt
 and use the [cleanup guide](UNINSTALL.md) for package removal and intentional leftovers.
 
 ## SYSTEMX PROJECTS API and selected chat export
+
+The direct CLI uses the same `projects` API and defaults to offline startup:
+
+```bash
+systemx projects --target "/path/to/workspace" -- list
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software --apply
+systemx projects --target "/path/to/workspace" -- context --project Project-A --agent agent.0
+systemx projects --target "/path/to/workspace" -- roles-init --project Project-A
+```
+
+Place optional `--offline` or `--online` before the `--` argument separator.
+`--online` permits an independently opted-in startup release check; it does not
+select a new version. The existing `systemx run --target PATH --offline --
+projects ...` form remains compatible. Both require a managed outer installation;
+a child `.SYSTEMXP` is never an installation target.
 
 ```python
 from systemx import projects, export_chat

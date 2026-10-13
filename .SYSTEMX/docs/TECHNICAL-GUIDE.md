@@ -178,6 +178,12 @@ Keep any new harness or MCP adapter behind the existing project boundary:
 
 These are extension requirements, not capabilities of a shipped MCP server.
 The current integration surface is the [library and CLI](LIBRARY.md).
+The [CLI and tools guide](CLI-TOOLS.md) maps its entry points and prerequisites.
+Direct `systemx projects --target OUTER_DIRECTORY -- ...` wraps the same
+`projects()` API, defaults to offline startup, and runs the outer installation's
+verified selected defaults. Its target is never a child `.SYSTEMXP`. The existing
+`systemx run --target OUTER_DIRECTORY --offline -- projects ...` interface remains
+compatible. Local `tools-guide` and interactive menu option 18 print the guide.
 
 ## Task scale and context scale
 

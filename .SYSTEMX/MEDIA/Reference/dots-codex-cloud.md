@@ -5,7 +5,7 @@
 [![Dots / Codex Cloud: six steps connecting project context, work, review and a saved handoff.](../Infographics/dots-codex-cloud-4k.jpg)](../Infographics/dots-codex-cloud-4k.jpg)
 
 **Artwork baseline:** the retained card depicts Agent 0/X/Z. See the current
-[full-system map](full-system.md) for all four roles and the optional Agent Y
+[full-system map](cli-projects.md) for all four roles and the optional Agent Y
 CLI lane. This text guide follows the current format.
 
 ## Workflow

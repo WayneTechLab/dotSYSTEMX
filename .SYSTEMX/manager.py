@@ -1037,6 +1037,10 @@ def projects(target, arguments, *, offline=True, capture=True):
     if not isinstance(arguments, (list, tuple)) or not arguments or any(
             not isinstance(value, str) or "\x00" in value for value in arguments):
         raise InstallError("Project arguments must be a nonempty string argument array")
+    if arguments[0] == "--":
+        arguments = arguments[1:]
+    if not arguments:
+        raise InstallError("Project arguments must include a projects subcommand")
     return run(target, ["projects", *arguments], offline=offline, capture=capture)
 
 
@@ -1242,7 +1246,10 @@ def main(argv=None):
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description=".SYSTEMX additive installation and version management")
+    parser = argparse.ArgumentParser(
+        description=".SYSTEMX additive installation and version management",
+        epilog="Use projects --target PATH -- SUBCOMMAND to route managed .SYSTEMXP records. "
+               "Select --root or --project NAME explicitly for scoped work; project routing is offline by default.")
     tool_version = version_id((PACKAGE / "VERSION").read_text(encoding="utf-8").strip())
     parser.add_argument("--version", action="version", version=".SYSTEMX " + tool_version +
                         " (" + release_channel(tool_version) + "; Python package " + package_version(tool_version) + ")")
@@ -1282,6 +1289,15 @@ def main(argv=None):
     command.add_argument("--target", required=True)
     command.add_argument("--offline", action="store_true")
     command.add_argument("arguments", nargs=argparse.REMAINDER)
+    command = sub.add_parser("projects", help="route explicit .SYSTEMXP scopes using verified managed defaults",
+                             description="Forward projects commands to the selected managed .SYSTEMX installation. "
+                                         "Scoped commands require --root or --project NAME after the subcommand.")
+    command.add_argument("--target", required=True, help="outer project directory containing .SYSTEMX")
+    mode = command.add_mutually_exclusive_group()
+    mode.add_argument("--offline", dest="offline", action="store_true", help="skip startup update discovery (default)")
+    mode.add_argument("--online", dest="offline", action="store_false", help="allow the opted-in startup release check")
+    command.set_defaults(offline=True)
+    command.add_argument("arguments", nargs=argparse.REMAINDER, help="projects subcommand arguments, following --")
     command = sub.add_parser("export-chat")
     command.add_argument("--target", required=True)
     command.add_argument("--output", required=True)
@@ -1328,6 +1344,8 @@ def main(argv=None):
             result = status(args.target)
         elif args.action == "run":
             return run(args.target, args.arguments, offline=args.offline).returncode
+        elif args.action == "projects":
+            return projects(args.target, args.arguments, offline=args.offline, capture=False).returncode
         elif args.action == "export-chat":
             result = export_chat(args.target, args.output, agent=args.agent, project=args.project)
         elif args.action == "first-run":

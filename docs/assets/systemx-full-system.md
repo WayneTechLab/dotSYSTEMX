@@ -96,7 +96,7 @@ and revision identity, and comparable deltas. Reuse unchanged inputs at
 meaningful boundaries; do not repeatedly rebuild or review without a concrete
 change. Scores advise. Agent 0/user decides acceptance or the next bounded gap.
 
-## 7. Toolchain and real execution
+## 7. CLI, tools, and real execution
 
 The app, IDE, CLI, chat, or bot harness supplies models, actual processes, tools,
 and permissions. `SYSTEMX.sh`, `SYSTEMX.ps1`, compatible `WSG-MENU.sh`,
@@ -108,7 +108,37 @@ IDs, source revisions, artifacts, and applicable live verification.
 The folder itself supplies no model, application framework, cloud service,
 scheduler, or bot runtime.
 
+The external CLI manages the **outer directory containing `.SYSTEMX`**:
+`first-run`, `install`, `status`, `policy`, `update`, `audit`, `uninstall`,
+`restore`, and `export-chat`. Its `status` is installation status; task status
+comes from the selected record scope. The direct project-routing command is:
+
+```bash
+systemx projects --target "/path/to/outer-workspace" -- list
+systemx projects --target "/path/to/outer-workspace" -- context --project Project-A --agent agent.0
+```
+
+`systemx projects` defaults to offline operation. Optional `--online` permits
+only the installation's configured startup notice check; it does not select or
+download defaults. The compatible longer form remains
+`systemx run --target OUTER --offline -- projects ...`. Explicit scope is required
+for child record operations. The outer launchers support `tools-guide`,
+`doctor`, `validate`, task/agent commands, and configured project actions.
+The Python API exposes `run()`, `projects()`, and `export_chat()`.
+Git and `gh` supply authorized repository/PR actions; Codex, Copilot, or a
+configured CLI supplies Agent Y execution when installed and authorized.
+See the versioned [CLI and tools guide](../../.SYSTEMX/docs/CLI-TOOLS.md).
+
 ## 8. SYSTEMX PROJECTS
+
+```text
+.SYSTEMX/
+  scripts/                         Shared operational tools
+  .systemx/                        Managed defaults and logs after install
+  Projects/
+    Project-A/.SYSTEMXP/           Separate selected records
+    Project-B/.SYSTEMXP/           Independent sibling records
+```
 
 `Projects/REGISTRY.json` selects named children at
 `.SYSTEMX/Projects/NAME/.SYSTEMXP`. Each child has `GLOBAL/`, `PLAN/`,
@@ -117,6 +147,14 @@ scheduler, or bot runtime.
 selected scope. One outer installation supplies shared tools and selected
 defaults. Do not nest another `.SYSTEMX`, combine sibling ledgers, or infer
 scope from a previous chat. Explicit project selection is required.
+
+Use `projects context --project Project-A` or
+`projects roles-init --project Project-A` through the chosen outer entry point.
+Role activation previews by default and creates optional records only with
+`--apply`. Each child's `project.json` configures its own application commands;
+those commands run from `Projects/Project-A/`, not from `.SYSTEMXP` or the outer
+repository. Source URLs are references and do not change that working directory.
+The shared outer installation does not merge sibling memory or task ledgers.
 
 ## 9. Defaults, setup, updates, and recovery
 
@@ -146,7 +184,7 @@ Git, local folders, Drive, cloud storage, and VMs can carry records through
 authorized access and verified snapshots. A URL alone does not connect a
 service, synchronize concurrent writers, or prove deployment.
 
-[4K download](../../.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg) ·
+[4K download](../../.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg) ·
 [Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide) ·
 [Shared-workspace guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Shared-Workspaces-Cloud-and-Bots)
 

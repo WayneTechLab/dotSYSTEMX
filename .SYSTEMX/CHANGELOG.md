@@ -4,6 +4,34 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.9.0-alpha.5 — CLI tools and explicit .SYSTEMXP routing
+
+- Added direct installed-CLI project routing:
+  `systemx projects --target OUTER -- SUBCOMMAND ...`. It uses the selected
+  verified managed defaults, requires explicit scope where applicable, preserves
+  output and command exit status, and defaults offline. `--online` permits only
+  the configured startup notice; it does not select/download new defaults.
+- Added a versioned CLI/tools guide, a `tools-guide` command, and menu option
+  18. Documented management commands, operational commands, Python API,
+  external provider/Git tools, and exact child execution directories.
+- Restored reviewed folder-only PowerShell launcher operation. Both Bash and
+  PowerShell treat any installation marker as managed state and refuse invalid
+  files, directories, or dangling links without falling back to local code.
+- Revised the full-system infographic with prominent CLI examples and a
+  Project-A/Project-B `.SYSTEMXP` tree. The new portable graphic and companion
+  use new filenames so ordinary managed updates add them without overwriting
+  earlier local media. Only the latest map ships in the new template; tagged
+  alpha.4 artwork and existing users' files remain available.
+- Updated the README, wiki, setup examples, project guide, and library examples
+  for the new outer-target CLI. Project records remain blank and independent;
+  Agent 0/X/Y/Z responsibilities and gated PR authority are unchanged.
+
+Existing managed projects need a reviewed external alpha.5 tool and an explicit
+backed-up bootstrap refresh for recognized stock manager/launcher changes
+before selecting these defaults. Ordinary updates remain additive; do not
+replace customized bootstraps or user records. See the release report for
+actual local, package, and public-tag evidence and inherited platform limits.
+
 ## 1.9.0-alpha.4 — Agent Y visual and manual refresh
 
 - Replaced the public full-system poster with the current Agent 0/X/Y/Z

@@ -47,7 +47,7 @@ lane includes an opted-in draft PR, project checks and review, recorded task
 disposition, separately authorized merge, and gated cleanup.
 
 The selected `systemx-full-system.png` and portable
-[4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-full-system-4k.jpg) are
+[4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg) are
 3840 × 2160 exports. See the current [prompt/provenance record](systemx-full-system-prompt.md)
 for native dimensions and export steps. Earlier releases retained a 1672 × 941
 master and a separately named upscaled PNG; that earlier provenance does not

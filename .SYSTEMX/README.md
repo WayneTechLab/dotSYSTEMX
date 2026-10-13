@@ -26,6 +26,11 @@ setup refuses independent case variants to protect project records.
 Dots / Codex Cloud, and Codex / Copilot CLI on a local drive, with 4K cards
 and accessible text guides.
 
+The [CLI and tools guide](docs/CLI-TOOLS.md) maps the external manager, verified
+managed runner, reviewed folder-only launchers, Python API, and optional provider
+tools. It includes explicit `.SYSTEMXP` selection and the working directory for
+child application commands. Print it with `tools-guide` or local menu option 18.
+
 ## Focused context and reversible setup
 
 Current focus, a single task ledger, bounded context, and scoped agent memory can
@@ -77,16 +82,22 @@ tasks, status, sources, decisions, and scoped agent memory. Keep one outer
 installation; never put another `.SYSTEMX` inside it. The registry ships empty.
 
 ```bash
-bash .SYSTEMX/SYSTEMX.sh projects add Project-A --kind software --apply
-bash .SYSTEMX/SYSTEMX.sh projects context --project Project-A --agent agent.0
-bash .SYSTEMX/SYSTEMX.sh projects validate --project Project-A
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software
+systemx projects --target "/path/to/workspace" -- add Project-A --kind software --apply
+systemx projects --target "/path/to/workspace" -- context --project Project-A --agent agent.0
+systemx projects --target "/path/to/workspace" -- validate --project Project-A
 ```
 
-Omit `--apply` to preview creation. Existing destinations are never replaced.
+The target is the directory containing the outer `.SYSTEMX`; direct `projects`
+defaults to offline startup. The compatible `systemx run --target PATH --offline
+-- projects ...` and `bash .SYSTEMX/SYSTEMX.sh projects ...` forms remain available;
+Windows uses the reviewed `SYSTEMX.ps1` launcher. Omit `--apply` to preview
+creation. Existing destinations are never replaced.
 Child scopes share the outer version pin; updates preserve all existing project
 records and code. Select every scoped command explicitly with `--project NAME`
 or `--root`. Referenced repositories and cloud locations are not automatically
 connected. Follow the guide for library use, export, and backup/removal boundaries.
+Configured child commands execute from `Projects/Project-A/`, not `.SYSTEMXP`.
 
 ## Project structure
 
@@ -110,9 +121,10 @@ creates a role and memory file; it does not launch an agent runtime.
 ## Everyday use
 
 ```bash
-systemx run --target "/path/to/project" -- status
-systemx run --target "/path/to/project" -- task-ready
-systemx run --target "/path/to/project" -- context --agent agent.0
+systemx run --target "/path/to/project" --offline -- status
+systemx run --target "/path/to/project" --offline -- task-ready
+systemx run --target "/path/to/project" --offline -- context --agent agent.0
+systemx run --target "/path/to/project" --offline -- tools-guide
 ```
 
 Use [the work guide](WORK/README.md) for task creation, dependencies, review, and

@@ -37,7 +37,7 @@ edition is not retroactively updated to claim it evaluated the new runtime.
 
 | Workflow | 3840 × 2160 image | Text guide |
 | --- | --- | --- |
-| Full-system map: Agent 0 / X / Y / Z | [4K JPEG](Infographics/systemx-full-system-4k.jpg) | [Current guide](Reference/full-system.md) |
+| Full-system map: Agent 0 / X / Y / Z | [4K JPEG](Infographics/systemx-cli-projects-4k.jpg) | [Current guide](Reference/cli-projects.md) |
 | ChatGPT + Google Drive | [4K JPEG](Infographics/chatgpt-google-drive-4k.jpg) | [Guide](Reference/chatgpt-google-drive.md) |
 | Codex + GitHub / main project | [4K JPEG](Infographics/codex-github-main-4k.jpg) | [Guide](Reference/codex-github-main.md) |
 | Dots / Codex Cloud | [4K JPEG](Infographics/dots-codex-cloud-4k.jpg) | [Guide](Reference/dots-codex-cloud.md) |

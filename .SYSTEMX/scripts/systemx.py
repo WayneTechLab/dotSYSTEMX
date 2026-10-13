@@ -95,12 +95,12 @@ REQUIRED = (
     "lifecycle.py", "tests/test_lifecycle.py", "docs/FIRST-RUN.md", "docs/UNINSTALL.md",
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
-    "docs/ONE-SHOT-PROJECT.md", "docs/SHARED-WORKSPACES.md",
+    "docs/ONE-SHOT-PROJECT.md", "docs/SHARED-WORKSPACES.md", "docs/CLI-TOOLS.md",
     "MEDIA/Infographics/chatgpt-google-drive-4k.jpg",
     "MEDIA/Infographics/codex-copilot-cli-local-4k.jpg",
     "MEDIA/Infographics/codex-github-main-4k.jpg",
     "MEDIA/Infographics/dots-codex-cloud-4k.jpg",
-    "MEDIA/Infographics/systemx-full-system-4k.jpg",
+    "MEDIA/Infographics/systemx-cli-projects-4k.jpg",
     "MEDIA/README.md",
     "MEDIA/Reference/ASSETS.json",
     "MEDIA/Reference/IMAGE-PROMPTS.md",
@@ -108,7 +108,7 @@ REQUIRED = (
     "MEDIA/Reference/codex-copilot-cli-local.md",
     "MEDIA/Reference/codex-github-main.md",
     "MEDIA/Reference/dots-codex-cloud.md",
-    "MEDIA/Reference/full-system.md",
+    "MEDIA/Reference/cli-projects.md",
     "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.json",
     "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.md",
     "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf",
@@ -425,7 +425,7 @@ def menu():
                "11": ("paths", False), "12": ("alias-create", False),
                "13": ("setup-guide", False), "14": ("removal-guide", False),
                "15": ("projects-guide", False), "16": ("projects-list", False),
-               "17": ("standard-roles-guide", False)}
+               "17": ("standard-roles-guide", False), "18": ("tools-guide", False)}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
@@ -433,7 +433,8 @@ def menu():
               "11) Check exact .SYSTEMX casing and alias\n12) Enable local .systemx -> .SYSTEMX alias\n"
               "13) First-time setup guide\n14) Uninstall, restore, and cleanup guide\n"
               "15) SYSTEMX PROJECTS setup and selection\n16) List registered projects\n"
-              "17) Agent X, Agent Y, and Agent Z setup and review guide\n0) Exit")
+              "17) Agent X, Agent Y, and Agent Z setup and review guide\n"
+              "18) CLI, tools, and .SYSTEMXP routing guide\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -461,6 +462,9 @@ def menu():
 
 def dispatch(action, dry_run=False):
     record_directory(SYSTEMX)
+    if action == "tools-guide":
+        print((DEFAULTS / "docs/CLI-TOOLS.md").read_text(encoding="utf-8"))
+        return 0
     if action == "standard-roles-guide":
         for name in ("AGENT-X.md", "AGENT-Y.md", "AGENT-Z.md"):
             print((DEFAULTS / "docs" / name).read_text(encoding="utf-8"))
@@ -513,7 +517,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Standalone .SYSTEMX project operations (exact-case directory)")
     parser.add_argument("--root", type=Path, action=RootSelector, help="project record directory when running versioned defaults")
     subparsers = parser.add_subparsers(dest="action")
-    for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide"):
+    for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide", "tools-guide"):
         command_parser = subparsers.add_parser(action)
         if action == "validate":
             command_parser.add_argument("--template", action="store_true",

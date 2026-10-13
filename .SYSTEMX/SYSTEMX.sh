@@ -14,7 +14,7 @@ if [[ -z "$SYSTEMX_PYTHON" ]]; then
   printf '%s\n' 'SYSTEMX requires Python 3.9+ for command tools. Documentation is usable without it.' >&2
   exit 2
 fi
-if [[ -f "$SYSTEMX_DIR/INSTALLATION.json" ]]; then
+if [[ -e "$SYSTEMX_DIR/INSTALLATION.json" || -L "$SYSTEMX_DIR/INSTALLATION.json" ]]; then
   exec "$SYSTEMX_PYTHON" -I -B "$SYSTEMX_DIR/manager.py" run --target "$(dirname "$SYSTEMX_DIR")" -- "$@"
 fi
 exec "$SYSTEMX_PYTHON" -I -B "$SYSTEMX_DIR/scripts/systemx.py" "$@"

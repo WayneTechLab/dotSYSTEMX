@@ -2,7 +2,7 @@
 
 These are the historical production prompts for the four retained Agent 0/X/Z
 use-case cards. Their original image bytes remain unchanged. The current
-[full-system map](full-system.md) and [Agent Y manual](../../docs/AGENT-Y.md)
+[full-system map](cli-projects.md) and [Agent Y manual](../../docs/AGENT-Y.md)
 describe the additional optional CLI delegation role; do not interpret the
 three-panel card artwork as the complete current role inventory.
 
