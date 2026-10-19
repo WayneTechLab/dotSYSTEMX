@@ -33,6 +33,8 @@ workspace/
     │   │       ├── AGENTS/           registry and per-agent memory
     │   │       ├── MEMORY/           durable facts and dated checkpoints
     │   │       ├── DECISIONS/        project-owned decision records
+    │   │       ├── AUTOBOT/          optional; created by explicit autobot init
+    │   │       ├── DATA/             optional; created by explicit data init
     │   │       ├── SOURCES.json      explicit code, Drive, chat, document refs
     │   │       ├── SYNC/             optional local status snapshot
     │   │       └── project.json      explicitly configured project commands
@@ -97,6 +99,12 @@ the project needs reviewed access decisions or source-linked system navigation.
 See the [access and map guide](ACCESS-AND-MAP.md); neither record grants access
 or duplicates task state.
 
+The child can explicitly initialize a generic [AUTOBOT panel](AUTOBOT.md) and
+blank [DATA](DATA.md) scaffold after creation. Private root brand, detailed rules,
+research, request
+history, and memory are never copied into new children. Shared standards can be
+referenced deliberately, with child-specific facts kept in that child's records.
+
 ## Daily work and explicit selection
 
 Every scoped work command requires `--project NAME` or `--root`. There is no
@@ -149,6 +157,24 @@ policy must be explicit. The outer Agent 0 handles cross-project branch or
 repository collisions; a child role record is not a separate GitHub identity.
 The Agent Y job, Agent X events, and Agent Z review records for the result
 remain in that same selected child.
+
+Agent Alpha (`agent.a`) is the optional on-demand coordinator for this child's
+ten AUTOBOT functions. Activate it separately from X/Y/Z and request only the
+selected design, brand, research, or other reference needed for the assignment:
+
+```bash
+systemx projects --target "/path/to/workspace" -- autobot init --project Project-A
+systemx projects --target "/path/to/workspace" -- autobot init --project Project-A --apply
+systemx projects --target "/path/to/workspace" -- autobot context --project Project-A --bot autobot.brand
+systemx projects --target "/path/to/workspace" -- data audit --project Project-A
+```
+
+Both `autobot` and the `agent-a` alias require explicit child/root selection.
+Requests/results stay within that child's `AUTOBOT/REQUESTS.json`; they do not
+accept tasks, dispatch providers, or automatically open sibling files. Matching
+inputs reuse existing results. DATA payloads stay local and ignored by Git by
+default; inspect actual ignore behavior, tracked files, and external sync rules
+before publishing. Source pointers do not authorize ingestion or upload.
 
 Example prompt:
 

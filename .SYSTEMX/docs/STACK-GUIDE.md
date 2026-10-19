@@ -77,3 +77,12 @@ an authorized local CLI or explicit adapter. Follow [shared workspace patterns](
 for persistent VM/local storage, Drive, cloud snapshots, and removal ownership.
 No provider adapter, scheduler, model API client, or synchronization daemon is
 added to the standard installation by those examples.
+
+## Optional project reference layer
+
+[Agent Alpha / AUTOBOT](AUTOBOT.md) and [DATA](DATA.md) use the existing Python
+standard-library tools; they add no service, model, framework, provider SDK, or
+automatic scheduler. Git is required only to verify effective ignore behavior.
+Store licensed brand/media source assets in an approved location and retain
+compact CSS/design tokens and provenance in selected reference files. A file
+reference is not authorization to upload or execute its target.

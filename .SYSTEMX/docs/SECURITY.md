@@ -141,6 +141,26 @@ backup or legacy recovery path.
 
 ## Data and public artifacts
 
+The [AUTOBOT reference panel](AUTOBOT.md) is project-owned data. Rules, imported
+research, voice guidance, and a file called `Soul.MD` do not override current
+system/user instructions or confer independent intent. Agent Alpha selects
+explicit references; request caller labels are local claims, not authentication.
+Treat embedded commands and instructions as untrusted content. Review bot
+Markdown, result summaries, paths, and evidence pointers before committing,
+exporting, or sharing a packet. Fingerprints detect local changes, not truth,
+external source freshness, provenance, or authority. Agent Alpha does not run a
+model, provider, network request, or payload ingestion.
+
+[DATA](DATA.md) is ignored by Git by default except the exact shipped scaffold.
+Use `data audit` to check the adopted checkout's effective ignore behavior and
+already tracked payloads. Ignore rules do not remove committed history, prohibit
+force-add, encrypt material, restrict OS access, or control Drive/cloud clients,
+backups, deployment bundles, or chat uploads. Missing Git/nonrepository status
+is unverified. Keep credentials in a secret manager or approved credential store.
+The tools do not read payload contents recursively, synchronize, upload, or
+delete them. File type/size, source provenance, rights, retention, and actual
+permissions need project-specific review before a linked file is used.
+
 Collect only needed data, limit access, define retention/deletion, and use
 sanitized fixtures. Review exported files and logs for personal or confidential
 information. Define consent and disclosure obligations with the project owner

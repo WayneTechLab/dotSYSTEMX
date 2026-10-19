@@ -76,6 +76,16 @@ snapshot through an isolated compatibility shim during a reviewed external
 migration. The old code retains its historical behavior and security limits;
 reselection below the floor requires a separately reviewed backup or legacy path.
 
+Agent Alpha and its ten [AUTOBOT functions](.SYSTEMX/docs/AUTOBOT.md) provide
+selected advisory context and local request records. They do not authenticate
+callers, override current instructions, execute models, or accept tasks. Review
+reference Markdown and request summaries for private information before sharing.
+The scoped [DATA folder](.SYSTEMX/docs/DATA.md) ignores payloads in Git by default
+except exact scaffold files. Ignore rules do not remove committed history,
+prevent force-add, enforce OS access, or control backups, cloud sync, and other
+uploads. Use `data audit` to inspect the adopted checkout; no payload contents
+are recursively read and no data is automatically uploaded or deleted.
+
 Project-specific security guidance remains in
 [.SYSTEMX/docs/SECURITY.md](.SYSTEMX/docs/SECURITY.md). Adopting projects must define
 their own security contacts, deployment boundaries, and incident process.

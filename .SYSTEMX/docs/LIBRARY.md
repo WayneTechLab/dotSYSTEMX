@@ -14,7 +14,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.6"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.10.0-alpha.1"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -38,7 +38,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.9.0-alpha.6` is spelled `1.9.0a6` in Python package
+The public release ID `1.10.0-alpha.1` is spelled `1.10.0a1` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)
@@ -232,3 +232,32 @@ Role commands perform local record operations; they do not schedule external
 jobs, call a model, run checks, or upload evidence. Use `offline=True` to suppress
 an independently enabled startup update check. See [Agent X](AGENT-X.md) and
 [Agent Z](AGENT-Z.md).
+
+## Agent Alpha and DATA through the existing API
+
+AUTOBOT and DATA use the same reviewed `run` and `projects` argument-array
+interfaces; no new import or autonomous service is required:
+
+```python
+from systemx import run, projects
+
+preview = run("/path/to/workspace", ["autobot", "init"], offline=True, capture=True)
+preview.check_returncode()
+packet = run("/path/to/workspace",
+             ["autobot", "context", "--bot", "autobot.design"],
+             offline=True, capture=True)
+packet.check_returncode()
+data_report = projects("/path/to/workspace",
+                       ["data", "audit", "--project", "Project-A"])
+data_report.check_returncode()
+```
+
+Agent Alpha activation is explicit and separate from X/Y/Z `roles-init`.
+`autobot`/`agent-a` requests and completions preview unless `--apply` is supplied;
+the returned process contains JSON records and selected context, not a model
+execution. Unchanged request identities and completed results are reused.
+`data init` also previews; `data status`/`data audit` are read-only and do not
+read payload contents, synchronize, upload, or delete data. Only missing scaffold
+files are added by explicit initialization. A selected child receives its own
+records using shared outer tools; never set an independent child install target.
+See [AUTOBOT](AUTOBOT.md), [DATA](DATA.md), and [CLI/tools](CLI-TOOLS.md).

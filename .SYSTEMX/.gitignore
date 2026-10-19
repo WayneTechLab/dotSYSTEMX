@@ -1,4 +1,6 @@
 # Local runtime data and credentials. Project config and project docs are tracked.
+# DATA/.gitignore (and each initialized child's DATA/.gitignore) ignores user
+# payload recursively while retaining only the exact blank scaffold guides.
 /local/
 /logs/
 /state/

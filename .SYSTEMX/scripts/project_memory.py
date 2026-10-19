@@ -117,10 +117,10 @@ def validate_records(root, ledger, registry):
     for agent in registry["agents"]:
         fields(agent, ("id", "role", "memory"), "Agent record")
         string(agent["id"], "Agent ID")
-        if not re.fullmatch(r"agent\.(?:0|[1-9]\d*|x|y|z)", agent["id"]) or agent["id"] in agents:
-            raise ValueError("Use unique agent.0, agent.x, agent.y, agent.z, or numeric worker IDs")
+        if not re.fullmatch(r"agent\.(?:0|[1-9]\d*|a|x|y|z)", agent["id"]) or agent["id"] in agents:
+            raise ValueError("Use unique agent.0, agent.a, agent.x, agent.y, agent.z, or numeric worker IDs")
         string(agent["role"], "Agent role")
-        expected_role = {"agent.x": "event-time", "agent.y": "cli-worker",
+        expected_role = {"agent.a": "autobot-coordinator", "agent.x": "event-time", "agent.y": "cli-worker",
                          "agent.z": "review"}.get(agent["id"])
         if expected_role and agent["role"] != expected_role:
             raise ValueError(agent["id"] + " has a reserved standard role: " + expected_role)

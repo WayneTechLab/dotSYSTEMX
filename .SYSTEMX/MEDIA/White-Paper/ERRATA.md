@@ -21,3 +21,11 @@ This correction changes the destination of one citation, not the paper's
 technical baseline or its claims. For current format and Agent Y behavior, use
 the [version history](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog)
 and [Agent Y guide](../../docs/AGENT-Y.md).
+
+## Later optional AUTOBOT / Agent Alpha tier
+
+Edition 1.2 also predates the optional AUTOBOT tier added in 1.10.0-alpha.1.
+Read the current [AUTOBOT manual](../../docs/AUTOBOT.md) for Agent Alpha
+(`agent.a`), the ten named references, bounded context and reusable requests,
+and [DATA](../../docs/DATA.md) for ignored local payload and Git audit behavior.
+This is a later format addition, not a claim that the frozen paper tested it.

@@ -80,3 +80,11 @@ Media explains the format; it is not canonical project state. Read relevant guid
 on demand. Use [START-HERE](../START-HERE.md) for normal context loading;
 `WORK/TASKS.json`, plans, events, reviews and checkpoints remain in their standard
 locations. This organization adds no running service, scheduler or agent.
+
+## Current reference tier
+
+The retained raster maps predate Agent Alpha and AUTOBOT, introduced in
+1.10.0-alpha.1. Use the current [AUTOBOT manual](../docs/AUTOBOT.md) for the
+Mermaid diagram and ten specialist roles, and the [DATA manual](../docs/DATA.md)
+for local payload handling. The white paper and existing image checksums remain
+tied to their stated baselines.

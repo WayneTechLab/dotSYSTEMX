@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.9.0-alpha.6` release and leaves updates manual.
+example selects the reviewed `v1.10.0-alpha.1` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.9.0-alpha.6"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.10.0-alpha.1"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.6
-systemx first-run --target "$PWD" --profile project --version 1.9.0-alpha.6 --apply
+systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.1
+systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.1 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -144,6 +144,8 @@ provider authentication and host permissions still need their own review.
 | Current focus and reviewed facts | `.SYSTEMX/WORK/FOCUS.json`, `.SYSTEMX/MEMORY/PROJECT.md` |
 | Agent handoffs and checkpoints | `.SYSTEMX/AGENTS/<id>/MEMORY.md` and session records |
 | Optional CLI task/PR lane, events, and reviews | `.SYSTEMX/AGENTS/agent.y/`, `.SYSTEMX/EVENTS/`, `.SYSTEMX/REVIEWS/` after role activation |
+| On-demand detailed reference panel | `.SYSTEMX/AUTOBOT/` and optional Agent Alpha (`agent.a`) |
+| Local temporary, large, imported, and private payloads | `.SYSTEMX/DATA/`; payloads ignored by Git by default |
 
 The task ledger generates TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED
 views. The public template starts with blank project records and only the
@@ -175,6 +177,30 @@ The direct `projects` command defaults to offline startup and uses the managed
 workspace's verified selected defaults. The compatible `systemx run --target
 PATH --offline -- projects ...` form and reviewed folder-only launchers remain
 available. Source URLs do not connect cloud services or synchronize records.
+
+## Detailed project context on demand
+
+[AUTOBOT](.SYSTEMX/docs/AUTOBOT.md) adds an optional second tier for design,
+product purpose and voice, memory, rules, research, brand, media, design tokens,
+data, and archive references. Its ten named Markdown functions stay outside the
+ordinary resume packet. **Agent Alpha (`AGENTA`, `agent.a`)** coordinates a
+bounded selection requested by Agent 0/X/Y/Z or Tools; Agent 0 still owns the plan
+and acceptance. Files such as `Design.MD`, `Soul.MD`, `Brand.MD`, and `Tokens.MD`
+can describe the company's identity, ICO/favicon and logo variants, licensed
+fonts, media kit, application CSS, and approved source material after adoption.
+
+Explicit `autobot init` previews Agent Alpha activation; `--apply` adds missing
+blank records. It is separate from X/Y/Z role activation. Selected context and
+matching completed requests are reused until inputs change. This is reference
+routing and recordkeeping, without background model calls or recurring checks.
+Each named `.SYSTEMXP` may maintain its own panel with shared outer tools.
+
+[DATA](.SYSTEMX/docs/DATA.md) supplies local `TEMP`, `LARGE`, `IMPORTS`,
+`RESEARCH`, `ASSETS`, `EXPORTS`, `CACHE`, and `ARCHIVE` folders. Payloads are
+**ignored by Git by default**; only the empty scaffold is intended to be tracked.
+Git ignore does not remove committed files or control Drive, backups, or other
+uploads. Use `data audit` to inspect the adopted checkout. Bot files keep reviewed
+pointers to payloads; they do not automatically read or upload them.
 
 ## Try it with an AI assistant
 
@@ -315,8 +341,8 @@ and completion, submitted timesheet approval linked to a payroll preview,
 fictional payroll calculation/review/submission receipts, and benefit election
 review/confirmation. These host UI journeys use browser memory and reset on
 reload; they do not call Gusto, persist to cloud services or execute payroll.
-The selected SYSTEMX release remains **1.9.0-alpha.6** with its original portable
-fingerprints.
+That documented WebAppX baseline pins SYSTEMX **1.9.0-alpha.6** with its original
+portable fingerprints; it does not identify this repository's current release.
 
 The host also mounts genuine SDK directory, admin onboarding and payroll
 components against isolated local mock sessions. Onboarding adds explicit

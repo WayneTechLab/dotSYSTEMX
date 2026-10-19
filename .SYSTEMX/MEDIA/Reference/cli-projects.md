@@ -56,3 +56,11 @@ Generated with the built-in imagegen tool. The requested and exported canvas is
 3840 × 2160; [asset metadata](ASSETS.json) records actual generation dimensions,
 export method, and exact-byte SHA-256 hashes. Upscaling, if recorded there,
 adds canvas pixels rather than native detail. **Alpha — use at your own risk.**
+
+## Agent Alpha and local DATA
+
+This image predates the optional AUTOBOT tier. The current [AUTOBOT manual](../../docs/AUTOBOT.md)
+adds Agent Alpha (`agent.a`) and ten selected reference functions without
+changing Agent 0/X/Y/Z task authority. Each root or named `.SYSTEMXP` may
+initialize its own panel. [DATA](../../docs/DATA.md) contains ignored local
+payload; `data audit` checks effective Git metadata without ingesting files.

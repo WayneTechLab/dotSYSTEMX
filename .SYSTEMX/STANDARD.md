@@ -99,6 +99,8 @@ work remains a blocker; it is not equivalent to passing a check.
 | Scoped proof and adoption of existing workflows | [Evidence boundaries](docs/EVIDENCE.md), [upgrades](docs/UPGRADING.md) |
 | Git, releases, monitoring, recovery, and ownership | [Operations](docs/OPERATIONS.md) |
 | AI collaboration and tool use | [AI standard](AI/README.md) |
+| Detailed on-demand design, brand, research, and rules | [Agent Alpha and AUTOBOT](docs/AUTOBOT.md) |
+| Ignored local payloads and scaffold inspection | [DATA](docs/DATA.md) |
 | Active work, master plan, and continuity | [Start/resume protocol](START-HERE.md), [work ledger](WORK/README.md), [memory](MEMORY/README.md) |
 
 The written standard describes responsibilities. Only the explicitly configured
@@ -124,6 +126,21 @@ a due item nor a score automatically creates work, changes task state, repeats
 checks, or grants authority. Agent Y never infers merge permission or branch
 cleanup from a score. Company policies may refine the versioned review
 questions; they do not override environment or user instructions.
+
+Agent Alpha (`agent.a`, `AGENTA`) is the optional coordinator for the
+[AUTOBOT reference tier](docs/AUTOBOT.md). Its ten named functions supplement
+the selected root or child scope. Request a bounded subset for a concrete
+purpose; reuse unchanged inputs and existing results. The coordinator is outside
+the ten-bot limit and does not become a second Agent 0 or add worker capacity.
+Only explicit init registers it. Requests/results preserve reference work and
+evidence; acceptance remains in the task ledger. No scheduled scan, model call,
+automatic research, or recursive rebuild is implied by a file change.
+
+Keep imported/large/private payloads under [DATA](docs/DATA.md) or an approved
+store; keep portable descriptions and source pointers in the appropriate bot
+record. Shipped DATA ignores payloads in Git by default, with only exact scaffold
+files intended to be tracked. Verify adopted ignore behavior; it does not govern
+already tracked files, cloud sync, other uploads, or actual access permissions.
 
 ## Research, phases, and shared-source handoffs
 

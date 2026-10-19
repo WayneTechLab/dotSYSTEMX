@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.9.0a6"
+version = "1.10.0a1"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -34,6 +34,16 @@ include-package-data = false
 
 [tool.setuptools.package-data]
 systemx = ["GUSTO/*.md", "GUSTO/*.json", "GUSTO/docs/*.md", "GUSTO/contracts/*.md", "GUSTO/contracts/*.json",
+           "AUTOBOT/*.MD", "AUTOBOT/*.md", "AUTOBOT/*.json", "AGENTS/agent.a/*.md",
+           "templates/autobot/*.MD", "templates/autobot/*.md", "templates/autobot/*.json",
+           "DATA/.gitignore", "DATA/README.md", "DATA/TEMP/README.md", "DATA/LARGE/README.md",
+           "DATA/IMPORTS/README.md", "DATA/RESEARCH/README.md", "DATA/ASSETS/README.md",
+           "DATA/EXPORTS/README.md", "DATA/CACHE/README.md", "DATA/ARCHIVE/README.md",
+           "templates/data/.gitignore", "templates/data/README.md",
+           "templates/data/TEMP/README.md", "templates/data/LARGE/README.md",
+           "templates/data/IMPORTS/README.md", "templates/data/RESEARCH/README.md",
+           "templates/data/ASSETS/README.md", "templates/data/EXPORTS/README.md",
+           "templates/data/CACHE/README.md", "templates/data/ARCHIVE/README.md",
            "GUSTO/mock/*.md", "GUSTO/mock/fixtures/*.json", "GUSTO/sdk/*.md", "GUSTO/sdk/*.json", "GUSTO/sdk/*.txt",
            "GUSTO/webhooks/*.md", "GUSTO/webhooks/*.json", "GUSTO/examples/*.md", "GUSTO/examples/*.json",
            ".gitignore", ".gitattributes", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",

@@ -49,6 +49,15 @@ and the [project map](PLAN/MAP.md) when source or system boundaries matter. They
 are blank in the public template and are not loaded into every context packet.
 See the [access and map guide](docs/ACCESS-AND-MAP.md).
 
+Read [AUTOBOT](docs/AUTOBOT.md) context only when a named function is needed for
+the current work. Optional Agent Alpha routes the selected root or child's
+design, brand, rules, research, and other detailed references; it does not add
+all ten files to this resume sequence. Reuse a matching completed request.
+[DATA](docs/DATA.md) contains ignored local payloads; a pointer is not permission
+to ingest or upload them. `data audit` checks effective Git handling without
+reading payload contents. Preserve the canonical task ledger and current user
+instructions when applying any reference.
+
 The command `bash .SYSTEMX/SYSTEMX.sh context --agent agent.0` prints a bounded
 resume packet containing these shared records and the selected agent's memory.
 `task-show TASK-001` reads the complete record for a particular task. Neither

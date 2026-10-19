@@ -163,6 +163,12 @@ def validate_optional(root):
         agent_y.load_jobs(root)
     if safe(root, "REVIEWS/POLICY.json").exists():
         agent_z.validate_policy(read(root, "REVIEWS/POLICY.json"))
+    # Optional references are validated in their selected scope only. DATA
+    # validates scaffold metadata without traversing or reading user payloads.
+    import autobots
+    import data_tools
+    autobots.validate_optional(root)
+    data_tools.validate_optional(root)
 
 
 def add_cli(subparsers, scope=None):

@@ -35,3 +35,11 @@ status views; do not maintain duplicate TODO/DONE lists in other chats. Across
 threads, worktrees, or synced copies, name one canonical writer and verify the
 snapshot before integrating changes. Read only relevant context and retained
 proof; save reviewed facts and the next action without an automatic repeat loop.
+
+When detailed design, brand, rules, research, media, or working memory is needed,
+consult `.SYSTEMX/docs/AUTOBOT.md`. Optional Agent Alpha (`agent.a`) routes only
+selected references and reuses unchanged retained results; it does not duplicate
+the canonical task ledger or run autonomous checks. Root and child panels stay
+independent. `.SYSTEMX/DATA` payload is ignored by Git by default; run a scoped
+`data audit` and review file sensitivity before sharing. Do not automatically
+read, upload, or execute payload because a reference names it.

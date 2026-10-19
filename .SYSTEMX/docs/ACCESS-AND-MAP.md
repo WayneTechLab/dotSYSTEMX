@@ -17,12 +17,17 @@ reason and owner instead of inventing a permission.
 
 The matrix records intent and review history. Actual authorization is enforced
 by the relevant operating system, repository, cloud provider, application, or
-service. An Agent 0/X/Y/Z registry entry is not an authenticated identity or a
+service. An Agent 0/X/Y/Z/Alpha registry entry is not an authenticated identity or a
 grant. If [Agent Y](AGENT-Y.md) uses a selected CLI, review that process's
 actual account, filesystem access, Git remote, branch, and PR permissions as
 separate access paths. Confirm the live account, target, and permission at the
 external boundary before a consequential action. Keep credentials and secret
 values out of records.
+For [AUTOBOT](AUTOBOT.md), separately record who may view or change detailed
+brand, policy, research, and private-source references. A request's caller label
+is attribution, not permission evidence. [DATA](DATA.md) ignore rules influence
+Git additions, not local access, cloud sharing, or external sync. Map the actual
+storage boundary and approved retrieval path when payloads are sensitive.
 When an access gap requires work, create or update a task in the selected
 `WORK/TASKS.json`; do not add status columns or competing checkboxes here.
 

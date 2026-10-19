@@ -246,3 +246,14 @@ for the boundary between model/harness, records, app tools, verification, and
 delivery. The [shared workspace guide](SHARED-WORKSPACES.md) covers
 cloud snapshot requirements, multi-chat writer ownership, and bot startup context.
 These are integration patterns over the current CLI/library, not new cloud services.
+
+## On-demand reference and payload boundaries
+
+The optional [AUTOBOT tier](AUTOBOT.md) adds Agent Alpha (`agent.a`) and ten
+selected reference functions under each chosen scope. It uses the existing
+coordination lock and atomic record writes, deterministic input fingerprints,
+immutable evidence-linked completions, and explicit capacity limits. It never
+automatically loads the panel, calls a model, or accepts a task.
+[Local DATA](DATA.md) separates ignored payload from tracked instructions; the
+Git audit reads bounded metadata only. Managed defaults and dedicated blank
+creation seeds keep root and child records independent.

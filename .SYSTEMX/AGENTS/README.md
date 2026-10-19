@@ -110,3 +110,25 @@ recorded cancellation; deleting its branch needs preserved evidence and a fresh
 head check. Automated cleanup follows only accepted completion, verified
 remote merge, and a retained bundle; a closed unmerged PR keeps its branch.
 Merge itself requires separate authority.
+
+## Agent Alpha and the ten AUTOBOT functions
+
+[Agent Alpha](../docs/AUTOBOT.md), ID `agent.a` and display name `AGENTA`, routes
+explicit requests from Agent 0/X/Y/Z or Tools to a bounded selection of detailed
+project reference files. It is a coordinator outside the fixed ten AUTOBOT slots,
+not a second project coordinator or an extra subagent allowance. `autobot init`
+previews its separate activation; the public registry remains Agent 0 only.
+
+The panel covers Design, Soul, Memory, Rules, Research, Brand, Media, Tokens,
+Data, and Archive. Each name maps to its exact `.MD` file. The runtime records
+input/file fingerprints and reuses unchanged requests, including completed
+results. Explicit changed inputs or refresh create bounded work; they never
+authorize repeated checks, recursive dispatch, provider execution, or task
+acceptance. Requests carry caller attribution, not authenticated identity.
+
+Keep current work in `WORK/TASKS.json` and durable facts in `MEMORY/PROJECT.md`.
+AUTOBOT working memory and archive records are concise indexes and references.
+Large/private material belongs in [DATA](../docs/DATA.md) or an approved store.
+Review selected content before including it in worker packets or exports. New
+children receive blank records rather than copies of private root or sibling
+content. Bot policies remain below the active user/system instructions.

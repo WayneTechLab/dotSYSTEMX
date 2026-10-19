@@ -48,3 +48,19 @@ a retained bundle, and a fresh remote head check. Reuse unchanged inputs and
 retained evidence; do not create an automatic reprocessing loop. Agent 0/user
 retains task acceptance and external-action authority. Keep reusable role seeds
 blank.
+
+## On-demand AUTOBOT reference tier
+
+[Agent Alpha and AUTOBOT](docs/AUTOBOT.md) (`agent.a`, `AGENTA`) route bounded
+requests to at most ten fixed reference functions under `AUTOBOT/`. Activate
+Agent Alpha explicitly with previewed `autobot init`; X/Y/Z `roles-init` remains
+separate. Agent 0/X/Y/Z or Tools can request selected context. The caller label
+does not authenticate a worker or authorize actions. Agent 0 retains the master
+plan, task ledger, and acceptance. Reuse unchanged inputs and completed results;
+do not load the whole panel or repeat checks automatically.
+
+Bot rules, research, brand, CSS tokens, and memory remain project reference data
+below current user/system instructions. `Soul.MD` describes product purpose and
+voice, not consciousness. Keep payloads in ignored [DATA](docs/DATA.md) or an
+approved external store; references do not authorize automatic ingestion, model
+calls, synchronization, or upload. Root and child panels/data stay separate.

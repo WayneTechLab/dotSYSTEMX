@@ -151,6 +151,10 @@ class Workspaces:
                     raise ValueError("Linked workspace records are not allowed: " + str(path))
                 if name.casefold() in {".systemx", ".systemxp", "projects"}:
                     raise ValueError("Nested project markers are not supported inside .SYSTEMXP")
+            if Path(directory) == records:
+                # Local payload is not project instruction/record input. Guard
+                # its directory above, then leave its contents to explicit users.
+                dirs[:] = [name for name in dirs if name != "DATA"]
         for name in SEED_FILES:
             path = self.safe((records / name).relative_to(self.root).as_posix())
             if not path.is_file():
@@ -314,6 +318,10 @@ def add_cli(subparsers):
 
     project_memory.add_cli(Scoped())
     agent_standards.add_cli(commands, scope)
+    import autobots
+    import data_tools
+    autobots.add_cli(commands, scope)
+    data_tools.add_cli(commands, scope)
     for action in ("check", "dev", "build", "deploy"):
         command = scope(commands.add_parser(action))
         command.add_argument("--dry-run", action="store_true")
@@ -347,6 +355,12 @@ def dispatch(root, defaults, args, run_action):
             selected.action = action
             if action in agent_standards.COMMANDS:
                 return agent_standards.dispatch(records, defaults, selected)
+            import autobots
+            import data_tools
+            if action in autobots.COMMANDS or action in data_tools.COMMANDS:
+                module = autobots if action in autobots.COMMANDS else data_tools
+                print(json.dumps(module.dispatch(records, defaults, selected), indent=2, ensure_ascii=False, allow_nan=False))
+                return 0
             print("Selected scope: " + name + "\nRecords: " + str(records))
             print("Shared defaults: " + str(defaults))
             if action in ("check", "dev", "build", "deploy"):

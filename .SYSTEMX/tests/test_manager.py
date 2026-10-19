@@ -847,6 +847,35 @@ class ManagerTests(unittest.TestCase):
                 with self.assertRaisesRegex(manager.InstallError, "missing core files"):
                     manager.verified_bundle(files)
 
+    def test_one_ten_bundle_rejects_missing_reference_tier_files_even_if_rehashed(self):
+        bundle = manager.read_bundle(self.source)
+        self.assertGreaterEqual(manager.version_key(bundle["version"])[:3], (1, 10, 0))
+        for name in ("scripts/autobots.py", "scripts/data_tools.py", "AUTOBOT/Design.MD",
+                     "AUTOBOT/AGENTA.MD", "templates/autobot/REQUESTS.json", "DATA/.gitignore",
+                     "templates/data/LARGE/README.md", "templates/AGENT-A-MEMORY.md"):
+            with self.subTest(name=name):
+                files = dict(bundle["files"])
+                files.pop(name)
+                manifest = json.loads(files[manager.MANIFEST])
+                manifest["files"].pop(name)
+                files[manager.MANIFEST] = json.dumps(manifest).encode("utf-8")
+                with self.assertRaisesRegex(manager.InstallError, "missing core files"):
+                    manager.verified_bundle(files)
+
+    def test_one_ten_bundle_rejects_retained_autobot_requests_even_if_rehashed(self):
+        bundle = manager.read_bundle(self.source)
+        for name in ("AUTOBOT/REQUESTS.json", "templates/autobot/REQUESTS.json"):
+            for seed in ({"schemaVersion": 1, "requests": [{"private": "fixture"}]},
+                         {"schemaVersion": True, "requests": []}, {"schemaVersion": 1.0, "requests": []}):
+                with self.subTest(name=name, seed=seed):
+                    files = dict(bundle["files"])
+                    files[name] = json.dumps(seed).encode("utf-8")
+                    manifest = json.loads(files[manager.MANIFEST])
+                    manifest["files"][name] = manager.distribution_digest(name, files[name], manifest["schemaVersion"])
+                    files[manager.MANIFEST] = json.dumps(manifest).encode("utf-8")
+                    with self.assertRaisesRegex(manager.InstallError, "AUTOBOT request ledger must be empty"):
+                        manager.verified_bundle(files)
+
     def test_archive_manifest_and_path_checks_reject_untrusted_layouts(self):
         for path in ("../outside", "a/../../escape", "/absolute", "C:/escape", "a\\b", "con.txt", "NUL", "a./b", "local/data"):
             with self.subTest(path=path), self.assertRaises(manager.InstallError):

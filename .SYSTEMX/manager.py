@@ -279,6 +279,17 @@ def verified_bundle(files):
     if base_version >= (1, 9, 0):
         required.update({"scripts/agent_y.py", "AGENTS/agent.y/README.md", "templates/AGENT-Y-MEMORY.md",
                          "docs/AGENT-Y.md", "tests/test_agent_y.py"})
+    if base_version >= (1, 10, 0):
+        panel = ("README.md", "AGENTA.MD", "CATALOG.json", "REQUESTS.json",
+                 "Design.MD", "Soul.MD", "Memory.MD", "Rules.MD", "Research.MD",
+                 "Brand.MD", "Media.MD", "Tokens.MD", "Data.MD", "Archive.MD")
+        scaffold = (".gitignore", "README.md") + tuple(name + "/README.md" for name in
+            ("TEMP", "LARGE", "IMPORTS", "RESEARCH", "ASSETS", "EXPORTS", "CACHE", "ARCHIVE"))
+        required.update({"scripts/autobots.py", "scripts/data_tools.py", "tests/test_autobots.py",
+                         "tests/test_data_tools.py", "templates/AGENT-A-MEMORY.md",
+                         "AGENTS/agent.a/README.md", "docs/AUTOBOT.md", "docs/DATA.md"})
+        required.update(base + "/" + name for base in ("AUTOBOT", "templates/autobot") for name in panel)
+        required.update(base + "/" + name for base in ("DATA", "templates/data") for name in scaffold)
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -311,6 +322,12 @@ def verified_bundle(files):
         raise InstallError("Distribution contains changed project seeds")
     if decode(files["WORK/TASKS.json"]) != {"schemaVersion": 1, "tasks": []}:
         raise InstallError("Distribution task ledger must be empty")
+    if base_version >= (1, 10, 0):
+        for name in ("AUTOBOT/REQUESTS.json", "templates/autobot/REQUESTS.json"):
+            request_seed = decode(files[name])
+            if (not isinstance(request_seed, dict) or type(request_seed.get("schemaVersion")) is not int or
+                    request_seed != {"schemaVersion": 1, "requests": []}):
+                raise InstallError("Distribution AUTOBOT request ledger must be empty")
     if base_version >= (1, 7, 0):
         if decode(files["Projects/REGISTRY.json"]) != {"schemaVersion": 1, "projects": []}:
             raise InstallError("Distribution project registry must be empty")

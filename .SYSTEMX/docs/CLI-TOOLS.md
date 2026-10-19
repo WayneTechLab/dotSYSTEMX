@@ -67,6 +67,13 @@ reports available configured command executables; it does not authenticate
 providers or prove an application's correctness. `tools-guide` prints this
 guide. The interactive local menu offers it as **option 18**.
 
+The [AUTOBOT reference tier](AUTOBOT.md) is available through `autobot` and its
+`agent-a` alias. Tools can explicitly request a bounded selection under Agent
+Alpha; a menu or caller label does not authorize execution. The runtime returns
+selected context and request records without starting models or external tools.
+`autobot-guide` and `data-guide` print their manuals; local menu option **19**
+opens the AUTOBOT guide and option **20** runs the read-only DATA audit.
+
 To use a reviewed folder-only copy directly, run the launcher from the containing
 directory. Managed launchers select their verified cache; malformed or missing
 managed state must be repaired through reviewed tools, never used as a reason
@@ -171,6 +178,34 @@ that working directory, such as `code/`, or a deliberately reviewed absolute
 script path. `SOURCES.json` references never redirect the working directory or
 fetch a repository. Command arrays execute without shell expansion; put
 pipelines in an explicit project script.
+
+## On-demand AUTOBOT and local DATA
+
+Use the selected defaults' tools for a specific root or child scope:
+
+```bash
+systemx run --target "/path/to/workspace" --offline -- autobot init
+systemx run --target "/path/to/workspace" --offline -- autobot init --apply
+systemx run --target "/path/to/workspace" --offline -- autobot list
+systemx run --target "/path/to/workspace" --offline -- autobot context --bot autobot.tokens
+systemx run --target "/path/to/workspace" --offline -- data audit
+systemx projects --target "/path/to/workspace" -- autobot init --project Project-A
+systemx projects --target "/path/to/workspace" -- data init --project Project-A
+```
+
+Agent Alpha activation is separate from X/Y/Z `roles-init`. The fixed panel has
+ten named functions plus its coordinator; there is no extra allowance for
+running agents. `request` and `complete` preview by default and require explicit
+`--apply` for writes. Matching requests/results are reused; changed facts need
+an honest current input revision. Neither a request nor a changed file starts
+provider execution, research, task acceptance, or a repeated review loop.
+
+`data init` previews missing scaffold; `--apply` adds only missing files.
+`data status` and `data audit` inspect effective Git exclusions without payload
+ingestion, upload, or deletion. Child commands use `.SYSTEMXP/AUTOBOT` and
+`.SYSTEMXP/DATA`, with separate records and shared outer tools. See the
+[AUTOBOT manual](AUTOBOT.md) and [DATA manual](DATA.md) for exact file names,
+ten-slot catalog, current command arguments, privacy, and evidence boundaries.
 
 ## Handoffs and operating limits
 

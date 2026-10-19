@@ -37,6 +37,8 @@ do not start one.
 | `WORK/FOCUS.json` | Selected objective, existing task IDs, checkpoint pointer | Generated `CURRENT.md` |
 | `AGENTS/REGISTRY.json` | Stable role IDs and memory paths | Each role's scoped memory |
 | `MEMORY/PROJECT.md` | Verified durable facts, decisions, lessons | Dated session checkpoints |
+| `AUTOBOT/` | Optional detailed reference functions and bounded Agent Alpha requests | Exactly ten named `.MD` functions and `AGENTA.MD` charter |
+| `DATA/` | Local payload storage with effective Git exclusion checks | Ignored payloads; exact scaffold README and `.gitignore` files remain portable |
 | `project.json` | Explicit host-project commands | Empty `config/project.example.json` |
 | `INSTALLATION.json` (managed installs) | Selected defaults release, version pin, profile, update policy, fingerprints | Retained defaults under `.systemx/releases/<version>/` |
 
@@ -128,8 +130,10 @@ pointers are rejected. Selection replaces the whole focus; it never changes task
 `AGENTS/REGISTRY.json` contains exactly `schemaVersion` and `agents`. Each agent
 has `id`, `role`, and `memory`. IDs are unique `agent.0`, `agent.1`, etc., without
 leading zeroes, plus reserved standard roles `agent.x` (`event-time`),
-`agent.y` (`cli-worker`), and `agent.z` (`review`) when explicitly activated
-using compatible tools. Agent 0 must have role `coordinator`; other roles are
+`agent.y` (`cli-worker`), `agent.z` (`review`), and `agent.a`
+(`autobot-coordinator`) when explicitly activated using compatible tools.
+Agent Alpha setup is separate from X/Y/Z setup. Agent 0 must have role
+`coordinator`; other roles are
 nonempty descriptions. Memory must exist at `AGENTS/<id>/MEMORY.md`, without
 symlinks.
 
@@ -218,7 +222,10 @@ for policy, local locking, interrupted writes, and filesystem limits.
 The public registry remains Agent 0 only. Explicit role setup adds standard
 role entries and project-owned records while preserving existing bytes.
 Activated `agent.x`/`agent.y`/`agent.z` IDs require tools that support each
-one; a reader predating an activated ID is incompatible. Record schema version
+one; a reader predating an activated ID is incompatible. Optional Agent Alpha
+(`agent.a`, `autobot-coordinator`) uses separate `autobot init` activation and
+the `AGENTS/agent.a/MEMORY.md` path. A reader predating that ID is also
+incompatible. Record schema version
 1 is otherwise unchanged. A downgrade after activation requires a reviewed
 migration or backup.
 
@@ -270,6 +277,43 @@ retains its branch for manual disposition. Automated branch deletion needs
 exact ownership/head verification and a retained local bundle. Merge requires
 separate authorization. See
 [Agent Y](docs/AGENT-Y.md).
+
+## AUTOBOT, Agent Alpha, and DATA records
+
+`AUTOBOT/CATALOG.json` has exactly `schemaVersion: 1`, `coordinator: "agent.a"`,
+`maximum: 10`, and `bots`. The ten ordered entries each have `id`, `name`,
+`file`, and a nonempty bounded `functions` array. IDs map exactly from
+`autobot.design`, `autobot.soul`, `autobot.memory`, `autobot.rules`,
+`autobot.research`, `autobot.brand`, `autobot.media`, `autobot.tokens`,
+`autobot.data`, and `autobot.archive` to their corresponding title-case
+`AUTOBOT/Name.MD` files. Identity, path case, slot order, and count are fixed.
+The coordinator's charter is `AUTOBOT/AGENTA.MD`, outside the ten slots.
+
+`AUTOBOT/REQUESTS.json` contains exactly `schemaVersion: 1` and `requests`.
+Each request has `id`, `createdAt`, `identity`, `state`, and `completion`.
+Its `ABR-` ID derives from the request identity, which includes scope, claimed
+caller, purpose, input revision, optional canonical task ID, selected bot IDs,
+catalog hash, and selected file/charter paths, byte sizes, and SHA-256 hashes.
+Only explicitly named bot files and the charter enter context, bounded to 64 KiB.
+The ledger is bounded to 4,096 entries and 8 MiB; capacity does not authorize
+automatic history deletion. Caller labels are not authenticated identities.
+
+State is `requested` with null completion, or `complete` with `completedAt`,
+`summary`, `responseRevision`, and nonempty `evidence`. Completion is immutable;
+identical requests/results are reused, conflicting completion is refused, and
+changed input or file/policy fingerprints create a new request. Freshness of
+external facts still depends on an honest current input revision. The runtime
+does not execute models, research, tools, or DATA ingestion, and request
+completion does not accept a canonical task. See [AUTOBOT](docs/AUTOBOT.md).
+
+`DATA/` contains exact README scaffolds in `TEMP`, `LARGE`, `IMPORTS`,
+`RESEARCH`, `ASSETS`, `EXPORTS`, `CACHE`, and `ARCHIVE`. Its scoped `.gitignore`
+allows only the shipped scaffold and ignores payloads at any depth. Effective
+Git behavior is inspected with `data status`/`data audit`; nonrepository status
+is unverified and already tracked payloads need explicit host-project review.
+The runtime never reads payload contents recursively, removes data, or uploads
+it. Neither Git ignore nor a local path grants privacy, access, cloud exclusion,
+or evidence availability to another reviewer. See [DATA](docs/DATA.md).
 
 Merged-PR cleanup writes a verified bundle to ignored
 `state/agent-y/archives/<Y-ID>.bundle` before removing owned refs. The portable

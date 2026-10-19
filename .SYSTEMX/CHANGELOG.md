@@ -4,6 +4,38 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.10.0-alpha.1 — On-demand AUTOBOT and local DATA
+
+- Added the optional tier-2 `AUTOBOT/` reference panel with ten exact-case named
+  specialist files: Design, Soul, Memory, Rules, Research, Brand, Media, Tokens,
+  Data, and Archive. `AGENTA.MD` defines Agent Alpha (`agent.a`), activated
+  separately from X/Y/Z; the public registry still contains only Agent 0.
+- Added preview-first `autobot` / `agent-a` tools for additive initialization,
+  bounded selected context, fingerprinted request reuse, explicit evidence-linked
+  completion, and stale-context reporting. No bot process, recursive routing,
+  model call, task acceptance, or background refresh is started.
+- Added independent root and named `.SYSTEMXP` panels, with dedicated blank
+  creation seeds that never copy adopted root brand, research, memory, or payload.
+- Added `DATA/` with TEMP, LARGE, IMPORTS, RESEARCH, ASSETS, EXPORTS, CACHE and
+  ARCHIVE guides. Only exact scaffold files are packaged/tracked by default;
+  payload is ignored recursively. `data init` preserves existing files;
+  `data status` / `data audit` inspect bounded Git metadata and flag tracked
+  payload or ineffective ignore rules without reading payload contents.
+- Added Agent Alpha and DATA guides, menu options 19/20, role/scope validation,
+  packaging declarations, regression coverage, README/wiki routing and Mermaid
+  diagrams. Brand, ICO/favicon/logo/font rights, media kit, CSS tokens, source
+  provenance, retention and explicit input revisions are covered in reusable
+  blank specialist formats. Existing core project records and Gusto contracts
+  remain unchanged.
+- The installer rejects incomplete 1.10 bundles and populated AUTOBOT request
+  seeds before installation, including internally rehashed malformed bundles.
+
+Ignore rules are not encryption or removal from Git history. Cloud/Drive sync,
+force-add, existing tracked files, project tooling and external actions still
+require their own handling. Older diagrams/white paper remain identified
+baselines; the current AUTOBOT manual describes this added tier. Alpha status
+continues; source checks do not certify a host application's production safety.
+
 ## 1.9.0-alpha.6 — Optional portable Gusto HR contracts
 
 - Added optional `.SYSTEMX/GUSTO/` with 64 employer/employee/manager/contractor

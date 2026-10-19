@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "coordinator": "agent.a",
+  "maximum": 10,
+  "bots": [
+    {
+      "id": "autobot.design",
+      "name": "Design",
+      "file": "AUTOBOT/Design.MD",
+      "functions": [
+        "Interface and layout decisions",
+        "Component and accessibility specifications"
+      ]
+    },
+    {
+      "id": "autobot.soul",
+      "name": "Soul",
+      "file": "AUTOBOT/Soul.MD",
+      "functions": [
+        "Purpose and values",
+        "Voice and human interaction preferences"
+      ]
+    },
+    {
+      "id": "autobot.memory",
+      "name": "Memory",
+      "file": "AUTOBOT/Memory.MD",
+      "functions": [
+        "Accepted short-term context",
+        "Durable evidence pointers"
+      ]
+    },
+    {
+      "id": "autobot.rules",
+      "name": "Rules",
+      "file": "AUTOBOT/Rules.MD",
+      "functions": [
+        "Project constraints",
+        "Exceptions and authority references"
+      ]
+    },
+    {
+      "id": "autobot.research",
+      "name": "Research",
+      "file": "AUTOBOT/Research.MD",
+      "functions": [
+        "Source register and research questions",
+        "Corroboration and uncertainty"
+      ]
+    },
+    {
+      "id": "autobot.brand",
+      "name": "Brand",
+      "file": "AUTOBOT/Brand.MD",
+      "functions": [
+        "Company and product identity",
+        "Brand and media-kit references"
+      ]
+    },
+    {
+      "id": "autobot.media",
+      "name": "Media",
+      "file": "AUTOBOT/Media.MD",
+      "functions": [
+        "Logo and icon asset references",
+        "Media rights and export specifications"
+      ]
+    },
+    {
+      "id": "autobot.tokens",
+      "name": "Tokens",
+      "file": "AUTOBOT/Tokens.MD",
+      "functions": [
+        "CSS and design token references",
+        "Font and theme specifications"
+      ]
+    },
+    {
+      "id": "autobot.data",
+      "name": "Data",
+      "file": "AUTOBOT/Data.MD",
+      "functions": [
+        "Dataset metadata and provenance",
+        "Private DATA location and retention references"
+      ]
+    },
+    {
+      "id": "autobot.archive",
+      "name": "Archive",
+      "file": "AUTOBOT/Archive.MD",
+      "functions": [
+        "Superseded context references",
+        "Retention and recall indexes"
+      ]
+    }
+  ]
+}

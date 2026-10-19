@@ -113,6 +113,8 @@ Configured child commands execute from `Projects/Project-A/`, not `.SYSTEMXP`.
 | [docs/](docs/) and [AI/](AI/README.md) | Engineering, operations, and collaboration guidance |
 | [Projects/](Projects/README.md) | Registered child projects using exact `.SYSTEMXP` record folders |
 | [templates/](templates/) | Reusable briefs, decisions, evidence, releases, and handoffs |
+| [AUTOBOT/](AUTOBOT/) | Optional ten-function reference panel routed by Agent Alpha on demand |
+| [DATA/](DATA/) | Local payload folders, ignored by Git by default except exact scaffold files |
 | [config/project.example.json](config/project.example.json) | Empty project command configuration |
 
 The template ships blank project records and only `agent.0`. Agent registration
@@ -175,6 +177,30 @@ jobs, accept tasks, or repeat unchanged reviews. The public seed registry stays
 Agent 0 only; standard X/Y/Z definitions and blank activation templates are
 included. PR ready, close, merge, and branch cleanup have separate gates;
 Agent Y never merges automatically.
+
+## Agent Alpha, AUTOBOT, and local DATA
+
+[AUTOBOT](docs/AUTOBOT.md) is the optional second tier for deeper project
+references. Its fixed ten slots map to exact files `Design.MD`, `Soul.MD`,
+`Memory.MD`, `Rules.MD`, `Research.MD`, `Brand.MD`, `Media.MD`, `Tokens.MD`,
+`Data.MD`, and `Archive.MD`. Agent Alpha (`AGENTA`, `agent.a`) is the coordinator
+outside that ten-bot limit. Agent 0/X/Y/Z or an explicitly authorized tools call
+selects only the functions needed for the current task. Agent 0 retains task
+acceptance; file content and caller labels grant no authority.
+
+Preview `autobot init`, then apply it explicitly in the intended root or child
+scope. Agent Alpha activation is separate from `roles-init`; blank seeds still
+register only Agent 0. Requests fingerprint inputs and selected files and reuse
+unchanged results. The runtime does not launch bots, fetch research, or trigger
+recursive reviews or rebuilds.
+
+[DATA](docs/DATA.md) provides `TEMP`, `LARGE`, `IMPORTS`, `RESEARCH`, `ASSETS`,
+`EXPORTS`, `CACHE`, and `ARCHIVE`. Its payloads are ignored by Git by default;
+only the exact `.gitignore` and README scaffold files are intended to be tracked.
+`data init` previews missing scaffold, `data status` inspects it, and `data audit`
+reports effective Git exclusions and tracked-payload warnings. These commands do
+not ingest, upload, or delete payloads. Existing Git history and external sync
+tools require separate review.
 
 ## Complete projects and shared work
 
