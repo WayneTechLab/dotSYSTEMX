@@ -4,6 +4,17 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.10.0-alpha.2 — Final validation boundary fixes
+
+- Corrected optional validation to respect the AUTOBOT request ledger's 8 MiB
+  bound independently of the 256 KiB context-file bound. A regression retains
+  a valid 300 KiB ledger unchanged through validation and initialization.
+- Strict public-template validation rejects unlisted DATA payload paths before
+  parsing their contents. Adopted validation continues to leave payload outside
+  the project-record scan.
+- This is the published release of the AUTOBOT/DATA addition. The initial
+  alpha.1 source tag is retained without a release; it was not repointed.
+
 ## 1.10.0-alpha.1 — On-demand AUTOBOT and local DATA
 
 - Added the optional tier-2 `AUTOBOT/` reference panel with ten exact-case named

@@ -67,6 +67,16 @@ class SystemxTests(unittest.TestCase):
         self.assert_ok(self.run_cli("validate", "--template"))
         self.assertFalse((self.systemx / "project.json").exists())
 
+    def test_strict_template_rejects_extra_data_before_parsing_payload(self):
+        path = self.systemx / "DATA/LARGE/unexpected.json"
+        path.write_bytes(b"PRIVATE_DATA_NOT_VALID_JSON")
+        result = self.run_cli("validate", "--template")
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Public template contains extra files: DATA/LARGE/unexpected.json", result.stderr)
+        self.assertNotIn("Invalid JSON", result.stderr)
+        self.assertEqual(path.read_bytes(), b"PRIVATE_DATA_NOT_VALID_JSON")
+        self.assert_ok(self.run_cli("validate"))
+
     def test_tools_guide_and_menu_option_are_read_only(self):
         before = {p.relative_to(self.systemx).as_posix(): p.read_bytes()
                   for p in self.systemx.rglob("*") if p.is_file()}

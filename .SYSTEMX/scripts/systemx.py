@@ -296,6 +296,14 @@ def validate_template(distribution=False):
     except ConfigError as error:
         issues.append(str(error))
         files = []
+    if distribution:
+        extra = sorted(path.relative_to(SYSTEMX).as_posix() for path in files
+                       if path.relative_to(SYSTEMX).as_posix() not in REQUIRED)
+        if extra:
+            issues.append("Public template contains extra files: " + ", ".join(extra))
+            # Unexpected local payload is not an instruction or validation input.
+            # Refuse its pathname without reading/parsing its contents.
+            files = [path for path in files if path.relative_to(SYSTEMX).as_posix() in REQUIRED]
     markdown_count = 0
     for path in files:
         relative = path.relative_to(SYSTEMX).as_posix()

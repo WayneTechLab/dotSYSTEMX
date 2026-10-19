@@ -270,6 +270,19 @@ class AutobotTests(unittest.TestCase):
         self.assertIn("AUTOBOT/Design.MD", repaired["add"])
         self.assertEqual((self.systemx / "AUTOBOT/Brand.MD").read_text(), "Preserve adopted brand\n")
 
+    def test_validation_allows_request_ledger_above_individual_context_file_limit(self):
+        self.init()
+        path = self.systemx / "AUTOBOT/REQUESTS.json"
+        # Legal JSON whitespace makes a >256 KiB ledger without processing
+        # thousands of unrelated requests; its separate capacity is 8 MiB.
+        path.write_text('{"schemaVersion": 1, "requests": []}' + ' ' * (300 * 1024))
+        result = self.run_cli("validate")
+        self.assert_ok(result)
+        self.assertEqual(self.value("autobot", "status")["total"], 0)
+        before = path.read_bytes()
+        self.value("autobot", "init", "--apply")
+        self.assertEqual(path.read_bytes(), before)
+
     def test_parallel_identical_requests_share_one_retained_identity(self):
         self.init()
         command = ("autobot", "request", "--caller", "agent.0", "--purpose", "Parallel bounded context",

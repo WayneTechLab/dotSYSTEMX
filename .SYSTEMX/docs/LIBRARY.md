@@ -14,7 +14,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.10.0-alpha.1"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.10.0-alpha.2"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -38,7 +38,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.10.0-alpha.1` is spelled `1.10.0a1` in Python package
+The public release ID `1.10.0-alpha.2` is spelled `1.10.0a2` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)

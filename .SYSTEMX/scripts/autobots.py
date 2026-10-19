@@ -371,7 +371,7 @@ def validate_optional(root):
     if not active and not present and not directory.exists():
         return
     for name in SEEDS:
-        _text(root, "AUTOBOT/" + name)
+        _text(root, "AUTOBOT/" + name, MAX_LEDGER_BYTES if name == "REQUESTS.json" else MAX_FILE_BYTES)
     validate_catalog(_json(root, CATALOG))
     data = load_requests(root)
     if data["requests"] and not active:
