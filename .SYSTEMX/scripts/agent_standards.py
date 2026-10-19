@@ -167,8 +167,10 @@ def validate_optional(root):
     # validates scaffold metadata without traversing or reading user payloads.
     import autobots
     import data_tools
+    import root_coordination
     autobots.validate_optional(root)
     data_tools.validate_optional(root)
+    root_coordination.validate_optional(root)
 
 
 def add_cli(subparsers, scope=None):

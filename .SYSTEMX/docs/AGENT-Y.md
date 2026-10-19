@@ -383,6 +383,15 @@ The controller's path, commit, and process checks are not the host project's tes
 suite. Agent 0 must run or verify the applicable project checks and original
 acceptance evidence before recording `done`.
 
+Optional [ROOT](../ROOT/SX-MILESTONE.md) can link the originating `RTask`,
+delegated `STask`, canonical task, and explicit external provider item. Keep
+this mapping separate from the existing Y job and PR lifecycle. Several runs
+may belong to one task, and a broad harness item may cover several canonical
+tasks. ROOT delta compares observed snapshots; the controller still needs its
+actual job, Git, provider, and PR checks. A completed external item is execution
+evidence awaiting the existing acceptance process. A tool card describes a
+bounded available-tool call; it does not launch the provider or authorize a PR.
+
 ## PR lifecycle policy
 
 Automatic PR actions require an explicit policy for that task and the host's

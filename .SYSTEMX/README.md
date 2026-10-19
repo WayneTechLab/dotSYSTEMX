@@ -117,6 +117,7 @@ Configured child commands execute from `Projects/Project-A/`, not `.SYSTEMXP`.
 | [START-HERE.md](START-HERE.md) and [CURRENT.md](CURRENT.md) | Start/resume protocol and generated current focus |
 | [GLOBAL/](GLOBAL/README.md) | Project identity, constraints, and accepted references |
 | [PLAN/MASTER-PLAN.md](PLAN/MASTER-PLAN.md) | Outcomes, milestones, dependencies, and acceptance |
+| [ROOT/](ROOT/SX-MILESTONE.md) | Optional operating rules, flexible planning structure, and explicit harness/bot state observations |
 | [WORK/](WORK/README.md) | Canonical tasks and generated status views |
 | [MEMORY/](MEMORY/README.md) | Verified project facts and session checkpoints |
 | [AGENTS/](AGENTS/README.md) | Coordinator, registered roles, and scoped agent memory |
@@ -143,6 +144,26 @@ Use [the work guide](WORK/README.md) for task creation, dependencies, review, an
 current focus. Keep one authoritative ledger; generated views are not separate
 editable status lists. [Evidence and acceptance](docs/EVIDENCE.md) describe the
 review needed before completion.
+
+## Optional ROOT planning and task-state comparison
+
+[SX-RULES](ROOT/SX-RULES.md) records internal coordination rules within the
+active user and environment instructions. [SX-MILESTONE](ROOT/SX-MILESTONE.md)
+defines milestone → wave → phase → group → task → subtask → single action.
+A wave groups related phases; a phase holds a coherent task list. Skip
+unnecessary levels and expand only upcoming work. Counts and worker limits are
+project decisions, rather than a requirement to generate a fixed-size tree.
+
+`RTask` captures a request's origin and `STask` a bounded delegation. Plan nodes
+reference canonical `TASK-` IDs; independently owned or accepted subtasks also
+need their own task records. Status stays in `WORK/TASKS.json`. Optional ROOT
+mappings compare that ledger with observed IDE/harness and cloud/bot items,
+including one-to-many relationships. Observations retain their scope, revision,
+time, and evidence. A read-only delta reports gaps; it does not connect a
+provider, execute a tool card, or accept external completion automatically.
+Use ROOT only in the selected outer or `.SYSTEMXP` scope, and load a bounded
+selection when needed. Follow the [ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta)
+for setup and the full contract.
 
 ## Configuration contract
 
@@ -215,7 +236,7 @@ tools require separate review.
 ## Complete projects and shared work
 
 Use the [one-shot project guide](docs/ONE-SHOT-PROJECT.md) to turn a
-researched brief into phases, milestones, tasks, worker waves, and accepted
+researched brief into phases, milestones, tasks, execution batches, and accepted
 delivery. Use [shared workspaces, clouds, and bots](docs/SHARED-WORKSPACES.md)
 for repositories, named `.SYSTEMXP` children, authorized Drive/cloud access,
 multi-chat handoffs, and persistent local/VM bot context. The harness supplies

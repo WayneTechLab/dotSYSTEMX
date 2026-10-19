@@ -73,6 +73,8 @@ Alpha; a menu or caller label does not authorize execution. The runtime returns
 selected context and request records without starting models or external tools.
 `autobot-guide` and `data-guide` print their manuals; local menu option **19**
 opens the AUTOBOT guide and option **20** runs the read-only DATA audit.
+`root-guide` prints the optional ROOT planning/observation manual; local menu
+option **21** opens the same guide.
 
 To use a reviewed folder-only copy directly, run the launcher from the containing
 directory. Managed launchers select their verified cache; malformed or missing
@@ -132,6 +134,7 @@ workspace/                                      external CLI --target
         │   └── .SYSTEMXP/                      Project-A records only
         │       ├── GLOBAL/ PLAN/ WORK/ MEMORY/
         │       ├── AGENTS/ EVENTS/ REVIEWS/      optional roles after activation
+        │       ├── ROOT/                        optional plan and task-state mappings
         │       ├── SOURCES.json SYNC/
         │       └── project.json                Project-A check/build/deploy args
         └── Project-B/
@@ -178,6 +181,45 @@ that working directory, such as `code/`, or a deliberately reviewed absolute
 script path. `SOURCES.json` references never redirect the working directory or
 fetch a repository. Command arrays execute without shell expansion; put
 pipelines in an explicit project script.
+
+## Optional ROOT planning and task delta
+
+ROOT adds selected-scope operating rules, request/plan references, task-surface
+mappings, local observations, and bounded tool cards. It preserves the existing
+Master Plan and canonical task ledger. Use the selected defaults' tools and
+preview mutations before adding `--apply`:
+
+```bash
+systemx run --target "/path/to/workspace" --offline -- root init
+systemx run --target "/path/to/workspace" --offline -- root init --apply
+systemx run --target "/path/to/workspace" --offline -- root status
+systemx run --target "/path/to/workspace" --offline -- root delta --layer harness --layer bot
+systemx run --target "/path/to/workspace" --offline -- root packet --limit 5
+systemx projects --target "/path/to/workspace" -- root init --project Project-A
+systemx projects --target "/path/to/workspace" -- root init --project Project-A --apply
+systemx projects --target "/path/to/workspace" -- root delta --project Project-A --layer harness --layer bot
+```
+
+`root request`, `node`, `bind`, `observe`, and `card` each require an explicit
+idempotency key and preview by default. `request` captures root/delegated origin;
+`node` links planning structure to canonical tasks; `bind` maps actual harness
+or bot items; `observe` retains readback evidence and state; `card` describes one
+bounded call to an actual available tool. Use each command's `--help` and the
+[SX-MILESTONE contract](../ROOT/SX-MILESTONE.md) for current required fields.
+
+`root delta` is read-only. It compares saved observations, not live harness or
+cloud services, and leaves missing, stale, unavailable, or divergent state
+visible. Source and expected revisions are caller-provided comparison inputs;
+they need independent readback from the actual source. Mappings may be
+many-to-many, and external completion does not change canonical acceptance.
+`root-guide` explains the hierarchy and generic tool-card boundary. These
+commands neither execute cards nor install MCP or provider integrations.
+The delta defaults to the harness layer and a bounded task selection; repeat
+`--layer harness --layer bot` to assess both external surfaces. Excluded layers
+remain unassessed. Repeat `--task TASK-ID` to select explicit tasks, rather
+than assuming a bounded report covers the whole backlog. `root packet` prepares
+a selected coordination packet, capped at ten tasks and 64 KiB, without
+dispatching work or loading the entire plan/history.
 
 ## On-demand AUTOBOT and local DATA
 

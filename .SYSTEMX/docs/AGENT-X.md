@@ -140,6 +140,14 @@ complete a task or cancel a remote job.
 
 ## Keep the cycle moving
 
+When optional [ROOT](../ROOT/SX-MILESTONE.md) is adopted, Agent X remains the
+home for observed events and time. A crash, bug, or unknown links to the relevant
+canonical task and originating/delegated request when known; it is not another
+hierarchy level or an automatic retry instruction. ROOT harness/bot observations
+describe saved task-state snapshots. They do not replace event history or
+establish that a recorded run or live check actually occurred. Agent 0 resolves
+the remaining delta with original evidence and bounded follow-up work.
+
 Agent X records when the idea was accepted, implementation changed, checks ran,
 a revision was delivered, and the actual live state was rechecked. Every event
 keeps its scope and original revision. Agent Z can cite these records when

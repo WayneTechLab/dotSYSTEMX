@@ -49,6 +49,27 @@ retained evidence; do not create an automatic reprocessing loop. Agent 0/user
 retains task acceptance and external-action authority. Keep reusable role seeds
 blank.
 
+## Optional ROOT coordination
+
+Use [SX-RULES](ROOT/SX-RULES.md) for internal operating conventions and
+[SX-MILESTONE](ROOT/SX-MILESTONE.md) for the planning hierarchy and generic
+tool-card contract, when ROOT is adopted in this scope. These documents do not
+override active instructions or install tools. `RTask` identifies the originating
+request; `STask` identifies a bounded delegated request. Each independently
+owned outcome references a canonical `TASK-` record rather than a new status
+database. Choose useful levels and counts; do not expand an entire numerical
+tree before the next work is understood.
+
+Agent 0 compares canonical tasks with actual harness and optional bot task
+observations using explicit many-to-many mappings. Save the observed source
+revision, time, state, and evidence, and expose stale or unavailable information.
+A local ROOT delta reads those snapshots; it does not contact a harness or bot,
+change permissions, start agents, or accept completed provider output. Agent X
+keeps events, Agent Y keeps delegated CLI runs, and Agent Z keeps fixed-policy
+reviews under their existing contracts. Agent Alpha supplies selected detailed
+references. Checkpoint the exact remaining delta when stopping; do not restart
+unchanged tasks or reviews to make lists appear equal.
+
 ## On-demand AUTOBOT reference tier
 
 [Agent Alpha and AUTOBOT](docs/AUTOBOT.md) (`agent.a`, `AGENTA`) route bounded

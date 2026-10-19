@@ -168,6 +168,14 @@ bounded at 32 MiB and contain no automatically fetched external data.
 
 ## Multi-project and chat use
 
+With optional [ROOT](../ROOT/SX-MILESTONE.md), review only the selected
+canonical tasks, relevant plan/request references, and original evidence.
+Harness/bot state differences can reveal missing review or stale observations;
+equal status labels do not establish correctness, live synchronization, or
+milestone acceptance. ROOT does not add a second scorecard or trigger another
+review whenever a planning node changes. Preserve Agent Z's fixed versioned
+questions and reuse a valid report until its source, evidence, or policy changes.
+
 Use `projects agent-z COMMAND --project Project-A` to keep policy, requests,
 reports, and memory in that project's `.SYSTEMXP`. Do not mix equal task IDs from
 different projects. Example: `projects agent-z policy --project Project-A`.

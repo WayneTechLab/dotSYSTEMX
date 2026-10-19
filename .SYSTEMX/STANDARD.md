@@ -102,6 +102,7 @@ work remains a blocker; it is not equivalent to passing a check.
 | Detailed on-demand design, brand, research, and rules | [Agent Alpha and AUTOBOT](docs/AUTOBOT.md) |
 | Ignored local payloads and scaffold inspection | [DATA](docs/DATA.md) |
 | Active work, master plan, and continuity | [Start/resume protocol](START-HERE.md), [work ledger](WORK/README.md), [memory](MEMORY/README.md) |
+| Optional internal rules, planning hierarchy, and task-surface deltas | [SX-RULES](ROOT/SX-RULES.md), [SX-MILESTONE](ROOT/SX-MILESTONE.md) |
 
 The written standard describes responsibilities. Only the explicitly configured
 checks enforce project behavior automatically.
@@ -145,11 +146,29 @@ already tracked files, cloud sync, other uploads, or actual access permissions.
 ## Research, phases, and shared-source handoffs
 
 A deep-research brief should retain relevant original sources, constraints,
-uncertainty, and acceptance criteria. Phases and execution waves are planning
-conventions in the Master Plan, not new task-schema fields or commands. Tasks
-retain canonical IDs, local dependencies, ownership, evidence, and history.
+uncertainty, and acceptance criteria. Phases and waves are planning
+conventions, supported by optional [ROOT](ROOT/SX-MILESTONE.md) records without
+changing the task schema. Use milestone → wave → phase → optional group →
+task → optional subtask → single action, skipping levels that add no useful
+coordination. A wave groups related phases; a phase holds a coherent task list.
+Counts express project choices, never automatic quotas or recursive expansion.
+`RTask` preserves the originating request and `STask` a scoped delegation;
+status, hierarchy, origin, and events remain separate. Independently owned or
+accepted work keeps canonical task IDs, dependencies, evidence, and history.
+Events, bugs, and unknowns link to Agent X records and follow-up tasks as needed.
 Read relevant changes each meaningful turn; preserve accepted work and reviewed
 facts. Accumulating project knowledge is not model training or a guarantee of AGI.
+
+When ROOT is adopted, [SX-RULES](ROOT/SX-RULES.md) describes the internal rules
+within the environment's instruction hierarchy. Compare the selected ledger
+with actual harness and optional bot task observations through explicit stable
+ID mappings. Item counts need not match: one harness item may cover several
+canonical tasks, and one task may have several execution attempts. A saved
+observation is a snapshot; stale, missing, unavailable, or divergent state stays
+visible. A provider's completion can support `needs_review`; only the existing
+Agent 0/user acceptance process establishes `done`. Use a bounded next-action
+packet, and stop or checkpoint when the accepted objective or authorized budget
+is reached. Changes to a plan never imply automatic tool execution or rechecks.
 
 For shared chats or bots, identify the canonical scope, source revision, access,
 and write owner. A URL alone provides no access or persistence. No cloud sync

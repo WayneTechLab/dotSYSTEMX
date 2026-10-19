@@ -138,6 +138,30 @@ CLI handoffs, and Z scorecards. All roles can run sequentially in one assistant
 when parallelism is unavailable. A thread title, agent ID, or folder name is not
 an access credential.
 
+## Keep task-surface differences visible
+
+The optional [ROOT layer](../ROOT/SX-MILESTONE.md) records explicit mappings
+among canonical SYSTEMX tasks, IDE/harness plan items, and cloud/bot task items.
+These surfaces have different granularity and status vocabularies. One harness
+item can summarize several canonical tasks; one task can have several bot runs.
+Preserve stable task and external item IDs rather than matching titles or item
+counts. Keep request origin (`RTask`) and bounded delegation (`STask`) separate
+from task status and Agent X event history.
+
+Only record an observation after reading the actual source, retaining scope,
+revision, observation time, raw/normalized state, and evidence under the ROOT
+contract. ROOT delta compares local records without contacting remote services.
+Caller-provided expected revisions are comparison values, not proof of a live
+remote. Missing connector access, unavailable readback, old observations, or
+state mismatches remain visible gaps. Use the source's authorized tool to
+reconcile them and read back the result. A successful provider run can support
+review; Agent 0/user still accepts canonical `done` against original criteria.
+
+Each selected `.SYSTEMXP` may adopt its own ROOT records using the shared outer
+tools. Retain one writer per scope and never merge root/child task identities.
+The ROOT tool card describes one bounded available-tool call and expected
+evidence. It does not authorize a write, install transport, or execute the call.
+
 ## Google Drive: local synchronization and connector access
 
 For a locally available project folder, install once with the `drive` profile:

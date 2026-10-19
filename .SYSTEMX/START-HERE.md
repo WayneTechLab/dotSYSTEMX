@@ -49,6 +49,21 @@ and the [project map](PLAN/MAP.md) when source or system boundaries matter. They
 are blank in the public template and are not loaded into every context packet.
 See the [access and map guide](docs/ACCESS-AND-MAP.md).
 
+If this scope has adopted [ROOT](ROOT/SX-MILESTONE.md), consult
+[SX-RULES](ROOT/SX-RULES.md) and only the selected request, plan nodes, and
+harness/bot mappings needed for this objective. The rules remain subordinate
+to active user and environment instructions. Use existing canonical task IDs;
+`RTask` request origin, `STask` delegation, and planning levels do not replace
+task status. Compare observations with actual tool readback before claiming
+alignment. Missing access or an old snapshot remains an explicit gap. ROOT is
+optional and its complete plan or observation history is not part of every
+resume packet.
+`root packet` prepares a bounded ROOT selection without dispatching work.
+`root delta` defaults to the harness layer; select both `--layer harness
+--layer bot` only when both surfaces apply, and report excluded layers as
+unassessed. Use explicit `--task` selections when the current focus is too broad
+or the relevant task is outside it.
+
 Read [AUTOBOT](docs/AUTOBOT.md) context only when a named function is needed for
 the current work. Optional Agent Alpha routes the selected root or child's
 design, brand, rules, research, and other detailed references; it does not add
@@ -86,6 +101,14 @@ the caller-supplied base and original acceptance criteria.
 - Before pausing, switching tasks, or losing context, checkpoint facts, evidence,
   exact next action, and unresolved blockers using the
   [memory protocol](MEMORY/README.md).
+- Where the harness or an external bot maintains its own task list, preserve
+  stable mappings to the selected canonical tasks and record the observed
+  state, source revision, and readback time. Reconcile the remaining delta
+  through available authorized tools. An external completed item is execution
+  evidence; Agent 0/user still reviews acceptance before canonical `done`.
+- Honor an explicit stop or pause. Retain task IDs, acceptance criteria,
+  dependencies, pending job handles, and failed attempts in the checkpoint;
+  a new session resumes that boundary without launching duplicate work.
 
 ## Blank versus active
 
@@ -113,7 +136,7 @@ Agent 0 coordinates the result with X event evidence and Z review.
 ## Complete projects and shared work
 
 Use the [one-shot project guide](docs/ONE-SHOT-PROJECT.md) to turn a
-researched brief into phases, milestones, tasks, worker waves, and accepted
+researched brief into phases, milestones, tasks, execution batches, and accepted
 delivery. Use [shared workspaces, clouds, and bots](docs/SHARED-WORKSPACES.md)
 for repositories, named `.SYSTEMXP` children, authorized Drive/cloud access,
 multi-chat handoffs, and persistent local/VM bot context. The harness supplies

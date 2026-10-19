@@ -876,6 +876,111 @@ class ManagerTests(unittest.TestCase):
                     with self.assertRaisesRegex(manager.InstallError, "AUTOBOT request ledger must be empty"):
                         manager.verified_bundle(files)
 
+    def test_one_eleven_bundle_rejects_missing_root_files_even_if_rehashed(self):
+        bundle = manager.read_bundle(self.source)
+        self.assertGreaterEqual(manager.version_key(bundle["version"])[:3], (1, 11, 0))
+        required = ("scripts/root_coordination.py", "tests/test_root_coordination.py") + tuple(
+            base + "/" + leaf for base in ("ROOT", "templates/root") for leaf in
+            ("SX-RULES.md", "SX-MILESTONE.md", "PLAN.json", "MIRRORS.json"))
+        for name in required:
+            with self.subTest(name=name):
+                files = dict(bundle["files"])
+                files.pop(name)
+                manifest = json.loads(files[manager.MANIFEST])
+                manifest["files"].pop(name)
+                files[manager.MANIFEST] = json.dumps(manifest).encode("utf-8")
+                with self.assertRaisesRegex(manager.InstallError, "missing core files"):
+                    manager.verified_bundle(files)
+
+    def test_one_eleven_bundle_rejects_retained_root_records_and_noninteger_schemas(self):
+        bundle = manager.read_bundle(self.source)
+        seeds = {"PLAN.json": {"schemaVersion": 1, "requests": [], "nodes": []},
+                 "MIRRORS.json": {"schemaVersion": 1, "bindings": [], "observations": [], "cards": []}}
+        for base in ("ROOT", "templates/root"):
+            for leaf, expected in seeds.items():
+                variants = [dict(expected, schemaVersion=True), dict(expected, schemaVersion=1.0),
+                            dict(expected, unexpected="fixture")]
+                for field in expected:
+                    if field != "schemaVersion":
+                        variants.append(dict(expected, **{field: [{"private": "fixture"}]}))
+                for seed in variants:
+                    with self.subTest(name=base + "/" + leaf, seed=seed):
+                        name = base + "/" + leaf
+                        files = dict(bundle["files"])
+                        files[name] = json.dumps(seed).encode("utf-8")
+                        manifest = json.loads(files[manager.MANIFEST])
+                        manifest["files"][name] = manager.distribution_digest(name, files[name], manifest["schemaVersion"])
+                        files[manager.MANIFEST] = json.dumps(manifest).encode("utf-8")
+                        with self.assertRaisesRegex(manager.InstallError, "ROOT coordination records must be empty"):
+                            manager.verified_bundle(files)
+
+    def test_one_eleven_bundle_rejects_drifted_root_documentation_seeds(self):
+        bundle = manager.read_bundle(self.source)
+        for base in ("ROOT", "templates/root"):
+            for leaf in ("SX-RULES.md", "SX-MILESTONE.md"):
+                with self.subTest(name=base + "/" + leaf):
+                    name = base + "/" + leaf
+                    files = dict(bundle["files"])
+                    files[name] += b"\nLocal fixture policy\n"
+                    manifest = json.loads(files[manager.MANIFEST])
+                    manifest["files"][name] = manager.distribution_digest(name, files[name], manifest["schemaVersion"])
+                    files[manager.MANIFEST] = json.dumps(manifest).encode("utf-8")
+                    with self.assertRaisesRegex(manager.InstallError, "ROOT documentation and dedicated seeds must match"):
+                        manager.verified_bundle(files)
+
+    def test_root_distribution_validation_does_not_execute_source_module(self):
+        files = dict(manager.read_bundle(self.source)["files"])
+        name = "scripts/root_coordination.py"
+        files[name] = b'raise RuntimeError("Untrusted source must not be executed by bundle validation")\n'
+        manifest = json.loads(files[manager.MANIFEST])
+        manifest["files"][name] = manager.distribution_digest(name, files[name], manifest["schemaVersion"])
+        files[manager.MANIFEST] = json.dumps(manifest).encode("utf-8")
+        verified = manager.verified_bundle(files)
+        self.assertEqual(verified["version"], self.version)
+
+    def test_previous_one_ten_release_without_root_remains_valid(self):
+        for base in ("ROOT", "templates/root"):
+            shutil.rmtree(self.source / base)
+        for name in ("scripts/root_coordination.py", "tests/test_root_coordination.py"):
+            (self.source / name).unlink()
+        self.write_manifest("1.10.0-alpha.3")
+        bundle = manager.read_bundle(self.source)
+        self.assertEqual(bundle["version"], "1.10.0-alpha.3")
+        self.assertNotIn("ROOT/PLAN.json", bundle["files"])
+
+    def test_upgrade_adds_root_defaults_and_preserves_user_root_records(self):
+        root_names = tuple(base + "/" + leaf for base in ("ROOT", "templates/root") for leaf in
+                           ("SX-RULES.md", "SX-MILESTONE.md", "PLAN.json", "MIRRORS.json"))
+        module_names = ("scripts/root_coordination.py", "tests/test_root_coordination.py")
+        new_files = {name: (self.source / name).read_bytes() for name in root_names + module_names}
+        for base in ("ROOT", "templates/root"):
+            shutil.rmtree(self.source / base)
+        for name in module_names:
+            (self.source / name).unlink()
+        self.write_manifest("1.10.0-alpha.3")
+        self.install()
+        local = self.root / ".SYSTEMX/ROOT"
+        local.mkdir()
+        user_files = {"PLAN.json": b'{"schemaVersion":1,"requests":[{"fixture":"owner data"}],"nodes":[]}\n',
+                      "SX-RULES.md": b"# Local owner rules\nKeep this exact content.\n",
+                      "owner-notes.md": b"Unmanaged owner fixture\n"}
+        for leaf, data in user_files.items():
+            (local / leaf).write_bytes(data)
+        for name, data in new_files.items():
+            path = self.source / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        self.write_manifest(self.version)
+        manager.set_policy(self.root, pin="none")
+        manager.update(self.root, source=self.source)
+        for leaf, data in user_files.items():
+            self.assertEqual((local / leaf).read_bytes(), data)
+        for leaf in ("SX-MILESTONE.md", "MIRRORS.json"):
+            self.assertEqual((local / leaf).read_bytes(), new_files["ROOT/" + leaf])
+        for leaf in ("SX-RULES.md", "SX-MILESTONE.md", "PLAN.json", "MIRRORS.json"):
+            self.assertEqual((self.root / ".SYSTEMX/templates/root" / leaf).read_bytes(),
+                             new_files["templates/root/" + leaf])
+
     def test_archive_manifest_and_path_checks_reject_untrusted_layouts(self):
         for path in ("../outside", "a/../../escape", "/absolute", "C:/escape", "a\\b", "con.txt", "NUL", "a./b", "local/data"):
             with self.subTest(path=path), self.assertRaises(manager.InstallError):

@@ -5,7 +5,7 @@ flowchart TB
   subgraph Prepare["DEFINE AND BUILD"]
     direction LR
     R["0 · RESEARCH<br/>Brief + 20-route matrix"] --> F["1 · FOUNDATION<br/>Shell + shared contracts"]
-    F --> P["2 · PARALLEL WAVE<br/>Scoped app workers / optional Agent Y CLI"]
+    F --> P["2 · PARALLEL BATCH<br/>Scoped app workers / optional Agent Y CLI"]
   end
   subgraph Complete["INTEGRATE AND ACCEPT"]
     direction LR
@@ -13,14 +13,14 @@ flowchart TB
     V --> D["5 · DELIVER + FINISH<br/>Actual target evidence"]
   end
   Prepare --> Complete
-  Complete --> Record["EVERY WAVE · Agent X timestamps + evidence<br/>Agent 0 keeps tasks, Global context, Master Plan, and next action current"]
+  Complete --> Record["EACH BATCH · Agent X timestamps + evidence<br/>Agent 0 keeps tasks, Global context, Master Plan, and next action current"]
   classDef phase fill:#EAF2FA,stroke:#22476B,color:#142D45
   classDef role fill:#ECF4ED,stroke:#38674B,color:#163721
   class R,F,P,I,V,D phase
   class Record role
 ```
 
-**Diagram:** Each wave has an acceptance gate. Parallel work follows accepted shared contracts; delivery needs actual target evidence.
+**Diagram:** Each execution batch has a verification or acceptance boundary. Parallel work follows accepted shared contracts; delivery needs actual target evidence.
 
 A good deep-research prompt gives a project a better starting point: a clear
 problem, relevant sources, constraints, examples, and a measurable finish line.
@@ -68,7 +68,7 @@ Do not invent access, credentials, user research, integrations, or live behavior
 Return a concise brief plus a source index: user journeys, route/content inventory,
 requirements and non-goals, data/entities, authorization rules, design principles,
 stack/toolchain options with reasons, acceptance matrix, risks, dependencies,
-phases, milestones, task groups, and a recommended first execution wave.
+phases, milestones, task groups, and a recommended first execution batch.
 Define what 'done' means and which actions require additional authority.
 Use Agent Z's existing 100-question policy to review the saved brief when available;
 keep unknowns and justified N/A visible. This research request does not authorize
@@ -162,21 +162,31 @@ persistence, correct permissions, or production delivery.
 
 | Planning unit | Meaning | Where it lives |
 | --- | --- | --- |
-| Phase | A broad kind of work: discovery, foundation, implementation, verification, delivery | Master Plan prose/table |
 | Milestone | A measurable outcome with acceptance evidence and a stable `M-001`-style ID | Master Plan milestone table |
+| Wave | A coordinated group of related phases, with dependencies and a bounded goal | Master Plan or optional ROOT structure |
+| Phase | A coherent task list: discovery, foundation, implementation, verification, or delivery | Master Plan or optional ROOT structure |
+| Group | An optional named collection within a phase | Plan structure, referencing canonical tasks |
 | Task | A bounded outcome with owner, scope, dependencies, evidence, and history | Canonical `WORK/TASKS.json` |
-| Wave | A selected group of ready, non-conflicting tasks that may run together | Master Plan/coordination notes and current focus |
+| Subtask / single action | A smaller outcome or execution step; independently owned or accepted work needs a canonical task | Task references or a supporting checklist |
+| RTask / STask | Originating request / bounded delegated request | Optional ROOT request references |
+| Event | A meaningful observed fact such as a crash, bug, or unknown | Agent X evidence linked to tasks; explicit follow-up work when needed |
 | Thread/subagent | An actual harness execution context assigned a task | Harness, referenced by scoped agent notes and reports |
 | Agent Y handoff | One task assigned to a separately installed CLI provider, with an optional branch/PR artifact | Selected scope's `AGENTS/agent.y/JOBS.json`; canonical status remains in `WORK/TASKS.json` |
 
-Phases and waves are planning conventions; there are no `phase` or `wave` CLI
-commands or additional task-schema fields. The CLI enforces local dependency and
-status consistency, while Agent 0 selects waves and resolves resource conflicts.
-The ten-task focus limit is separate from the requested worker limit.
+Use milestone → wave → phase → optional group → task → optional subtask →
+single action, skipping levels when a shorter plan is clearer. Counts are
+project choices. A milestone is accepted for its outcome, rather than for
+completing ten of each planning unit. Expand the next bounded work instead of
+generating the entire possible tree. Optional [ROOT](../ROOT/SX-MILESTONE.md)
+records add request/structure references and task-state comparisons; the core
+task schema remains unchanged. Agent 0 chooses dependency-ready execution
+batches and resolves write/resource conflicts. A planning wave can contain
+several batches, which may run sequentially or in parallel. The ten-task focus
+limit is separate from the requested worker limit.
 
 A practical sequence for the example app:
 
-| Wave | Milestone and work | Gate before advancing |
+| Execution batch | Milestone and work | Gate before advancing |
 | --- | --- | --- |
 | 0 | M-001: research, brief, route inventory, scope and acceptance | Material ambiguities resolved; brief reviewed |
 | 1 | M-002: app shell, design tokens, routing, data/auth contracts, test baseline | Shared interfaces and foundation verified |
@@ -197,13 +207,14 @@ bash .SYSTEMX/SYSTEMX.sh task-add --title 'Verify the shared app shell' \
 
 Use returned IDs. Add prerequisites with repeated `--depends-on TASK_ID` flags
 when creating dependent tasks. Never mark a prerequisite done merely to unblock
-a wave. If two components can proceed against a reviewed contract, make that
-contract a real completed prerequisite and keep final integration as separate work.
+an execution batch. If two components can proceed against a reviewed contract,
+make that contract a real completed prerequisite and keep final integration as
+separate work.
 
 ## 5. Run bounded parallel work, then integrate
 
-After shared contracts are accepted, one wave might assign public pages to
-`agent.1`, member flows to `agent.2`, data/API implementation to `agent.3`, and
+After shared contracts are accepted, one execution batch might assign public
+pages to `agent.1`, member flows to `agent.2`, data/API implementation to `agent.3`, and
 independent test design to `agent.4`. Give the coordinator ownership of shared
 routing, dependency manifests, schema changes, and integration. These assignments
 are examples: choose fewer workers when independence or capacity is limited.
@@ -259,6 +270,9 @@ At each meaningful work turn or handoff:
    revision, and original evidence. Failed attempts remain part of the timeline.
 4. Update canonical tasks through the CLI. It regenerates TODO, WORKING-ON,
    BLOCKED, REVIEW, DONE, CANCELLED, and CURRENT views as applicable.
+   If ROOT is adopted, compare selected harness/bot readbacks with the mapped
+   task IDs and retain the remaining delta. A local snapshot cannot establish
+   live alignment or replace acceptance evidence.
 5. At a completion boundary or explicit request, Agent Z uses the same versioned
    100 questions; reuse an unchanged report and retained evidence.
 6. Agent 0 accepts against the original criteria or records the concrete gap.
@@ -311,8 +325,11 @@ existing work and task IDs. Use the saved research/source index; verify volatile
 facts and load only the context needed. Resolve material ambiguity without
 inventing decisions; continue independent authorized work when possible.
 
-Agent 0 coordinates. Organize the accepted outcome into phases, milestone IDs,
-dependency-linked tasks, and bounded waves. I authorize up to 10 active workers
+Agent 0 coordinates. Use milestone -> wave -> phase -> optional group -> task
+-> optional subtask -> single action; skip unnecessary levels and choose counts
+to fit the work. Preserve milestone IDs and dependency-linked canonical tasks.
+If ROOT is adopted, link RTask origin and STask delegation without duplicating
+status. I authorize up to 10 active workers
 total across app subagents and optional CLI handoffs for independent work,
 subject to lower harness limits; use fewer when useful.
 Give each worker a precise scope, base revision, acceptance criteria, resource
@@ -330,6 +347,11 @@ versioned 100-question policy for requested prompt review and acceptance boundar
 Reuse unchanged reviews; scores do not create a rebuild or deployment loop.
 Keep canonical tasks and generated views in sync, promote only reviewed facts,
 and checkpoint the exact next step at wave boundaries or before interruption.
+If the harness or a cloud bot has a task list, read it through actual available
+tools and map its items to the canonical TASK IDs. Record observation revision,
+time, and evidence; report stale, unavailable, or conflicting state. A completed
+provider item does not accept the canonical task. Use ROOT delta if adopted,
+then reconcile through authorized tools; a saved snapshot is not live sync.
 
 Continue through the accepted milestones within available tools, budget, and
 authority. Run relevant checks on changed work, integrate, and verify the actual

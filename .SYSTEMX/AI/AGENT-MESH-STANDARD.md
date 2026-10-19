@@ -41,6 +41,25 @@ branch cleanup remain separate operations with their own gates.
 
 ## Optional durable format
 
+Optional [ROOT](../ROOT/SX-MILESTONE.md) provides request origin (`RTask`),
+bounded delegation (`STask`), structural plan nodes, and explicit mappings to
+harness/bot task items. Its hierarchy can skip unnecessary levels. Structural
+nodes and messages reference canonical task IDs and do not duplicate status.
+Keep independently owned/accepted work in the task ledger; a small single
+action may be a checklist item in its supporting record. A wave groups related
+phases, while an execution batch selects dependency-ready tasks for available
+workers. Planning size does not create worker capacity.
+
+Agent 0 reads the actual harness/provider state before recording a ROOT
+observation. A local delta compares those snapshots, including unmapped,
+unavailable, stale, or divergent state; it does not contact remote services.
+Map many-to-many when granularity differs and retain separate execution
+attempts. A completed worker or provider result still needs canonical review
+and acceptance. Use the generic tool card only with tools actually advertised
+by the current host, within existing permissions. It is not a universal
+Copilot API or an MCP server. Reuse evidence for unchanged inputs and preserve
+the exact next step on stop, rather than repeatedly replanning or rechecking.
+
 Projects needing machine-readable coordination can use the
 [message schema](agent-mesh.schema.json). For example:
 

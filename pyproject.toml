@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.10.0a3"
+version = "1.11.0a1"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -34,6 +34,7 @@ include-package-data = false
 
 [tool.setuptools.package-data]
 systemx = ["GUSTO/*.md", "GUSTO/*.json", "GUSTO/docs/*.md", "GUSTO/contracts/*.md", "GUSTO/contracts/*.json",
+           "ROOT/*.md", "ROOT/*.json", "templates/root/*.md", "templates/root/*.json",
            "AUTOBOT/*.MD", "AUTOBOT/*.md", "AUTOBOT/*.json", "AGENTS/agent.a/*.md",
            "templates/autobot/*.MD", "templates/autobot/*.md", "templates/autobot/*.json",
            "DATA/.gitignore", "DATA/README.md", "DATA/TEMP/README.md", "DATA/LARGE/README.md",

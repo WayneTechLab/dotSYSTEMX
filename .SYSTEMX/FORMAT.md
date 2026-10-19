@@ -35,6 +35,7 @@ do not start one.
 | `PLAN/MASTER-PLAN.md` | Outcomes, milestones, acceptance, sequencing rationale | Task ID references |
 | `WORK/TASKS.json` | Task ownership, state, dependencies, evidence, history | Six generated work views |
 | `WORK/FOCUS.json` | Selected objective, existing task IDs, checkpoint pointer | Generated `CURRENT.md` |
+| `ROOT/` | Optional request/plan structure and observed harness/bot mappings | `SX-RULES.md`, `SX-MILESTONE.md`, and read-only delta output; task status stays in `WORK/TASKS.json` |
 | `AGENTS/REGISTRY.json` | Stable role IDs and memory paths | Each role's scoped memory |
 | `MEMORY/PROJECT.md` | Verified durable facts, decisions, lessons | Dated session checkpoints |
 | `AUTOBOT/` | Optional detailed reference functions and bounded Agent Alpha requests | Exactly ten named `.MD` functions and `AGENTA.MD` charter |
@@ -149,6 +150,32 @@ The optional [agent-message schema](AI/agent-mesh.schema.json) describes message
 with its own lifecycle. It neither replaces the task ledger nor adds a bus or
 scheduler. Its `$id` is a schema identifier; the CLI does not fetch it or contact
 any vendor. A general JSON Schema validator is needed to enforce that schema.
+
+## Optional ROOT planning and observations
+
+`ROOT/SX-RULES.md` describes internal coordination rules within the active
+instruction hierarchy. `ROOT/SX-MILESTONE.md` defines the optional request and
+planning vocabulary, ROOT record schemas, and tool-card contract. The selected
+scope owns its ROOT records; a registered child uses `.SYSTEMXP/ROOT` and the
+outer installation's shared tools. Existing scopes without ROOT remain valid.
+
+Plan hierarchy, request origin, task status, and events are separate concerns.
+Milestone IDs refer to the Master Plan. Structural plan nodes reference existing
+canonical task IDs; they do not duplicate task status or infer milestone
+acceptance. `RTask` denotes an originating request and `STask` its scoped
+delegation. Hierarchy levels may be skipped and counts are project-defined.
+Independently owned or accepted subtasks remain canonical tasks.
+
+ROOT mappings relate canonical tasks to explicitly identified harness/bot
+items, including many-to-many relationships and separate execution attempts.
+Observations preserve source state, revision, timestamp, and evidence. Delta
+output compares the saved observations; it is read-only and cannot establish
+live synchronization. An expected revision supplied by the caller remains a
+comparison input until verified against the original source. Missing or stale
+observations remain gaps. External completion is execution evidence and does
+not bypass the existing `needs_review` → `done` acceptance gate. Tool cards
+describe bounded calls to actual available tools; they neither execute tools
+nor register an MCP server, install providers, or grant permissions.
 
 ## Public distribution versus adopted project
 

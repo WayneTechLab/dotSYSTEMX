@@ -54,6 +54,32 @@ Completed or cancelled tasks can reopen to `todo`. Prior completion evidence
 stays in history, while current acceptance evidence/reviewer are cleared. Reopen
 dependent tasks first if they would otherwise rely on an unfinished dependency.
 
+## Planning structure and external task lists
+
+Optional [ROOT](../ROOT/SX-MILESTONE.md) connects the Master Plan to a flexible
+milestone → wave → phase → group → task → subtask → single-action hierarchy.
+A wave groups related phases; a phase is a coherent task list. Use only useful
+levels and expand the next bounded work. Numbered outlines such as `01-01-01`
+are display references, not stable task identities. An independently owned,
+reviewed, or dependency-bearing subtask receives its own canonical `TASK-` ID;
+small actions can remain a checklist inside the relevant task's supporting
+record. Plan nodes reference tasks and do not carry a competing status.
+
+`RTask` records the root request and `STask` a scoped delegation. A crash, bug,
+or unknown is an event or issue linked to the task; create explicit follow-up
+work when necessary. A milestone is an accepted outcome gate, rather than a
+fixed number of tasks or phases.
+
+An IDE/harness and a cloud bot may expose additional TODO lists. Map their
+items explicitly to canonical tasks; one item can cover several tasks and one
+task can have several attempts. ROOT stores observed source state and reports a
+read-only delta. It supplies no automatic harness/cloud connector. Read back
+actual source state before updating an observation, retain revision/time/evidence,
+and report inaccessible or stale data. External completion can support
+`needs_review`; it cannot bypass canonical acceptance, blockers, or dependencies.
+When the host exposes only planned/active/completed, keep blocked/cancelled and
+review distinctions in the canonical ledger and the handoff explanation.
+
 ## Consistency and concurrency
 
 Commands validate records, take a local coordination lock, update JSON atomically,

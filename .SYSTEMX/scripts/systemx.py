@@ -65,7 +65,8 @@ for _name, _path in (
         ("agent_y", SCRIPTS / "agent_y.py"),
         ("agent_z", SCRIPTS / "agent_z.py"),
         ("autobots", SCRIPTS / "autobots.py"),
-        ("data_tools", SCRIPTS / "data_tools.py")):
+        ("data_tools", SCRIPTS / "data_tools.py"),
+        ("root_coordination", SCRIPTS / "root_coordination.py")):
     _load_local(_name, _path)
 
 import project_memory
@@ -75,6 +76,7 @@ import project_workspaces
 import agent_standards
 import autobots
 import data_tools
+import root_coordination
 
 SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
@@ -154,7 +156,7 @@ REQUIRED = (
     "GUSTO/webhooks/events.example.json",
     "tests/test_gusto_contracts.py",
     "docs/AUTOBOT.md", "docs/DATA.md",
-) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED + autobots.REQUIRED + data_tools.REQUIRED
+) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED + autobots.REQUIRED + data_tools.REQUIRED + root_coordination.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "GLOBAL/ACCESS-MATRIX.md",
     "PLAN/MASTER-PLAN.md", "PLAN/MAP.md", "MEMORY/PROJECT.md",
@@ -280,6 +282,7 @@ def distribution_issues(files):
         agent_z.validate_policy(agent_standards.read(SYSTEMX, "config/agent-z-policy.json"))
         autobots.validate_template(SYSTEMX, DEFAULTS)
         data_tools.validate_template(SYSTEMX, DEFAULTS)
+        root_coordination.validate_template(SYSTEMX, DEFAULTS)
     except (ConfigError, OSError, ValueError) as error:
         issues.append("Public template: " + str(error))
     return issues
@@ -477,7 +480,8 @@ def menu():
                "13": ("setup-guide", False), "14": ("removal-guide", False),
                "15": ("projects-guide", False), "16": ("projects-list", False),
                "17": ("standard-roles-guide", False), "18": ("tools-guide", False),
-               "19": ("autobot-guide", False), "20": ("data-guide", False)}
+               "19": ("autobot-guide", False), "20": ("data-guide", False),
+               "21": ("root-guide", False)}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
@@ -487,7 +491,8 @@ def menu():
               "15) SYSTEMX PROJECTS setup and selection\n16) List registered projects\n"
               "17) Agent X, Agent Y, and Agent Z setup and review guide\n"
               "18) CLI, tools, and .SYSTEMXP routing guide\n"
-              "19) Agent Alpha and on-demand AUTOBOT guide\n20) Local DATA and Git-ignore audit guide\n0) Exit")
+              "19) Agent Alpha and on-demand AUTOBOT guide\n20) Local DATA and Git-ignore audit guide\n"
+              "21) ROOT planning, tool cards, and observed task delta guide\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -515,6 +520,10 @@ def menu():
 
 def dispatch(action, dry_run=False):
     record_directory(SYSTEMX)
+    if action == "root-guide":
+        for name in ("SX-RULES.md", "SX-MILESTONE.md"):
+            print((DEFAULTS / "ROOT" / name).read_text(encoding="utf-8"))
+        return 0
     if action in {"autobot-guide", "data-guide"}:
         name = "AUTOBOT.md" if action == "autobot-guide" else "DATA.md"
         print((DEFAULTS / "docs" / name).read_text(encoding="utf-8"))
@@ -574,7 +583,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Standalone .SYSTEMX project operations (exact-case directory)")
     parser.add_argument("--root", type=Path, action=RootSelector, help="project record directory when running versioned defaults")
     subparsers = parser.add_subparsers(dest="action")
-    for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide", "tools-guide", "autobot-guide", "data-guide"):
+    for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide", "tools-guide", "autobot-guide", "data-guide", "root-guide"):
         command_parser = subparsers.add_parser(action)
         if action == "validate":
             command_parser.add_argument("--template", action="store_true",
@@ -588,6 +597,7 @@ def main(argv=None):
     agent_standards.add_cli(subparsers)
     autobots.add_cli(subparsers)
     data_tools.add_cli(subparsers)
+    root_coordination.add_cli(subparsers)
     project_workspaces.add_cli(subparsers)
     args = parser.parse_args(argv)
     if args.action == "help":
@@ -600,8 +610,9 @@ def main(argv=None):
             return project_workspaces.dispatch(SYSTEMX, DEFAULTS, args, run_scoped_action)
         if args.action in agent_standards.COMMANDS:
             return agent_standards.dispatch(SYSTEMX, DEFAULTS, args)
-        if args.action in autobots.COMMANDS or args.action in data_tools.COMMANDS:
-            module = autobots if args.action in autobots.COMMANDS else data_tools
+        if args.action in autobots.COMMANDS or args.action in data_tools.COMMANDS or args.action in root_coordination.COMMANDS:
+            module = (autobots if args.action in autobots.COMMANDS else
+                      data_tools if args.action in data_tools.COMMANDS else root_coordination)
             print(json.dumps(module.dispatch(SYSTEMX, DEFAULTS, args), indent=2, ensure_ascii=False, allow_nan=False))
             return 0
         if args.action == "alias":

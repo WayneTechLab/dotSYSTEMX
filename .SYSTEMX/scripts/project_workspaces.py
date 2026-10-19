@@ -320,8 +320,10 @@ def add_cli(subparsers):
     agent_standards.add_cli(commands, scope)
     import autobots
     import data_tools
+    import root_coordination
     autobots.add_cli(commands, scope)
     data_tools.add_cli(commands, scope)
+    root_coordination.add_cli(commands, scope)
     for action in ("check", "dev", "build", "deploy"):
         command = scope(commands.add_parser(action))
         command.add_argument("--dry-run", action="store_true")
@@ -357,8 +359,10 @@ def dispatch(root, defaults, args, run_action):
                 return agent_standards.dispatch(records, defaults, selected)
             import autobots
             import data_tools
-            if action in autobots.COMMANDS or action in data_tools.COMMANDS:
-                module = autobots if action in autobots.COMMANDS else data_tools
+            import root_coordination
+            if action in autobots.COMMANDS or action in data_tools.COMMANDS or action in root_coordination.COMMANDS:
+                module = (autobots if action in autobots.COMMANDS else
+                          data_tools if action in data_tools.COMMANDS else root_coordination)
                 print(json.dumps(module.dispatch(records, defaults, selected), indent=2, ensure_ascii=False, allow_nan=False))
                 return 0
             print("Selected scope: " + name + "\nRecords: " + str(records))

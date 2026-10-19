@@ -10,6 +10,13 @@ It also validates task/agent records, dependencies, transition history, mileston
 references, completion evidence fields, and generated work-view consistency.
 Recorded evidence and reviewer names are not independently authenticated.
 Current-focus references and the generated `CURRENT.md` are also checked.
+If present, the optional `ROOT/` extension is checked for schema, scoped task and
+milestone references, hierarchy consistency, and retained observation records.
+Its read-only `root delta` reports differences between canonical tasks and local
+observations of harness/bot items. A valid record or an observation with no
+reported difference does not verify a live integration, remote revision, or
+accepted project outcome. See [ROOT rules](../ROOT/SX-RULES.md) and
+[planning and tool cards](../ROOT/SX-MILESTONE.md).
 
 `validate --template` adds the [public distribution checks](../FORMAT.md#public-distribution-versus-adopted-project):
 only the standard file inventory, reviewed blank seed hashes, empty tasks/focus

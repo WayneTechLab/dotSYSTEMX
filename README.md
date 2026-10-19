@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.10.0-alpha.3` release and leaves updates manual.
+example selects the reviewed `v1.11.0-alpha.1` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.10.0-alpha.3"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.1"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.3
-systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.3 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.1
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.1 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -115,6 +115,9 @@ flowchart LR
   S --> C[Projects/NAME/.SYSTEMXP records]
   R --> A0[Agent 0: scope and coordination]
   C --> A0
+  A0 --> ROOT[Optional ROOT: rules, plan links, and task delta]
+  ROOT -.-> HS[Observed harness and bot items]
+  ROOT --> A0
   A0 --> W[App or IDE subagents]
   A0 --> Y[Agent Y: selected external CLI lane]
   Y --> P[Isolated branch and optional draft PR]
@@ -155,6 +158,7 @@ provider authentication and host permissions still need their own review.
 | Shared context and constraints | `.SYSTEMX/GLOBAL/CONTEXT.md` |
 | Reviewed access decisions and gaps | `.SYSTEMX/GLOBAL/ACCESS-MATRIX.md` |
 | Outcomes and acceptance | `.SYSTEMX/PLAN/MASTER-PLAN.md` |
+| Optional operating rules, planning structure, and task-state comparisons | `.SYSTEMX/ROOT/SX-RULES.md`, `SX-MILESTONE.md`, and ROOT records |
 | Source locations, interfaces, and boundaries | `.SYSTEMX/PLAN/MAP.md` |
 | Task status, ownership, dependencies, and evidence | `.SYSTEMX/WORK/TASKS.json` |
 | Current focus and reviewed facts | `.SYSTEMX/WORK/FOCUS.json`, `.SYSTEMX/MEMORY/PROJECT.md` |
@@ -175,6 +179,17 @@ or an automatic system inventory. See the
 [Agent X](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-X),
 [Agent Y](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y), and
 [Agent Z](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Z) manuals.
+
+The optional [ROOT planning layer](.SYSTEMX/ROOT/SX-MILESTONE.md) connects a
+milestone to waves, phases, groups, and canonical tasks. Use only the levels a
+project needs; counts are planning choices. `RTask` identifies the originating
+request and `STask` a scoped delegation. They do not introduce another task
+status. [SX-RULES](.SYSTEMX/ROOT/SX-RULES.md) describes internal coordination
+within the active user and environment instructions. ROOT can compare saved
+harness and bot observations against the task ledger using explicit mappings.
+Those are local snapshots, requiring readback from the actual tools to establish
+their current state; a provider's completed run still needs Agent 0 acceptance.
+See the [ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta).
 
 For multiple named projects, one outer `.SYSTEMX` can hold separate
 `.SYSTEMX/Projects/<name>/.SYSTEMXP` records. Each child keeps its own context,
@@ -229,6 +244,9 @@ Read the active project's context, Master Plan, task ledger, and current focus.
 Use up to 10 subagents if the harness supports them and parallel work helps.
 Give each worker a bounded assignment. Record verified results and the next
 step; distinguish local checks from live acceptance.
+If ROOT is enabled, link the originating request and selected plan nodes to
+existing TASK IDs. Compare the canonical ledger with actual harness/bot task
+observations, report the remaining delta, and checkpoint the next action.
 ```
 
 The ten-worker number is a requested ceiling, not a guarantee of available

@@ -4,6 +4,34 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-alpha.1 — Optional ROOT planning and observed task deltas
+
+- Added `ROOT/SX-RULES.md` for the internal operating contract and
+  `ROOT/SX-MILESTONE.md` for reusable planning terms, tool cards, and worked
+  examples. Current environment/user instructions retain their authority.
+- Reconciled the planning outline as milestone → wave → phase → optional group
+  → task → optional subtask → single action. Projects may skip levels and choose
+  their own counts. Expand the next bounded work only; no numeric task quota or
+  complete combinatorial tree is generated.
+- Separated originating requests (`RTask`), delegated requests (`STask`),
+  hierarchy, task state, and Agent X events. The existing `WORK/TASKS.json`
+  remains the only task-status ledger, including evidence and acceptance gates.
+- Added optional preview-first `root` commands for blank initialization,
+  immutable request/plan records, many-to-many harness/bot task mappings,
+  evidence-linked observations, bounded tool cards, and read-only delta reports.
+  Canonical task changes invalidate old observation fingerprints. Recorded
+  external completion cannot accept a canonical task.
+- Added independent selected `.SYSTEMXP/ROOT` support and dedicated blank seeds.
+  Older scopes can omit this extension. Additive updates preserve existing
+  local ROOT files; new default tools live in the selected immutable release.
+- Added distribution/package guards, regressions, menu option 21, and public
+  manual links. ROOT records do not execute tools, authenticate callers, connect
+  to IDE/cloud APIs, synchronize remote state, or start retry/check loops.
+
+The four-page image guide remains the labeled 1.10.0-alpha.3 media edition;
+current ROOT behavior is documented in text and Mermaid. Public project records
+remain blank. Alpha status and the existing permission boundaries continue.
+
 ## 1.10.0-alpha.3 — Four-page system infographic field guide
 
 - Replaced the current one-page poster with four 3840 × 2160 imagegen exports:

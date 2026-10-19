@@ -330,6 +330,24 @@ record IDs are scoped; do not compare reports from different projects. Outer
 updates preserve each child's adopted policy and history. Merely adding new
 defaults does not activate roles or rewrite a child's registry.
 
+## Optional ROOT records within a child
+
+A selected project can adopt [ROOT](../ROOT/SX-MILESTONE.md) at
+`Projects/NAME/.SYSTEMXP/ROOT`, sharing the outer tools and version pin.
+`SX-RULES.md` remains subordinate to active instructions. `SX-MILESTONE.md`
+defines optional planning levels, originating/delegated requests, and bounded
+tool cards. The child Master Plan still owns milestone outcomes, and the
+child `WORK/TASKS.json` owns task status and acceptance.
+
+ROOT mappings compare that child's canonical tasks with explicitly observed
+harness/bot items. External IDs, revisions, timestamps, and evidence identify
+the saved snapshots; they do not establish continuous cloud synchronization.
+Use only selected child tasks and preserve gaps when the source cannot be read.
+`Project-A:TASK-001` and `Project-B:TASK-001` remain distinct even when their
+external provider or ROOT node labels match. ROOT adoption adds missing files
+explicitly and preserves existing project records; ordinary child creation
+does not populate adopted request or task history.
+
 ## Shared portfolio and repository patterns
 
 Each child needs a registered name: `Projects/NAME/.SYSTEMXP`. A nameless

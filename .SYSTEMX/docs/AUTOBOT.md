@@ -152,6 +152,15 @@ loading it.
 
 ## Scope, data, and authority
 
+Optional [ROOT](../ROOT/SX-MILESTONE.md) supplies internal coordination and
+planning references for the selected scope. `ROOT/SX-RULES.md` owns the written
+SYSTEMX operating conventions; `AUTOBOT/Rules.MD` holds applicable
+project-specific rules, policy pointers, and reviewed exceptions. Both remain
+within the active instruction hierarchy. Agent Alpha can supply selected
+references to a ROOT-linked task or tool card, without becoming another task
+owner, changing status, or triggering checks. Load the requested subset rather
+than the entire panel, plan, and history.
+
 Each `.SYSTEMXP` may have its own blank AUTOBOT panel and Agent Alpha role.
 The child shares outer tools and version policy; it does not inherit the root's
 private brand, data, requests, or memory. Shared standards are explicit reviewed
