@@ -14,7 +14,7 @@ From the public Git repository:
 ```bash
 python3 -m venv .venv
 # Activate this environment using your platform's normal command, then:
-python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.1"
+python -m pip install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.2"
 systemx setup --profile project
 systemx install --target "/path/to/project" --profile project
 ```
@@ -38,7 +38,7 @@ Upgrading the Python package only updates that tool environment. Each project's
 default version and pin remain independent. `systemx update --target ...` selects
 project defaults under the [preservation contract](INSTALLATION.md).
 
-The public release ID `1.11.0-alpha.1` is spelled `1.11.0a1` in Python package
+The public release ID `1.11.0-alpha.2` is spelled `1.11.0a2` in Python package
 metadata and wheel filenames (PEP 440). They identify the same release.
 `systemx --version` shows both; `status --target ...` shows project defaults.
 The library and CLI are alpha APIs; review [release policy](RELEASE-POLICY.md)
@@ -228,10 +228,14 @@ projects("/path/to/workspace", ["agent-z", "policy", "--project", "Project-A"]).
 `run` is exported by the package and returns `subprocess.CompletedProcess`.
 Arguments must be an explicit string array; they cannot override the chosen
 workspace's global `--root`. Scoped `projects ... --root` remains valid.
-Role commands perform local record operations; they do not schedule external
-jobs, call a model, run checks, or upload evidence. Use `offline=True` to suppress
-an independently enabled startup update check. See [Agent X](AGENT-X.md) and
-[Agent Z](AGENT-Z.md).
+The shown registration and policy commands perform local record operations.
+Agent X bookkeeping and Agent Z policy/review records do not execute schedules,
+call models, or run project checks. Explicit [Agent Y](AGENT-Y.md) execution can
+invoke an installed provider and publish an opted-in draft PR under its separate
+task and permission gates. `offline=True` suppresses the manager's independently
+enabled startup release check; it does not prohibit networking by a configured
+project command, provider, Git, or `gh`. See [Agent X](AGENT-X.md),
+[Agent Y](AGENT-Y.md), and [Agent Z](AGENT-Z.md).
 
 ## Agent Alpha and DATA through the existing API
 
@@ -261,3 +265,37 @@ read payload contents, synchronize, upload, or delete data. Only missing scaffol
 files are added by explicit initialization. A selected child receives its own
 records using shared outer tools; never set an independent child install target.
 See [AUTOBOT](AUTOBOT.md), [DATA](DATA.md), and [CLI/tools](CLI-TOOLS.md).
+
+## ROOT through the existing API
+
+Optional [ROOT](../ROOT/SX-MILESTONE.md) uses the same argument-array interfaces.
+The target remains the outer containing directory; a child selector chooses only
+its records. These examples require a managed installation whose selected
+defaults include ROOT:
+
+```python
+from systemx import run, projects
+
+preview = run("/path/to/workspace", ["root", "init"], offline=True, capture=True)
+preview.check_returncode()  # add --apply only after reviewing missing files
+
+# After ROOT is initialized, load a bounded current selection:
+packet = run("/path/to/workspace", ["root", "packet", "--limit", "5"],
+             offline=True, capture=True)
+packet.check_returncode()
+
+# For an existing child with ROOT initialized, assess both selected surfaces:
+delta = projects("/path/to/workspace",
+                 ["root", "delta", "--project", "Project-A",
+                  "--layer", "harness", "--layer", "bot"],
+                 offline=True, capture=True)
+delta.check_returncode()
+```
+
+Use the returned process's JSON output and coverage/truncation notices. A packet
+does not dispatch workers. Delta compares local, caller-attested observations;
+it neither reads the external source nor proves live synchronization. Select
+only applicable layers and tasks, and retain missing or unavailable readback as
+a gap. Tool cards are references rather than executable calls. Canonical task
+status and Agent 0/user acceptance remain unchanged. Existing projects without
+ROOT continue to work; initialization explicitly adds missing blank records.

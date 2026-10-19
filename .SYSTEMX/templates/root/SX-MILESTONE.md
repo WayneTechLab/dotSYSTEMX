@@ -18,9 +18,9 @@ describe an adopted project; they are not active assignments or accepted facts.
 | Group | An optional collection of related items within that structure | A task list needs a useful section, component, or work package |
 | Task | An independently owned and accepted unit in `WORK/TASKS.json` | The work needs status, dependencies, evidence, and review |
 | Subtask | A smaller plan item beneath a task | Breaking down the work makes the next action clearer; give it a canonical task ID if independently owned or accepted |
-| Single action | A bounded operation within an assignment, represented by an `action` node when useful | The operation needs explicit tool/evidence/stop boundaries; it is not a new task by default |
+| Single action / SingleTask | A bounded operation within an assignment, represented by an `action` node when useful | The operation needs explicit tool/evidence/stop boundaries; `SingleTask` is a prose alias, not a new kind or status |
 | RTask | The originating user or authorized harness request | The plan needs a stable pointer back to its objective and source |
-| STask | A bounded delegated request with a parent RTask or STask | Another worker or channel needs a clear assignment and return boundary |
+| STask | A bounded child, follow-up, or delegated request with a parent RTask or STask | Related work needs explicit provenance and scope; it does not require another agent |
 | Event | A recorded occurrence, such as a crash, bug, unknown result, or verified observation | Time, provenance, and evidence matter; use Agent X records where enabled |
 | TODO | The pending state of accepted canonical work | A task is waiting to start; it is not a hierarchy level |
 
@@ -45,6 +45,11 @@ resources, and the host's real capabilities, not from a node's name.
 A display outline such as `01-01-01` is a human navigation aid. It is not a
 canonical task ID or a dependency edge. Reordering a plan should not renumber
 `TASK-001` or change the identity of a retained request or node.
+
+The user's accepted objective remains authoritative across RTask and STask
+records. A delegated worker cannot expand that objective through a child request.
+Use `--kind stask --parent RT/ST-ID` for the bounded relationship; do not add
+`stask` or `SingleTask` to canonical task statuses or planning node kinds.
 
 ## Counts are planning hints
 
@@ -223,10 +228,17 @@ to ten selected tasks, supports a bounded limit up to 100, and reports coverage
 and omitted counts. A clear report for that selection is not an assessment of
 every task, unbound external item, or undiscovered channel.
 
-`packet` supplies selected ROOT context for up to ten existing tasks, capped at
-64 KiB. Use it to load the relevant slice instead of rereading all rules, plan
+`packet` supplies selected ROOT context for up to ten existing tasks. Its full
+rendered JSON output, including scope/limit metadata, indentation, UTF-8 bytes,
+and the final newline, is capped at **64 KiB**. Other ROOT command results have
+a **128 KiB** rendered-output cap. Mutation candidates are checked against their
+final response limit before records are written. An oversized result fails;
+select fewer tasks or keep large evidence behind reviewed references rather
+than expecting invalid or silently byte-truncated JSON.
+
+Use a packet to load the relevant slice instead of rereading all rules, plan
 nodes, mirrors, and review history every turn. Inspect the underlying task and
-evidence when the bounded packet reports omitted or truncated material.
+evidence when the bounded packet reports omitted or truncated collections.
 
 Without an explicit expected source revision, a delta cannot establish that an
 observed revision is the intended one and reports that limitation. Both revision
@@ -234,6 +246,116 @@ strings are caller-supplied; equal strings are not a remote authenticity check.
 By default, task changes and supplied revision differences drive freshness.
 Choose an age limit only when the task needs one. An age warning does not create
 a polling schedule or automatically authorize another readback.
+
+## First use: one task in one scope
+
+Use this example once in an adopted, authorized project. It creates a real
+pending task; it does not run the task or accept its outcome. Adapt the example
+objective and acceptance before adoption. If `M-001` already names a different
+milestone, choose an unused milestone ID and replace **every** `M-001` below.
+Task creation itself is not retry-idempotent; do not rerun it to resume work.
+
+First choose **one** scope from the directory containing the reviewed outer
+`.SYSTEMX`. For the root workspace:
+
+```bash
+sx() { bash .SYSTEMX/SYSTEMX.sh "$@"; }
+```
+
+For an existing registered child named `Project-A`, choose this alternative:
+
+```bash
+sx() { bash .SYSTEMX/SYSTEMX.sh projects "$@" --project Project-A; }
+```
+
+If a child has not been created, preview and create it with `projects add
+Project-A --kind software`, then `projects add Project-A --kind software
+--apply`, before selecting it. Do not create an already registered scope again.
+
+In the selected scope's master plan, add the following row under its existing
+Milestones table. The root file is `.SYSTEMX/PLAN/MASTER-PLAN.md`; the child file
+is `.SYSTEMX/Projects/Project-A/.SYSTEMXP/PLAN/MASTER-PLAN.md`. Preserve the rest
+of that accepted plan. This table declares the ID before any task or ROOT node
+references it:
+
+| ID | Outcome | Acceptance evidence required | Dependencies | Task IDs |
+| --- | --- | --- | --- | --- |
+| M-001 | First accepted project checkpoint | Owner reviews the documented checkpoint against the agreed outcome | None | |
+
+Now run the common sequence below in that same shell. It captures the actual
+canonical task ID returned by `task-add`, rather than assuming `TASK-001` is
+available. The explicit `--milestone M-001` on **canonical task creation** is
+essential: a ROOT milestone node does not populate that canonical field.
+
+```bash
+(
+  set -eu
+  sx root init
+  sx root init --apply
+
+  SX_TASK_ID="$(sx task-add \
+    --title 'Document the first accepted checkpoint' \
+    --owner agent.0 --milestone M-001 \
+    --acceptance 'The checkpoint addresses the agreed milestone outcome and is ready for owner review' \
+    --scope 'Selected project records' \
+    --next 'Inspect the accepted objective and record the checkpoint evidence' \
+    | python3 -c 'import re,sys; ids=re.findall(r"^Created (TASK-[0-9]{3,})$",sys.stdin.read(),re.M); assert len(ids)==1, "Unexpected task-add response"; print(ids[0])')"
+
+  sx_record_id() {
+    python3 -c 'import json,sys; print(json.load(sys.stdin)["record"]["id"])'
+  }
+  SX_REQUEST_ID="$(sx root request --key first-use-request --kind rtask \
+    --title 'Reach the accepted first checkpoint' \
+    --source-ref 'PLAN/MASTER-PLAN.md#milestones' --apply | sx_record_id)"
+  SX_MILESTONE_NODE_ID="$(sx root node --key first-use-milestone \
+    --kind milestone --title 'First accepted project checkpoint' \
+    --request "$SX_REQUEST_ID" --milestone M-001 --apply | sx_record_id)"
+  sx root node --key first-use-task --kind task \
+    --title 'Document the checkpoint' --request "$SX_REQUEST_ID" \
+    --parent "$SX_MILESTONE_NODE_ID" --task "$SX_TASK_ID" --apply
+  sx task-show "$SX_TASK_ID"
+  sx root packet --task "$SX_TASK_ID"
+  printf 'Created canonical task: %s\n' "$SX_TASK_ID"
+)
+```
+
+The subshell stops on an unexpected response; its variables are local to the
+example. Retain the printed task ID, and reference it in the master plan's Task
+IDs cell if useful. The skipped wave/phase/group levels are intentional for a
+single task. No harness binding or remote observation has been invented; create
+those only from real external items when needed. Resume using existing IDs and
+task commands, not another execution of this creation sequence.
+
+## Harnesses without native plan revisions
+
+An IDE or chat plan may expose item IDs and states without a provider-issued
+revision. Capture the exact authorized plan readback as a retained snapshot,
+including the tool/source, selected scope, observation time, and relevant item
+identities and states. Review the capture for private content before sharing it.
+Keep large or private bytes in an approved evidence store, such as the selected
+scope's ignored DATA area; an ignore rule is not access control.
+
+Identify those exact bytes with a label such as
+`observed-snapshot:sha256:<actual-digest>`. For an existing reviewed capture file,
+the following command computes that label; replace the path with its real
+location:
+
+```bash
+python3 -c 'import hashlib,pathlib,sys; print("observed-snapshot:sha256:" + hashlib.sha256(pathlib.Path(sys.argv[1]).read_bytes()).hexdigest())' "/path/to/retained-harness-plan.json"
+```
+
+Use the actual label as the observation's `--revision`, retain the capture and
+its tool/readback reference with `--evidence`, and describe it as a locally
+observed snapshot identity. Set `--expected-revision` only when the intended
+snapshot has actually been established for the comparison. Both labels remain
+caller assertions; matching digests identify captured bytes and do not prove
+provider authenticity, semantic completeness, or current remote state.
+
+Do not use Git `HEAD` as a stand-in for the harness plan's revision: a repository
+commit does not version an unsaved IDE or cloud TODO list. If no defensible
+snapshot or intended revision is available, record that limitation and leave
+`--expected-revision` unset so delta retains `revision_unverified`. A later
+authorized readback can append a new observation without rewriting the old one.
 
 ## Tool-card contract
 

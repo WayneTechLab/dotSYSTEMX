@@ -370,6 +370,89 @@ class RootCoordinationTests(unittest.TestCase):
             self.call("request", "--key", "long-title", "--kind", "rtask", "--title", "X" * 513, "--source-ref", "fixture", "--apply")
         self.assertEqual(before, (self.systemx / root_tools.PLAN).read_bytes())
 
+    def test_oversized_allowed_observation_preview_and_apply_leave_no_record_or_log(self):
+        self.tasks("todo")
+        binding = self.bind()
+        args = ["root", "observe", "--key", "oversized-observation", "--binding", binding,
+                "--raw-state", "pending", "--state", "pending", "--revision", "r1",
+                "--expected-revision", "r1"]
+        for index in range(100):
+            # Each reference is unique and within the allowed 2,048-byte field
+            # limit. Their complete public response still exceeds 128 KiB.
+            args += ["--evidence", str(index).zfill(3) + "x" * 2045]
+        before = self.payloads()
+        for suffix in ([], ["--apply"]):
+            result = self.run_cli(*args, *suffix)
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+            self.assertIn("ROOT output exceeds 128 KiB", result.stderr)
+            self.assertNotIn("Traceback", result.stderr)
+            self.assertEqual(before, self.payloads())
+        self.assertEqual(self.read(root_tools.MIRRORS)["observations"], [])
+
+    def test_all_append_commands_preflight_complete_metadata_before_writing(self):
+        self.tasks("todo")
+        origin = self.request()
+        binding = self.bind()
+        commands = [
+            ["request", "--key", "bounded-request", "--kind", "rtask", "--title", "Outcome", "--source-ref", "fixture"],
+            ["node", "--key", "bounded-node", "--kind", "task", "--title", "Work", "--request", origin, "--task", "TASK-001"],
+            ["bind", "--key", "bounded-bind", "--layer", "bot", "--channel", "fixture", "--item", "external", "--task", "TASK-001"],
+            ["observe", "--key", "bounded-observation", "--binding", binding, "--raw-state", "pending",
+             "--state", "pending", "--revision", "r1", "--evidence", "fixture/evidence"],
+            ["card", "--key", "bounded-card", "--task", "TASK-001", "--provider", "provider", "--tool", "tool",
+             "--purpose", "Purpose", "--input-revision", "r1", "--expected-evidence", "Original result",
+             "--permission-boundary", "Existing authorization", "--stop-condition", "One result"],
+        ]
+        for args in commands:
+            with self.subTest(command=args[0]):
+                preview = self.call(*args)
+                expected = {**preview, "applied": True}
+                rendered_size = len((json.dumps(expected, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8"))
+                before = self.payloads()
+                with patch.object(root_tools, "MAX_OUTPUT_BYTES", rendered_size - 1), self.assertRaises(ValueError):
+                    self.call(*args, "--apply")
+                self.assertEqual(before, self.payloads())
+
+    def test_fresh_under_lock_candidate_is_checked_before_ledger_replacement(self):
+        self.tasks("todo")
+        binding = self.bind()
+        before = self.payloads()
+        original = root_tools._public
+        calls = []
+
+        def reject_fresh_candidate(*args, **kwargs):
+            calls.append(1)
+            if len(calls) == 2:
+                raise ValueError("Fixture output grew before the locked write")
+            return original(*args, **kwargs)
+
+        with patch.object(root_tools, "_public", side_effect=reject_fresh_candidate), self.assertRaises(ValueError):
+            self.observe(binding)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(before, self.payloads())
+
+    def test_packet_limit_counts_public_pretty_utf8_output_and_final_metadata(self):
+        self.tasks("todo")
+        ledger = self.read("WORK/TASKS.json")
+        ledger["tasks"][0]["scope"] = ["s" + str(index) for index in range(6000)]
+        self.save("WORK/TASKS.json", ledger)
+        before = self.payloads()
+        result = self.run_cli("root", "packet", "--task", "TASK-001")
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("ROOT packet exceeds 64 KiB", result.stderr)
+        self.assertEqual(before, self.payloads())
+        ledger["tasks"][0]["scope"] = ["s" + str(index) for index in range(100)]
+        self.save("WORK/TASKS.json", ledger)
+        accepted = self.run_cli("root", "packet", "--task", "TASK-001")
+        self.assert_ok(accepted)
+        self.assertLessEqual(len(accepted.stdout.encode("utf-8")), root_tools.MAX_PACKET_BYTES)
+        # The launcher resolves macOS temporary-directory aliases; direct calls
+        # retain their supplied scope spelling, so measure that exact response.
+        public = self.call("packet", "--task", "TASK-001")
+        rendered_size = len((json.dumps(public, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8"))
+        with patch.object(root_tools, "MAX_PACKET_BYTES", rendered_size - 1), self.assertRaises(ValueError):
+            self.call("packet", "--task", "TASK-001")
+
     def test_packet_ancestor_closure_bounded_default_large_task_set_and_selected_scope(self):
         self.tasks(*(["todo"] * 105))
         origin = self.request()

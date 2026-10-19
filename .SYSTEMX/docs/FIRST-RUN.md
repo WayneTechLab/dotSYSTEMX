@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.2"
 "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.1"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.2"
 & "$HOME\.venvs\dotsystemx\Scripts\python.exe" -I -B -m systemx --help
 ```
 
@@ -170,7 +170,8 @@ systemx projects --target $projectRoot -- context --project Project-A --agent ag
 
 ## Optional: activate standard Agent X, Agent Y, and Agent Z roles
 
-Preview `bash .SYSTEMX/SYSTEMX.sh roles-init`, then add `--apply` to create
+Preview `systemx run --target "/path/to/project" --offline -- roles-init`, then
+add `--apply` to create
 project-owned event/schedule ledgers, CLI job records, a review policy, and X/Y/Z memory. Use the
 scoped variant for a child. This activation is separate from installing defaults
 and starts no worker, provider, or scheduler. Follow [Agent X](AGENT-X.md),
@@ -197,3 +198,39 @@ Configure a child's application commands in its `.SYSTEMXP/project.json`.
 Their working directory is `.SYSTEMX/Projects/Project-A/`, so explicitly address
 `code/` or the intended project script. Read the [CLI and tools guide](CLI-TOOLS.md)
 before connecting provider, repository, or cloud tooling.
+
+## Optional: adopt ROOT, Agent Alpha, and DATA
+
+Initialize only the features useful to the selected project. Each operation
+previews missing files first; repeat it with `--apply` to add them. Existing
+records are preserved, and older scopes remain valid without these features.
+
+| Feature | Use it for | Setup and limits |
+| --- | --- | --- |
+| [ROOT](../ROOT/SX-MILESTONE.md) | Internal rules, flexible plan references, and explicit harness/bot task-state observations | `root init`; no external connector, card execution, or duplicate task-status ledger |
+| [Agent Alpha and AUTOBOT](AUTOBOT.md) | Selected design, brand, research, rules, and other detailed references | `autobot init`; separate from X/Y/Z activation, without launching models |
+| [DATA](DATA.md) | Local temporary, large, imported, and private payloads | `data init`; payloads ignored by Git by default; check adopted exclusions with `data audit` |
+
+For the outer scope, using the `systemx` function defined above:
+
+```bash
+systemx run --target "/path/to/project" --offline -- root init
+systemx run --target "/path/to/project" --offline -- autobot init
+systemx run --target "/path/to/project" --offline -- data init
+```
+
+For an existing named child, use the outer installation as the target and select
+the child explicitly. These examples also preview before applying:
+
+```bash
+systemx projects --target "/path/to/project" -- root init --project Project-A
+systemx projects --target "/path/to/project" -- autobot init --project Project-A
+systemx projects --target "/path/to/project" -- data init --project Project-A
+```
+
+The same arguments work with the PowerShell function from step 3. Use
+`root-guide` through managed `run`, or local menu option 21, for the ROOT manual.
+Keep one canonical task ledger, load only the relevant packet or references,
+and verify actual harness/bot readback before recording an observation. A ROOT
+delta compares saved snapshots; equal state labels do not establish live
+synchronization or task acceptance.

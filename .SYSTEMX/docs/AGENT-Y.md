@@ -454,6 +454,20 @@ force-push authority.
 
 ## Security, portability, and limits
 
+Agent Y cannot receive `ROOT/` or `AUTOBOT/` beneath `.SYSTEMX` as editable
+paths, alongside the existing protected coordination directories. Agent 0
+reviews and integrates shared planning, rule, reference, and ledger changes.
+The guard applies to new handoffs, selected run/readiness preflight, and actual
+changed paths beneath a broader allowlist; it is not an OS sandbox.
+
+Older jobs that named these newly protected paths remain readable as history.
+Loading them neither rewrites their allowlists nor authorizes their execution.
+Current `run` and `pr-ready` refuse those handoffs before side effects. Use the
+existing inspection, abandonment, cancellation, or dead-run recovery workflow
+when its normal state and ownership gates are satisfied, and prepare a newly
+scoped task if execution is still needed. Preserve prior records and evidence;
+do not erase history or broaden permissions to bypass the policy.
+
 An installed CLI can read local files, invoke tools, and use credentials available
 to its OS process. Run it with the least access needed; keep secrets out of
 prompts, arguments, environment dumps, transcripts, commits, PR bodies, and

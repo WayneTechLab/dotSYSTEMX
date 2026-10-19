@@ -57,11 +57,14 @@ optional group, task, optional subtask, and single action. Skip unnecessary
 levels. Expand only the next useful slice of work. Counts are project planning
 choices, never a fixed quota or a reason to generate an enormous empty backlog.
 
-`RTask` identifies an originating request; `STask` identifies a delegated request
-with a named parent and bounded scope. Both may reference several canonical
-tasks. They are provenance relationships, not task statuses or compulsory levels
-in the work hierarchy. A request can span several phases; a task keeps its
-identity when the plan is reorganized.
+`RTask` identifies an originating request; `STask` identifies a bounded child,
+follow-up, or delegated request with a named parent. Both may reference several
+canonical tasks. They are provenance relationships, not task statuses or
+compulsory levels in the work hierarchy. An STask does not introduce another
+mandatory agent or authorize a worker to change the user's accepted objective.
+A request can span several phases; a task keeps its identity when the plan is
+reorganized. The informal name `SingleTask` means a single action, represented
+by node kind `action`; it is not another node kind or canonical status.
 
 Plan nodes describe containment and references. They carry no independent task
 status. Progress comes from the unique referenced task IDs, so linking one task
@@ -73,6 +76,12 @@ A crash, failed check, unexpected result, or unknown ticket is an event. Agent X
 can retain its time, affected task, evidence, and observed state. Create or amend
 a canonical follow-up task only when the work is accepted into scope. Event
 logging never authorizes a restart, retry, deployment, or background schedule.
+
+Declare a milestone ID in the selected `PLAN/MASTER-PLAN.md` before referencing
+it in ROOT. Create each linked canonical task with that same `--milestone M-ID`.
+A ROOT parent does not assign or change the milestone field of an existing
+canonical task. Use the [first-use example](SX-MILESTONE.md#first-use-one-task-in-one-scope)
+for the complete order and actual returned-ID handling.
 
 ## 4. Preserve the canonical task acceptance gate
 
@@ -112,6 +121,14 @@ also captures the current referenced canonical-task fingerprints. A supplied
 external revision is an assertion by the caller; SYSTEMX does not fetch or
 authenticate the remote source. Evidence references are pointers, not automatic
 proof that the referenced result is genuine or current.
+
+If a harness exposes no native plan revision, retain an authorized exact snapshot
+of the observed plan, its capture time, scope, and tool/readback evidence. A
+clearly labeled snapshot digest can identify those captured bytes; it is not a
+provider-issued revision or proof of freshness. Never substitute repository
+`HEAD` as if it versioned an IDE's plan. If the intended source revision cannot
+be established, retain `revision_unverified` instead of inventing one. See the
+[snapshot guidance](SX-MILESTONE.md#harnesses-without-native-plan-revisions).
 
 Use the read-only `root delta` report to identify missing observations, changed
 canonical records, divergent states, unknown or unavailable surfaces, and

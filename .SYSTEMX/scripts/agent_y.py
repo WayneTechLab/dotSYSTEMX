@@ -173,7 +173,7 @@ def _prompt(path, repo):
     return path, hashlib.sha256(content).hexdigest(), content
 
 
-def _allowed(value):
+def _allowed(value, *, legacy_record=False):
     if (not isinstance(value, str) or not value or value.startswith("/") or "\\" in value or
             ":" in value or "\x00" in value or any(part in {"", ".", ".."} for part in value.rstrip("/").split("/"))):
         raise ValueError("--allow-path must be a contained POSIX-style repository path")
@@ -183,7 +183,13 @@ def _allowed(value):
     if (".git" in lower or ".systemx" in lower[1:] or lower[0] in {"local", "logs", "state"} or
             any(part in {".systemxp", ".env", "secrets", "credentials"} for part in lower) or
             (lower[0] == ".systemx" and (len(lower) < 2 or lower[1] in {
-                "agents", "events", "global", "plan", "work", "memory", "reviews", "local", "logs", "state"}))):
+                "agents", "events", "global", "plan", "work", "memory", "reviews",
+                "local", "logs", "state"}))):
+        raise ValueError("Agent Y cannot own coordination, secret, or Git metadata paths")
+    # Older handoffs may retain these previously permitted scopes. Reading
+    # history is not authority to execute or promote such a handoff today.
+    if (not legacy_record and lower[0] == ".systemx" and
+            len(lower) > 1 and lower[1] in {"root", "autobot"}):
         raise ValueError("Agent Y cannot own coordination, secret, or Git metadata paths")
     return value
 
@@ -251,7 +257,7 @@ def load_jobs(root):
                 len(job["allowPaths"]) != len(set(job["allowPaths"]))):
             raise ValueError("Agent Y requires allowed paths")
         for path in job["allowPaths"]:
-            if len(path) > 240 or _allowed(path) != path:
+            if len(path) > 240 or _allowed(path, legacy_record=True) != path:
                 raise ValueError("Agent Y allowed paths must be normalized")
         pr = job["pr"]
         if pr["number"]:
@@ -623,6 +629,8 @@ def _update(root, identifier, mutator):
 def run(root, args):
     data = load_jobs(root)
     job = _get(data, args.id)
+    for path in job["allowPaths"]:
+        _allowed(path)
     if job["state"] != "prepared":
         raise ValueError("Only a prepared Agent Y channel can be run")
     sidecar = _sidecar(root, args.id)
@@ -870,6 +878,8 @@ def _require_prepared_base(job, repo):
 
 def pr_ready(root, args):
     job = _get(load_jobs(root), args.id)
+    for path in job["allowPaths"]:
+        _allowed(path)
     if job["state"] != "draft_pr":
         raise ValueError("Only an owned draft PR can be marked ready")
     _accepted_task(root, job)

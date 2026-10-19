@@ -516,6 +516,98 @@ class AgentYTests(unittest.TestCase):
         self.rejected(*self.prepare_args(prompt_file=large), "--apply", env=env)
         self.assertEqual(before, self.records())
 
+    def test_prepare_cannot_delegate_root_or_autobot_coordination(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        self.fake_executable(folder, "codex", "pass\n")
+        before, refs = self.records(), self.git_state()
+        for path in (".SYSTEMX/ROOT", ".SYSTEMX/ROOT/MIRRORS.json", ".SYSTEMX/root/PLAN.json",
+                     ".SYSTEMX/AUTOBOT", ".SYSTEMX/AUTOBOT/REQUESTS.json", ".SYSTEMX/autobot/CATALOG.json"):
+            with self.subTest(path=path):
+                result = self.rejected(*self.prepare_args(allow_path=path), "--apply", env=env)
+                self.assertIn("cannot own coordination", result.stderr)
+                self.assertEqual(before, self.records())
+                self.assertEqual(refs, self.git_state())
+
+    def test_post_run_diff_refuses_coordination_even_under_a_parent_allowlist(self):
+        self.ready_task()
+        # Recheck actual Git diffs independently of prepare. This also refuses
+        # broad parent allowlists retained by a pre-protection controller.
+        inspect_diff = (
+            "import pathlib, sys\n"
+            "sys.path.insert(0, sys.argv[1])\n"
+            "import agent_y\n"
+            "try:\n"
+            "    agent_y._changed(pathlib.Path(sys.argv[2]), [sys.argv[3]])\n"
+            "except ValueError as error:\n"
+            "    print(str(error), file=sys.stderr)\n"
+            "    sys.exit(2)\n")
+        for name in ("ROOT/MIRRORS.json", "AUTOBOT/REQUESTS.json"):
+            with self.subTest(path=name):
+                path = self.systemx / name
+                original = path.read_bytes()
+                path.write_text('{"unapproved": true}\n', encoding="utf-8")
+                try:
+                    result = subprocess.run(
+                        [sys.executable, "-B", "-c", inspect_diff, str(self.systemx / "scripts"),
+                         str(self.root), ".SYSTEMX/" + name.split("/")[0]],
+                        cwd=self.temp.name, text=True, capture_output=True, timeout=20)
+                    self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                    self.assertIn("cannot own coordination", result.stderr)
+                    self.assertEqual(path.read_text(), '{"unapproved": true}\n')
+                finally:
+                    path.write_bytes(original)
+        self.assertEqual(self.git("status", "--porcelain", "--untracked-files=all"), "")
+
+    def test_legacy_coordination_handoff_is_readable_but_cannot_run_and_can_be_abandoned(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        invocation = Path(self.temp.name) / "legacy-provider-ran"
+        self.fake_executable(folder, "codex", "from pathlib import Path\nPath(" +
+                             repr(str(invocation)) + ").write_text('unapproved run')\n")
+        prepared = self.value(*self.prepare_args(), "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        jobs_path = self.systemx / "AGENTS/agent.y/JOBS.json"
+        data = json.loads(jobs_path.read_text())
+        sidecar_path = self.systemx / "state/agent-y" / (identifier + ".json")
+        sidecar_bytes = sidecar_path.read_bytes()
+        # Model old records, whose ROOT/AUTOBOT paths were permitted. Missing
+        # host-local state proves the current policy check precedes that read.
+        sidecar_path.unlink()
+        for allowed in (".SYSTEMX/ROOT", ".SYSTEMX/AUTOBOT"):
+            with self.subTest(allowed=allowed):
+                data["jobs"][0]["allowPaths"] = [allowed]
+                jobs_path.write_text(json.dumps(data))
+                before, refs = self.records(), self.git_state()
+                self.assertEqual(self.value("agent-y", "show", identifier)["job"]["allowPaths"], [allowed])
+                self.value("agent-y", "list")
+                self.assertTrue(self.value("agent-y", "validate")["valid"])
+                self.assert_ok(self.cli("validate"))
+                for apply in ([], ["--apply"]):
+                    result = self.rejected("agent-y", "run", identifier, *apply, env=env)
+                    self.assertIn("cannot own coordination", result.stderr)
+                self.assertFalse(invocation.exists())
+                self.assertEqual(before, self.records())
+                self.assertEqual(refs, self.git_state())
+        sidecar_path.write_bytes(sidecar_bytes)
+        sidecar_path.chmod(0o600)
+        self.assertFalse(self.value("agent-y", "abandon", identifier, "--reason", "Reassign protected scope",
+                                    env=env)["applied"])
+        abandoned = self.value("agent-y", "abandon", identifier, "--reason", "Reassign protected scope",
+                               "--apply", env=env)
+        self.assertEqual(abandoned["job"]["state"], "failed")
+        self.assertEqual(abandoned["job"]["allowPaths"], [".SYSTEMX/AUTOBOT"])
+        retained = jobs_path.read_bytes()
+        for forbidden in (".SYSTEMX/WORK", ".SYSTEMX/ROOT/.env", ".SYSTEMX/AUTOBOT/secrets",
+                          ".SYSTEMX/ROOT/../WORK", "src/.SYSTEMXP/ROOT"):
+            with self.subTest(forbidden=forbidden):
+                invalid = json.loads(retained)
+                invalid["jobs"][0]["allowPaths"] = [forbidden]
+                jobs_path.write_text(json.dumps(invalid))
+                self.rejected("agent-y", "validate")
+        jobs_path.write_bytes(retained)
+        self.assert_ok(self.cli("validate"))
+
     def test_fake_cli_run_returns_reviewable_work_without_completing_task(self):
         self.ready_task()
         folder, env = self.fake_path()
@@ -760,6 +852,20 @@ class AgentYTests(unittest.TestCase):
         for call in map(json.loads, gh_calls.read_text().splitlines()):
             self.assertEqual(call["GH_HOST"], "github.com")
             self.assertEqual(call["GH_REPO"], "")
+        # Historical draft PRs remain inspectable/cancellable, but current
+        # policy cannot promote a formerly allowed coordination handoff.
+        jobs_path = self.systemx / "AGENTS/agent.y/JOBS.json"
+        legacy = json.loads(jobs_path.read_text())
+        for allowed in (".SYSTEMX/ROOT", ".SYSTEMX/AUTOBOT"):
+            with self.subTest(legacy_scope=allowed):
+                legacy["jobs"][0]["allowPaths"] = [allowed]
+                jobs_path.write_text(json.dumps(legacy))
+                before, calls_before = self.records(), gh_calls.read_bytes()
+                for apply in ([], ["--apply"]):
+                    rejected = self.rejected("agent-y", "pr-ready", identifier, *apply, env=env)
+                    self.assertIn("cannot own coordination", rejected.stderr)
+                self.assertEqual(before, self.records())
+                self.assertEqual(calls_before, gh_calls.read_bytes())
         task = json.loads((self.systemx / "WORK/TASKS.json").read_text())["tasks"][0]
         self.assertEqual(task["status"], "in_progress")
         self.rejected("agent-y", "pr-close", identifier, "--reason", "abandoned", "--apply", env=env)
@@ -784,6 +890,11 @@ class AgentYTests(unittest.TestCase):
         self.assertEqual(closed["job"]["state"], "closed")
         self.assertEqual(json.loads(gh_state.read_text())["state"], "CLOSED")
         self.assertEqual(self.git("ls-remote", "origin", "refs/heads/" + result["job"]["branch"]).split()[0], head)
+        before = self.records()
+        self.assertEqual(self.value("agent-y", "show", identifier)["job"]["allowPaths"], [".SYSTEMX/AUTOBOT"])
+        self.assertTrue(self.value("agent-y", "validate")["valid"])
+        self.assert_ok(self.cli("validate"))
+        self.assertEqual(before, self.records())
 
     def test_pr_ready_reconciles_remote_success_after_local_save_failure(self):
         self.ready_task()

@@ -18,7 +18,10 @@ Host project
 └── .SYSTEMX                       exact stored directory name
     ├── GLOBAL, PLAN, MEMORY       project context, outcomes, durable facts
     ├── WORK                       canonical tasks and current focus
-    ├── AGENTS                     Agent 0, optional X/Y/Z, and scoped worker memory
+    ├── AGENTS                     Agent 0, optional X/Y/Z/Alpha, scoped worker memory
+    ├── ROOT                       optional rules, plan links, task observations/cards
+    ├── AUTOBOT                    ten named reference functions and Alpha requests
+    ├── DATA                       local payloads ignored by Git except scaffold
     ├── EVENTS                     event and due ledgers after activation
     ├── REVIEWS                    policy, requests, scorecards after activation
     ├── AGENTS/agent.y/JOBS.json    scoped CLI handoffs after activation
@@ -52,8 +55,22 @@ folder. It is different from the nested manager cache. Follow the
 | `scripts/agent_x.py` | Event occurrence/recording time and due-item tracking |
 | `scripts/agent_y.py` | Bounded CLI handoffs, isolated task worktrees, post-run checks, and owned draft PR operations |
 | `scripts/agent_z.py` | Fixed 100-question policy, request/report validation, score math and deltas |
+| `scripts/root_coordination.py` | Optional request/plan references, bounded packets, observed harness/bot mappings, read-only task delta, reference-only tool cards |
+| `scripts/autobots.py` | Explicit Agent Alpha setup, selected specialist context, and reusable reference requests |
+| `scripts/data_tools.py` | Missing DATA scaffold setup and bounded, metadata-only Git exclusion/index audit |
 | `config/distribution.json` | Explicit public file inventory with release fingerprints |
 | `config/template-records.json` | Reviewed blank seed fingerprints |
+
+ROOT, AUTOBOT, and DATA are independent optional features in the selected outer
+or child record scope. Their explicit initialization adds missing blank files
+and preserves existing records; older scopes remain valid without them. Agent
+Alpha registration is separate from X/Y/Z activation. ROOT structure references
+the existing Master Plan and canonical task IDs. Its observations are local
+snapshots, and its delta does not contact a harness or cloud service. Tool cards
+describe bounded available-tool calls without executing them. AUTOBOT supplies
+only selected reference context; DATA audit does not read or upload payloads.
+Use the [ROOT manual](../ROOT/SX-MILESTONE.md), [AUTOBOT guide](AUTOBOT.md), and
+[DATA guide](DATA.md) for exact scope, record, initialization, and output limits.
 
 The library and CLI use the same manager functions. Refreshed stock launchers
 invoke both managed and unmanaged tools in Python isolated mode (`-I`). Direct
@@ -128,8 +145,8 @@ against that receipt and refuses an occupied destination. See
 
 ## Concurrency, integrity, and logs
 
-Install/update and removal use an exclusive local writer lock. Task, Agent X,
-Agent Y, and Agent Z command writes use a separate per-scope coordination lock. Cooperating
+Install/update and removal use an exclusive local writer lock. Task, role,
+ROOT, AUTOBOT, and DATA command writes use a separate per-scope coordination lock. Cooperating
 coordination writers wait up to one second; the lock records a token, PID, host,
 and creation time. On a crash it remains for manual inspection and is never
 automatically removed as "stale." Operation receipts

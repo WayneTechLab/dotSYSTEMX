@@ -33,8 +33,10 @@ and accessible text guides.
 [2 — Agent coordination](MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) ·
 [3 — Agent Alpha and AUTOBOT](MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) ·
 [4 — DATA and project scopes](MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg).
-The linked companion provides the complete accessible text, commands, and
-authority boundaries; load only the relevant section for the current task.
+Media edition `1.10.0-alpha.3` illustrates that baseline. The linked companion
+provides accessible text, commands, and authority boundaries; the later
+[ROOT manual](ROOT/SX-MILESTONE.md) covers optional planning, tool cards, and
+task-state comparisons. Load only the relevant section for the current task.
 
 The [CLI and tools guide](docs/CLI-TOOLS.md) maps the external manager, verified
 managed runner, reviewed folder-only launchers, Python API, and optional provider

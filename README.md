@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.11.0-alpha.1` release and leaves updates manual.
+example selects the reviewed `v1.11.0-alpha.2` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.2"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.1
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.1 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.2
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.2 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -282,10 +282,12 @@ cover ChatGPT with Google Drive, Codex with a GitHub project, Dots/Codex Cloud,
 and Codex/Copilot CLI with a local drive. Those retained cards show the earlier
 Agent 0/X/Z baseline; their text guides describe the optional Agent Y lane.
 The [four-part field guide](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md)
-above covers the current Agent 0/X/Y/Z, Agent Alpha, AUTOBOT, DATA, and
-`.SYSTEMXP` coordination format. The
+above illustrates the Agent 0/X/Y/Z, Agent Alpha, AUTOBOT, DATA, and `.SYSTEMXP`
+baseline from media edition `1.10.0-alpha.3`. The later optional
+[ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta)
+adds flexible planning, tool cards, and local task-state comparisons. The
 [media library](.SYSTEMX/MEDIA/README.md) holds the downloads and text guides.
-For a researched brief that becomes phases, milestones, tasks, and review waves,
+For a researched brief that becomes milestones, phases, tasks, execution batches, and review,
 see the [one-shot project guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/One-Shot-Project-Guide).
 “One shot” describes the starting brief, not a promise of completion in one
 response.

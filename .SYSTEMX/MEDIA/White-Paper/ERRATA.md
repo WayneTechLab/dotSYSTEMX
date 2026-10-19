@@ -29,3 +29,13 @@ Read the current [AUTOBOT manual](../../docs/AUTOBOT.md) for Agent Alpha
 (`agent.a`), the ten named references, bounded context and reusable requests,
 and [DATA](../../docs/DATA.md) for ignored local payload and Git audit behavior.
 This is a later format addition, not a claim that the frozen paper tested it.
+
+## Later optional ROOT planning and task-observation layer
+
+Edition 1.2 also predates ROOT. Read the [ROOT manual](../../ROOT/SX-MILESTONE.md)
+and [SX-RULES](../../ROOT/SX-RULES.md) for optional request-linked planning,
+bounded tool cards, explicit harness/bot task observations, and read-only delta
+comparisons. `WORK/TASKS.json` remains the canonical task-state and acceptance
+ledger; recorded external completion does not accept a task or execute a tool.
+This supplement identifies later features without changing the frozen PDF,
+editable Markdown, or their checksums.

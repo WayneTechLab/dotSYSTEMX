@@ -36,6 +36,9 @@ coordinates the [master plan](../PLAN/MASTER-PLAN.md),
 | [Agent X](../docs/AGENT-X.md) | Human/bot/automation event time and due-item bookkeeping without a scheduler. |
 | [Agent Y](../docs/AGENT-Y.md) | Optional external CLI provider handoffs, task branches, and scoped draft PR lifecycle. |
 | [Agent Z](../docs/AGENT-Z.md) | Fixed 100-question evidence review, retained scorecards, and comparable deltas. |
+| [ROOT rules and planning](../ROOT/SX-MILESTONE.md) | Optional internal rules, request/plan references, bounded tool cards, and local harness/bot task-state comparisons. |
+| [Agent Alpha and AUTOBOT](../docs/AUTOBOT.md) | On-demand selection of ten detailed reference functions; no extra running workers. |
+| [Local DATA](../docs/DATA.md) | Ignored payload folders and scoped Git audit, without automatic ingestion or upload. |
 | [Tool calling](TOOLCALLING-AND-BROWSER-AUTOMATION.md) | Route work to appropriate tools and verify target surfaces. |
 | [Connectors](EXTERNAL-SERVICE-CONNECTOR-STANDARD.md) | External service boundaries and troubleshooting. |
 | [Recovery](RECOVERY-PLAYBOOK.md) | Recover from auth, process, permission, and tool failures. |
@@ -47,7 +50,7 @@ install an AI runtime or grant access to external accounts.
 ## Complete projects and shared work
 
 Use the [one-shot project guide](../docs/ONE-SHOT-PROJECT.md) to turn a
-researched brief into phases, milestones, tasks, worker waves, and accepted
+researched brief into phases, milestones, tasks, execution batches, and accepted
 delivery. Use [shared workspaces, clouds, and bots](../docs/SHARED-WORKSPACES.md)
 for repositories, named `.SYSTEMXP` children, authorized Drive/cloud access,
 multi-chat handoffs, and persistent local/VM bot context. The harness supplies

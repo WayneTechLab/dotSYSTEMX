@@ -1,10 +1,14 @@
 # .SYSTEMX: four-part system field guide
 
-This is the complete accessible text companion to four 4K infographic pages.
-Page 1 shows the whole format; pages 2–4 explain its coordination, reference,
-and storage boundaries. The diagrams describe the optional capabilities of the
-format, not processes that setup automatically starts. The command manuals and
-[format contract](../../FORMAT.md) define the executable behavior.
+This is the accessible text companion to four retained 4K infographic pages
+depicting **feature baseline `1.10.0-alpha.2`**, published as **media edition
+`1.10.0-alpha.3`**. Page 1 shows that baseline's overview; pages 2–4 explain its
+coordination, reference, and storage boundaries. The diagrams describe optional
+capabilities, not processes that setup automatically starts. Their baseline is
+separate from the project's selected source/defaults version. They do not depict
+the later ROOT layer; read the [ROOT supplement](#later-root-layer-supplement)
+alongside them. The command manuals and [format contract](../../FORMAT.md)
+define the selected release's executable behavior.
 
 **Exact names:** `.SYSTEMX` for the outer installation and `.SYSTEMXP` for a
 registered child's records. `AGENTA` means Agent Alpha, registry ID `agent.a`.
@@ -410,7 +414,36 @@ does not train the model or establish AGI.
 
 The four retained use-case cards and white-paper edition 1.2 describe older
 examined baselines. Their original bytes and stated limits are preserved.
-Use this field guide and the current manuals for Agent Y, Agent Alpha, AUTOBOT,
-DATA, and `.SYSTEMXP` behavior. [Media index](../README.md) ·
+Use these four pages for their illustrated Agent Y, Agent Alpha, AUTOBOT,
+DATA, and `.SYSTEMXP` baseline. Consult the selected release's manuals and the
+[ROOT supplement](#later-root-layer-supplement) for later behavior. The retained
+artwork and frozen paper are not a complete picture of later source releases.
+[Media index](../README.md) ·
 [Public wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide).
+
+## Later ROOT layer supplement
+
+ROOT adds optional planning and task-observation metadata beyond the retained
+artwork's feature baseline. Read the [ROOT manual](../../ROOT/SX-MILESTONE.md)
+and [SX-RULES](../../ROOT/SX-RULES.md) for the full contract. A flexible
+milestone → wave → phase → group → task → subtask → single-action structure
+links originating requests (`RTask`) and bounded delegated requests (`STask`) to
+existing canonical tasks. Optional tool cards record execution intent, permission
+boundaries, expected evidence, and stop conditions; they do not execute tools.
+
+ROOT bindings relate named IDE/harness or optional cloud/bot items to one or
+more canonical task IDs. Caller-supplied observations retain raw/normalized
+state, time, revision, and evidence references. A bounded read-only delta reports
+missing, stale, divergent, unknown, or unavailable records. These are local
+coordination records, not an authenticated live provider readback or an automatic
+sync engine. `WORK/TASKS.json` retains task-state and acceptance authority;
+external `completed` never accepts `done` automatically. Reconcile affected
+differences with authorized real tools and retain new observations when needed.
+
+ROOT remains optional and scoped to the selected outer `.SYSTEMX` or named
+`.SYSTEMXP`. It grants no provider access, model process, execution permission,
+or background polling. Its manuals extend the illustrated baseline without
+altering the four JPEGs, original generation metadata, frozen paper, or recorded
+checksums. The source/defaults version and the two media baseline identifiers
+remain separate.

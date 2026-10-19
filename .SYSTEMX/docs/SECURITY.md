@@ -74,6 +74,12 @@ parallel. The task record and role memory are coordination, not isolation or
 authorization. Remote branch and PR mutations require the actual host account's
 permissions and the task's explicit lifecycle policy. No Agent Z score or
 provider claim grants permission to merge, close, or delete.
+`ROOT/` and `AUTOBOT/` join the protected `.SYSTEMX` coordination paths:
+new preparation, selected execution/readiness, and inspected changes refuse
+those edits. Historical jobs remain readable without rewriting their saved
+permissions; their old allowlists do not authorize a new run or PR promotion.
+Normal cancellation and recovery gates remain available. This policy is a
+controller check, not filesystem isolation for an independently running CLI.
 For untrusted provider execution, use a separate OS account or container that
 cannot read the controller's GitHub credentials or write `.SYSTEMX` records.
 An allowed-path packet and post-run diff check cannot enforce that separation.

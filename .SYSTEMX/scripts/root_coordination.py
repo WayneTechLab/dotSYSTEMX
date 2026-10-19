@@ -109,6 +109,23 @@ def _write(root, relative, value):
     memory.atomic_write(Path(root), relative, encoded)
 
 
+def _public(root, result, packet=False):
+    """Check the exact final CLI response before a candidate can mutate records."""
+    result = dict(result)
+    result.setdefault("scope", str(root))
+    result["executed"] = False
+    result["limit"] = LIMIT
+    # Both root and project-scoped launchers print this representation followed
+    # by one newline. Compact JSON understates indented collections and UTF-8.
+    serialized = json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+    maximum = MAX_PACKET_BYTES if packet else MAX_OUTPUT_BYTES
+    if len(serialized.encode("utf-8")) > maximum:
+        if packet:
+            raise ValueError("ROOT packet exceeds 64 KiB; select fewer TASK IDs or retain large evidence behind references")
+        raise ValueError("ROOT output exceeds 128 KiB; request a smaller selected task set")
+    return result
+
+
 def _token(value, prefix):
     return records.token(value, prefix)
 
@@ -382,6 +399,9 @@ def initialize(root, defaults, apply=False):
     with memory.coordination_lock(root):
         planned = initialize(root, defaults)
         log = "logs/root/" + uuid.uuid4().hex + ".json"
+        # Include the eventual receipt path in the final response before the
+        # first log or scaffold write; an output rejection must not install it.
+        response = _public(root, {**planned, "applied": True, "receipt": log})
         receipt = {"schemaVersion": 1, "operation": "root-init", "at": memory.now(),
                    "state": "started", "add": planned["add"]}
         _write(root, log, receipt)
@@ -395,10 +415,10 @@ def initialize(root, defaults, apply=False):
             raise
         finally:
             _write(root, log, receipt)
-    return {**planned, "applied": True, "receipt": log}
+    return response
 
 
-def _append(root, document, collection, prefix, key, identity, maximum, apply, build=None):
+def _append(root, document, collection, prefix, key, identity, maximum, apply, build=None, response_fields=None):
     identifier = _id(prefix, key)
 
     def plan_write():
@@ -420,13 +440,21 @@ def _append(root, document, collection, prefix, key, identity, maximum, apply, b
         validate_mirrors(root, mirrors, plan, tasks)
         return data, item, False
 
+    def response(item, reused):
+        return _public(root, {"applied": apply, "reused": reused, "record": item, "taskAccepted": False,
+                              **(response_fields or {})})
+
     data, item, reused = plan_write()
+    result = response(item, reused)
     if apply and not reused:
         with memory.coordination_lock(root):
             data, item, reused = plan_write()
+            # Recompute and check the complete public response under the scope
+            # lock, before replacing the old ledger with this fresh candidate.
+            result = response(item, reused)
             if not reused:
                 _write(root, document, data)
-    return {"applied": apply, "reused": reused, "record": item, "taskAccepted": False}
+    return result
 
 
 def _active_bindings(mirrors):
@@ -617,9 +645,7 @@ def packet(root, selected=None, limit=10):
               "cards": cards[:10], "totalCards": len(cards), "cardsTruncated": len(cards) > 10,
               "statusAuthority": "WORK/TASKS.json", "taskAccepted": False,
               "packetNote": "Selected canonical work and reference contracts only; no remote observation or tool execution."}
-    if len(records.encoded(result).encode("utf-8")) > MAX_PACKET_BYTES:
-        raise ValueError("ROOT packet exceeds 64 KiB; select fewer TASK IDs or retain large evidence behind references")
-    return result
+    return _public(root, result, packet=True)
 
 
 def add_cli(subparsers, scope=None):
@@ -728,13 +754,8 @@ def dispatch(root, defaults, args):
         identity = {"request": args.request, "taskIds": args.task, "provider": args.provider, "tool": args.tool,
                     "purpose": args.purpose, "inputRevision": args.input_revision, "expectedEvidence": args.expected_evidence,
                     "permissionBoundary": args.permission_boundary, "stopCondition": args.stop_condition}
-        result = _append(root, MIRRORS, "cards", "CARD", args.key, identity, MAX_CARDS, args.apply)
-        result["toolCalled"] = False
+        result = _append(root, MIRRORS, "cards", "CARD", args.key, identity, MAX_CARDS, args.apply,
+                         response_fields={"toolCalled": False})
     else:
         raise ValueError("Unknown ROOT action")
-    result.setdefault("scope", str(root))
-    result["executed"] = False
-    result["limit"] = LIMIT
-    if len(records.encoded(result).encode("utf-8")) > MAX_OUTPUT_BYTES:
-        raise ValueError("ROOT output exceeds 128 KiB; request a smaller selected task set")
-    return result
+    return _public(root, result, packet=action == "packet")

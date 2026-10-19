@@ -4,6 +4,29 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-alpha.2 — ROOT write boundaries and full manual review
+
+- Validate the complete rendered ROOT response before committing a new record.
+  Oversized preview and apply requests now fail without changing the ledger.
+  Packet and response limits count the indented UTF-8 JSON actually emitted,
+  including scope and capability metadata.
+- Extend Agent Y's protected coordination paths to `ROOT/` and `AUTOBOT/`,
+  including explicit allow-path requests and edits detected beneath a broader
+  allowed parent. CLI workers return proposals; shared record changes remain
+  with the coordinator's existing acceptance and integration boundary. Retain
+  older handoff history unchanged; execution and readiness enforce the current
+  policy while inspection, cancellation, and recovery keep their normal gates.
+- Review README and the portable/wiki manuals together. Correct remaining
+  wave/execution-batch terminology, optional-feature onboarding, target/CWD
+  instructions, library preview/apply parity, and the first milestone/task
+  example. Document `SingleTask` as the prose alias for an `action` node.
+- Clarify that registration and record commands do not execute providers,
+  while an explicitly authorized Agent Y run can. Expand the technical map
+  with ROOT, AUTOBOT, DATA, and Agent Alpha.
+- Label the retained graphics and frozen white paper by their examined
+  baselines; link later ROOT guidance without changing image or paper bytes.
+  Keep public seeds blank and preserve adopted files during updates.
+
 ## 1.11.0-alpha.1 — Optional ROOT planning and observed task deltas
 
 - Added `ROOT/SX-RULES.md` for the internal operating contract and
