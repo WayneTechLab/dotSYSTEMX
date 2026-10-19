@@ -1,6 +1,7 @@
 # .SYSTEMX media library
 
-Current full-system map, latest public paper, and one retained 4K image per workflow.
+Four-part current system field guide, latest public paper, and one retained
+4K image per workflow.
 **.SYSTEMX** is a product of
 **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 
@@ -33,22 +34,46 @@ also predates the optional Agent Y CLI/PR lane introduced in 1.9.0-alpha.2;
 read the current [Agent Y guide](../docs/AGENT-Y.md) for that role. The frozen
 edition is not retroactively updated to claim it evaluated the new runtime.
 
-## 4K workflow infographics
+## Four-part 4K system field guide
+
+One overview page connects the complete format. Three detail pages explain
+coordination, the reference panel, and local data/project boundaries. Each page
+has a **3840 × 2160 export canvas** and a complete accessible text counterpart.
+
+[![Overview of Agent 0/X/Y/Z, Agent Alpha, the ten AUTOBOT functions, DATA, and .SYSTEMXP.](Infographics/systemx-field-guide-01-overview-4k.jpg)](Reference/systemx-field-guide.md)
+
+| Page | 4K JPEG | Accessible text |
+| --- | --- | --- |
+| 1 — Whole-system overview | [Open image](Infographics/systemx-field-guide-01-overview-4k.jpg) | [Overview](Reference/systemx-field-guide.md#page-1--whole-system-overview) |
+| 2 — Agent 0 / X / Y / Z and tools | [Open image](Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | [Coordination](Reference/systemx-field-guide.md#page-2--agent-coordination-and-tools) |
+| 3 — AGENTA and all ten AUTOBOTs | [Open image](Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | [Reference tier](Reference/systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |
+| 4 — DATA and `.SYSTEMXP` scopes | [Open image](Infographics/systemx-field-guide-04-data-projects-4k.jpg) | [Data and projects](Reference/systemx-field-guide.md#page-4--local-data-and-project-scopes) |
+
+The [text companion](Reference/systemx-field-guide.md) is the complete readable
+explanation and links the current executable manuals. The series replaces the
+earlier single full-system poster in the current distribution. The earlier
+poster remains available from its immutable release; existing installations
+retain their old local files under the additive update policy.
+
+Agent Alpha routes at most ten named reference functions on demand; it is
+separate from the ten specialist slots. Agent 0 retains task acceptance. The
+images do not add running services, model access, scheduler execution, GitHub
+permissions, or automatic access to local DATA.
+
+## Retained 4K workflow infographics
 
 | Workflow | 3840 × 2160 image | Text guide |
 | --- | --- | --- |
-| Full-system map: Agent 0 / X / Y / Z | [4K JPEG](Infographics/systemx-cli-projects-4k.jpg) | [Current guide](Reference/cli-projects.md) |
 | ChatGPT + Google Drive | [4K JPEG](Infographics/chatgpt-google-drive-4k.jpg) | [Guide](Reference/chatgpt-google-drive.md) |
 | Codex + GitHub / main project | [4K JPEG](Infographics/codex-github-main-4k.jpg) | [Guide](Reference/codex-github-main.md) |
 | Dots / Codex Cloud | [4K JPEG](Infographics/dots-codex-cloud-4k.jpg) | [Guide](Reference/dots-codex-cloud.md) |
 | Codex / Copilot CLI + local drive | [4K JPEG](Infographics/codex-copilot-cli-local-4k.jpg) | [Guide](Reference/codex-copilot-cli-local.md) |
 
-The full-system map includes the optional Agent Y CLI/branch/PR lane and its
-separate acceptance gates. The four use-case cards are retained Agent 0/X/Z
+The four use-case cards are retained Agent 0/X/Z
 baseline artwork, preserved byte for byte; their text guides describe the
-current Agent Y option. Read the [Agent Y manual](../docs/AGENT-Y.md) for
+Agent Y option. Read the [Agent Y manual](../docs/AGENT-Y.md) for
 provider identity, project checks, cancellation, merge, and cleanup details.
-The map and cards were created with imagegen; 4K describes their export canvas.
+The images were created with imagegen; 4K describes their export canvas.
 Upscaling adds canvas pixels, not native image detail.
 [Asset metadata](Reference/ASSETS.json) records dimensions, raw-byte SHA-256 hashes
 and archived source locations. [Generation prompts](Reference/IMAGE-PROMPTS.md)
@@ -61,8 +86,8 @@ and do not imply endorsement.
 MEDIA/
   README.md       Media index
   White-Paper/    Latest PDF, editable text, metadata and a separate erratum
-  Infographics/  Full-system map and four use-case 4K JPEG outputs
-  Reference/     Workflow guides, image prompts and asset provenance
+  Infographics/  Four system field-guide pages and four retained workflow cards
+  Reference/     Complete text companion, workflow guides, prompts and provenance
 ```
 
 Only the latest paper and selected 4K outputs ship in the current template.
@@ -81,10 +106,8 @@ on demand. Use [START-HERE](../START-HERE.md) for normal context loading;
 `WORK/TASKS.json`, plans, events, reviews and checkpoints remain in their standard
 locations. This organization adds no running service, scheduler or agent.
 
-## Current reference tier
-
-The retained raster maps predate Agent Alpha and AUTOBOT, introduced in
-1.10.0-alpha.1. Use the current [AUTOBOT manual](../docs/AUTOBOT.md) for the
-Mermaid diagram and ten specialist roles, and the [DATA manual](../docs/DATA.md)
-for local payload handling. The white paper and existing image checksums remain
-tied to their stated baselines.
+The new field guide includes Agent Alpha, all ten AUTOBOT files, local DATA,
+and explicit root/child scope selection. Read the [AUTOBOT manual](../docs/AUTOBOT.md)
+for exact request contracts and the [DATA manual](../docs/DATA.md) for audit
+limits. The frozen white paper and four retained workflow cards remain tied to
+their stated historical baselines.

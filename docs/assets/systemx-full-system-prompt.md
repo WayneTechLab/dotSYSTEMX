@@ -1,11 +1,19 @@
-# CLI and .SYSTEMXP full-system infographic prompt
+# Historical CLI and .SYSTEMXP full-system infographic prompt
+
+This is the retained production record for the previous one-page map, which
+predates Agent Alpha/AUTOBOT. The current four-page manual has its own
+[generation and correction prompts](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide-prompts.md)
+and [accessible field guide](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md).
+The feature baseline is now 1.10.0-alpha.2; the new media edition ships with
+1.10.0-alpha.3. The historical prompt blocks below remain unchanged.
 
 Mode: built-in imagegen edit. The alpha.4 four-role poster was the target and
 style reference. This edition emphasizes executable CLI entry points and exact
 child-project routing while retaining Agent 0/X/Y/Z responsibilities.
-Only the latest 4K web PNG and portable JPEG ship; previous artwork is retained
-in tagged Git history. Actual dimensions and exact-byte hashes are in
-[asset metadata](../../.SYSTEMX/MEDIA/Reference/ASSETS.json).
+The former [4K web PNG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/docs/assets/systemx-full-system.png)
+and [portable JPEG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg)
+are retained in tagged history. Their actual dimensions and exact-byte hashes
+remain in the [historical asset metadata](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Reference/ASSETS.json).
 
 ```text
 Use case: infographic-diagram
@@ -61,6 +69,6 @@ rather than implying a standalone `projects` executable:
 Change ONLY the small black terminal example inside the Project-A card in panel 8. It currently shows '$ projects context ...' and '$ projects roles-init ...', which could falsely imply a standalone projects executable. Replace with exactly three readable lines (no dollar signs): 'systemx projects --target OUTER --' then 'context --project Project-A' then 'or: roles-init --project Project-A'. The 'or:' makes clear the last two lines are alternative subcommands appended to the prefix, not a single combined command. Preserve all other content, panel 7's correct full CLI command, the .SYSTEMXP tree, Agent 0/X/Y/Z, all role boundaries and existing design. Do not introduce any new labels, folders, command flags or arrows. Maintain landscape 16:9; request native 3840x2160 where possible.
 ```
 
-The built-in tool returned 1672 × 941 pixels. The selected exports use a
+The built-in tool returned 1672 × 941 pixels. Those historical exports use a
 3840 × 2160 canvas resized with macOS `sips`; this adds no native detail.
 The portable output stays below the installer's 2 MiB per-file limit.

@@ -4,6 +4,21 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.10.0-alpha.3 — Four-page system infographic field guide
+
+- Replaced the current one-page poster with four 3840 × 2160 imagegen exports:
+  complete overview; Agent 0/X/Y/Z coordination and tools; AGENTA and all ten
+  AUTOBOT specialists; DATA, named .SYSTEMXP projects and update/recovery boundaries.
+- Added a complete accessible text companion and generation/correction prompts.
+  Recorded native 1672 × 941 dimensions, 4K canvas upscaling, raw-byte checksums,
+  feature baseline and export settings. Each portable image stays below 2 MiB.
+- Updated README, portable media navigation and wiki guides. The prior poster
+  stays available in immutable history; the four environment cards and frozen
+  white paper retain their original examined baselines.
+- Updated portable inventory and package version for additive adoption. Existing
+  installations keep their local records, files and prior media; no runtime
+  behavior, project seed, agent policy or GitHub Actions setting changes.
+
 ## 1.10.0-alpha.2 — Final validation boundary fixes
 
 - Corrected optional validation to respect the AUTOBOT request ledger's 8 MiB

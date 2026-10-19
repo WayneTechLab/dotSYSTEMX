@@ -26,6 +26,16 @@ setup refuses independent case variants to protect project records.
 Dots / Codex Cloud, and Codex / Copilot CLI on a local drive, with 4K cards
 and accessible text guides.
 
+[![.SYSTEMX field guide overview: Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOT functions, local DATA, and named .SYSTEMXP scopes.](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](MEDIA/Reference/systemx-field-guide.md)
+
+[Four-part 4K field guide](MEDIA/Reference/systemx-field-guide.md):
+[1 — Overview](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) ·
+[2 — Agent coordination](MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) ·
+[3 — Agent Alpha and AUTOBOT](MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) ·
+[4 — DATA and project scopes](MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg).
+The linked companion provides the complete accessible text, commands, and
+authority boundaries; load only the relevant section for the current task.
+
 The [CLI and tools guide](docs/CLI-TOOLS.md) maps the external manager, verified
 managed runner, reviewed folder-only launchers, Python API, and optional provider
 tools. It includes explicit `.SYSTEMXP` selection and the working directory for

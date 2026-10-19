@@ -1,66 +1,44 @@
-# Full-system map: Agent 0 / X / Y / Z
+# Full-system infographic and CLI/project routing
 
-[Open the 4K image](../Infographics/systemx-cli-projects-4k.jpg).
+The current visual manual is the **[four-part .SYSTEMX field guide](systemx-field-guide.md)**.
+Page 1 shows Agent 0/X/Y/Z, AGENTA / Agent Alpha, all ten AUTOBOT reference
+functions, local DATA, shared tools, and named `.SYSTEMXP` child projects.
+Pages 2–4 explain coordination, reference selection, and storage/project boundaries.
+The feature baseline is **1.10.0-alpha.2**; the four-page media edition ships
+with **1.10.0-alpha.3**.
 
-This current map connects project context, canonical work, all four standard
-roles, actual tools, named child projects, and installation/recovery. It replaces
-the older three-role poster in the public README/wiki. The four historical
-workflow cards and white-paper edition 1.2 retain their examined baseline.
+| Page | 3840 × 2160 image | Accessible explanation |
+| --- | --- | --- |
+| 1 — Whole-system overview | [4K JPEG](../Infographics/systemx-field-guide-01-overview-4k.jpg) | [Overview](systemx-field-guide.md#page-1--whole-system-overview) |
+| 2 — Agent coordination and tools | [4K JPEG](../Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | [Coordination](systemx-field-guide.md#page-2--agent-coordination-and-tools) |
+| 3 — Agent Alpha and the ten AUTOBOTs | [4K JPEG](../Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | [Reference tier](systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |
+| 4 — Local DATA and project scopes | [4K JPEG](../Infographics/systemx-field-guide-04-data-projects-4k.jpg) | [Data and projects](systemx-field-guide.md#page-4--local-data-and-project-scopes) |
 
-1. Read the exact `.SYSTEMX` scope: context, access decisions, Master Plan,
-   MAP, focus, and reviewed memory.
-2. Agent 0 assigns bounded tasks to app/IDE workers or a separate Agent Y
-   external CLI lane. Only Agent 0/user accepts task outcomes.
-3. `WORK/TASKS.json` owns status; TODO, working, blocked, review, done,
-   cancelled, and current-focus pages are generated views.
-4. Agent X records actual actors, occurrence/recording times, revisions,
-   evidence, and due items; the host executes schedules.
-5. Agent Y selects a provider per task, receives an explicit packet, and runs
-   in a task-owned Git worktree. A task may opt into a draft PR. Accepted
-   completion permits separate ready; cancellation permits close while
-   preserving unmerged work; verified merge plus acceptance permits archived
-   cleanup. Agent Y never merges.
-6. Agent Z reviews matching inputs against 100 questions in ten categories.
-   Its evidence/unknowns/delta scorecard advises acceptance; reuse unchanged
-   reviews and create a bounded task for an actual gap.
-7. The external `systemx` CLI manages the outer installation. Direct
-   `systemx projects --target OUTER -- ...` routes selected defaults to explicit
-   child operations and defaults offline. Reviewed local `SYSTEMX.sh` and
-   `SYSTEMX.ps1` launchers expose `tools-guide`, `doctor`, `validate`, task/role
-   commands, and configured checks/builds. Python `run()`, `projects()`, and
-   `export_chat()` are optional library entry points. Git/gh and authorized
-   CLI providers supply their real tools; role records grant no permissions.
-8. `.SYSTEMX/Projects/Project-A/.SYSTEMXP/` and
-   `.SYSTEMX/Projects/Project-B/.SYSTEMXP/` are independent siblings under one
-   outer tool installation. Select `--project Project-A` explicitly. Each child
-   retains separate context, plan, tasks, memory, roles, sources, decisions,
-   sync status, and optional events/reviews. The managed `.SYSTEMX/.systemx/`
-   cache is a different location; never nest a second `.SYSTEMX`.
-9. Preview setup, pin reviewed defaults, use additive manual updates, and keep
-   uninstall/restore receipts and backups. Startup notices are opt-in and
-   do not select code.
+The executable contracts remain in the selected release's [CLI and tools guide](../../docs/CLI-TOOLS.md),
+[project routing guide](../../docs/PROJECTS.md), [AUTOBOT manual](../../docs/AUTOBOT.md),
+and [DATA manual](../../docs/DATA.md). Agent 0/user retains task acceptance;
+role records and reference files do not start models, grant permissions, or
+create another worker allowance. The host executes schedules and actual tools.
+URLs identify sources; access and transport require authorized connectors or clients.
 
-Agent Y's worktree and PR controls are workflow gates, not OS isolation.
-Protect host credentials and private records with appropriate host controls.
-A cloud/Drive URL alone does not authorize access or synchronize writers.
+Preserve `.SYSTEMX`, `.SYSTEMXP`, and the specialist `.MD` filename casing.
+Children use `.SYSTEMX/Projects/NAME/.SYSTEMXP` with separate records and
+shared outer tools/version. Select the root or named child explicitly.
+Matching requests reuse their retained results; no background refresh or
+recursive whole-panel review is implied.
 
-The [full accessible walkthrough](https://github.com/WayneTechLab/dotSYSTEMX/blob/main/docs/assets/systemx-full-system.md)
-explains every panel. See the versioned local [CLI and tools guide](../../docs/CLI-TOOLS.md),
-[project routing guide](../../docs/PROJECTS.md), [Agent Y guide](../../docs/AGENT-Y.md),
-[Agent X guide](../../docs/AGENT-X.md), [Agent Z guide](../../docs/AGENT-Z.md),
-and [installation guide](../../docs/INSTALLATION.md) for executable contracts.
-The [Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide)
-provides the changeable public manual.
+[Generation prompts](systemx-field-guide-prompts.md) and [asset metadata](ASSETS.json)
+record production and export provenance. Each image uses a 4K export canvas;
+an enlarged canvas does not add native detail. **Alpha — use at your own risk.**
 
-Generated with the built-in imagegen tool. The requested and exported canvas is
-3840 × 2160; [asset metadata](ASSETS.json) records actual generation dimensions,
-export method, and exact-byte SHA-256 hashes. Upscaling, if recorded there,
-adds canvas pixels rather than native detail. **Alpha — use at your own risk.**
+## Historical one-page map
 
-## Agent Alpha and local DATA
-
-This image predates the optional AUTOBOT tier. The current [AUTOBOT manual](../../docs/AUTOBOT.md)
-adds Agent Alpha (`agent.a`) and ten selected reference functions without
-changing Agent 0/X/Y/Z task authority. Each root or named `.SYSTEMXP` may
-initialize its own panel. [DATA](../../docs/DATA.md) contains ignored local
-payload; `data audit` checks effective Git metadata without ingesting files.
+The former single-page Agent 0/X/Y/Z, CLI, and `.SYSTEMXP` poster predates the
+AUTOBOT tier. It remains available in immutable tagged history as the
+[previous 4K JPEG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg).
+Its [historical edit prompt](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/docs/assets/systemx-full-system-prompt.md)
+and [text equivalent](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/docs/assets/systemx-full-system.md)
+retain that examined baseline. The four separate workflow cards and edition 1.2
+white paper also retain their stated historical baselines. Additive managed
+updates preserve older local files; the current template ships the selected
+four-page series in place of the old one-page export.

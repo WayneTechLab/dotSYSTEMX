@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.10.0-alpha.2` release and leaves updates manual.
+example selects the reviewed `v1.10.0-alpha.3` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.10.0-alpha.2"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.10.0-alpha.3"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.2
-systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.2 --apply
+systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.3
+systemx first-run --target "$PWD" --profile project --version 1.10.0-alpha.3 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -85,12 +85,20 @@ create a lowercase compatibility link where supported; see
 
 ## How the system coordinates work
 
-[![.SYSTEMX full-system map: CLI, launchers, and library select root or named .SYSTEMXP records; Agent 0 coordinates app workers and Agent Y's external CLI lane, Agent X records events, and Agent Z reviews evidence.](docs/assets/systemx-full-system.png)](.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg)
+[![Page 1 of the .SYSTEMX four-part field guide: Agent 0, X, Y, and Z coordinate work; Agent Alpha routes ten AUTOBOT reference functions; local DATA and named .SYSTEMXP projects keep explicit boundaries.](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)
 
-[Download the 4K full-system map](.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg) ·
-[Accessible text equivalent](docs/assets/systemx-full-system.md) ·
+[Four-part 4K field guide and accessible text](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md) ·
+[Visual manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide) ·
 [CLI and tools guide](.SYSTEMX/docs/CLI-TOOLS.md) ·
 [Media library](.SYSTEMX/MEDIA/README.md)
+
+The four pages move from the whole system to its working details:
+[1 — Overview](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg),
+[2 — Agent coordination](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg),
+[3 — Agent Alpha and all ten AUTOBOTs](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg),
+and [4 — DATA and project scopes](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg).
+The [text companion](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md) explains
+the records, commands, evidence gates, and limits without requiring an image.
 
 Use the CLI to select one outer workspace and one named project. Each
 `.SYSTEMX/Projects/Project-A/.SYSTEMXP` keeps its own plan, ledger, memory, and
@@ -115,6 +123,14 @@ flowchart LR
   P --> Z[Agent Z: evidence review]
   X --> Z
   Z --> A0
+  A0 --> AA[Agent Alpha: on-demand reference routing]
+  X --> AA
+  Y --> AA
+  Z --> AA
+  CLI --> AA
+  AA --> AB[Ten selected AUTOBOT functions]
+  AB --> A0
+  D[Local DATA: ignored payloads and reviewed pointers] -.-> AB
   A0 --> S
 ```
 
@@ -246,8 +262,10 @@ identify a location; they do not connect a service by themselves.
 [Four use-case walkthroughs and 4K graphics](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Use-Case-Infographics)
 cover ChatGPT with Google Drive, Codex with a GitHub project, Dots/Codex Cloud,
 and Codex/Copilot CLI with a local drive. Those retained cards show the earlier
-Agent 0/X/Z baseline; their text guides and the full-system map above include
-the current optional Agent Y lane. The
+Agent 0/X/Z baseline; their text guides describe the optional Agent Y lane.
+The [four-part field guide](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md)
+above covers the current Agent 0/X/Y/Z, Agent Alpha, AUTOBOT, DATA, and
+`.SYSTEMXP` coordination format. The
 [media library](.SYSTEMX/MEDIA/README.md) holds the downloads and text guides.
 For a researched brief that becomes phases, milestones, tasks, and review waves,
 see the [one-shot project guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/One-Shot-Project-Guide).

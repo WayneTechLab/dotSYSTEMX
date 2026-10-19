@@ -76,45 +76,154 @@
       }
     },
     {
-      "id": "systemx-full-system",
-      "generatedOn": "2026-10-12",
+      "id": "systemx-field-guide-01-overview",
+      "page": 1,
+      "pages": 4,
+      "title": "Complete system overview",
+      "generatedOn": "2026-10-19",
+      "tool": "built-in imagegen; generation plus targeted technical edits",
+      "baseline": "1.10.0-alpha.2",
+      "mediaEdition": "1.10.0-alpha.3",
       "roles": [
         "agent.0",
         "agent.x",
         "agent.y",
-        "agent.z"
+        "agent.z",
+        "agent.a"
       ],
-      "baseline": "1.9.0-alpha.5",
-      "prompt": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.9.0-alpha.5/docs/assets/systemx-full-system-prompt.md",
-      "tool": "built-in imagegen edit",
-      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 80",
+      "prompt": "systemx-field-guide-prompts.md",
+      "textReference": "systemx-field-guide.md",
+      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
       "upscaled": true,
       "export": {
-        "file": "../Infographics/systemx-cli-projects-4k.jpg",
+        "file": "../Infographics/systemx-field-guide-01-overview-4k.jpg",
         "width": 3840,
         "height": 2160,
-        "bytes": 1867015,
-        "sha256": "cc09f9cde7aba3bb77c109257a937b031254d599b81479ad96b05909a617e1b1"
-      },
-      "web": {
-        "url": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.9.0-alpha.5/docs/assets/systemx-full-system.png",
-        "width": 3840,
-        "height": 2160,
-        "bytes": 7334619,
-        "sha256": "48d0a9f413da3d30c8f6853f8fa3d30ce2639c2bf4a300edae1680b322065e2e"
+        "bytes": 1789030,
+        "sha256": "d62e59186efcddce53799027a52f3817d9f38c154c8ffb6a9659724a91826283"
       },
       "source": {
         "width": 1672,
         "height": 941,
-        "bytes": 2141747,
-        "sha256": "21c5b8c7a0ffd48653d5bf1c7689d47c3c941ea8aa1ca311b2eef87faf995584",
-        "note": "Native built-in imagegen original retained outside the repository; only selected latest 4K outputs ship."
+        "bytes": 1703294,
+        "sha256": "b3cab918c11df13a49ad5fa6298929309c0f4deb335b18c6fb91030547805298",
+        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
+      }
+    },
+    {
+      "id": "systemx-field-guide-02-agent-coordination",
+      "page": 2,
+      "pages": 4,
+      "title": "Coordination, tools and evidence",
+      "generatedOn": "2026-10-19",
+      "tool": "built-in imagegen; generation plus targeted technical edits",
+      "baseline": "1.10.0-alpha.2",
+      "mediaEdition": "1.10.0-alpha.3",
+      "roles": [
+        "agent.0",
+        "agent.x",
+        "agent.y",
+        "agent.z",
+        "agent.a"
+      ],
+      "prompt": "systemx-field-guide-prompts.md",
+      "textReference": "systemx-field-guide.md",
+      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
+      "upscaled": true,
+      "export": {
+        "file": "../Infographics/systemx-field-guide-02-agent-coordination-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 1825911,
+        "sha256": "fa355d18c7edf51703de2bab7edb7baab2862ff339bf7b01f3279b8051a6e036"
       },
-      "focus": "CLI and .SYSTEMXP routing"
+      "source": {
+        "width": 1672,
+        "height": 941,
+        "bytes": 1811763,
+        "sha256": "1d194e1cf285d2e319fd881e4cdde05e70ebfd88a16e31f84579c3c6947c4514",
+        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
+      }
+    },
+    {
+      "id": "systemx-field-guide-03-autobot-panel",
+      "page": 3,
+      "pages": 4,
+      "title": "AGENTA and the ten AUTOBOT specialists",
+      "generatedOn": "2026-10-19",
+      "tool": "built-in imagegen; generation plus targeted technical edits",
+      "baseline": "1.10.0-alpha.2",
+      "mediaEdition": "1.10.0-alpha.3",
+      "roles": [
+        "agent.0",
+        "agent.x",
+        "agent.y",
+        "agent.z",
+        "agent.a"
+      ],
+      "prompt": "systemx-field-guide-prompts.md",
+      "textReference": "systemx-field-guide.md",
+      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
+      "upscaled": true,
+      "export": {
+        "file": "../Infographics/systemx-field-guide-03-autobot-panel-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 1754811,
+        "sha256": "fe3819592990a7927dd4771124db2fb89791ca1c6b35c580a27ac3c7938b94d7"
+      },
+      "source": {
+        "width": 1672,
+        "height": 941,
+        "bytes": 1720082,
+        "sha256": "20558ce3768081df07c665d8fc62a9af6c0f84ea9e0599b60c93db60b5e1b652",
+        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
+      }
+    },
+    {
+      "id": "systemx-field-guide-04-data-projects",
+      "page": 4,
+      "pages": 4,
+      "title": "Local DATA, project scopes and safe updates",
+      "generatedOn": "2026-10-19",
+      "tool": "built-in imagegen; generation plus targeted technical edits",
+      "baseline": "1.10.0-alpha.2",
+      "mediaEdition": "1.10.0-alpha.3",
+      "roles": [
+        "agent.0",
+        "agent.x",
+        "agent.y",
+        "agent.z",
+        "agent.a"
+      ],
+      "prompt": "systemx-field-guide-prompts.md",
+      "textReference": "systemx-field-guide.md",
+      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
+      "upscaled": true,
+      "export": {
+        "file": "../Infographics/systemx-field-guide-04-data-projects-4k.jpg",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 1739691,
+        "sha256": "2f83730562bd2020566926bb22f2f924362d4193158f90b1da2cd5b186d724a8"
+      },
+      "source": {
+        "width": 1672,
+        "height": 941,
+        "bytes": 1788768,
+        "sha256": "e328a189fa1b82f7a47252eb8abb90870c38144f8984bd2e7bd5356cef896f52",
+        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
+      }
     }
   ],
   "layoutRelease": "1.8.6-alpha.1",
   "sourceArchive": "v1.8.5-alpha.1",
-  "note": "Four historical cards retain their exact bytes and examined baseline. The latest full-system map emphasizes CLI/tools and .SYSTEMXP routing for alpha.5; its new filename is additive for existing projects. Per-asset generation/export provenance is recorded; only selected 4K outputs ship.",
-  "updatedOn": "2026-10-12"
+  "note": "The current full-system field guide has four selected 4K exports covering the alpha.2 implementation. Four historical environment cards retain their exact bytes and baseline. Prior full-system posters remain in immutable tagged history. All native generation dimensions, export methods and exact-byte hashes are recorded; only selected 4K outputs ship.",
+  "updatedOn": "2026-10-19",
+  "historicalFullSystem": {
+    "baseline": "1.9.0-alpha.5",
+    "exportUrl": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg",
+    "sha256": "cc09f9cde7aba3bb77c109257a937b031254d599b81479ad96b05909a617e1b1",
+    "metadataUrl": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Reference/ASSETS.json"
+  }
 }

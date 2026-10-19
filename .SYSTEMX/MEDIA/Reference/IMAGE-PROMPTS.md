@@ -1,10 +1,18 @@
-# Use-case infographic prompts
+# Historical use-case infographic prompts
+
+The current four-page system manual has a separate
+[generation and correction record](systemx-field-guide-prompts.md) and
+[accessible field guide](systemx-field-guide.md). It covers Agent 0/X/Y/Z,
+AGENTA / Agent Alpha, all ten AUTOBOT reference functions, DATA, and `.SYSTEMXP`.
+That series describes the 1.10.0-alpha.2 feature baseline and ships with the
+1.10.0-alpha.3 media edition.
 
 These are the historical production prompts for the four retained Agent 0/X/Z
 use-case cards. Their original image bytes remain unchanged. The current
-[full-system map](cli-projects.md) and [Agent Y manual](../../docs/AGENT-Y.md)
-describe the additional optional CLI delegation role; do not interpret the
-three-panel card artwork as the complete current role inventory.
+[four-part field guide](systemx-field-guide.md), [CLI/project routing index](cli-projects.md),
+and [Agent Y manual](../../docs/AGENT-Y.md) describe the current optional roles
+and reference tier. Do not interpret the three-panel card artwork as the
+complete current role inventory. The production prompts below remain unchanged.
 
 Mode: built-in imagegen. Four independent new-image requests; no input images.
 

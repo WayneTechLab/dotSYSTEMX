@@ -4,7 +4,10 @@ The standalone logo remains `.SYSTEMX`; attribution belongs in project informati
 
 | Asset | Purpose | Editable source |
 | --- | --- | --- |
-| `systemx-full-system.png` | Current 4K Agent 0/X/Y/Z, CLI and tools, explicit `.SYSTEMXP` child scopes, records, and lifecycle map | [Imagegen prompt](systemx-full-system-prompt.md) · [text equivalent](systemx-full-system.md) · [portable 4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg) |
+| [Field guide 1 — overview](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) | Whole-system view: Agent 0/X/Y/Z, AGENTA, all ten AUTOBOTs, DATA, tools, and `.SYSTEMXP` | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-1--whole-system-overview) |
+| [Field guide 2 — coordination](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | Assignment, execution, event tracking, evidence, review, and acceptance | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-2--agent-coordination-and-tools) |
+| [Field guide 3 — AUTOBOT panel](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | Agent Alpha, ten named reference functions, bounded requests, and result reuse | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |
+| [Field guide 4 — DATA/projects](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg) | Local payload storage, Git exclusions, separate child scopes, and shared outer tools | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-4--local-data-and-project-scopes) |
 | `systemx-logo.png` | Current brand logo | Imagegen provenance in [IMAGE-PROMPTS.md](IMAGE-PROMPTS.md) |
 | `systemx-coordination.png` / `.svg` | Global/Master Plan, Agent 0/X/Y/Z, acceptance and checkpoint | [Mermaid](systemx-coordination.mmd) |
 | `systemx-project-waves.png` / `.svg` | Research through accepted delivery | [Mermaid](systemx-project-waves.mmd) |
@@ -33,15 +36,23 @@ examples for the poster's external CLI, managed/local launcher, Python API,
 provider, and child-project lanes. Child `.SYSTEMXP` records share one outer
 default version; select each scoped command explicitly by registered project name.
 
-The full-system poster is a built-in imagegen raster asset. Its text equivalent
-and generation/edit prompts are maintained alongside it. Click the image in the
-README or wiki to inspect small path labels at full resolution. The editable
-Mermaid diagrams remain available for focused technical views.
+The current [four-part field guide](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md)
+uses built-in imagegen raster artwork and a complete accessible text companion.
+Its feature baseline is **1.10.0-alpha.2**, and this media edition ships with
+**1.10.0-alpha.3**. Click an image in the README or wiki to inspect it at full
+resolution. The focused Mermaid diagrams above retain their stated earlier
+rendering baseline; they are supplementary views, not the complete AUTOBOT inventory.
 
-The current full-system PNG and portable JPEG are **3840 × 2160** exports.
-Imagegen returned a **1672 × 941** native output; macOS `sips` resized the selected
-export to 4K. Upscaling adds canvas pixels, not native image detail. The
-generation/edit prompt and portable asset metadata retain this provenance.
-Current documentation links one selected PNG and the portable JPEG. The four
-retained use-case cards and edition 1.2 white paper
-describe their older Agent 0/X/Z baseline; current text guides explain Agent Y.
+Each selected page is a **3840 × 2160 JPEG**. The
+[generation/correction prompts](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide-prompts.md)
+and [per-page metadata](../../.SYSTEMX/MEDIA/Reference/ASSETS.json) record native
+dimensions, exact-byte hashes, and export methods. Upscaling adds canvas pixels,
+not native image detail. Only the selected four-page exports ship for this series.
+
+The prior one-page map remains available as a
+[historical PNG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/docs/assets/systemx-full-system.png)
+and [historical JPEG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg).
+Its [old prompt record](systemx-full-system-prompt.md) retains the production copy;
+the [map index](systemx-full-system.md) links current and historical explanations.
+The four retained use-case cards and edition 1.2 white paper also describe their
+stated earlier Agent 0/X/Z baseline; current manuals cover Agent Y and the new tier.

@@ -8,7 +8,7 @@ Only the selected final PNGs are included here; the drafts are not distributed.
 
 - `systemx-logo.png`: standalone monochrome folder/branch mark and wordmark.
 - `systemx-workflow.png`: legacy six-step illustration, retained for existing links.
-  Current documentation uses the full-system poster and Agent 0/X/Y/Z diagrams
+  Current documentation uses the four-part field guide and focused diagrams
   listed in [asset notes](README.md).
 
 Both files have an opaque white background. They are raster assets, not editable
@@ -36,20 +36,29 @@ Preserve every other element exactly: .SYSTEMX title including the leading dot, 
 The current Mermaid `.mmd`, SVG, and PNG diagrams are technical renderings, not
 imagegen edits. Their source and maintenance notes are in [README.md](README.md).
 
-## Full-system infographic
+## Current four-part field guide
 
-`systemx-full-system.png` is the current comprehensive raster overview, generated
-with the built-in imagegen tool. The exact initial and correction prompts are in
-[systemx-full-system-prompt.md](systemx-full-system-prompt.md), and the accessible
-[text equivalent](systemx-full-system.md) explains every section and boundary.
-It shows Agent 0, Agent X, optional Agent Y, and Agent Z. Agent Y's separate CLI
-lane includes an opted-in draft PR, project checks and review, recorded task
-disposition, separately authorized merge, and gated cleanup.
+The [four-page field guide](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md)
+replaces the previous one-page raster overview. It shows Agent 0/X/Y/Z,
+AGENTA / Agent Alpha, all ten AUTOBOT reference functions, local DATA, tools,
+and `.SYSTEMXP` project scopes. The feature baseline is 1.10.0-alpha.2; this
+media edition ships with 1.10.0-alpha.3.
 
-The selected `systemx-full-system.png` and portable
-[4K JPEG](../../.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg) are
-3840 × 2160 exports. See the current [prompt/provenance record](systemx-full-system-prompt.md)
-for native dimensions and export steps. Earlier releases retained a 1672 × 941
-master and a separately named upscaled PNG; that earlier provenance does not
-describe the current selected asset. Historical use-case card prompts are
-retained unchanged in the [portable media library](../../.SYSTEMX/MEDIA/Reference/IMAGE-PROMPTS.md).
+Its [generation and correction prompts](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide-prompts.md)
+describe the approved copy, relationships, and final corrections. The
+[asset record](../../.SYSTEMX/MEDIA/Reference/ASSETS.json) supplies native/output
+dimensions, export methods, and exact-byte hashes for each selected 4K JPEG.
+Upscaling a canvas does not add native detail. The accessible companion
+explains every page and takes precedence over an ambiguous drawn connector.
+
+## Historical one-page infographic
+
+The previous [4K PNG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/docs/assets/systemx-full-system.png)
+and [portable 4K JPEG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg)
+remain in tagged history. They cover the earlier Agent 0/X/Y/Z, CLI, and
+`.SYSTEMXP` baseline and predate Agent Alpha/AUTOBOT.
+[Historical edit prompts](systemx-full-system-prompt.md) retain their original
+production copy and export details; [this index](systemx-full-system.md)
+routes readers to the current series and archived text equivalent.
+Historical use-case card prompts are retained unchanged in the
+[portable media library](../../.SYSTEMX/MEDIA/Reference/IMAGE-PROMPTS.md).
