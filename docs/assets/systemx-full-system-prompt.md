@@ -4,8 +4,9 @@ This is the retained production record for the previous one-page map, which
 predates Agent Alpha/AUTOBOT. The current four-page manual has its own
 [generation and correction prompts](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide-prompts.md)
 and [accessible field guide](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md).
-The feature baseline is now 1.10.0-alpha.2; the new media edition ships with
-1.10.0-alpha.3. The historical prompt blocks below remain unchanged.
+The current feature baseline is 1.11.0-alpha.2; ROOT-inclusive media edition
+1.11.0-alpha.3 shows SX-RULES, SX-MILESTONE, and explicit TODO reconciliation.
+The historical prompt blocks below remain unchanged.
 
 Mode: built-in imagegen edit. The alpha.4 four-role poster was the target and
 style reference. This edition emphasizes executable CLI entry points and exact

@@ -4,10 +4,10 @@ The standalone logo remains `.SYSTEMX`; attribution belongs in project informati
 
 | Asset | Purpose | Editable source |
 | --- | --- | --- |
-| [Field guide 1 — overview](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) | Whole-system view: Agent 0/X/Y/Z, AGENTA, all ten AUTOBOTs, DATA, tools, and `.SYSTEMXP` | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-1--whole-system-overview) |
-| [Field guide 2 — coordination](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | Assignment, execution, event tracking, evidence, review, and acceptance | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-2--agent-coordination-and-tools) |
-| [Field guide 3 — AUTOBOT panel](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | Agent Alpha, ten named reference functions, bounded requests, and result reuse | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |
-| [Field guide 4 — DATA/projects](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg) | Local payload storage, Git exclusions, separate child scopes, and shared outer tools | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-4--local-data-and-project-scopes) |
+| [Field guide 1 — overview](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) | Whole-system view: ROOT, SX-RULES, SX-MILESTONE, Agent 0/X/Y/Z, AGENTA, ten AUTOBOTs, DATA, tools, and `.SYSTEMXP` | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-1--whole-system-overview) |
+| [Field guide 2 — coordination](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | Canonical, harness, and optional bot TODO observations; read-only delta, authorized reconciliation, readback, and acceptance | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-2--agent-coordination-and-tools) |
+| [Field guide 3 — ROOT/AUTOBOT](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | ROOT planning, requests, tool cards, Agent Alpha, ten named reference functions, and result reuse | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |
+| [Field guide 4 — DATA/projects](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg) | Independent child ROOT/task records, local payload storage, Git exclusions, shared outer tools, and reversible updates | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-4--local-data-and-project-scopes) |
 | `systemx-logo.png` | Current brand logo | Imagegen provenance in [IMAGE-PROMPTS.md](IMAGE-PROMPTS.md) |
 | `systemx-coordination.png` / `.svg` | Global/Master Plan, Agent 0/X/Y/Z, acceptance and checkpoint | [Mermaid](systemx-coordination.mmd) |
 | `systemx-project-waves.png` / `.svg` | Research through accepted delivery | [Mermaid](systemx-project-waves.mmd) |
@@ -38,9 +38,13 @@ default version; select each scoped command explicitly by registered project nam
 
 The current [four-part field guide](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md)
 uses built-in imagegen raster artwork and a complete accessible text companion.
-Its feature baseline is **1.10.0-alpha.2**, and this media edition ships with
-**1.10.0-alpha.3**. Click an image in the README or wiki to inspect it at full
-resolution. The focused Mermaid diagrams above retain their stated earlier
+Its feature baseline is **1.11.0-alpha.2**, and the ROOT-inclusive media edition
+is **1.11.0-alpha.3**. `WORK/TASKS.json` remains the sole task-state authority;
+ROOT records explicit mappings and observed harness/bot snapshots. Agent 0 uses
+actual authorized tools to reconcile differences and records a fresh readback.
+The drawings do not imply a live connector, equal TODO counts, or automatic
+acceptance of an external `completed` state. Click an image in the README or
+wiki to inspect it at full resolution. The focused Mermaid diagrams above retain their stated earlier
 rendering baseline; they are supplementary views, not the complete AUTOBOT inventory.
 
 Each selected page is a **3840 × 2160 JPEG**. The
@@ -55,4 +59,5 @@ and [historical JPEG](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-al
 Its [old prompt record](systemx-full-system-prompt.md) retains the production copy;
 the [map index](systemx-full-system.md) links current and historical explanations.
 The four retained use-case cards and edition 1.2 white paper also describe their
-stated earlier Agent 0/X/Z baseline; current manuals cover Agent Y and the new tier.
+stated earlier Agent 0/X/Z baseline; current manuals and the new field guide
+cover Agent Y, ROOT, and AUTOBOT.

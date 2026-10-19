@@ -40,9 +40,10 @@ imagegen edits. Their source and maintenance notes are in [README.md](README.md)
 
 The [four-page field guide](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md)
 replaces the previous one-page raster overview. It shows Agent 0/X/Y/Z,
-AGENTA / Agent Alpha, all ten AUTOBOT reference functions, local DATA, tools,
-and `.SYSTEMXP` project scopes. The feature baseline is 1.10.0-alpha.2; this
-media edition ships with 1.10.0-alpha.3.
+AGENTA / Agent Alpha, all ten AUTOBOT reference functions, ROOT,
+SX-RULES, SX-MILESTONE, canonical/harness/optional bot TODO reconciliation,
+local DATA, tools, and `.SYSTEMXP` project scopes. The feature baseline is
+1.11.0-alpha.2; the ROOT-inclusive media edition is 1.11.0-alpha.3.
 
 Its [generation and correction prompts](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide-prompts.md)
 describe the approved copy, relationships, and final corrections. The

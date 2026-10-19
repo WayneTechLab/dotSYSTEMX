@@ -79,11 +79,11 @@
       "id": "systemx-field-guide-01-overview",
       "page": 1,
       "pages": 4,
-      "title": "Complete system overview",
+      "title": "Complete system with ROOT",
       "generatedOn": "2026-10-19",
       "tool": "built-in imagegen; generation plus targeted technical edits",
-      "baseline": "1.10.0-alpha.2",
-      "mediaEdition": "1.10.0-alpha.3",
+      "baseline": "1.11.0-alpha.2",
+      "mediaEdition": "1.11.0-alpha.3",
       "roles": [
         "agent.0",
         "agent.x",
@@ -99,26 +99,35 @@
         "file": "../Infographics/systemx-field-guide-01-overview-4k.jpg",
         "width": 3840,
         "height": 2160,
-        "bytes": 1789030,
-        "sha256": "d62e59186efcddce53799027a52f3817d9f38c154c8ffb6a9659724a91826283"
+        "bytes": 1900067,
+        "sha256": "932b114f65f277ebce216f47795ec03c1e8001c749ba63f4f3840168a4b6d7e6"
       },
       "source": {
         "width": 1672,
         "height": 941,
-        "bytes": 1703294,
-        "sha256": "b3cab918c11df13a49ad5fa6298929309c0f4deb335b18c6fb91030547805298",
+        "bytes": 1830191,
+        "sha256": "a02e2764e87ebd34172bc146056ed0cb73fffbbb365d7e8f9ac98ca82fcaa05e",
         "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      }
+      },
+      "coverage": [
+        "ROOT",
+        "SX-RULES",
+        "SX-MILESTONE",
+        "canonical SYSTEMX tasks",
+        "observed harness TODO",
+        "optional bot TODO",
+        "Agent0 authorized reconciliation and readback"
+      ]
     },
     {
       "id": "systemx-field-guide-02-agent-coordination",
       "page": 2,
       "pages": 4,
-      "title": "Coordination, tools and evidence",
+      "title": "Three TODO surfaces, one task authority",
       "generatedOn": "2026-10-19",
       "tool": "built-in imagegen; generation plus targeted technical edits",
-      "baseline": "1.10.0-alpha.2",
-      "mediaEdition": "1.10.0-alpha.3",
+      "baseline": "1.11.0-alpha.2",
+      "mediaEdition": "1.11.0-alpha.3",
       "roles": [
         "agent.0",
         "agent.x",
@@ -134,26 +143,35 @@
         "file": "../Infographics/systemx-field-guide-02-agent-coordination-4k.jpg",
         "width": 3840,
         "height": 2160,
-        "bytes": 1825911,
-        "sha256": "fa355d18c7edf51703de2bab7edb7baab2862ff339bf7b01f3279b8051a6e036"
+        "bytes": 1893890,
+        "sha256": "9950a100561b4c30d2aad232865af09fa9a3a51d142e004291e76c83a37584e8"
       },
       "source": {
         "width": 1672,
         "height": 941,
-        "bytes": 1811763,
-        "sha256": "1d194e1cf285d2e319fd881e4cdde05e70ebfd88a16e31f84579c3c6947c4514",
+        "bytes": 1865643,
+        "sha256": "0737e82e44d3196554d219bf2254fe9222c0b626e8d42acc6a21e46dfd2f4943",
         "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      }
+      },
+      "coverage": [
+        "ROOT",
+        "SX-RULES",
+        "SX-MILESTONE",
+        "canonical SYSTEMX tasks",
+        "observed harness TODO",
+        "optional bot TODO",
+        "Agent0 authorized reconciliation and readback"
+      ]
     },
     {
       "id": "systemx-field-guide-03-autobot-panel",
       "page": 3,
       "pages": 4,
-      "title": "AGENTA and the ten AUTOBOT specialists",
+      "title": "ROOT planning and on-demand specialists",
       "generatedOn": "2026-10-19",
       "tool": "built-in imagegen; generation plus targeted technical edits",
-      "baseline": "1.10.0-alpha.2",
-      "mediaEdition": "1.10.0-alpha.3",
+      "baseline": "1.11.0-alpha.2",
+      "mediaEdition": "1.11.0-alpha.3",
       "roles": [
         "agent.0",
         "agent.x",
@@ -169,26 +187,35 @@
         "file": "../Infographics/systemx-field-guide-03-autobot-panel-4k.jpg",
         "width": 3840,
         "height": 2160,
-        "bytes": 1754811,
-        "sha256": "fe3819592990a7927dd4771124db2fb89791ca1c6b35c580a27ac3c7938b94d7"
+        "bytes": 1809511,
+        "sha256": "4f44e03bd7103e0464f87af063b97a312e985f44d0d86ca81368e9a9345c049f"
       },
       "source": {
         "width": 1672,
         "height": 941,
-        "bytes": 1720082,
-        "sha256": "20558ce3768081df07c665d8fc62a9af6c0f84ea9e0599b60c93db60b5e1b652",
+        "bytes": 1756317,
+        "sha256": "9c15ae639ea96e482b20d63c9a3670f9a588a6f65bccc353f04efbd0c0746866",
         "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      }
+      },
+      "coverage": [
+        "ROOT",
+        "SX-RULES",
+        "SX-MILESTONE",
+        "canonical SYSTEMX tasks",
+        "observed harness TODO",
+        "optional bot TODO",
+        "Agent0 authorized reconciliation and readback"
+      ]
     },
     {
       "id": "systemx-field-guide-04-data-projects",
       "page": 4,
       "pages": 4,
-      "title": "Local DATA, project scopes and safe updates",
+      "title": "Scoped ROOT, DATA and the toolchain",
       "generatedOn": "2026-10-19",
-      "tool": "built-in imagegen; generation plus targeted technical edits",
-      "baseline": "1.10.0-alpha.2",
-      "mediaEdition": "1.10.0-alpha.3",
+      "tool": "built-in imagegen",
+      "baseline": "1.11.0-alpha.2",
+      "mediaEdition": "1.11.0-alpha.3",
       "roles": [
         "agent.0",
         "agent.x",
@@ -204,26 +231,62 @@
         "file": "../Infographics/systemx-field-guide-04-data-projects-4k.jpg",
         "width": 3840,
         "height": 2160,
-        "bytes": 1739691,
-        "sha256": "2f83730562bd2020566926bb22f2f924362d4193158f90b1da2cd5b186d724a8"
+        "bytes": 1919070,
+        "sha256": "86118223ad7cdd34ab74cd0b541dc73d0f274ad4915ef9db6df037989175e966"
       },
       "source": {
         "width": 1672,
         "height": 941,
-        "bytes": 1788768,
-        "sha256": "e328a189fa1b82f7a47252eb8abb90870c38144f8984bd2e7bd5356cef896f52",
+        "bytes": 1815773,
+        "sha256": "d9d9457961459d7e913a98fdf2f8b0ecd5056996194b5bb95e5cc70acc8a7ebb",
         "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      }
+      },
+      "coverage": [
+        "ROOT",
+        "SX-RULES",
+        "SX-MILESTONE",
+        "canonical SYSTEMX tasks",
+        "observed harness TODO",
+        "optional bot TODO",
+        "Agent0 authorized reconciliation and readback"
+      ]
     }
   ],
   "layoutRelease": "1.8.6-alpha.1",
   "sourceArchive": "v1.8.5-alpha.1",
-  "note": "The current full-system field guide has four selected 4K exports covering the alpha.2 implementation. Four historical environment cards retain their exact bytes and baseline. Prior full-system posters remain in immutable tagged history. All native generation dimensions, export methods and exact-byte hashes are recorded; only selected 4K outputs ship.",
+  "note": "The current four-page field guide covers ROOT and the 1.11.0-alpha.2 feature baseline, published as media edition 1.11.0-alpha.3. Canonical tasks, observed harness/bot TODOs, read-only delta and authorized reconciliation/readback remain distinct. Four historical environment cards retain exact bytes and baseline. Prior editions remain in tagged history. Only selected 4K exports ship; native dimensions, export method and exact byte hashes are recorded.",
   "updatedOn": "2026-10-19",
   "historicalFullSystem": {
     "baseline": "1.9.0-alpha.5",
     "exportUrl": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Infographics/systemx-cli-projects-4k.jpg",
     "sha256": "cc09f9cde7aba3bb77c109257a937b031254d599b81479ad96b05909a617e1b1",
     "metadataUrl": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.2/.SYSTEMX/MEDIA/Reference/ASSETS.json"
+  },
+  "previousFieldGuide": {
+    "baseline": "1.10.0-alpha.2",
+    "mediaEdition": "1.10.0-alpha.3",
+    "metadataUrl": "https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.3/.SYSTEMX/MEDIA/Reference/ASSETS.json",
+    "assets": [
+      {
+        "id": "systemx-field-guide-01-overview",
+        "sha256": "d62e59186efcddce53799027a52f3817d9f38c154c8ffb6a9659724a91826283",
+        "exportUrl": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.10.0-alpha.3/.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg"
+      },
+      {
+        "id": "systemx-field-guide-02-agent-coordination",
+        "sha256": "fa355d18c7edf51703de2bab7edb7baab2862ff339bf7b01f3279b8051a6e036",
+        "exportUrl": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.10.0-alpha.3/.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg"
+      },
+      {
+        "id": "systemx-field-guide-03-autobot-panel",
+        "sha256": "fe3819592990a7927dd4771124db2fb89791ca1c6b35c580a27ac3c7938b94d7",
+        "exportUrl": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.10.0-alpha.3/.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg"
+      },
+      {
+        "id": "systemx-field-guide-04-data-projects",
+        "sha256": "2f83730562bd2020566926bb22f2f924362d4193158f90b1da2cd5b186d724a8",
+        "exportUrl": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.10.0-alpha.3/.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg"
+      }
+    ]
   }
 }

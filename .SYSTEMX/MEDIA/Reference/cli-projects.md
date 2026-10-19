@@ -2,10 +2,10 @@
 
 The current visual manual is the **[four-part .SYSTEMX field guide](systemx-field-guide.md)**.
 Page 1 shows Agent 0/X/Y/Z, AGENTA / Agent Alpha, all ten AUTOBOT reference
-functions, local DATA, shared tools, and named `.SYSTEMXP` child projects.
-Pages 2–4 explain coordination, reference selection, and storage/project boundaries.
-The feature baseline is **1.10.0-alpha.2**; the four-page media edition ships
-with **1.10.0-alpha.3**.
+functions, ROOT, local DATA, shared tools, and named `.SYSTEMXP` child projects.
+Pages 2–4 explain observed TODO deltas, ROOT planning and bounded tool cards,
+reference selection, and storage/project boundaries. The feature baseline is
+**1.11.0-alpha.2**; the four-page media edition ships with **1.11.0-alpha.3**.
 
 | Page | 3840 × 2160 image | Accessible explanation |
 | --- | --- | --- |
@@ -24,7 +24,7 @@ URLs identify sources; access and transport require authorized connectors or cli
 Preserve `.SYSTEMX`, `.SYSTEMXP`, and the specialist `.MD` filename casing.
 Children use `.SYSTEMX/Projects/NAME/.SYSTEMXP` with separate records and
 shared outer tools/version. Select the root or named child explicitly.
-Matching requests reuse their retained results; no background refresh or
+Matching requests reuse their retained record or result; no background refresh or
 recursive whole-panel review is implied.
 
 [Generation prompts](systemx-field-guide-prompts.md) and [asset metadata](ASSETS.json)

@@ -39,3 +39,10 @@ comparisons. `WORK/TASKS.json` remains the canonical task-state and acceptance
 ledger; recorded external completion does not accept a task or execute a tool.
 This supplement identifies later features without changing the frozen PDF,
 editable Markdown, or their checksums.
+
+The [four-part system field guide](../Reference/systemx-field-guide.md), media
+edition `1.11.0-alpha.3` for feature baseline `1.11.0-alpha.2`, brings ROOT,
+Agent 0/X/Y/Z, Agent Alpha, AUTOBOT, DATA, and `.SYSTEMXP` together. Its text
+explains the canonical/harness/optional-bot observation delta and reconciliation
+through authorized real tools. That later media edition does not change the
+paper's examined baseline or claim that the paper evaluated those additions.

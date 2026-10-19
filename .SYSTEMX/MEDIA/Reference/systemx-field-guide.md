@@ -1,14 +1,16 @@
 # .SYSTEMX: four-part system field guide
 
-This is the accessible text companion to four retained 4K infographic pages
-depicting **feature baseline `1.10.0-alpha.2`**, published as **media edition
-`1.10.0-alpha.3`**. Page 1 shows that baseline's overview; pages 2–4 explain its
-coordination, reference, and storage boundaries. The diagrams describe optional
-capabilities, not processes that setup automatically starts. Their baseline is
-separate from the project's selected source/defaults version. They do not depict
-the later ROOT layer; read the [ROOT supplement](#later-root-layer-supplement)
-alongside them. The command manuals and [format contract](../../FORMAT.md)
-define the selected release's executable behavior.
+This is the accessible text companion to four 4K infographic pages for
+**media edition `1.11.0-alpha.3`**, describing **feature baseline
+`1.11.0-alpha.2`**. Page 1 introduces the format; page 2 explains agent
+coordination and observed TODO deltas; page 3 connects ROOT planning to Agent
+Alpha's reference panel; page 4 explains DATA, CLI entry points, and project
+scopes. The diagrams describe optional capabilities, not processes that setup
+automatically starts. These media identifiers are separate from a project's
+selected defaults version. The command manuals and
+[format contract](../../FORMAT.md) define the selected release's executable
+behavior; consult [SX-RULES](../../ROOT/SX-RULES.md) and the
+[ROOT manual](../../ROOT/SX-MILESTONE.md) for the planning/observation contract.
 
 **Exact names:** `.SYSTEMX` for the outer installation and `.SYSTEMXP` for a
 registered child's records. `AGENTA` means Agent Alpha, registry ID `agent.a`.
@@ -19,9 +21,9 @@ recoverable backups, and validate adoption in your own project.
 | Page | Image | Readable explanation |
 | --- | --- | --- |
 | 1 — Whole-system overview | [4K JPEG](../Infographics/systemx-field-guide-01-overview-4k.jpg) | [Overview](#page-1--whole-system-overview) |
-| 2 — Agent coordination and tools | [4K JPEG](../Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | [Coordination](#page-2--agent-coordination-and-tools) |
-| 3 — Agent Alpha and the ten AUTOBOTs | [4K JPEG](../Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | [Reference tier](#page-3--agent-alpha-and-the-ten-autobots) |
-| 4 — Local DATA and project scopes | [4K JPEG](../Infographics/systemx-field-guide-04-data-projects-4k.jpg) | [Data and projects](#page-4--local-data-and-project-scopes) |
+| 2 — Agent coordination and observed TODO delta | [4K JPEG](../Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | [Coordination](#page-2--agent-coordination-and-tools) |
+| 3 — ROOT planning, Agent Alpha, and the ten AUTOBOTs | [4K JPEG](../Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | [Planning and references](#page-3--agent-alpha-and-the-ten-autobots) |
+| 4 — Local DATA, CLI, and project scopes | [4K JPEG](../Infographics/systemx-field-guide-04-data-projects-4k.jpg) | [Data and projects](#page-4--local-data-and-project-scopes) |
 
 Each image is exported to a 3840 × 2160 canvas. Generation dimensions, export
 method, and exact-byte hashes belong in [asset metadata](ASSETS.json).
@@ -45,11 +47,21 @@ a selected installed CLI provider and an optional draft PR lane. Agent Z applies
 a versioned evidence-review policy. Agent Alpha routes selected detailed
 references from the AUTOBOT panel back to those roles and Tools.
 
+Optional `ROOT/` connects operating rules (`SX-RULES.md`), planning vocabulary
+and tools (`SX-MILESTONE.md`), request/plan metadata (`PLAN.json`), and observed
+external task mappings (`MIRRORS.json`). The selected `WORK/TASKS.json` remains
+the only task-status ledger. ROOT links that ledger to saved IDE/harness TODO
+snapshots and an explicitly selected optional bot layer; its local read-only
+delta reports differences for Agent 0 to reconcile through actual authorized
+tools. It does not contact a live provider or synchronize a remote list.
+
 ```mermaid
 flowchart TB
   H[Human objective, constraints, and authority] --> S[Explicit root or registered child scope]
   T[CLI, launchers, Python API, and authorized harness tools] --> S
   S --> C[Context, Master Plan, task ledger, focus, and memory]
+  C --> RP[ROOT: SX-RULES, SX-MILESTONE, request and plan links]
+  RP --> A0
   C --> A0[Agent 0: plan, delegation, integration, acceptance]
   A0 --> W[Authorized app or IDE workers]
   A0 --> Y[Agent Y: selected external CLI task]
@@ -69,6 +81,13 @@ flowchart TB
   R --> A0
   D[Local DATA: ignored payloads] -. reviewed pointers only .-> B
   P[Projects/NAME/.SYSTEMXP: independent child records] --> S
+  C --> DLT[ROOT delta: read-only comparison of saved observations]
+  HP[Observed harness or IDE TODO snapshots] --> DLT
+  BP[Optional observed bot snapshots] --> DLT
+  DLT --> A0
+  A0 --> RT[Authorized real tools and external readback]
+  RT --> HP
+  RT --> BP
 ```
 
 The system has one source of truth for each kind of information:
@@ -82,6 +101,9 @@ The system has one source of truth for each kind of information:
 | `WORK/TASKS.json` | Canonical task state, ownership, dependencies, history, and evidence |
 | `WORK/FOCUS.json` and generated `CURRENT.md` | Current objective and task/checkpoint pointers |
 | `MEMORY/PROJECT.md`, session checkpoints, agent memory | Reviewed facts and resumable handoffs |
+| Optional `ROOT/SX-RULES.md` and `ROOT/SX-MILESTONE.md` | Operating boundaries and the request/planning/tool-card contract |
+| Optional `ROOT/PLAN.json` | Request provenance and plan nodes referencing accepted milestones and canonical task IDs; no task status |
+| Optional `ROOT/MIRRORS.json` | Explicit harness/bot item bindings, saved observations, and bounded tool cards; no live connector |
 | Optional `EVENTS/`, `AGENTS/agent.y/`, `REVIEWS/` | Events, bounded CLI job records, and evidence reviews |
 | Optional `AUTOBOT/` | Selected reusable reference detail and bounded request/results |
 | Optional `DATA/` | Local payload storage whose supplied Git rules ignore payloads |
@@ -89,6 +111,9 @@ The system has one source of truth for each kind of information:
 TODO, WORKING-ON, BLOCKED, REVIEW, DONE, and CANCELLED pages are generated task
 views. They are not independent editable ledgers. Root and child scopes each own
 their records; the outer coordinator handles explicit cross-project references.
+Stable task IDs carry their scope across planning and external bindings. A host
+item may cover several tasks, and a task may have multiple external attempts.
+Checklist lengths and item order do not establish those relationships.
 
 Core tools use Python 3.9+ and the standard library. The selected harness supplies
 models, execution tools, permissions, and worker capacity. Git, GitHub CLI,
@@ -117,8 +142,9 @@ The work proceeds through explicit steps:
    scope, current source revision, existing local changes, focus, and acceptance
    criteria. Load the relevant records without loading every archive or bot file.
 2. **Plan the next bounded change.** Express phases, milestones, and waves in
-   the Master Plan. Keep actual task IDs, dependency state, ownership, and status
-   in the task ledger. A phase heading is not an additional task schema.
+   the Master Plan. Optional ROOT request and hierarchy nodes retain provenance
+   and explicit links. Keep actual task IDs, dependency state, ownership, and
+   status in the task ledger; structural nodes have no independent status.
 3. **Select useful detail.** Agent 0/X/Y/Z or Tools can ask Agent Alpha for a
    specific reference, purpose, and input revision. Reuse unchanged results.
 4. **Execute within authority.** A person or authorized worker uses the actual
@@ -134,6 +160,65 @@ The work proceeds through explicit steps:
    acceptance criteria, records the result and next step, and promotes verified
    facts to canonical memory. Stop when the accepted objective is met. New work
    needs changed evidence, a specific gap, or a newly authorized objective.
+
+### Three surfaces and the observed TODO delta
+
+The three possible surfaces are **canonical SYSTEMX tasks**, **the active
+IDE/harness plan or TODO list**, and **an optional bot/cloud task channel**.
+ROOT binds explicitly named external items to existing canonical task IDs in
+one selected scope. Several external items can map to one task, and one item
+can map to several tasks. A read-only delta compares a many-task item with the
+aggregate of all its covered task states and checks every covered fingerprint,
+including tasks outside a bounded output slice. Equal list sizes are neither
+expected nor evidence of agreement.
+
+An observation records the channel/item identity, raw reported state, normalized
+state, observed time, source revision, and evidence references. ROOT records
+the referenced canonical-task fingerprints. These are saved local assertions,
+not authenticated provider readbacks. If the harness exposes no plan revision,
+retain the exact authorized snapshot with capture time and readback evidence;
+a labeled snapshot digest identifies those captured bytes. Repository `HEAD`
+does not version an IDE's TODO list. Unknown or unavailable revisions stay
+explicitly unverified instead of being invented.
+
+```text
+Canonical WORK/TASKS.json ─┐
+Observed harness TODOs ────┼─ ROOT bindings + snapshots → read-only delta
+Optional observed bot ────┘                              │
+                                                        ▼
+Agent 0 reads actual affected state with authorized tools
+  → justified canonical transition OR authorized external-plan update
+  → external readback when supported → append a new observation
+  → report any remaining unavailable, stale, or unverified surface
+```
+
+`root delta` assesses the harness layer by default. Select
+`--layer harness --layer bot` only when both are actually in use; omitted layers
+remain unassessed. An absent optional bot is not a failed required worker.
+No comparison polls providers, executes tool cards, changes status, or starts
+another agent automatically. A matching local report describes the inspected
+records at their observation boundary, not a continuously synchronized live
+system. Reobserve only changed inputs or a consequential handoff that needs it.
+
+External `completed` describes execution. It can be compatible with canonical
+`needs_review` and, after independent acceptance, with `done`; it never performs
+that acceptance. External `cancelled` may end one attempt while the task remains
+valid for another authorized attempt. Retain raw state and reason. Superseding
+a binding preserves its history and does not stop its old runtime. Verify the
+existing handle before any conflicting replacement.
+
+```bash
+# In a reviewed adopted root; initialization previews, then explicitly applies.
+bash .SYSTEMX/SYSTEMX.sh root init
+bash .SYSTEMX/SYSTEMX.sh root init --apply
+bash .SYSTEMX/SYSTEMX.sh root delta
+bash .SYSTEMX/SYSTEMX.sh root delta --layer harness --layer bot
+```
+
+Use the [ROOT manual](../../ROOT/SX-MILESTONE.md#three-surfaces-explicit-relationships)
+for mapping/projection rules, bounded selection coverage, optional freshness
+limits, and exact commands. Use the normal task commands for canonical
+transitions; only Agent 0/user accepts `done` through the existing review gate.
 
 The [toolchain section](../../docs/CLI-TOOLS.md) is the entry point for explicit
 Tools calls, including the on-demand Agent Alpha route. A tools menu/caller
@@ -200,6 +285,41 @@ See [Agent X](../../docs/AGENT-X.md), [Agent Y](../../docs/AGENT-Y.md),
 ## Page 3 — Agent Alpha and the ten AUTOBOTs
 
 [Open page 3](../Infographics/systemx-field-guide-03-autobot-panel-4k.jpg).
+
+### ROOT planning and bounded tools
+
+ROOT supplies planning structure and operating references; AUTOBOT supplies
+selected detailed project context. Neither creates another task-status ledger.
+`SX-RULES.md` documents scope, authority, acceptance, evidence, handoffs, and
+stopping boundaries. `SX-MILESTONE.md` defines the optional structure:
+
+```text
+Accepted milestone → wave → phase → optional group
+  → canonical task reference → optional subtask → single action
+```
+
+Skip levels that do not help. A wave groups related phases; a phase contains a
+coherent task list. An independently owned or accepted subtask needs its own
+canonical task ID. Plan reordering does not renumber stable `TASK-...` records.
+Declare milestone IDs in `PLAN/MASTER-PLAN.md` before referencing them; a ROOT
+parent node does not populate a canonical task's milestone field.
+
+`ROOT/PLAN.json` retains originating requests (`RTask`), bounded delegated
+requests (`STask`), and structural nodes with their applicable task/milestone
+references. These records describe provenance and containment, without their
+own completion status. Counts and hierarchy depth are project choices, not a
+requirement to generate an enormous empty backlog. Summaries use unique task
+references; repeated links do not multiply completed work or accept a milestone.
+
+Under [SX-RULES step 7](../../ROOT/SX-RULES.md#7-use-actual-tools-with-a-bounded-tool-card),
+a tool card records the actual available provider/tool, selected scope/task IDs,
+purpose, input revision, expected evidence, permission boundary, and stop
+condition. Discover the tool and schema in the active harness; do not assume an
+app, CLI, connector, or model is installed. A card records intent only. The
+authorized harness invokes the real tool and retains its result/readback.
+One such bounded tools call may request Agent Alpha's relevant references.
+
+### Agent Alpha's reference panel
 
 `AUTOBOT/` is an optional second reference tier in the selected root or child.
 **AGENTA / Agent Alpha (`agent.a`) coordinates at most ten fixed AUTOBOT
@@ -296,6 +416,7 @@ installation. Keep the dot and exact uppercase spelling; never create a nested
 workspace/                                  external --target
 └── .SYSTEMX/                               one tool installation/defaults pin
     ├── GLOBAL/ PLAN/ WORK/ MEMORY/ AGENTS/   root records
+    ├── ROOT/                               optional rules, planning, observations
     ├── AUTOBOT/ DATA/                       root optional reference/payload tier
     ├── scripts/ config/ docs/ templates/    shared reviewed tools and blank seeds
     └── Projects/
@@ -305,6 +426,7 @@ workspace/                                  external --target
         │   └── .SYSTEMXP/
         │       ├── GLOBAL/ PLAN/ WORK/ MEMORY/ AGENTS/
         │       ├── SOURCES.json SYNC/
+        │       ├── ROOT/                    optional independent child ROOT records
         │       └── AUTOBOT/ DATA/            independent optional child tier
         └── Project-B/
             └── .SYSTEMXP/                   separate tasks, memory, references
@@ -322,15 +444,35 @@ for cross-project coordination: `Project-A:TASK-001` and
 systemx projects --target "/path/to/workspace" -- add Project-A --kind software
 systemx projects --target "/path/to/workspace" -- add Project-A --kind software --apply
 systemx projects --target "/path/to/workspace" -- context --project Project-A --agent agent.0
+systemx projects --target "/path/to/workspace" -- root init --project Project-A
+systemx projects --target "/path/to/workspace" -- root init --project Project-A --apply
+systemx projects --target "/path/to/workspace" -- root delta --project Project-A
 systemx projects --target "/path/to/workspace" -- autobot init --project Project-A
 systemx projects --target "/path/to/workspace" -- data audit --project Project-A
 ```
 
-Child AUTOBOT and DATA initialization remain explicit and previewed. The root
+Child ROOT, AUTOBOT, and DATA initialization remain explicit and previewed. The root
 does not automatically copy its private context into a child or load a sibling's
 memory. Shared standards should be explicit reviewed references. A root
 coordinator resolves cross-project dependencies and shared resource/branch
 collisions rather than silently combining child ledgers.
+
+The external CLI selects the containing workspace and verified managed defaults.
+`systemx run --target PATH --offline -- root ...` addresses root records;
+`systemx projects --target PATH -- root ... --project NAME` selects that child's
+records and defaults to offline startup. Reviewed local `SYSTEMX.sh` or
+`SYSTEMX.ps1` launchers provide the same record commands; the Python API routes
+through the managed runner. No entry point makes the selected command an OS
+sandbox. `--offline` suppresses the optional release notice, not network access
+by a separately authorized provider or configured application script.
+
+A child's ROOT bindings, observations, and tool cards reference that child's
+canonical tasks; identical task IDs in siblings are different identities.
+Scoped ROOT packets load bounded context rather than whole sibling ledgers.
+Root and child initialization preserve existing files. Shared outer tools do
+not copy private root brand data, external credentials, or prior observations
+into a child. See [CLI and tools](../../docs/CLI-TOOLS.md) for entry points,
+scope selectors, command working directories, and exact limits.
 
 `DATA/` is local payload storage in either selected scope:
 
@@ -403,8 +545,9 @@ Read [SYSTEMX PROJECTS](../../docs/PROJECTS.md), [DATA](../../docs/DATA.md),
 
 ## Reading the graphics as a workflow
 
-Use page 1 for orientation, page 2 when assigning/checking work, page 3 only when
-deeper references help, and page 4 when selecting a scope, handling payloads, or
+Use page 1 for orientation, page 2 when assigning/checking work and reconciling
+observed task deltas, page 3 when planning or selecting deeper references,
+and page 4 when selecting a scope, handling payloads, or
 changing installation state. Keep ordinary resume packets small and read the
 relevant details on demand. That may reduce repeated context and avoidable work,
 but maintaining records and using agents also costs time/tokens. No fixed token,
@@ -414,36 +557,25 @@ does not train the model or establish AGI.
 
 The four retained use-case cards and white-paper edition 1.2 describe older
 examined baselines. Their original bytes and stated limits are preserved.
-Use these four pages for their illustrated Agent Y, Agent Alpha, AUTOBOT,
-DATA, and `.SYSTEMXP` baseline. Consult the selected release's manuals and the
-[ROOT supplement](#later-root-layer-supplement) for later behavior. The retained
-artwork and frozen paper are not a complete picture of later source releases.
+This four-page edition brings ROOT, Agent Y, Agent Alpha, AUTOBOT, DATA, and
+`.SYSTEMXP` together for feature baseline `1.11.0-alpha.2`. Consult the selected
+release's manuals for executable behavior. The images and frozen paper do not
+automatically adopt later source changes.
 [Media index](../README.md) ·
 [Public wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Visual Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide).
 
 ## Later ROOT layer supplement
 
-ROOT adds optional planning and task-observation metadata beyond the retained
-artwork's feature baseline. Read the [ROOT manual](../../ROOT/SX-MILESTONE.md)
-and [SX-RULES](../../ROOT/SX-RULES.md) for the full contract. A flexible
-milestone → wave → phase → group → task → subtask → single-action structure
-links originating requests (`RTask`) and bounded delegated requests (`STask`) to
-existing canonical tasks. Optional tool cards record execution intent, permission
-boundaries, expected evidence, and stop conditions; they do not execute tools.
+This heading retains the destination of older supplement links. ROOT is now
+integrated into the four-page explanations above. The previous four-page
+edition depicted feature baseline `1.10.0-alpha.2` and shipped as media edition
+`1.10.0-alpha.3`; it predates ROOT and remains available in
+[tagged media history](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.3/.SYSTEMX/MEDIA/README.md).
 
-ROOT bindings relate named IDE/harness or optional cloud/bot items to one or
-more canonical task IDs. Caller-supplied observations retain raw/normalized
-state, time, revision, and evidence references. A bounded read-only delta reports
-missing, stale, divergent, unknown, or unavailable records. These are local
-coordination records, not an authenticated live provider readback or an automatic
-sync engine. `WORK/TASKS.json` retains task-state and acceptance authority;
-external `completed` never accepts `done` automatically. Reconcile affected
-differences with authorized real tools and retain new observations when needed.
-
-ROOT remains optional and scoped to the selected outer `.SYSTEMX` or named
-`.SYSTEMXP`. It grants no provider access, model process, execution permission,
-or background polling. Its manuals extend the illustrated baseline without
-altering the four JPEGs, original generation metadata, frozen paper, or recorded
-checksums. The source/defaults version and the two media baseline identifiers
-remain separate.
+The revised media edition `1.11.0-alpha.3` describes feature baseline
+`1.11.0-alpha.2` without changing the frozen white-paper files or four earlier
+workflow cards. Read the [ROOT manual](../../ROOT/SX-MILESTONE.md) and
+[SX-RULES](../../ROOT/SX-RULES.md) for exact record, tool-card, observation, delta,
+and output-limit contracts. Media editions, feature baselines, and each adopted
+project's source/defaults version remain separate identifiers.

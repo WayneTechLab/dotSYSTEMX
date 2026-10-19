@@ -26,17 +26,20 @@ setup refuses independent case variants to protect project records.
 Dots / Codex Cloud, and Codex / Copilot CLI on a local drive, with 4K cards
 and accessible text guides.
 
-[![.SYSTEMX field guide overview: Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOT functions, local DATA, and named .SYSTEMXP scopes.](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](MEDIA/Reference/systemx-field-guide.md)
+[![.SYSTEMX field guide overview: ROOT, SX-RULES, SX-MILESTONE, observed harness and optional bot TODOs, Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOT functions, DATA, and named .SYSTEMXP scopes.](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](MEDIA/Reference/systemx-field-guide.md)
 
 [Four-part 4K field guide](MEDIA/Reference/systemx-field-guide.md):
 [1 — Overview](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) ·
-[2 — Agent coordination](MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) ·
-[3 — Agent Alpha and AUTOBOT](MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) ·
-[4 — DATA and project scopes](MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg).
-Media edition `1.10.0-alpha.3` illustrates that baseline. The linked companion
-provides accessible text, commands, and authority boundaries; the later
-[ROOT manual](ROOT/SX-MILESTONE.md) covers optional planning, tool cards, and
-task-state comparisons. Load only the relevant section for the current task.
+[2 — Agents and TODO reconciliation](MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) ·
+[3 — ROOT planning and AUTOBOT](MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) ·
+[4 — Scopes, DATA, and tools](MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg).
+The ROOT-inclusive media edition `1.11.0-alpha.3` describes the
+`1.11.0-alpha.2` feature baseline. The linked companion provides accessible text,
+commands, and authority boundaries. [SX-RULES](ROOT/SX-RULES.md) and
+[SX-MILESTONE](ROOT/SX-MILESTONE.md) define the internal coordination contract,
+planning, tool cards, and task-state comparisons. Load only the relevant
+section for the current task. The [asset record](MEDIA/Reference/ASSETS.json)
+distinguishes native image size from the selected 3840 × 2160 exports.
 
 The [CLI and tools guide](docs/CLI-TOOLS.md) maps the external manager, verified
 managed runner, reviewed folder-only launchers, Python API, and optional provider
@@ -163,6 +166,14 @@ mappings compare that ledger with observed IDE/harness and cloud/bot items,
 including one-to-many relationships. Observations retain their scope, revision,
 time, and evidence. A read-only delta reports gaps; it does not connect a
 provider, execute a tool card, or accept external completion automatically.
+Agent 0 reconciles affected items through the actual authorized harness or bot
+tools, then reads back and records the changed state. One external item may
+cover several task IDs, and one task may have multiple bot attempts. Matching
+TODO counts is not required. The bot layer is optional and explicitly selected;
+an unassessed layer is not evidence of alignment. A reported `completed` run
+still needs normal evidence, review, and Agent 0/user acceptance before the
+canonical task becomes `done`. Reconcile on a meaningful change or handoff,
+then checkpoint; the format does not require continuous polling or repeat reviews.
 Use ROOT only in the selected outer or `.SYSTEMXP` scope, and load a bounded
 selection when needed. Follow the [ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta)
 for setup and the full contract.

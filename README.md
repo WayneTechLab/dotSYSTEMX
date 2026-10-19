@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.11.0-alpha.2` release and leaves updates manual.
+example selects the reviewed `v1.11.0-alpha.3` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.2"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.3"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.2
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.2 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.3
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.3 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -85,7 +85,7 @@ create a lowercase compatibility link where supported; see
 
 ## How the system coordinates work
 
-[![Page 1 of the .SYSTEMX four-part field guide: Agent 0, X, Y, and Z coordinate work; Agent Alpha routes ten AUTOBOT reference functions; local DATA and named .SYSTEMXP projects keep explicit boundaries.](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)
+[![Page 1 of the .SYSTEMX four-part field guide: ROOT connects SX-RULES, SX-MILESTONE, and canonical task records to observed harness and optional bot TODOs; Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOT functions, DATA, and named .SYSTEMXP scopes retain explicit roles.](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)
 
 [Four-part 4K field guide and accessible text](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md) ·
 [Visual manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide) ·
@@ -93,12 +93,19 @@ create a lowercase compatibility link where supported; see
 [Media library](.SYSTEMX/MEDIA/README.md)
 
 The four pages move from the whole system to its working details:
-[1 — Overview](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg),
-[2 — Agent coordination](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg),
-[3 — Agent Alpha and all ten AUTOBOTs](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg),
-and [4 — DATA and project scopes](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg).
+
+| 4K page | What it explains |
+| --- | --- |
+| [1 — Overview](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) | ROOT, canonical records, agents, tools, AUTOBOT, DATA, and project scopes |
+| [2 — Agent coordination and TODO reconciliation](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | Observed SYSTEMX, harness, and optional bot states; read-only delta; authorized changes and readback |
+| [3 — ROOT planning and AUTOBOT references](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | SX-RULES, SX-MILESTONE, requests, plan links, tool cards, Agent Alpha, and all ten AUTOBOTs |
+| [4 — Project scopes, DATA, and tools](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg) | Independent `.SYSTEMXP` records, shared outer tools, local payload boundaries, and reversible updates |
+
 The [text companion](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md) explains
 the records, commands, evidence gates, and limits without requiring an image.
+Each selected export has a 3840 × 2160 canvas; the
+[asset record](.SYSTEMX/MEDIA/Reference/ASSETS.json) distinguishes native
+image dimensions from the exported size.
 
 Use the CLI to select one outer workspace and one named project. Each
 `.SYSTEMX/Projects/Project-A/.SYSTEMXP` keeps its own plan, ledger, memory, and
@@ -115,9 +122,11 @@ flowchart LR
   S --> C[Projects/NAME/.SYSTEMXP records]
   R --> A0[Agent 0: scope and coordination]
   C --> A0
-  A0 --> ROOT[Optional ROOT: rules, plan links, and task delta]
-  ROOT -.-> HS[Observed harness and bot items]
+  A0 --> ROOT[Optional ROOT: rules, plan links, and read-only delta]
+  HS[Actual harness and optional bot readback] --> OBS[Explicit bindings and saved observations]
+  OBS --> ROOT
   ROOT --> A0
+  A0 -->|Authorized tool action| HS
   A0 --> W[App or IDE subagents]
   A0 --> Y[Agent Y: selected external CLI lane]
   Y --> P[Isolated branch and optional draft PR]
@@ -188,8 +197,19 @@ status. [SX-RULES](.SYSTEMX/ROOT/SX-RULES.md) describes internal coordination
 within the active user and environment instructions. ROOT can compare saved
 harness and bot observations against the task ledger using explicit mappings.
 Those are local snapshots, requiring readback from the actual tools to establish
-their current state; a provider's completed run still needs Agent 0 acceptance.
-See the [ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta).
+their current state. **`WORK/TASKS.json` remains the sole task-state authority.**
+One harness item can cover several canonical tasks, and a task can have several
+bot attempts; equal TODO counts are not a synchronization rule.
+
+To keep the three surfaces aligned, Agent 0 selects the scope and task IDs,
+records actual external observations with their revision and evidence, reads
+the delta, reconciles affected items through authorized tools, then reads back
+and records the changed state. The optional bot layer must be requested for
+comparison. A bot reporting `completed` does not mark a canonical task `done`;
+normal evidence, review, and Agent 0/user acceptance still apply. ROOT does not
+connect providers, run tool cards, or continuously poll for changes. Reuse an
+unchanged observation or review rather than starting a new loop. See the
+[ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta).
 
 For multiple named projects, one outer `.SYSTEMX` can hold separate
 `.SYSTEMX/Projects/<name>/.SYSTEMXP` records. Each child keeps its own context,
@@ -282,10 +302,10 @@ cover ChatGPT with Google Drive, Codex with a GitHub project, Dots/Codex Cloud,
 and Codex/Copilot CLI with a local drive. Those retained cards show the earlier
 Agent 0/X/Z baseline; their text guides describe the optional Agent Y lane.
 The [four-part field guide](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md)
-above illustrates the Agent 0/X/Y/Z, Agent Alpha, AUTOBOT, DATA, and `.SYSTEMXP`
-baseline from media edition `1.10.0-alpha.3`. The later optional
-[ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta)
-adds flexible planning, tool cards, and local task-state comparisons. The
+above includes ROOT, `SX-RULES`, `SX-MILESTONE`, and explicit task-state
+reconciliation alongside Agent 0/X/Y/Z, Agent Alpha, AUTOBOT, DATA, and
+`.SYSTEMXP`. The [ROOT manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/ROOT-Planning-and-Task-Delta)
+provides the executable record and command contract. The
 [media library](.SYSTEMX/MEDIA/README.md) holds the downloads and text guides.
 For a researched brief that becomes milestones, phases, tasks, execution batches, and review,
 see the [one-shot project guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/One-Shot-Project-Guide).

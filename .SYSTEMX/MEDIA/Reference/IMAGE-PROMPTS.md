@@ -3,9 +3,10 @@
 The current four-page system manual has a separate
 [generation and correction record](systemx-field-guide-prompts.md) and
 [accessible field guide](systemx-field-guide.md). It covers Agent 0/X/Y/Z,
-AGENTA / Agent Alpha, all ten AUTOBOT reference functions, DATA, and `.SYSTEMXP`.
-That series describes the 1.10.0-alpha.2 feature baseline and ships with the
-1.10.0-alpha.3 media edition.
+AGENTA / Agent Alpha, all ten AUTOBOT reference functions, DATA, `.SYSTEMXP`,
+and ROOT with `SX-RULES`, `SX-MILESTONE`, and the observed harness/bot task delta.
+That series describes the 1.11.0-alpha.2 feature baseline and ships with the
+1.11.0-alpha.3 media edition.
 
 These are the historical production prompts for the four retained Agent 0/X/Z
 use-case cards. Their original image bytes remain unchanged. The current

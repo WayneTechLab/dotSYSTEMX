@@ -1,9 +1,9 @@
 # .SYSTEMX media library
 
-Retained four-part system field guide, latest published paper, and one retained
-4K image per workflow. The graphics have explicit historical feature baselines;
-the [ROOT manual](../ROOT/SX-MILESTONE.md) documents later planning and task-state
-comparison features.
+Four-part system field guide, latest published paper, and one retained
+4K image per workflow. The field guide connects ROOT planning and observed
+task-state deltas with Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOTs, DATA, and named
+`.SYSTEMXP` scopes. The paper and workflow cards retain their older baselines.
 **.SYSTEMX** is a product of
 **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 
@@ -40,30 +40,37 @@ It also predates AUTOBOT, DATA, and the later ROOT layer; see the
 
 ## Four-part 4K system field guide
 
-The retained artwork depicts **feature baseline `1.10.0-alpha.2`**, published
-as **media edition `1.10.0-alpha.3`**. One overview page connects that baseline;
-three detail pages explain coordination, the reference panel, and local
-data/project boundaries. Each page has a **3840 × 2160 export canvas** and an
-accessible text counterpart. These pages do not depict the later ROOT layer;
-read the [ROOT manual](../ROOT/SX-MILESTONE.md) and
-[operating rules](../ROOT/SX-RULES.md) alongside them for planning structure,
-tool cards, explicit harness/bot observations, and task-state delta comparisons.
+**Media edition `1.11.0-alpha.3`** describes **feature baseline
+`1.11.0-alpha.2`**. One overview page connects the format; three detail pages
+explain agent coordination and observed TODO deltas, ROOT planning with the
+AUTOBOT panel, and DATA/project/CLI boundaries. Each page has a
+**3840 × 2160 export canvas** and an accessible text counterpart. Read the
+[ROOT manual](../ROOT/SX-MILESTONE.md) and [operating rules](../ROOT/SX-RULES.md)
+for executable records, bounded tool cards, and precise comparison limits.
 
-[![Overview of Agent 0/X/Y/Z, Agent Alpha, the ten AUTOBOT functions, DATA, and .SYSTEMXP.](Infographics/systemx-field-guide-01-overview-4k.jpg)](Reference/systemx-field-guide.md)
+[![SYSTEMX overview: ROOT rules and planning, canonical tasks and observed harness/bot deltas, Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOTs, DATA, and .SYSTEMXP.](Infographics/systemx-field-guide-01-overview-4k.jpg)](Reference/systemx-field-guide.md)
 
 | Page | 4K JPEG | Accessible text |
 | --- | --- | --- |
 | 1 — Whole-system overview | [Open image](Infographics/systemx-field-guide-01-overview-4k.jpg) | [Overview](Reference/systemx-field-guide.md#page-1--whole-system-overview) |
-| 2 — Agent 0 / X / Y / Z and tools | [Open image](Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | [Coordination](Reference/systemx-field-guide.md#page-2--agent-coordination-and-tools) |
-| 3 — AGENTA and all ten AUTOBOTs | [Open image](Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | [Reference tier](Reference/systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |
-| 4 — DATA and `.SYSTEMXP` scopes | [Open image](Infographics/systemx-field-guide-04-data-projects-4k.jpg) | [Data and projects](Reference/systemx-field-guide.md#page-4--local-data-and-project-scopes) |
+| 2 — Agent coordination and observed TODO delta | [Open image](Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | [Coordination](Reference/systemx-field-guide.md#page-2--agent-coordination-and-tools) |
+| 3 — ROOT planning, AGENTA, and all ten AUTOBOTs | [Open image](Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | [Planning and references](Reference/systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |
+| 4 — DATA, `.SYSTEMXP`, and CLI scopes | [Open image](Infographics/systemx-field-guide-04-data-projects-4k.jpg) | [Data and projects](Reference/systemx-field-guide.md#page-4--local-data-and-project-scopes) |
 
-The [text companion](Reference/systemx-field-guide.md) explains the four
-illustrated baseline pages and links the executable manuals plus a later ROOT
-supplement. Its baseline is separate from the selected source/defaults version.
-The series replaced the earlier single full-system poster. The earlier
-poster remains available from its immutable release; existing installations
-retain their old local files under the additive update policy.
+The [text companion](Reference/systemx-field-guide.md) explains all four pages
+and links the executable manuals. Its feature/media identifiers are separate
+from a project's selected defaults version. The earlier four-page edition,
+feature baseline `1.10.0-alpha.2` and media edition `1.10.0-alpha.3`, remains in
+[tagged media history](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.10.0-alpha.3/.SYSTEMX/MEDIA/README.md).
+Earlier single posters also remain in release history. Existing installations
+retain old local files under the additive update policy.
+
+`WORK/TASKS.json` owns task status. ROOT compares local snapshots of named
+IDE/harness and optional bot items through stable task-ID bindings; it does
+not connect or synchronize a live provider. Agent 0 resolves affected gaps
+through authorized actual tools, reads back external changes when supported,
+and records observations. Bot comparison is opt-in. External `completed` never
+automatically accepts canonical `done`; equal checklist counts are not required.
 
 Agent Alpha routes at most ten named reference functions on demand; it is
 separate from the ten specialist slots. Agent 0 retains task acceptance. The
@@ -97,7 +104,7 @@ MEDIA/
   README.md       Media index
   White-Paper/    Latest PDF, editable text, metadata and a separate erratum
   Infographics/  Four system field-guide pages and four retained workflow cards
-  Reference/     Baseline text companion, workflow guides, prompts and provenance
+  Reference/     Text companion, workflow guides, prompts and provenance
 ```
 
 Only the latest paper and selected 4K outputs ship in the current template.
@@ -116,10 +123,11 @@ on demand. Use [START-HERE](../START-HERE.md) for normal context loading;
 `WORK/TASKS.json`, plans, events, reviews and checkpoints remain in their standard
 locations. This organization adds no running service, scheduler or agent.
 
-The retained field guide includes Agent Alpha, all ten AUTOBOT files, local DATA,
-and explicit root/child scope selection. Read the [AUTOBOT manual](../docs/AUTOBOT.md)
+The field guide includes ROOT rules/planning, observed task deltas, Agent Alpha,
+all ten AUTOBOT files, local DATA, and explicit root/child scope selection.
+Read the [AUTOBOT manual](../docs/AUTOBOT.md)
 for exact request contracts and the [DATA manual](../docs/DATA.md) for audit
-limits. Use the [later ROOT supplement](Reference/systemx-field-guide.md#later-root-layer-supplement)
-for the additional planning and task-observation layer. The four-page artwork,
-frozen white paper, and four retained workflow cards keep their stated baselines;
-their original bytes and checksums are unchanged.
+limits. The [ROOT manual](../ROOT/SX-MILESTONE.md) defines the planning and
+task-observation layer. The current four-page edition has its own provenance
+and checksums. The frozen white paper and four older workflow cards keep their
+original bytes, checksums, and stated historical baselines.
