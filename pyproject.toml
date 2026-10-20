@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.11.0a3"
+version = "1.11.0a4"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
-license-files = [".SYSTEMX/LICENSE", ".SYSTEMX/GUSTO/sdk/LICENSE-APACHE-2.0.txt"]
+license-files = [".SYSTEMX/LICENSE"]
 dependencies = []
 keywords = ["systemx", "project-memory", "llm", "project-template"]
 classifiers = [
@@ -33,8 +33,7 @@ package-dir = {systemx = ".SYSTEMX"}
 include-package-data = false
 
 [tool.setuptools.package-data]
-systemx = ["GUSTO/*.md", "GUSTO/*.json", "GUSTO/docs/*.md", "GUSTO/contracts/*.md", "GUSTO/contracts/*.json",
-           "ROOT/*.md", "ROOT/*.json", "templates/root/*.md", "templates/root/*.json",
+systemx = ["ROOT/*.md", "ROOT/*.json", "templates/root/*.md", "templates/root/*.json",
            "AUTOBOT/*.MD", "AUTOBOT/*.md", "AUTOBOT/*.json", "AGENTS/agent.a/*.md",
            "templates/autobot/*.MD", "templates/autobot/*.md", "templates/autobot/*.json",
            "DATA/.gitignore", "DATA/README.md", "DATA/TEMP/README.md", "DATA/LARGE/README.md",
@@ -45,8 +44,6 @@ systemx = ["GUSTO/*.md", "GUSTO/*.json", "GUSTO/docs/*.md", "GUSTO/contracts/*.m
            "templates/data/IMPORTS/README.md", "templates/data/RESEARCH/README.md",
            "templates/data/ASSETS/README.md", "templates/data/EXPORTS/README.md",
            "templates/data/CACHE/README.md", "templates/data/ARCHIVE/README.md",
-           "GUSTO/mock/*.md", "GUSTO/mock/fixtures/*.json", "GUSTO/sdk/*.md", "GUSTO/sdk/*.json", "GUSTO/sdk/*.txt",
-           "GUSTO/webhooks/*.md", "GUSTO/webhooks/*.json", "GUSTO/examples/*.md", "GUSTO/examples/*.json",
            ".gitignore", ".gitattributes", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",
            "config/*.json", "AI/*.md", "AI/*.json", "GLOBAL/*.md", "PLAN/*.md",
            "WORK/*.md", "WORK/*.json", "MEMORY/*.md", "MEMORY/sessions/*.md",

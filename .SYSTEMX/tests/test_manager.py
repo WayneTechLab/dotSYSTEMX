@@ -155,6 +155,43 @@ class ManagerTests(unittest.TestCase):
         manager.set_policy(self.root, pin="current")
         self.assertEqual(manager.status(self.root)["pinnedVersion"], self.next_version)
 
+    def test_retired_optional_module_stays_local_and_old_snapshot_remains_runnable(self):
+        module = self.source / "extensions/example-module"
+        module.mkdir(parents=True)
+        (module / "contract.json").write_text('{"mode":"example","runtimeIncluded":false}\n')
+        (module / "LICENSE.txt").write_text("Synthetic fixture module license\n")
+        self.write_manifest()
+        self.install()
+        old_release = manager.release_path(self.root, self.version)
+        old_bundle = manager.read_bundle(old_release, exact=True)
+        old_files = {p.relative_to(old_release): p.read_bytes() for p in old_release.rglob("*") if p.is_file()}
+        local_module = self.root / ".SYSTEMX/extensions/example-module"
+        local_contract = local_module / "contract.json"
+        local_contract.write_text('{"projectOwned":"preserve this adopted module"}\n')
+        local_license = (local_module / "LICENSE.txt").read_bytes()
+        before = local_contract.read_bytes()
+        shutil.rmtree(module)
+        self.next_release()
+        manager.set_policy(self.root, pin="none")
+        manager.update(self.root, source=self.source)
+        current = manager.read_bundle(manager.release_path(self.root, self.next_version), exact=True)
+        self.assertFalse(any(name.startswith("extensions/example-module/") for name in current["files"]))
+        self.assertEqual(local_contract.read_bytes(), before)
+        self.assertEqual((local_module / "LICENSE.txt").read_bytes(), local_license)
+        for name, content in old_files.items():
+            self.assertEqual((old_release / name).read_bytes(), content)
+        self.assertEqual(manager.read_bundle(old_release, exact=True), old_bundle)
+        # Explicit rollback selects the complete verified older distribution;
+        # removing a module from new defaults does not invalidate its inventory.
+        manager.update(self.root, source=old_release, version=self.version)
+        result = manager.run(self.root, ["status"], offline=True, capture=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(manager.status(self.root)["activeVersion"], self.version)
+        self.assertEqual(local_contract.read_bytes(), before)
+        fresh = self.folder / "fresh project"
+        manager.install(fresh, source=self.source)
+        self.assertFalse((fresh / ".SYSTEMX/extensions/example-module").exists())
+
     def test_same_release_cannot_be_replaced_and_integrity_is_checked_before_execution(self):
         self.install()
         (self.source / "STANDARD.md").write_text("Different content under the same version\n")

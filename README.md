@@ -28,16 +28,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.11.0-alpha.3` release and leaves updates manual.
+example selects the reviewed `v1.11.0-alpha.4` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.3"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.4"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.3
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.3 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.4
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.4 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -338,6 +338,10 @@ MCP server. It does not make an existing project production ready. The
 and [Stack Guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Stack-Guide)
 explain its current implementation and how to connect real project commands.
 
+Application-specific SDKs, business workflows, provider fixtures, and service
+integrations belong in the adopting project. The base template supplies generic
+coordination records and tools; it does not bundle an application's feature set.
+
 Agent Y's worktree, allowed-path checks, and PR gates coordinate work; they are
 not an OS security sandbox. An external CLI can use credentials and files
 available to its host account. For untrusted providers or prompts, isolate that
@@ -366,47 +370,3 @@ repository, which public readers cannot open. [Source provenance](.SYSTEMX/SOURC
 records that relationship; this repository is the public standalone source.
 Keep private project records out of public exports and retain the license and
 attribution when redistributing the folder.
-
-## Optional Gusto HR integration package
-
-An optional [GUSTO package](.SYSTEMX/GUSTO/README.md) defines employer, employee, manager and
-contractor page contracts, seven reference roles, provider/native capability
-ownership and account-free synthetic fixtures. It records the exact Gusto React
-SDK 0.56.6 endpoint inventory and preserves provider credentials outside release
-files. The host builds its own UI/server adapters; this package does not deploy
-HR services or submit payroll. Real demo API testing requires an approved
-developer application; no shared public test key is supplied.
-
-Read [Gusto setup and account-free testing](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Gusto-HR-Integration)
-or the [portable getting-started guide](.SYSTEMX/GUSTO/docs/GETTING-STARTED.md).
-Validate the catalogs and synthetic fixtures without credentials:
-
-```bash
-python3 -I -B -m unittest discover -s .SYSTEMX/tests -p test_gusto_contracts.py -v
-bash .SYSTEMX/SYSTEMX.sh validate --template
-```
-
-For a running React/Firebase preview, use
-[WebAppX's Gusto setup](https://github.com/WayneTechLab/WebAppX/blob/main/docs/GUSTO-SETUP.md).
-Its full template supplies `/hr/demo` and selected development-only SDK flows at
-`/hr/demo/sdk`; dotSYSTEMX itself contains no web runtime. Gusto's
-[hosted Flows showcase](https://docs.gusto.com/embedded-payroll/docs/try-it-now)
-is available without API keys. An application's real Demo access uses its own
-credentials from the [Developer Portal setup](https://docs.gusto.com/embedded-payroll/docs/getting-started).
-
-WebAppX 3.4.0 extends the native account-free workspace with onboarding review
-and completion, submitted timesheet approval linked to a payroll preview,
-fictional payroll calculation/review/submission receipts, and benefit election
-review/confirmation. These host UI journeys use browser memory and reset on
-reload; they do not call Gusto, persist to cloud services or execute payroll.
-That documented WebAppX baseline pins SYSTEMX **1.9.0-alpha.6** with its original
-portable fingerprints; it does not identify this repository's current release.
-
-The host also mounts genuine SDK directory, admin onboarding and payroll
-components against isolated local mock sessions. Onboarding adds explicit
-simulated form/new-hire review and completion readback; payroll uses local
-calculate/poll/review/synthetic submission through the SDK submitted summary.
-The host guide documents the bounded, account-free sample steps. Benefits/time remain native because
-SDK 0.56.6 has no corresponding React UI flows. This selected coverage does not
-establish full SDK support, I-9, legal signatures, tax filing, payroll funding
-or provider acceptance. Native and SDK state remain separate.

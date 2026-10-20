@@ -4,6 +4,33 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-alpha.4 — Restore the generic template boundary
+
+- Remove the application-specific integration package, its dedicated validation
+  fixtures, and its public setup page from the distributed base template.
+- Remove provider-specific appendices and host-application links from the
+  README and portable documentation. Application SDKs, business workflows,
+  credentials, and runtime fixtures remain the adopting project's responsibility.
+- Update distribution metadata and installation examples while retaining the
+  ROOT-inclusive four-part field guide and its recorded media edition.
+- Keep core project records blank and preserve existing adopted files during
+  additive installation and updates. Removing files from this template does not
+  silently delete a user's local copy or change historical releases.
+
+## 1.11.0-alpha.3 — ROOT-inclusive four-part field guide
+
+- Refresh the four selected 3840 × 2160 infographic exports to show ROOT,
+  SX-RULES, SX-MILESTONE, Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOT reference
+  functions, DATA, tooling, and named .SYSTEMXP scopes together.
+- Explain canonical task-state authority, observed harness and optional bot
+  TODOs, read-only delta reports, authorized reconciliation, and fresh readback.
+  External completion still requires normal evidence, review, and acceptance.
+- Update README, accessible companion, prompt records, asset provenance, and
+  public wiki navigation. Retain native/export dimensions and exact-byte hashes;
+  a 4K canvas export is not a claim of native 4K generation.
+- Preserve the four earlier environment cards, frozen white paper, blank project
+  seeds, and runtime coordination behavior.
+
 ## 1.11.0-alpha.2 — ROOT write boundaries and full manual review
 
 - Validate the complete rendered ROOT response before committing a new record.
@@ -102,8 +129,7 @@ remain blank. Alpha status and the existing permission boundaries continue.
   packaging declarations, regression coverage, README/wiki routing and Mermaid
   diagrams. Brand, ICO/favicon/logo/font rights, media kit, CSS tokens, source
   provenance, retention and explicit input revisions are covered in reusable
-  blank specialist formats. Existing core project records and Gusto contracts
-  remain unchanged.
+  blank specialist formats. Existing core project records remain unchanged.
 - The installer rejects incomplete 1.10 bundles and populated AUTOBOT request
   seeds before installation, including internally rehashed malformed bundles.
 
@@ -113,27 +139,13 @@ require their own handling. Older diagrams/white paper remain identified
 baselines; the current AUTOBOT manual describes this added tier. Alpha status
 continues; source checks do not certify a host application's production safety.
 
-## 1.9.0-alpha.6 — Optional portable Gusto HR contracts
+## 1.9.0-alpha.6 — Historical application-specific package
 
-- Added optional `.SYSTEMX/GUSTO/` with 64 employer/employee/manager/contractor
-  page contracts, 33 provider/native/shared capabilities and seven reference roles.
-- Added authored adoption, account setup, permission, architecture, page and
-  migration guidance plus a proposed WebAppX/Firebase host mapping. Product
-  runtime, credentials and infrastructure remain host-owned.
-- Added synthetic account-free host fixtures and a bounded SDK employee-list
-  wire sample. They do not create an account or prove real sandbox behavior.
-- Pinned the reviewed `@gusto/embedded-react-sdk` 0.56.6 package provenance,
-  its API alias/version and exact exported endpoint inventory (106 blocks,
-  22 flows, 25 hooks), with Apache 2.0 attribution for third-party material.
-- Added portable contract integrity tests and wheel inventory declarations.
-  Existing core context/plan/task/memory/project seeds remain blank.
-
-The connector defaults disabled. A real demo API needs a developer application
-and environment-specific credentials; hosted-flow demonstrations do not provide
-a public API key. Native HR features require a host implementation and their own
-acceptance. No Gusto account, Firebase service, payroll or production connection
-is created by this release. Existing retained releases remain immutable; imports
-continue to preserve adopted records and custom files.
+This release bundled an application-specific integration alongside the generic
+format. That package is outside the base template's scope and is excluded from
+1.11.0-alpha.4 onward. Tagged historical releases remain immutable; additive
+updates preserve files already present in adopted projects. Existing core
+context, plan, task, memory, and project seeds were unchanged by this edition.
 
 ## 1.9.0-alpha.5 — CLI tools and explicit .SYSTEMXP routing
 

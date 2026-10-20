@@ -66,11 +66,14 @@ not a requirement to run every step or install a specific framework:
 The public template should teach the pattern. Individual projects own the actual
 vendor details.
 
-## Optional Gusto reference package
+## Keep application integrations outside the reusable base
 
-The [GUSTO package](../GUSTO/README.md) supplies optional HR route/role/capability
-contracts, synthetic account-free fixtures and a pinned SDK endpoint inventory.
-It does not make a vendor or cloud platform mandatory. Hosts own their actual
-adapters, credentials, application code and permission enforcement. Its mock
-mode corresponds to local testing and its demo mode to an authorized staging
-provider environment; neither provisions an account or grants API access.
+The base template contains connector conventions, not vendor SDK inventories,
+business-specific schemas, application workflows, provider licenses, or demo
+fixtures. Keep those implementations and their dependency manifests in the
+adopting application's own source tree. Project-owned references may point to
+them without copying an integration into the reusable defaults.
+
+An integration's validation, credentials, permissions, and release lifecycle
+belong to its host project. Adopting the generic connector contract does not
+install a provider, provision an account, or grant API access.
