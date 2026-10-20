@@ -1,8 +1,19 @@
-# White paper edition 1.2 — errata
+# Historical white paper edition 1.2 — errata
 
 This page records corrections to **Portable Project Memory for Agentic Work**,
 edition 1.2. The published 96-page PDF, editable Markdown, and their recorded
-checksums remain unchanged. Read this page alongside either frozen edition.
+checksums remain unchanged. Read this page alongside that historical PDF or
+Markdown source.
+
+Edition 2.0 is the current publication:
+[PDF](SYSTEMX-White-Paper-v2.0.pdf) ·
+[Editable text](SYSTEMX-White-Paper-v2.0.md) ·
+[Metadata](SYSTEMX-White-Paper-v2.0.json).
+The older edition is preserved in pinned history:
+[edition 1.2 PDF](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf) ·
+[Markdown](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.md) ·
+[metadata and original checksums](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.json).
+The correction below applies to that historical edition, not to edition 2.0.
 
 ## E1 — release verification report URL
 

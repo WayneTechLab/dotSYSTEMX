@@ -3,7 +3,8 @@
 Four-part system field guide, latest published paper, and one retained
 4K image per workflow. The field guide connects ROOT planning and observed
 task-state deltas with Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOTs, DATA, and named
-`.SYSTEMXP` scopes. The paper and workflow cards retain their older baselines.
+`.SYSTEMXP` scopes. The current paper examines the pinned `1.11.0-alpha.4`
+implementation; the four workflow cards retain their earlier baselines.
 **.SYSTEMX** is a product of
 **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 
@@ -13,30 +14,42 @@ task-state deltas with Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOTs, DATA, and named
 
 ## White paper
 
-**Portable Project Memory for Agentic Work** - edition 1.2, 96 pages.
-The reference for its examined Agent 0/X/Z baseline includes 29 chapters, all
-100 Agent Z questions, record contracts, six figures and clickable research citations.
+**Portable Project Coordination for AI-Assisted Work** — edition 2.0.
+A technical white paper for founders, project leads, developers, and researchers:
+start with the operating model, then follow the records, roles, task lifecycle,
+ROOT observations, project scopes, installation, security, and evaluation limits.
+Four original figures explain architecture, TODO reconciliation, record scopes,
+and illustrative input-token accounting.
 
-[Read the PDF](White-Paper/SYSTEMX-White-Paper-v1.2.pdf) ·
-[Editable text](White-Paper/SYSTEMX-White-Paper-v1.2.md) ·
-[Metadata and checksums](White-Paper/SYSTEMX-White-Paper-v1.2.json) ·
-[Edition 1.2 citation erratum](White-Paper/ERRATA.md) ·
+[Read the clickable PDF](White-Paper/SYSTEMX-White-Paper-v2.0.pdf) ·
+[Editable text](White-Paper/SYSTEMX-White-Paper-v2.0.md) ·
+[Edition metadata and checksums](White-Paper/SYSTEMX-White-Paper-v2.0.json) ·
+[Figure sources](White-Paper/figures/) ·
 [Wiki guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
 
-The published PDF and Markdown are unchanged. The erratum corrects one broken
-release-report URL in their Works Cited without altering either frozen file.
-Their other pinned references and historical inventory
-continue to describe its examined baseline. The Markdown image paths follow this
-folder layout. The PDF is selectable and linked; it is not tagged PDF/UA.
-Its installation-state discussion reflects that older baseline: from
-1.8.8-alpha.1, a pinned project may opt into check-only startup release notices
-without automatic selection. Use the current [format](../FORMAT.md) and
-[installation guide](../docs/INSTALLATION.md) for the active contract. The paper
-also predates the optional Agent Y CLI/PR lane introduced in 1.9.0-alpha.2;
-read the current [Agent Y guide](../docs/AGENT-Y.md) for that role. The frozen
-edition is not retroactively updated to claim it evaluated the new runtime.
-It also predates AUTOBOT, DATA, and the later ROOT layer; see the
-[edition supplement](White-Paper/ERRATA.md) and current manuals for those additions.
+The examined implementation is **`1.11.0-alpha.4`**, commit
+[`e086ba15a1e70c6b585b8f12a703defc5c984b2c`](https://github.com/WayneTechLab/dotSYSTEMX/tree/e086ba15a1e70c6b585b8f12a703defc5c984b2c).
+Publication edition, template version, and infographic media edition are
+separate identifiers. The paper includes Agent 0/X/Y/Z, Agent Alpha, AUTOBOT,
+DATA, `.SYSTEMXP`, ROOT, evidence, and a provider-free local verifier. Agent Z
+scores supplied answers; it does not execute its questionnaire. ROOT compares
+saved observations; actual authorized tools perform external writes and readback.
+
+The PDF has selectable text, linked contents and references, and clickable
+portfolio, business, repository, and wiki navigation. It is not tagged PDF/UA;
+retain the Markdown text alternative. The token model is illustrative and the
+evaluation protocol is proposed: neither establishes measured savings, model
+learning, independent peer review, or production certification. Alpha software
+may change; use at your own risk. See the [publication tools](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-alpha.5/docs/media)
+for draft building and verification.
+
+Only the latest paper is distributed here. Edition 1.2 remains byte-for-byte in
+[its archived PDF](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf),
+[Markdown](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.md),
+and [metadata](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.json).
+Read its separate [historical citation erratum](White-Paper/ERRATA.md) alongside
+that edition. A managed update adds the new publication without deleting an
+adopter's earlier paper or local files.
 
 ## Four-part 4K system field guide
 
@@ -102,13 +115,14 @@ and do not imply endorsement.
 ```text
 MEDIA/
   README.md       Media index
-  White-Paper/    Latest PDF, editable text, metadata and a separate erratum
+  White-Paper/   Latest PDF, editable text, metadata, figures, historical erratum
   Infographics/  Four system field-guide pages and four retained workflow cards
   Reference/     Text companion, workflow guides, prompts and provenance
 ```
 
-Only the latest paper and selected 4K outputs ship in the current template.
-Older papers, native PNGs and prior audio remain available through
+Only the latest paper, its figures, and selected 4K infographic exports ship
+in the current template. Older papers, earlier native imagegen artwork, and
+prior audio remain available through
 [Versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog)
 and the immutable release history.
 
@@ -129,5 +143,6 @@ Read the [AUTOBOT manual](../docs/AUTOBOT.md)
 for exact request contracts and the [DATA manual](../docs/DATA.md) for audit
 limits. The [ROOT manual](../ROOT/SX-MILESTONE.md) defines the planning and
 task-observation layer. The current four-page edition has its own provenance
-and checksums. The frozen white paper and four older workflow cards keep their
-original bytes, checksums, and stated historical baselines.
+and checksums. Edition 2.0 has separate publication metadata for its pinned
+implementation. Older papers remain in immutable release history; the four
+retained workflow cards keep their original bytes and historical baselines.

@@ -235,7 +235,7 @@ class SystemxTests(unittest.TestCase):
         self.assert_ok(result)
         manifest = json.loads((self.systemx / "config/distribution.json").read_text())
         self.assertEqual(manifest["schemaVersion"], 2)
-        binary = "MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf"
+        binary = "MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf"
         raw = (self.systemx / binary).read_bytes()
         self.assertIn(b"\r\n", raw)
         self.assertEqual(manifest["files"][binary], hashlib.sha256(raw).hexdigest())

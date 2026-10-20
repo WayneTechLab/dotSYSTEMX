@@ -59,6 +59,15 @@ make the installation inspectable while retaining your records in a backup.
 Read the [Technical Guide](docs/TECHNICAL-GUIDE.md),
 [Stack Guide](docs/STACK-GUIDE.md), and [About page](docs/ABOUT.md).
 
+The [edition 2.0 white paper](MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf)
+introduces the operating model, then explains task authority, Agent 0/X/Y/Z,
+Agent Alpha, ROOT, project scopes, and evidence boundaries against the pinned
+`1.11.0-alpha.4` implementation. Four figures and a reproducible local example
+support the explanation; token savings remain a testable proposition.
+[Editable text](MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.md) ·
+[Edition metadata](MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.json) ·
+[Public paper guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper).
+
 ## Start here
 
 For work in an active project, load [START-HERE.md](START-HERE.md). For setup,

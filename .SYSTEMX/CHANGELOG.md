@@ -4,6 +4,29 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-alpha.5 — White paper edition 2.0
+
+- Replace the active edition 1.2 paper with edition 2.0 PDF, editable Markdown,
+  publication metadata, and a sanitized local-verification record. Earlier
+  editions remain available in immutable history and existing adopted folders.
+- Document ROOT, scoped .SYSTEMXP records, Agent 0/X/Y/Z, Agent Alpha, the ten
+  AUTOBOT reference functions, local DATA, and their distinct authority and
+  evidence boundaries. Add four technical figures in PNG and SVG formats;
+  the PDF includes clickable references and navigation.
+- Pin the examined implementation to `1.11.0-alpha.4`, commit
+  `e086ba15a1e70c6b585b8f12a703defc5c984b2c`. Keep publication edition 2.0,
+  the alpha.5 distribution, and the existing `1.11.0-alpha.3` 4K field-guide edition
+  distinct rather than relabeling their evidence.
+- Retain the provider-free walkthrough's 30 local CLI commands on both
+  Python 3.9 and 3.14, including aggregate task mapping, stale fingerprints,
+  original-observation reuse, completion-review gates, and future-event
+  refusal checks. These synthetic checks do not establish model quality,
+  autonomous throughput, or live provider synchronization.
+- Present input-token arithmetic as a hypothetical accounting model and
+  evaluation proposal; no measured token, cost, or processing-time savings
+  are claimed. This publication update changes no core runtime behavior,
+  blank project seeds, update-preservation policy, or GitHub Actions setting.
+
 ## 1.11.0-alpha.4 — Restore the generic template boundary
 
 - Remove the application-specific integration package, its dedicated validation

@@ -1,120 +1,162 @@
-# White-paper publishing template
+# White-paper publishing tools
 
-Edition 1.2 is the illustrated, branded MLA-style research edition. The current
-`.SYSTEMX/MEDIA/White-Paper` folder holds only that edition. Earlier papers and
-original PNG artwork remain in immutable release history. Never replace a frozen
-release asset in place. Paper editions and template versions are distinct.
-The published PDF and Markdown have a separately maintained
-[citation erratum](../../.SYSTEMX/MEDIA/White-Paper/ERRATA.md); do not edit either
-frozen edition file merely to repair its outbound link.
+Edition **2.0**, *Portable Project Coordination for AI-Assisted Work*, is the
+current publication. It explains the operating model before the implementation,
+using four original figures, a reproducible local example, and clearly separated
+implementation evidence and proposed evaluation. Its examined software baseline
+is `1.11.0-alpha.4`, commit
+`e086ba15a1e70c6b585b8f12a703defc5c984b2c`; its publication release is
+`1.11.0-alpha.5`. Paper editions, template versions, and infographic editions are
+separate identifiers.
 
-## Build and identity
+[Current PDF](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf) ·
+[Editable manuscript](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.md) ·
+[Edition metadata](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.json) ·
+[Figure sources](../../.SYSTEMX/MEDIA/White-Paper/figures/)
+
+Only the latest paper is distributed in `.SYSTEMX/MEDIA/White-Paper`. Published
+editions remain immutable in tagged history. Never rebuild over a published PDF:
+timestamps, document IDs, font selection, and dependency versions can change its
+bytes even when the visible layout looks identical.
+
+## Build a separate edition 2.0 draft
+
+Run from a reviewed repository checkout. The verifier uses the Python standard
+library and creates a disposable local project. The PDF builder additionally
+requires **ReportLab and Pillow**, optional publishing dependencies rather than
+`.SYSTEMX` runtime dependencies. Use a Python interpreter with them installed;
+publication commands do not install packages themselves.
 
 ```bash
 draft_dir="$(mktemp -d)"
-python3 -I -B docs/media/build_white_paper.py --edition 1.2 --output "$draft_dir/SYSTEMX-White-Paper-draft.pdf"
-python3 -I -B docs/media/verify_white_paper_example.py --output "$draft_dir/walkthrough.json"
+python3 -I -B docs/media/verify_white_paper_v2.py \
+  --output "$draft_dir/coordination-verification.json"
+python3 -I -B docs/media/build_white_paper_v2.py \
+  --output "$draft_dir/SYSTEMX-White-Paper-v2.0-draft.pdf"
 python3 -I -B docs/media/tests/test_publication_security.py
 ```
 
-ReportLab and Pillow are optional publishing dependencies, not template runtime
-dependencies. Use a Python interpreter with both installed for the PDF builder
-and publication security tests. The default source is the edition's Markdown in
-`.SYSTEMX/MEDIA/White-Paper`. The published PDF path is reserved even if its
-file is missing: rebuilding there could invalidate its pinned checksum because
-PDF timestamps and document IDs can change when the visible pages do not. Give
-`--output` a separate draft path and use a new edition filename before
-publishing. `--source` and `--template` support local drafts. The frozen legacy
-builder remains available through `--edition 1.0` or `--edition 1.1` with explicit `--source`
-from the corresponding archived release and a separate `--output` for inspection.
-There is no automatic download or fallback to missing files.
+[build_white_paper_v2.py](build_white_paper_v2.py) defaults to the edition 2.0
+manuscript and [publication-template-v2.json](publication-template-v2.json).
+`--source` and `--template` select local inputs; `--font-dir` selects a licensed
+local Times New Roman font directory. The output must be a separate `.pdf`
+draft under an existing directory. Published edition paths are reserved even
+when their PDF is missing. The builder makes no network request, model call,
+shell invocation, or Mermaid interpretation.
 
-The four direct media commands enter Python isolated mode before imports. Their
-output writes pin each parent-directory component and replace a draft atomically,
-rejecting final symlinks and unsafe PDF link schemes. The legacy renderer also
-rejects hardlinked output and preserves the permissions of a regular existing output.
-These optional publication commands currently require POSIX directory-descriptor
-support (macOS or compatible Linux); they fail closed on native Windows. The
-portable `.SYSTEMX` manager and records have their own platform support.
+[verify_white_paper_v2.py](verify_white_paper_v2.py) runs synthetic local task,
+ROOT, and event operations, including refusal cases. It records sanitized
+argument arrays, return codes, returned IDs, and response digests, then removes
+the disposable project. Its synthetic harness observations are fixtures, not
+real IDE or cloud readback. It does not start agents, contact a provider, create
+PRs, deploy an application, or establish model performance. An optional
+`--output` writes the same JSON report printed to standard output.
 
-[publication-template.json](publication-template.json) controls the product,
-author, running author name, company credit, date, edition, baseline, margins,
-body typography and four navigation destinations. Keep company attribution
-separate from the `.SYSTEMX` product mark. Current publication credit is
-**Lucas (SatoshiUNO)**; **a product of Wayne Tech Lab LLC**. The portfolio is
-[Networks.Chat](https://Networks.Chat); the business is
-[WayneTechLab.com](https://WayneTechLab.com). This publishing identity does not
-populate the reusable template's project, agent or task records.
+Publication commands enter isolated Python mode before optional imports. Draft
+output handling pins directory components, rejects linked or nonregular targets,
+and replaces a completed draft atomically. External PDF links use HTTPS;
+internal links must name known document destinations. These optional publishing
+tools require POSIX directory-descriptor support on macOS or compatible Linux;
+they are not a native Windows publishing path. The portable manager and record
+format have their own platform support.
 
-The builder embeds Times New Roman when its four TTF files are available in the
-macOS system font folder. `--font-dir` selects a licensed local copy on another
-system. Otherwise it uses PDF's standard Times family. Do not redistribute the
-font files. The edition metadata records which face was used for the published
-PDF; different fonts and dependency versions may change line breaks and hashes.
+## Publication identity and layout
 
-## Format contract
+The edition 2.0 template records the title, author, product, company credit,
+date, technical baseline, full source commit, publication release, and four
+navigation destinations. Current credit is **Lucas (SatoshiUNO)**; **a product
+of Wayne Tech Lab LLC**. The portfolio is [Networks.Chat](https://Networks.Chat),
+the business is [WayneTechLab.com](https://WayneTechLab.com), and repository and
+wiki links complete the navigation. Attribution remains separate from the
+`.SYSTEMX` product mark and never populates reusable project or agent records.
 
-- US Letter; one-inch text margins; twelve-point Times-family research body;
-  double-spaced paragraphs with a half-inch first-line indent.
-- Author/page running header. Separate product header, company/edition footer,
-  clickable portfolio/business/repository/wiki navigation and return to contents.
-- Cover; abstract and keywords; linked contents; list of figures; reading routes;
-  numbered research chapters; reference appendices; publication notes; Works Cited.
-- MLA-style parenthetical citations mapped to alphabetized Works Cited entries
-  with half-inch hanging indents. Use source page numbers only when they exist.
-  Full URL labels may wrap in the PDF; the clickable destination stays intact.
-- Numbered figure captions with origin and meaning; linked raster cards and
-  vector coordination diagrams; readable source descriptions in Markdown.
+The layout uses US Letter pages, one-inch margins, a twelve-point Times-family
+body, double-spaced paragraphs, and a half-inch first-line indent. It adds a
+branded cover, author/page running header, company/edition footer, linked
+contents, list of figures, reading routes, and compact technical displays.
+Parenthetical source links lead to alphabetized Works Cited entries with
+hanging indents. This is an **MLA-style technical white paper**, not a strict
+classroom submission; use the receiving institution's rules for a submission.
 
-The branded cover, contents, numbered chapters, navigation footer, color and
-compact technical tables/code/captions adapt MLA for a public white paper. This
-is not a strict classroom submission format. Follow receiving-institution rules
-for a submission. See the [MLA Style Center](https://style.mla.org/works-cited/works-cited-a-quick-guide/).
+The builder embeds the four Times New Roman TTF faces when available in the
+macOS supplemental font directory or the specified `--font-dir`. Otherwise it
+uses the PDF standard Times family. Do not redistribute licensed fonts. Record
+the actual selected face and dependency versions with the published edition.
 
-## Editorial structure and citations
+## Manuscript, figures, and citations
 
-Use `##` for top-level sections and `###` for subheadings. Keep the abstract under
-`### Abstract` in the first section. The first section supplies front matter;
-subsequent sections become the contents. Code fences preserve source commands;
-long display lines wrap without changing the Markdown. Tables repeat headers.
-The two supported Mermaid diagrams have explicit vector renderers; unknown
-layouts must be implemented and visually checked rather than silently substituted.
+Use `##` for top-level sections and `###` for subheadings. The publication
+context contains `### Abstract`; subsequent sections populate the contents.
+Code fences retain commands; compact tables repeat their headers. The current
+manuscript introduces task authority, flexible planning, supporting roles, ROOT,
+project scopes, versioned installation, evidence, and security before the
+illustrative resource model and proposed evaluation.
 
-Figure lines use `![description](../Infographics/workflow-4k.jpg)` followed by a `*Fig. N. ...*`
-caption. The four existing atlas cards use the pinned media source; optimize only
-the embedded PDF representation. The active tree keeps only the 4K outputs;
-original artwork remains available in pinned release history.
-`<!-- pagebreak -->` starts a deliberate new display page. Keep code, image
-captions and explanatory prose together where practical.
+The four edition 2.0 figures are original implementation schematics and a
+declared mathematical illustration. Their PNG representations and editable SVG
+sources live in [the paper's figures directory](../../.SYSTEMX/MEDIA/White-Paper/figures/).
+They are separate from the unchanged four-part 4K infographic media edition
+`1.11.0-alpha.3`. The PDF builder embeds direct local PNG/JPEG files from
+`figures/`, with descriptive Markdown alt text and numbered `*Fig. N. ...*`
+captions. It does not execute SVG or generate a diagram from an unknown layout.
 
-Use named anchors such as `<a id="cite-source-title"></a>` before each Works
-Cited paragraph and `[Author, "Short Title"](#cite-source-title)` in the body.
-Do not mix numeric references with MLA citations. The companion
-[white-paper-bibliography.json](white-paper-bibliography.json) records the current
-edition's 32 bibliography entries; edit it and the Markdown together. Do not
-invent authors, publication dates, page numbers, experiments or endorsements.
-Pinned implementation references stay pinned until a later technical re-review.
+Keep bibliography entries in the current manuscript's Works Cited section.
+Named anchors such as `<a id="cite-source-title"></a>` connect body links such
+as `[Author, "Short Title"](#cite-source-title)` to the reference. Preserve full
+commit or release pins for implementation sources. Do not invent authors,
+dates, page numbers, experiments, endorsements, measured savings, or verification
+results. The older [white-paper-bibliography.json](white-paper-bibliography.json)
+belongs to edition 1.2; it is not edition 2.0's bibliography authority.
 
-## Acceptance before publication
+## Review before publication
 
-Render every page and inspect the cover, contents, figures, dense tables, code,
-Works Cited, headers and footers. Check extracted text and exact policy-question
-parity; ensure old code samples survive. Validate all internal destinations,
-external URI annotations, page/text bounds, metadata, hashes and package limits.
-The paper is selectable and linked, but it is not a tagged PDF/UA export; retain
-Markdown as the editable text alternative. Do not add PDF JavaScript, automatic
-web navigation or tracking. Update the README/wiki discovery and edition metadata.
+Render every page and inspect the cover, contents, figures, tables, code,
+references, headers, and footers. Check extracted text, citation and contents
+destinations, clickable external links, bounds, metadata, and package limits.
+Confirm that figure captions distinguish implementation schematics from
+illustrative accounting. Retain the verifier's positive and refusal results
+with their interpreter versions and exact scope; a passing local walkthrough
+is not acceptance of a real application or external system.
 
-The executable walkthrough runs in a temporary project and starts no agents or
-external jobs. It verifies local records and a tiny HTML contract, not deployment
-or a complete 100-answer quality assessment. Keep public-template records blank.
+The PDF provides selectable text and navigation but is not tagged PDF/UA.
+Retain the editable Markdown alternative. Do not add PDF JavaScript, automatic
+web navigation, tracking, or secret credentials. Freeze final PDF, manuscript,
+figure, and metadata hashes only after review, then update README/wiki discovery.
+Publishing a new edition does not rewrite a prior released edition.
 
-## Audio edition
+## Inspect an archived edition 1.2
 
-`python3 -I -B docs/media/narrate_white_paper.py "$draft_dir/reading.txt" --source /path/to/archived/SYSTEMX-White-Paper-v1.1.md`
-remains the **edition 1.1** narration pipeline. An explicit archived source is
-required; the command rejects a different edition. Its existing 107-minute synthetic reading is labeled
-edition 1.1 in the wiki. It does not narrate the new branded front matter or atlas.
-Do not relabel it as an edition 1.2 recording. Audio and transcripts remain outside
-the size-limited portable bundle. Any new recording needs its own edition,
-transcript, completeness checks and release assets.
+The older
+[PDF](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf),
+[manuscript](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.md),
+and [metadata](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.4/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.json)
+remain in tagged history. Read the separate
+[historical citation erratum](../../.SYSTEMX/MEDIA/White-Paper/ERRATA.md)
+alongside that edition.
+
+The retained [edition 1.2 builder](build_white_paper.py) and
+[template](publication-template.json) are archival tooling. Supply the archived
+manuscript explicitly and write to a separate draft path; there is no automatic
+download or fallback to missing published files:
+
+```bash
+draft_dir="$(mktemp -d)"
+python3 -I -B docs/media/build_white_paper.py --edition 1.2 \
+  --source "/path/to/archived/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.md" \
+  --template docs/media/publication-template.json \
+  --output "$draft_dir/SYSTEMX-White-Paper-v1.2-inspection.pdf"
+```
+
+Keep the archived source's required media available; use a complete archived
+checkout when investigating its original rendering. Earlier editions 1.0 and
+1.1 also require their matching explicit `--source` and separate `--output`.
+Inspection drafts are not replacements for published exact-byte assets.
+
+## Historical audio
+
+[narrate_white_paper.py](narrate_white_paper.py) is the **edition 1.1** narration
+pipeline. It requires the matching explicit archived `--source`; a different
+edition is rejected. Existing audio does not narrate edition 2.0 and must not
+be relabeled. Any new recording needs its own edition identity, transcript,
+completeness review, and release assets. Audio stays outside the size-limited
+portable bundle.

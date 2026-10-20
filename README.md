@@ -14,7 +14,8 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
 [Manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
-[Illustrated white paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
+[White paper: PDF](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf) ·
+[Paper guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
 
 > **ALPHA — USE AT YOUR OWN RISK.** The format may change daily and is provided
 > without warranty. Review and pin a release, keep recoverable backups, and
@@ -28,16 +29,16 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.11.0-alpha.4` release and leaves updates manual.
+example selects the reviewed `v1.11.0-alpha.5` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.4"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.5"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.4
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.4 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.5
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.5 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```
@@ -353,13 +354,20 @@ before enabling its execution lane.
 ## Manual, support, and attribution
 
 The [wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki) is the manual for
-setup, record formats, roles, prompts, operations, and release history. The
-[illustrated white paper](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
-contains the deeper coordination diagrams and implementation discussion for its
-published Agent 0/X/Z baseline. Read its
-[edition 1.2 erratum](.SYSTEMX/MEDIA/White-Paper/ERRATA.md) for a corrected
-release-report citation. The [Agent Y manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-Y)
-documents the newer external CLI lane.
+setup, record formats, roles, prompts, operations, and release history.
+**[Portable Project Coordination for AI-Assisted Work](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf)**,
+white paper edition 2.0, introduces the operating model for founders and project
+leads before explaining task authority, Agent 0/X/Y/Z, Agent Alpha, ROOT,
+project scopes, updates, security, and a reproducible local example. Four
+figures explain the architecture and boundaries. Its efficiency model is
+illustrative; it does not claim measured savings or autonomous completion.
+[Editable paper](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.md) ·
+[Edition metadata](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.json) ·
+[Paper manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper).
+The paper examines the pinned `1.11.0-alpha.4` implementation; its edition is
+separate from the installed template version. Older papers and the
+[edition 1.2 citation erratum](.SYSTEMX/MEDIA/White-Paper/ERRATA.md) remain
+historical references.
 
 [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) ·
 [Security](SECURITY.md) · [MIT License](LICENSE)

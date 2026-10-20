@@ -4,3 +4,5 @@
 *.png binary
 *.jpg binary
 *.pdf binary
+# Preserve vector-diagram bytes exactly across host checkout conventions.
+*.svg -text

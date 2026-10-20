@@ -35,6 +35,10 @@ class PublicationSecurityTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory(prefix='systemx-publication-security-')
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+        self.manuscript = self.root / 'paper-source.md'
+        self.manuscript.write_text(
+            '## Front\n### Abstract\nA local publication fixture.\n'
+            '## Section\nA bounded section for publication safety checks.\n')
 
     def test_planted_sibling_import_is_not_executed(self):
         for script in ('build_white_paper.py', 'build_white_paper_legacy.py',
@@ -53,7 +57,8 @@ class PublicationSecurityTests(unittest.TestCase):
 
     def test_current_paper_and_links(self):
         output = self.root / 'draft.pdf'
-        result = run_script('build_white_paper.py', '--output', output)
+        result = run_script('build_white_paper.py', '--source', self.manuscript,
+                            '--output', output)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue(output.read_bytes().startswith(b'%PDF-'))
         builder = load_builder()
@@ -74,11 +79,21 @@ class PublicationSecurityTests(unittest.TestCase):
             builder.configure(config)
 
     def test_published_edition_is_not_overwritten(self):
-        published = ROOT / '.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf'
-        before = published.read_bytes()
-        result = run_script('build_white_paper.py')
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('Published edition path is reserved', result.stderr)
+        # Historical editions need not remain in the active distribution. The
+        # publisher must still reserve their paths when a file exists there.
+        builder = load_builder()
+        mock_repo = self.root / 'mock-repo'
+        published = mock_repo / '.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v1.2.pdf'
+        published.parent.mkdir(parents=True)
+        before = b'%PDF-1.4\nFROZEN PUBLICATION SENTINEL\n'
+        published.write_bytes(before)
+        source = self.root / 'draft.md'
+        source.write_text('## Front\n### Abstract\nDraft.\n## Section\nContent.\n')
+        with patch.object(builder, 'ROOT', mock_repo), patch.object(
+                sys, 'argv', ['build_white_paper.py', '--source', str(source),
+                              '--output', str(published)]):
+            with self.assertRaisesRegex(ValueError, 'Published edition path is reserved'):
+                builder.main()
         self.assertEqual(published.read_bytes(), before)
 
     def test_missing_published_path_is_also_reserved(self):
@@ -143,7 +158,8 @@ class PublicationSecurityTests(unittest.TestCase):
             original_build(source, output)
 
         with patch.object(builder, 'build', side_effect=swap_then_build), patch.object(
-                sys, 'argv', ['build_white_paper.py', '--output', str(parent / 'paper.pdf')]):
+                sys, 'argv', ['build_white_paper.py', '--source', str(self.manuscript),
+                              '--output', str(parent / 'paper.pdf')]):
             with self.assertRaisesRegex(RuntimeError, 'Output directory changed'):
                 builder.main()
         self.assertEqual(sentinel.read_text(), 'KEEP')

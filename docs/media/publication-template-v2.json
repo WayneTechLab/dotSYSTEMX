@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "edition": "2.0",
+  "product": ".SYSTEMX",
+  "title": "Portable Project Coordination for AI-Assisted Work",
+  "subtitle": "A source-grounded technical white paper on context, task authority and evidence",
+  "author": "Lucas (SatoshiUNO)",
+  "runningAuthor": "SatoshiUNO",
+  "publisher": "Wayne Tech Lab LLC",
+  "productCredit": "A product of Wayne Tech Lab LLC",
+  "date": "20 October 2026",
+  "technicalBaseline": "1.11.0-alpha.4",
+  "technicalBaselineCommit": "e086ba15a1e70c6b585b8f12a703defc5c984b2c",
+  "publicationRelease": "1.11.0-alpha.5",
+  "layout": "MLA-style research body with branded front matter and compact technical displays",
+  "pageSize": "LETTER",
+  "marginPoints": 72,
+  "bodySizePoints": 12,
+  "bodyLeadingPoints": 24,
+  "paragraphIndentPoints": 36,
+  "figureBaseUrl": "https://raw.githubusercontent.com/WayneTechLab/dotSYSTEMX/v1.11.0-alpha.5/.SYSTEMX/MEDIA/White-Paper/figures/",
+  "keywords": "Agentic software development; portable project memory; task coordination; human oversight; evidence; versioned templates.",
+  "links": [
+    {"label": "Networks.Chat", "role": "Author portfolio", "url": "https://Networks.Chat"},
+    {"label": "WayneTechLab.com", "role": "Business", "url": "https://WayneTechLab.com"},
+    {"label": "GitHub repository", "role": "Source and releases", "url": "https://github.com/WayneTechLab/dotSYSTEMX"},
+    {"label": "Project wiki", "role": "User manual", "url": "https://github.com/WayneTechLab/dotSYSTEMX/wiki"}
+  ]
+}

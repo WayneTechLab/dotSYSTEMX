@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="720" viewBox="0 0 1060 720" role="img" aria-labelledby="title desc">
+<title id="title">2. Three TODO surfaces; one task-status authority</title>
+<desc id="desc">Explicit mappings connect different item counts and state vocabularies; no continuous connector.</desc>
+<rect x="0" y="0" width="1060" height="720" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1.5"/>
+<text x="28" y="39" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" fill="#152832" text-anchor="start">2. Three TODO surfaces; one task-status authority</text>
+<text x="28" y="73" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#4B626D" text-anchor="start">Explicit mappings connect different item counts and state vocabularies; no continuous connector.</text>
+<line x1="28" y1="92" x2="1032" y2="92" stroke="#BCCDD3" stroke-width="1.5"/>
+<rect x="28" y="116" width="320" height="143" rx="10" fill="#EAF5F4" stroke="#0B696D" stroke-width="1.5"/>
+<text x="44" y="150" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">SYSTEMX ledger</text>
+<text x="44" y="184" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">WORK/TASKS.json</text>
+<text x="44" y="212" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">Scope + stable TASK IDs</text>
+<text x="44" y="240" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">Canonical accepted state</text>
+<rect x="370" y="116" width="320" height="143" rx="10" fill="#F3F7F8" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="386" y="150" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">Harness / IDE TODO</text>
+<text x="386" y="184" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">Actual host plan or task list</text>
+<text x="386" y="212" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">One item may cover many tasks</text>
+<text x="386" y="240" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">Observe through available tools</text>
+<rect x="712" y="116" width="320" height="143" rx="10" fill="#F3F7F8" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="728" y="150" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">Optional bot / cloud TODO</text>
+<text x="728" y="184" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">Separate execution channel</text>
+<text x="728" y="212" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">Many attempts can cover one task</text>
+<text x="728" y="240" font-family="Arial, Helvetica, sans-serif" font-size="19.5" font-weight="400" fill="#152832" text-anchor="start">An absent optional bot is valid</text>
+<line x1="188" y1="264" x2="188" y2="283" stroke="#0B696D" stroke-width="2"/>
+<line x1="188" y1="283" x2="184.08531019299892" y2="274.8959760788259" stroke="#0B696D" stroke-width="2"/>
+<line x1="188" y1="283" x2="191.91468980700108" y2="274.8959760788259" stroke="#0B696D" stroke-width="2"/>
+<line x1="530" y1="264" x2="530" y2="283" stroke="#0B696D" stroke-width="2"/>
+<line x1="530" y1="283" x2="526.0853101929989" y2="274.8959760788259" stroke="#0B696D" stroke-width="2"/>
+<line x1="530" y1="283" x2="533.9146898070011" y2="274.8959760788259" stroke="#0B696D" stroke-width="2"/>
+<line x1="872" y1="264" x2="872" y2="283" stroke="#0B696D" stroke-width="2"/>
+<line x1="872" y1="283" x2="868.0853101929989" y2="274.8959760788259" stroke="#0B696D" stroke-width="2"/>
+<line x1="872" y1="283" x2="875.9146898070011" y2="274.8959760788259" stroke="#0B696D" stroke-width="2"/>
+<rect x="28" y="292" width="1004" height="80" rx="10" fill="#FFFFFF" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="46" y="323" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#152832" text-anchor="start">ROOT/MIRRORS.json retains observations, explicit bindings and bounded tool cards.</text>
+<text x="46" y="355" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#4B626D" text-anchor="start">Time + raw/normalized state + claimed revision + evidence + canonical fingerprints.</text>
+<text x="28" y="409" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#0B696D" text-anchor="start">ON MEANINGFUL CHANGE OR HANDOFF, PROCEED FROM 1 TO 6</text>
+<rect x="28" y="427" width="320" height="104" rx="10" fill="#F3F7F8" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="42" y="457" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">1  Select</text>
+<text x="42" y="492" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">Scope, request and</text>
+<text x="42" y="517" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">stable task IDs.</text>
+<rect x="370" y="427" width="320" height="104" rx="10" fill="#F3F7F8" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="384" y="457" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">2  Observe</text>
+<text x="384" y="492" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">Read actual state;</text>
+<text x="384" y="517" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">retain a snapshot.</text>
+<rect x="712" y="427" width="320" height="104" rx="10" fill="#EAF5F4" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="726" y="457" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">3  Compare</text>
+<text x="726" y="492" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">Inspect the read-only</text>
+<text x="726" y="517" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">root delta.</text>
+<rect x="28" y="543" width="320" height="104" rx="10" fill="#F3F7F8" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="42" y="573" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">4  Reconcile</text>
+<text x="42" y="608" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">Agent 0 uses</text>
+<text x="42" y="633" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">authorized tools.</text>
+<rect x="370" y="543" width="320" height="104" rx="10" fill="#F3F7F8" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="384" y="573" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">5  Read back</text>
+<text x="384" y="608" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">Inspect changes;</text>
+<text x="384" y="633" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">append observation.</text>
+<rect x="712" y="543" width="320" height="104" rx="10" fill="#EAF5F4" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="726" y="573" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0B696D" text-anchor="start">6  Accept</text>
+<text x="726" y="608" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">Evidence + review;</text>
+<text x="726" y="633" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="400" fill="#152832" text-anchor="start">Agent 0 or user accepts done.</text>
+<line x1="28" y1="672" x2="1032" y2="672" stroke="#BCCDD3" stroke-width="1.5"/>
+<text x="28" y="692" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#4B626D" text-anchor="start">Provider completed is a review candidate. A matching snapshot is not proof of current remote state.</text>
+<text x="28" y="714" font-family="Arial, Helvetica, sans-serif" font-size="18.5" font-weight="400" fill="#4B626D" text-anchor="start">No continuous polling or automatic synchronization is implied.</text>
+</svg>
