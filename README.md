@@ -14,6 +14,7 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
 [Manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
+[Advanced walkthrough](#advanced-walkthrough) ·
 [Introduction video](#introduction-video) ·
 [White paper: PDF](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf) ·
 [Paper guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
@@ -24,6 +25,31 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 > application or process as production ready. See the
 > [release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
 > and [version history](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
+
+## Advanced walkthrough
+
+**Inside the coordination layer** is a **5 minute 54 second** animated guide to
+the implemented `1.11.0-alpha.6` workflow: an accepted plan, bounded task packets,
+Agent 0/X/Y/Z, Agent Alpha, ROOT observations, `.SYSTEMXP` scopes, and reversible
+adoption. It includes an initial project brief, a bounded follow-up prompt, real
+local CLI examples, and a reproducible context-counting demonstration.
+
+[![Watch the advanced .SYSTEMX walkthrough: the coordination layer connects plans, agents, scoped project records, and evidence.](docs/assets/systemx-advanced-poster-4k.jpg)](https://www.youtube.com/watch?v=pLQu1JAZfRU)
+
+[Watch the advanced walkthrough](https://www.youtube.com/watch?v=pLQu1JAZfRU) ·
+[Download the Full HD MP4](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-advanced-v2.0/SYSTEMX-Advanced-Walkthrough-v2.0.mp4) ·
+[4K poster](docs/assets/systemx-advanced-poster-4k.jpg) ·
+[Transcript, chapters, and captions](docs/media/advanced-walkthrough/README.md) ·
+[Copyable prompts](docs/media/advanced-walkthrough/PROMPTS.md) ·
+[Context demonstration and limits](docs/media/advanced-walkthrough/CONTEXT-DEMO.md)
+
+The film is **1080p at 24 fps**, with synthetic narration and English captions;
+the separate poster is **native 3840 × 2160**. The local walkthrough uses synthetic
+project data. Its 20 HTML fixtures are not a completed WebApp, and no model,
+provider worker, PR, or cloud deployment was run. The token demonstration compares
+authored inputs, includes setup overhead and a smaller ordinary handoff, and
+does not measure bills, model quality, or processing speed. Media edition **2.0**
+does not change the software version or the generic template records.
 
 ## Introduction video
 
