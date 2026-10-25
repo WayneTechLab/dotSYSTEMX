@@ -4,6 +4,7 @@ The standalone logo remains `.SYSTEMX`; attribution belongs in project informati
 
 | Asset | Purpose | Editable source |
 | --- | --- | --- |
+| [Introduction poster — 4K](systemx-intro-poster-4k.jpg) | Custom thumbnail and linked preview for the [public YouTube introduction](https://www.youtube.com/watch?v=-EM-T6uNQAs); 3840 × 2160 JPEG | [Film guide and asset provenance](../media/introduction/README.md) |
 | [Field guide 1 — overview](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) | Whole-system view: ROOT, SX-RULES, SX-MILESTONE, Agent 0/X/Y/Z, AGENTA, ten AUTOBOTs, DATA, tools, and `.SYSTEMXP` | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-1--whole-system-overview) |
 | [Field guide 2 — coordination](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | Canonical, harness, and optional bot TODO observations; read-only delta, authorized reconciliation, readback, and acceptance | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-2--agent-coordination-and-tools) |
 | [Field guide 3 — ROOT/AUTOBOT](../../.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | ROOT planning, requests, tool cards, Agent Alpha, ten named reference functions, and result reuse | [Accessible companion](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md#page-3--agent-alpha-and-the-ten-autobots) |

@@ -8,6 +8,17 @@
   "featureBaseline": "1.11.0-alpha.5",
   "featureBaselineCommit": "85c9d6b78b9143b7ad928cc2b26050d1194921fa",
   "durationSeconds": 109.833333,
+  "onlineVideo": {
+    "platform": "YouTube",
+    "url": "https://www.youtube.com/watch?v=-EM-T6uNQAs",
+    "videoId": "-EM-T6uNQAs",
+    "channelUrl": "https://www.youtube.com/@WayneTechLab",
+    "publishedOn": "2026-10-24",
+    "chapters": 9,
+    "chapterNote": "The first two animated scenes share one YouTube chapter; the original MP4 retains ten chapter markers.",
+    "captionLanguage": "English (United States)",
+    "customThumbnailRepositoryFile": "docs/assets/systemx-intro-poster-4k.jpg"
+  },
   "video": {
     "width": 1920,
     "height": 1080,

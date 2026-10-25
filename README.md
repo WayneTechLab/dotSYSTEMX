@@ -31,12 +31,17 @@ A **1 minute 50 second animated introduction** to project memory, Agent 0/X/Y/Z,
 Agent Alpha, ROOT, AUTOBOT, DATA, `.SYSTEMXP` scopes, and reversible adoption.
 Created in Blender with synthetic narration, original music, and English captions.
 
-[![Watch or download the .SYSTEMX introduction: an animated core represents portable project context beside the uppercase .SYSTEMX wordmark.](docs/assets/systemx-intro-poster-4k.jpg)](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.mp4)
+[![Watch the .SYSTEMX introduction on YouTube: an animated core represents portable project context beside the uppercase .SYSTEMX wordmark.](docs/assets/systemx-intro-poster-4k.jpg)](https://www.youtube.com/watch?v=-EM-T6uNQAs)
 
-[Watch or download the Full HD film](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.mp4) ·
+[Watch on YouTube](https://www.youtube.com/watch?v=-EM-T6uNQAs) ·
+[Download the Full HD MP4](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.mp4) ·
 [4K poster](docs/assets/systemx-intro-poster-4k.jpg) ·
 [Transcript and captions](docs/media/introduction/README.md) ·
 [Video guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Introductory-Video)
+
+The film is **1080p**; its custom thumbnail is the **3840 × 2160** poster.
+YouTube provides nine chapters and selectable English captions.
+[Wayne Tech Lab on YouTube](https://www.youtube.com/@WayneTechLab).
 
 ## Quick start: add `.SYSTEMX` to a local project
 

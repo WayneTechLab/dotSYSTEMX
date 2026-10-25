@@ -26,6 +26,9 @@ The [introduction film guide](introduction/README.md) provides the approximately
 asset checksums. The film has its own `media-intro-v1.0` publication identity;
 its feature baseline is `1.11.0-alpha.5`. Large video files are release assets,
 while a compact 3840 × 2160 JPEG supplies the README and wiki preview.
+The public [YouTube introduction](https://www.youtube.com/watch?v=-EM-T6uNQAs)
+uses that poster as its custom thumbnail and provides nine chapters and selectable
+English captions. The downloadable MP4 retains its ten native chapter markers.
 The film does not change the portable template version or add authoring tools
 to an adopting project's dependencies.
 
