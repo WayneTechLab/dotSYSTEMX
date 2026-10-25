@@ -14,6 +14,7 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
 [Manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
+[Introduction video](#introduction-video) ·
 [White paper: PDF](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf) ·
 [Paper guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
 
@@ -23,6 +24,19 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 > application or process as production ready. See the
 > [release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
 > and [version history](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
+
+## Introduction video
+
+A **1 minute 50 second animated introduction** to project memory, Agent 0/X/Y/Z,
+Agent Alpha, ROOT, AUTOBOT, DATA, `.SYSTEMXP` scopes, and reversible adoption.
+Created in Blender with synthetic narration, original music, and English captions.
+
+[![Watch or download the .SYSTEMX introduction: an animated core represents portable project context beside the uppercase .SYSTEMX wordmark.](docs/assets/systemx-intro-poster-4k.jpg)](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.mp4)
+
+[Watch or download the Full HD film](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.mp4) ·
+[4K poster](docs/assets/systemx-intro-poster-4k.jpg) ·
+[Transcript and captions](docs/media/introduction/README.md) ·
+[Video guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Introductory-Video)
 
 ## Quick start: add `.SYSTEMX` to a local project
 

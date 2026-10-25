@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "product": ".SYSTEMX",
+  "title": "Keep the Work Oriented",
+  "mediaEdition": "1.0",
+  "mediaTag": "media-intro-v1.0",
+  "preparedOn": "2026-10-24",
+  "featureBaseline": "1.11.0-alpha.5",
+  "featureBaselineCommit": "85c9d6b78b9143b7ad928cc2b26050d1194921fa",
+  "durationSeconds": 109.833333,
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "codec": "H.264",
+    "audioCodec": "AAC",
+    "audioSampleRate": 48000,
+    "audioChannels": 2,
+    "chapters": 10,
+    "captions": "Visible English captions and an optional embedded caption track"
+  },
+  "poster": {
+    "width": 3840,
+    "height": 2160,
+    "format": "JPEG",
+    "quality": 92,
+    "chromaSubsampling": "4:4:4",
+    "method": "Format export from the native Blender 4K PNG; no resizing or generated replacement",
+    "repositoryFile": "docs/assets/systemx-intro-poster-4k.jpg",
+    "nativePngSha256": "3fc8a3622e4a44aeeb0d564b130c0957b0a2d40c48adf8e9123b55df7ecee9ae"
+  },
+  "production": {
+    "application": "Blender 5.3.0 Beta",
+    "nativeAnimatedScenes": 10,
+    "nativeRenderedInputFrames": 2780,
+    "finalVideoFrames": 2636,
+    "narration": "Synthetic Kokoro af_heart American English",
+    "humanVoiceRecording": false,
+    "musicAndTransitions": "Original procedural ambient score and sound effects",
+    "slidesOrPdfStillsUsedAsAnimation": false
+  },
+  "credits": {
+    "creator": "Lucas (SatoshiUNO)",
+    "productOf": "Wayne Tech Lab LLC",
+    "portfolio": "https://Networks.Chat",
+    "business": "https://WayneTechLab.com",
+    "speechModel": "Kokoro-82M, Apache 2.0",
+    "speechRuntime": "kokoro-onnx, MIT",
+    "renderedTypefaces": "Noto Sans and Liberation Mono, SIL OFL 1.1"
+  },
+  "distribution": {
+    "largeVideoHostedAsReleaseAsset": true,
+    "mediaTagIsNotATemplateVersion": true,
+    "portableTemplateVersionUnchanged": true,
+    "runtimeDependenciesAdded": false,
+    "gitHubActionsRequired": false
+  },
+  "assets": [
+    {
+      "name": "SYSTEMX-Introduction-v1.0-poster-4K.jpg",
+      "url": "https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0-poster-4K.jpg",
+      "bytes": 467372,
+      "sha256": "4a8a26911484695119d655d78e84fba07422f78a156eb20d21d67bf6e4148bc5"
+    },
+    {
+      "name": "SYSTEMX-Introduction-v1.0-script.txt",
+      "url": "https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0-script.txt",
+      "bytes": 1746,
+      "sha256": "fbbf064848e8e9c100b19735f4040c0d14c3736f7d173de371ce7f8fa42330cd"
+    },
+    {
+      "name": "SYSTEMX-Introduction-v1.0.mp4",
+      "url": "https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.mp4",
+      "bytes": 35273328,
+      "sha256": "c42f6d3b8140fdd02ad6354b10a3ae1e6535e2fabc21e02d4f825cef4e7c2a6e"
+    },
+    {
+      "name": "SYSTEMX-Introduction-v1.0.srt",
+      "url": "https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.srt",
+      "bytes": 2408,
+      "sha256": "a717b18404e1f793345f6f32b22354565a572f0ac34d48391fb70e50969c6890"
+    }
+  ],
+  "scope": "Illustrated alpha feature overview, not live application evidence or measured effectiveness."
+}

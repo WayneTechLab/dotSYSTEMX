@@ -19,6 +19,16 @@ editions remain immutable in tagged history. Never rebuild over a published PDF:
 timestamps, document IDs, font selection, and dependency versions can change its
 bytes even when the visible layout looks identical.
 
+## Introduction film and poster
+
+The [introduction film guide](introduction/README.md) provides the approximately
+1 minute 50 second Blender overview, a 4K poster, the transcript, captions, and
+asset checksums. The film has its own `media-intro-v1.0` publication identity;
+its feature baseline is `1.11.0-alpha.5`. Large video files are release assets,
+while a compact 3840 × 2160 JPEG supplies the README and wiki preview.
+The film does not change the portable template version or add authoring tools
+to an adopting project's dependencies.
+
 ## Build a separate edition 2.0 draft
 
 Run from a reviewed repository checkout. The verifier uses the Python standard
