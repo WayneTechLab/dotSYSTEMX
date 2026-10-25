@@ -48,16 +48,16 @@ YouTube provides nine chapters and selectable English captions.
 Run this from the **containing project directory** on macOS or Linux. You need
 Python 3.9+ and Git. The isolated Python environment lives outside the project;
 the first `first-run` command previews changes before you apply them. This
-example selects the reviewed `v1.11.0-alpha.5` release and leaves updates manual.
+example selects the reviewed `v1.11.0-alpha.6` release and leaves updates manual.
 
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.5"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.6"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.5
-systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.5 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.6
+systemx first-run --target "$PWD" --profile project --version 1.11.0-alpha.6 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 ```

@@ -4,6 +4,21 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-alpha.6 — YouTube introduction and verified media links
+
+- Link the public [YouTube introduction](https://www.youtube.com/watch?v=-EM-T6uNQAs)
+  from the README, media library, and wiki, with a clickable
+  [3840 × 2160 poster](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0-poster-4K.jpg).
+  Keep original MP4, caption, and transcript downloads available independently.
+- Distinguish the 1080p film and its ten animated scenes/native MP4 chapter
+  markers from the 4K thumbnail and nine YouTube navigation chapters.
+- Refresh current installation examples and distribution metadata for alpha.6.
+  Keep white paper edition 2.0, its alpha.4 examined implementation and alpha.5
+  publication identity, and the alpha.3 four-part field guide unchanged.
+- Retain generic blank project records, manual updates, additive preservation,
+  and the existing runtime behavior. No GitHub Actions workflow or runtime
+  dependency is added; repository Actions remains disabled.
+
 ## 1.11.0-alpha.5 — White paper edition 2.0
 
 - Replace the active edition 1.2 paper with edition 2.0 PDF, editable Markdown,

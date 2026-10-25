@@ -56,7 +56,7 @@ the same in both versions.
 The [asset record](ASSETS.json) supplies exact file sizes, SHA-256 digests,
 feature baseline, and credits. The release's `SHA256SUMS` covers its downloadable
 files. This media tag is not a template version and is ignored by template release
-discovery. The current installer remains `1.11.0-alpha.5`.
+discovery. The current installer is `1.11.0-alpha.6`.
 
 The original film is hosted as a release asset rather than copied into the portable
 `.SYSTEMX` distribution. Media production libraries, model weights, raw frames,

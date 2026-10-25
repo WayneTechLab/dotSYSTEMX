@@ -12,6 +12,21 @@ implementation; the four workflow cards retain their earlier baselines.
 [Business: WayneTechLab.com](https://WayneTechLab.com) ·
 [User manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki)
 
+## Introduction video
+
+[Watch the 1:50 introduction on YouTube](https://www.youtube.com/watch?v=-EM-T6uNQAs) ·
+[Download the 4K thumbnail](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0-poster-4K.jpg) ·
+[Download the original Full HD MP4](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-intro-v1.0/SYSTEMX-Introduction-v1.0.mp4) ·
+[Chapters, captions, and transcript](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Introductory-Video)
+
+The Blender introduction covers project records, Agent 0/X/Y/Z, Agent Alpha,
+ROOT, AUTOBOT references, DATA, `.SYSTEMXP` scopes, and preserved updates.
+The film is **1080p**; the thumbnail is **3840 × 2160**. YouTube provides nine
+chapters and selectable English captions. The original MP4 retains ten chapter
+markers. Media edition 1.0 and its alpha.5 feature baseline remain separate
+from the currently installed template version. Video files and authoring tools
+are hosted separately rather than added to this portable folder.
+
 ## White paper
 
 **Portable Project Coordination for AI-Assisted Work** — edition 2.0.
