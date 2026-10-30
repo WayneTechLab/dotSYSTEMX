@@ -1,7 +1,25 @@
-# White-paper publishing tools
+# Media guides and white-paper publishing tools
+
+Choose a film by the detail you need. Video editions and software versions are
+separate; these guides do not add authoring tools to `.SYSTEMX` installations.
+
+| Film | Duration and resolution | Read alongside it |
+| --- | --- | --- |
+| [Start with a Folder — edition 3.0](start-with-a-folder/README.md) | 9:55, native 3840 × 2160 at 30 fps | Beginner's walkthrough, transcript, English SDH captions, chapters, notices, and checksums; software baseline 1.11.0-alpha.6 |
+| [Inside the coordination layer — edition 2.0](advanced-walkthrough/README.md) | 5:54, 1920 × 1080 at 24 fps | Advanced workflow, prompt examples, and the constructed context-counting demonstration; software baseline 1.11.0-alpha.6 |
+| [Introduction — edition 1.0](introduction/README.md) | 1:50, 1920 × 1080 at 24 fps | Short overview, transcript, captions, and original media provenance; feature baseline 1.11.0-alpha.5 |
+
+Large films are downloadable release assets. The earlier advanced edition also
+provides its editable production project; the third film publishes rendered media
+and readable companions.
+The repository keeps compact posters and readable companions; the portable
+template stays generic and does not acquire production logs or demonstration
+project records.
+
+## White paper edition 2.0
 
 Edition **2.0**, *Portable Project Coordination for AI-Assisted Work*, is the
-current publication. It explains the operating model before the implementation,
+current white-paper publication. It explains the operating model before the implementation,
 using four original figures, a reproducible local example, and clearly separated
 implementation evidence and proposed evaluation. Its examined software baseline
 is `1.11.0-alpha.4`, commit

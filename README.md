@@ -14,6 +14,7 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
 [Manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
+[Start with a Folder](#start-with-a-folder) ·
 [Advanced walkthrough](#advanced-walkthrough) ·
 [Introduction video](#introduction-video) ·
 [White paper: PDF](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf) ·
@@ -25,6 +26,30 @@ A product of **Wayne Tech Lab LLC**, created by **Lucas (SatoshiUNO)**.
 > application or process as production ready. See the
 > [release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
 > and [version history](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
+
+## Start with a Folder
+
+New to `.SYSTEMX`? This **9 minute 55 second animated beginner's guide** follows
+one small community garden website from its first request to a checked and
+reviewed result. A folder, a plan, and one task introduce the records before
+the film explains agents, parallel work, ROOT observations, AUTOBOT references,
+DATA, independent projects, and a useful handoff to the next session.
+
+[![Watch Start with a Folder: a paper folder holds your goal, plan, work and evidence, and project memory.](docs/assets/systemx-field-guide-poster-4k.jpg)](https://www.youtube.com/watch?v=k1-CQYZnSYM)
+
+[Watch Start with a Folder](https://www.youtube.com/watch?v=k1-CQYZnSYM) ·
+[Download the native 4K film](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-field-guide-v3.0/SYSTEMX-Start-with-a-Folder-v3.0-4K.mp4) ·
+[4K poster](docs/assets/systemx-field-guide-poster-4k.jpg) ·
+[Transcript, English SDH captions, and chapters](docs/media/start-with-a-folder/README.md) ·
+[Media release and downloads](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-field-guide-v3.0)
+
+The film is **native 3840 × 2160 at 30 fps**, with synthetic narration,
+original music and paper/pen sound effects, **12 chapters**, and **120 English
+SDH caption cues**. Its community garden example is synthetic. Models, worker
+execution, and permissions still come from the chosen host; the folder is not
+a running agent or cloud service. **Video edition 3.0** explains software
+**1.11.0-alpha.6** and does not change the reusable template. The earlier films
+remain available below.
 
 ## Advanced walkthrough
 
