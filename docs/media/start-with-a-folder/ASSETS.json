@@ -5,7 +5,7 @@
   "videoEdition": "3.0",
   "mediaTag": "media-field-guide-v3.0",
   "preparedOn": "2026-10-29",
-  "publicationStatus": "prepared_youtube_upload_private_pending_publication_and_release_readback",
+  "publicationStatus": "published_verified",
   "featureBaseline": "1.11.0-alpha.6",
   "softwareReleaseTag": "v1.11.0-alpha.6",
   "softwareReleaseCommit": "f942daf38fc7f1661910912dbcf07faaec5ad7aa",
@@ -25,6 +25,13 @@
     "platform": "YouTube",
     "url": "https://www.youtube.com/watch?v=k1-CQYZnSYM",
     "videoId": "k1-CQYZnSYM",
+    "visibility": "public",
+    "publicPlaybackVerified": true,
+    "public4KOptionVerified": true,
+    "publicDecodedPlaybackDimensions": [3840, 2160],
+    "publicCaptionLanguageVerified": "English (United States)",
+    "publicDescriptionLinksVerified": true,
+    "readbackOn": "2026-10-29",
     "channelUrl": "https://www.youtube.com/@WayneTechLab",
     "chapterPositions": [
       {
