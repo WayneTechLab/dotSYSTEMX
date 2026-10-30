@@ -6,3 +6,96 @@
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# Maintainer repository boundary only. The portable .SYSTEMX/.gitignore and
+# adopted projects' payload, retention, and sharing policies are separate.
+# Keep a generic index here; retain static publications/provenance in
+# docs/assets and .SYSTEMX/MEDIA instead of film-production subdirectories.
+/docs/media/*
+!/docs/media/README.md
+
+# Explicit repository-root authoring/output locations.
+/media-production/
+/film-production/
+/renders/
+/render-output/
+/deliverables/
+/audio-stems/
+/narration-output/
+
+# Playable media, editable film sources, captions, and speech markup are not
+# public-template assets. Anchor guards to root files and canonical media
+# containers, without ignoring arbitrary adopter source or DATA directories.
+/*.[mM][pP]4
+/*.[mM]4[vV]
+/*.[mM][oO][vV]
+/*.[wW][eE][bB][mM]
+/*.[mM][kK][vV]
+/*.[aA][vV][iI]
+/*.[wW][aA][vV]
+/*.[mM][pP]3
+/*.[mM]4[aA]
+/*.[aA][aA][cC]
+/*.[fF][lL][aA][cC]
+/*.[oO][gG][gG]
+/*.[oO][pP][uU][sS]
+/*.[aA][iI][fF][fF]
+/*.[aA][iI][fF]
+/*.[bB][lL][eE][nN][dD]
+/*.[sS][rR][tT]
+/*.[vV][tT][tT]
+/*.[aA][sS][sS]
+/*.[sS][sS][aA]
+/*.[sS][sS][mM][lL]
+/*.[bB][lL][eE][nN][dD][0-9]*
+/docs/assets/**/*.[mM][pP]4
+/docs/assets/**/*.[mM]4[vV]
+/docs/assets/**/*.[mM][oO][vV]
+/docs/assets/**/*.[wW][eE][bB][mM]
+/docs/assets/**/*.[mM][kK][vV]
+/docs/assets/**/*.[aA][vV][iI]
+/docs/assets/**/*.[wW][aA][vV]
+/docs/assets/**/*.[mM][pP]3
+/docs/assets/**/*.[mM]4[aA]
+/docs/assets/**/*.[aA][aA][cC]
+/docs/assets/**/*.[fF][lL][aA][cC]
+/docs/assets/**/*.[oO][gG][gG]
+/docs/assets/**/*.[oO][pP][uU][sS]
+/docs/assets/**/*.[aA][iI][fF][fF]
+/docs/assets/**/*.[aA][iI][fF]
+/docs/assets/**/*.[bB][lL][eE][nN][dD]
+/docs/assets/**/*.[sS][rR][tT]
+/docs/assets/**/*.[vV][tT][tT]
+/docs/assets/**/*.[aA][sS][sS]
+/docs/assets/**/*.[sS][sS][aA]
+/docs/assets/**/*.[sS][sS][mM][lL]
+/docs/assets/**/*.[bB][lL][eE][nN][dD][0-9]*
+/.SYSTEMX/MEDIA/**/*.[mM][pP]4
+/.SYSTEMX/MEDIA/**/*.[mM]4[vV]
+/.SYSTEMX/MEDIA/**/*.[mM][oO][vV]
+/.SYSTEMX/MEDIA/**/*.[wW][eE][bB][mM]
+/.SYSTEMX/MEDIA/**/*.[mM][kK][vV]
+/.SYSTEMX/MEDIA/**/*.[aA][vV][iI]
+/.SYSTEMX/MEDIA/**/*.[wW][aA][vV]
+/.SYSTEMX/MEDIA/**/*.[mM][pP]3
+/.SYSTEMX/MEDIA/**/*.[mM]4[aA]
+/.SYSTEMX/MEDIA/**/*.[aA][aA][cC]
+/.SYSTEMX/MEDIA/**/*.[fF][lL][aA][cC]
+/.SYSTEMX/MEDIA/**/*.[oO][gG][gG]
+/.SYSTEMX/MEDIA/**/*.[oO][pP][uU][sS]
+/.SYSTEMX/MEDIA/**/*.[aA][iI][fF][fF]
+/.SYSTEMX/MEDIA/**/*.[aA][iI][fF]
+/.SYSTEMX/MEDIA/**/*.[bB][lL][eE][nN][dD]
+/.SYSTEMX/MEDIA/**/*.[sS][rR][tT]
+/.SYSTEMX/MEDIA/**/*.[vV][tT][tT]
+/.SYSTEMX/MEDIA/**/*.[aA][sS][sS]
+/.SYSTEMX/MEDIA/**/*.[sS][sS][aA]
+/.SYSTEMX/MEDIA/**/*.[sS][sS][mM][lL]
+/.SYSTEMX/MEDIA/**/*.[bB][lL][eE][nN][dD][0-9]*
+
+# Known production receipts only; never ignore JSON schemas, PDF/image
+# artifacts, static ASSETS provenance, HTML, Markdown, or license text globally.
+/DELIVERY.json
+/RELEASE-ASSETS.json
+/voice-manifest.json
+/*.[mM][pP]4.receipt.json

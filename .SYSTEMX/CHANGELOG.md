@@ -4,6 +4,24 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-alpha.7 — Generic template and reference-library cleanup
+
+- Remove the current repository's film-companion directories and the optional
+  white-paper/audio authoring component, including its component-specific tests.
+  Published media and authoring archives remain separate from reusable defaults;
+  historical immutable release identities are preserved.
+- Keep published PDFs, the four-part infographic posters, legitimate reference
+  images, and their static provenance. Replace current production-directory and
+  media-download links with generic reference navigation and hosted YouTube
+  guidance. Add no video, audio, caption, Blender, or render payload to the template.
+- Refresh the public README, current install examples, and distribution metadata
+  for alpha.7. The hosted film continues to describe its recorded alpha.6 baseline;
+  this patch introduces no runtime capability, schema, provider, or dependency.
+- Preserve actual runtime tests, schemas, policy, blank project records, manual
+  updates, and additive owner-file/default-cache retention. Repository ignore
+  rules protect this source checkout without changing the adopted folder's
+  user-payload policy. GitHub Actions remains disabled.
+
 ## 1.11.0-alpha.6 — YouTube introduction and verified media links
 
 - Link the public [YouTube introduction](https://www.youtube.com/watch?v=-EM-T6uNQAs)
