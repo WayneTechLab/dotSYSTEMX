@@ -972,10 +972,13 @@ class ManagerTests(unittest.TestCase):
     def test_schema_two_hashes_binary_and_unknown_files_byte_for_byte(self):
         unknown = self.source / "MEDIA/fixture-unknown.dat"
         unknown.write_bytes(b"prefix\x00\r\nsuffix")
+        known = "MEDIA/Infographics/systemx-map-architecture.svg"
+        (self.source / known).write_bytes(
+            b'<svg xmlns="http://www.w3.org/2000/svg">\r\n'
+            b'<desc>Byte-exact media fixture</desc>\r\n</svg>\r\n')
         self.write_manifest("1.9.0-alpha.3")
         manifest = json.loads((self.source / manager.MANIFEST).read_text())
         self.assertEqual(manifest["schemaVersion"], 2)
-        known = "MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg"
         self.assertIn(b"\r\n", (self.source / known).read_bytes())
         for name in (known, "MEDIA/fixture-unknown.dat"):
             with self.subTest(name=name):
@@ -1002,7 +1005,7 @@ class ManagerTests(unittest.TestCase):
                 files = dict(original)
                 files[name] = converted
                 self.assertEqual(manager.verified_bundle(files)["version"], self.version)
-        for name in ("MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg",
+        for name in ("MEDIA/Infographics/systemx-map-architecture.svg",
                      "MEDIA/fixture-unknown.dat"):
             with self.subTest(name=name):
                 self.assertNotEqual(manager.distribution_digest(name, b"a\r\nb", 2),

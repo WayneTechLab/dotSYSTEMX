@@ -1,62 +1,80 @@
 # Published reference library
 
-The reusable template contains the current white paper, static system diagrams,
-accessible text companions, and their reference provenance. Film production,
-narration, captions, editable scenes, render output, and publication workspaces
-are maintained separately from this source distribution.
+The beta.3 source distribution has twelve current infographic SVGs: four
+system maps, seven detailed agent guides, and one atlas built from the final
+individual guides. Each topic has one current file in
+[the media library](../../.SYSTEMX/MEDIA/README.md). Use the
+[complete text alternative](../../.SYSTEMX/MEDIA/Reference/visual-guide.md)
+for the reading order, exact commands, paths, flow, and role boundaries.
 
-## Current white paper, edition 2.1
+## Current graphics
 
-*.SYSTEMX: Portable Project Coordination for AI-Assisted Work* examines the
-`1.11.0-beta.1` record model, agent roles, Access Matrix, security boundaries,
-release accounting, external authoring-data boundary, and evaluation limits.
-The current five-page PDF has selectable text and navigation.
+| System map | SVG |
+| --- | --- |
+| Architecture and selected scopes | [Open map 1](../../.SYSTEMX/MEDIA/Infographics/systemx-map-architecture.svg) |
+| Canonical task and evidence cycle | [Open map 2](../../.SYSTEMX/MEDIA/Infographics/systemx-map-task-cycle.svg) |
+| Agenda, Access Matrix, BOT/DOT, and Agent1 | [Open map 3](../../.SYSTEMX/MEDIA/Infographics/systemx-map-governance.svg) |
+| First run, direct I/O, DATA, and release boundary | [Open map 4](../../.SYSTEMX/MEDIA/Infographics/systemx-map-onboarding.svg) |
 
-[Clickable PDF](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) ·
-[Readable manuscript](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.md) ·
-[Edition provenance](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.json) ·
-[White-paper manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
+| Agent | One detailed SVG |
+| --- | --- |
+| Agent 0 | [Coordinator and roster](../../.SYSTEMX/MEDIA/Infographics/systemx-agent-0.svg) |
+| Agent X | [Events and time](../../.SYSTEMX/MEDIA/Infographics/systemx-agent-x.svg) |
+| Agent Y | [Selected CLI](../../.SYSTEMX/MEDIA/Infographics/systemx-agent-y.svg) |
+| Agent Z | [Evidence review](../../.SYSTEMX/MEDIA/Infographics/systemx-agent-z.svg) |
+| Agent Alpha | [AUTOBOT and Agenda](../../.SYSTEMX/MEDIA/Infographics/systemx-agent-alpha.svg) |
+| Agent Beta | [Named BOT/DOT records](../../.SYSTEMX/MEDIA/Infographics/systemx-agent-beta.svg) |
+| Agent1 | [Security and access advice](../../.SYSTEMX/MEDIA/Infographics/systemx-agent-1.svg) |
 
-Earlier edition 2.0 examined `1.11.0-alpha.4` and was published with
-`1.11.0-alpha.5`. Its original PDF, figures, manuscript, and provenance remain
-available from that [immutable release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-alpha.5).
-Optional publishing and narration tools are not dependencies of the template runtime.
+[Combined atlas](../../.SYSTEMX/MEDIA/Infographics/systemx-atlas.svg) ·
+[Asset manifest and art provenance](../../.SYSTEMX/MEDIA/Reference/ASSETS.json).
+The [beta.3 8K PNG export pack](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.11.0-beta.3/dotsystemx-1.11.0-beta.3-current-graphics-8k.zip) is a separate release asset containing the twelve current exports, manifest, checksums, and accessible guide; it is not another source copy.
+The SVGs declare a 7680 × 4320 canvas and overlay exact vector labels on
+imagegen-generated illustration. The illustration's native source size is
+recorded separately; an 8K export canvas does not create native 8K raster
+artwork. The atlas is an overview; open the individual guides for small text.
 
-## Static guides
+The [current builder](build_current_visuals.py) uses reviewed external art
+sources and adds deterministic labels, diagrams, and accessibility metadata.
+The [visual verifier](verify_current_visuals.py) checks exact current inventory,
+SVG structure, embedded-source integrity, and legibility. Raw generated art
+and Blender files stay in the owner archive outside the public template. The
+public repository carries one final SVG per current topic and no video files.
 
-[Current beta visual guide and accessible text](../../.SYSTEMX/MEDIA/Reference/current-visual-guide.md) ·
-[Detailed agent sheets and text transcript](../../.SYSTEMX/MEDIA/Reference/agent-detail-guide.md) ·
-[Lifecycle infographic](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg) ·
-[BOT/DOT workspaces](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-bot-workspaces.svg) ·
-[Security and access](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-security-access.svg) ·
-[Access Matrix](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-access-matrix.svg)
+Before shipping a Python wheel, remove stale generated `build/` and
+`*.egg-info/` directories, then build from the reviewed source. Set the wheel
+output outside the checkout and run the [wheel payload verifier](verify_wheel_payload.py):
 
-The current set has four beta feature infographics, seven agent role cards,
-and seven detailed agent sheets on 7680 × 4320 SVG canvases, with exact vector
-labels and reading-order text companions. The detailed sheets show the folder,
-example prompt, CLI subcommand map, process flow, and boundary for every role.
-Imagegen illustrations have 1672 × 941 or 1536 × 1024 native pixels; the 8K
-canvas is an export size. These graphics explain source behavior and boundaries,
-not live provider, device, or deployment status.
+```bash
+python3 -I -B docs/media/verify_wheel_payload.py /path/to/dotsystemx-<version>-py3-none-any.whl
+```
 
-The [first-set builder](build_current_visuals.py) and
-[detailed-sheet builder](build_detail_visuals.py) reconstruct the stock SVGs
-from reviewed external inputs. The [visual verifier](verify_current_visuals.py)
-checks current asset hashes, SVG structure and contrast, and optional external
-8K raster export hashes. Raw generated art and raster exports remain outside
-the portable template; the SVGs are the current main-branch copies.
+The checker compares every `systemx/` wheel file, including the embedded
+distribution manifest, byte for byte with `.SYSTEMX/` and checks manifest
+digests. It also rejects unexpected wheel members and checks the package
+metadata, entry point, license, and complete wheel `RECORD`. It fails if stale
+build output added an old image or document, if a file is missing, or if
+content differs. It requires only Python's standard library and does not
+change the source tree.
 
-### Historical field guide
+## Retained research paper
 
-[Four-part field guide and accessible text](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md) ·
-[Portable reference library](../../.SYSTEMX/MEDIA/README.md) ·
-[Documentation images](../assets/README.md) ·
-[Visual manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide)
+[Portable Project Coordination for AI-Assisted Work, edition 2.1](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
+is retained with a [Markdown text alternative](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.md)
+and [provenance](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.json).
+That edition examines `1.11.0-beta.1`. It is a historical research baseline,
+not a claim that its text has been updated for beta.3. The PDF has selectable
+text but is not tagged PDF/UA. Edition 2.0 remains in
+[immutable alpha.5 history](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-alpha.5).
 
-The four overview/detail posters explain canonical records, agent roles, ROOT,
-AUTOBOT references, DATA, tools, and named `.SYSTEMXP` scopes. Their images and
-stated baseline remain separate from a project's selected defaults version.
-Images explain responsibilities; they do not launch workers or grant access.
+## Previous visual editions and hosted films
 
-For current hosted video guidance, use the public manual's YouTube links. Video
-files and production metadata are not distributed with new template source.
+The four original JPEG maps, beta.1 feature graphics, role cards, and
+superseded detailed sheets remain in
+[immutable beta.2 source history](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-beta.2/.SYSTEMX/MEDIA/Infographics)
+and the separately verified owner archive. Current README and wiki embeds use
+the beta.3 set; historical links preserve earlier claims without showing old
+artwork as current. For hosted video history, use the
+[wiki manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki). Video files,
+Blender projects, narration, renders, and captions are not stored in this
+source distribution.

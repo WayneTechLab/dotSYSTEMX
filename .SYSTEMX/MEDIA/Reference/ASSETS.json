@@ -1,1088 +1,337 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "generatedOn": "2026-10-31",
   "product": ".SYSTEMX",
-  "scope": "current portable visual assets only",
-  "checksumMethod": "SHA-256 of exact file bytes",
-  "builder": "docs/media/build_current_visuals.py",
-  "foundationalSeries": "Four historical-baseline JPEG pages retained as current foundation",
+  "softwareBaseline": "1.11.0-beta.3",
+  "scope": "four current maps, seven current agent guides, one combined atlas",
+  "canvas": {
+    "width": 7680,
+    "height": 4320,
+    "note": "Vector labels are crisp; embedded art retains recorded native dimensions."
+  },
   "assets": [
     {
-      "id": "systemx-field-guide-01-overview",
-      "page": 1,
-      "pages": 4,
-      "title": "Complete system with ROOT",
-      "generatedOn": "2026-10-19",
-      "tool": "built-in imagegen; generation plus targeted technical edits",
-      "baseline": "1.11.0-alpha.2",
-      "mediaEdition": "1.11.0-alpha.3",
-      "roles": [
-        "agent.0",
-        "agent.x",
-        "agent.y",
-        "agent.z",
-        "agent.a"
-      ],
-      "prompt": "systemx-field-guide-prompts.md",
-      "textReference": "systemx-field-guide.md",
-      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
-      "upscaled": true,
-      "export": {
-        "file": "../Infographics/systemx-field-guide-01-overview-4k.jpg",
-        "width": 3840,
-        "height": 2160,
-        "bytes": 1900067,
-        "sha256": "932b114f65f277ebce216f47795ec03c1e8001c749ba63f4f3840168a4b6d7e6"
-      },
-      "source": {
+      "id": "systemx-map-architecture",
+      "kind": "system-map",
+      "title": "SYSTEM MAP 1 / ARCHITECTURE",
+      "description": "The portable root keeps objective, plan, canonical tasks and focus. Named .SYSTEMXP children keep independent records under one outer toolchain.",
+      "file": "../Infographics/systemx-map-architecture.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 340369,
+      "sha256": "5a48058ede271f62fbc08240b5012a60979736e703b83c5e4207f94ea3b61ca0",
+      "embeddedArt": {
+        "fileName": "map-01-architecture.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1830191,
-        "sha256": "a02e2764e87ebd34172bc146056ed0cb73fffbbb365d7e8f9ac98ca82fcaa05e",
-        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      },
-      "coverage": [
-        "ROOT",
-        "SX-RULES",
-        "SX-MILESTONE",
-        "canonical SYSTEMX tasks",
-        "observed harness TODO",
-        "optional bot TODO",
-        "Agent0 authorized reconciliation and readback"
-      ]
+        "bytes": 249523,
+        "sha256": "bc26f16b6e1d356dde2a368da01d6f00189b480bc4b083c66e8ffa1e4907c42f",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
-      "id": "systemx-field-guide-02-agent-coordination",
-      "page": 2,
-      "pages": 4,
-      "title": "Three TODO surfaces, one task authority",
-      "generatedOn": "2026-10-19",
-      "tool": "built-in imagegen; generation plus targeted technical edits",
-      "baseline": "1.11.0-alpha.2",
-      "mediaEdition": "1.11.0-alpha.3",
-      "roles": [
-        "agent.0",
-        "agent.x",
-        "agent.y",
-        "agent.z",
-        "agent.a"
-      ],
-      "prompt": "systemx-field-guide-prompts.md",
-      "textReference": "systemx-field-guide.md",
-      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
-      "upscaled": true,
-      "export": {
-        "file": "../Infographics/systemx-field-guide-02-agent-coordination-4k.jpg",
-        "width": 3840,
-        "height": 2160,
-        "bytes": 1893890,
-        "sha256": "9950a100561b4c30d2aad232865af09fa9a3a51d142e004291e76c83a37584e8"
-      },
-      "source": {
+      "id": "systemx-map-task-cycle",
+      "kind": "system-map",
+      "title": "SYSTEM MAP 2 / TASK + EVIDENCE",
+      "description": "The task and evidence cycle connects the objective and canonical task ledger to Agent X timing, Agent Y selected CLI work, Agent Z review, and owner acceptance.",
+      "file": "../Infographics/systemx-map-task-cycle.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 307089,
+      "sha256": "8c430229cf66c6bb368361799a42a292db335cd609839386c1cfab540f681da3",
+      "embeddedArt": {
+        "fileName": "map-02-task-cycle.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1865643,
-        "sha256": "0737e82e44d3196554d219bf2254fe9222c0b626e8d42acc6a21e46dfd2f4943",
-        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      },
-      "coverage": [
-        "ROOT",
-        "SX-RULES",
-        "SX-MILESTONE",
-        "canonical SYSTEMX tasks",
-        "observed harness TODO",
-        "optional bot TODO",
-        "Agent0 authorized reconciliation and readback"
-      ]
+        "bytes": 224435,
+        "sha256": "b767ddb53d7ef46686c53fc76509371951d9460912dc1f78beb193d1988ddc26",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
-      "id": "systemx-field-guide-03-autobot-panel",
-      "page": 3,
-      "pages": 4,
-      "title": "ROOT planning and on-demand specialists",
-      "generatedOn": "2026-10-19",
-      "tool": "built-in imagegen; generation plus targeted technical edits",
-      "baseline": "1.11.0-alpha.2",
-      "mediaEdition": "1.11.0-alpha.3",
-      "roles": [
-        "agent.0",
-        "agent.x",
-        "agent.y",
-        "agent.z",
-        "agent.a"
-      ],
-      "prompt": "systemx-field-guide-prompts.md",
-      "textReference": "systemx-field-guide.md",
-      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
-      "upscaled": true,
-      "export": {
-        "file": "../Infographics/systemx-field-guide-03-autobot-panel-4k.jpg",
-        "width": 3840,
-        "height": 2160,
-        "bytes": 1809511,
-        "sha256": "4f44e03bd7103e0464f87af063b97a312e985f44d0d86ca81368e9a9345c049f"
-      },
-      "source": {
+      "id": "systemx-map-governance",
+      "kind": "system-map",
+      "title": "SYSTEM MAP 3 / GOVERNANCE",
+      "description": "The governance map shows ten unset Agenda context settings, twenty default-deny Access Matrix roles, offline named BOT folders and advisory Agent1 assessment.",
+      "file": "../Infographics/systemx-map-governance.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 445156,
+      "sha256": "d14561ddaf874069d60a5974a9200fd64c29039f997dee2bfcb7db43bf324160",
+      "embeddedArt": {
+        "fileName": "map-03-governance.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1756317,
-        "sha256": "9c15ae639ea96e482b20d63c9a3670f9a588a6f65bccc353f04efbd0c0746866",
-        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      },
-      "coverage": [
-        "ROOT",
-        "SX-RULES",
-        "SX-MILESTONE",
-        "canonical SYSTEMX tasks",
-        "observed harness TODO",
-        "optional bot TODO",
-        "Agent0 authorized reconciliation and readback"
-      ]
+        "bytes": 328050,
+        "sha256": "cda91b2313916be5b03b82a798f43b07db710e2a0074dfb996828d1d96069fa0",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
-      "id": "systemx-field-guide-04-data-projects",
-      "page": 4,
-      "pages": 4,
-      "title": "Scoped ROOT, DATA and the toolchain",
-      "generatedOn": "2026-10-19",
-      "tool": "built-in imagegen",
-      "baseline": "1.11.0-alpha.2",
-      "mediaEdition": "1.11.0-alpha.3",
-      "roles": [
-        "agent.0",
-        "agent.x",
-        "agent.y",
-        "agent.z",
-        "agent.a"
-      ],
-      "prompt": "systemx-field-guide-prompts.md",
-      "textReference": "systemx-field-guide.md",
-      "exportMethod": "macOS sips; resize to 3840 x 2160; JPEG quality 85",
-      "upscaled": true,
-      "export": {
-        "file": "../Infographics/systemx-field-guide-04-data-projects-4k.jpg",
-        "width": 3840,
-        "height": 2160,
-        "bytes": 1919070,
-        "sha256": "86118223ad7cdd34ab74cd0b541dc73d0f274ad4915ef9db6df037989175e966"
-      },
-      "source": {
+      "id": "systemx-map-onboarding",
+      "kind": "system-map",
+      "title": "SYSTEM MAP 4 / FIRST RUN + TOOLCHAIN",
+      "description": "First-run and toolchain routes connect the reviewed CLI to host-owned IDE processes, selected project scopes, local DATA and separate release and deployment evidence.",
+      "file": "../Infographics/systemx-map-onboarding.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 299415,
+      "sha256": "a00375c98262be4093d98e9f59123e7edbf085da75b80f8aee8f8274262e1f6c",
+      "embeddedArt": {
+        "fileName": "map-04-onboarding.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1815773,
-        "sha256": "d9d9457961459d7e913a98fdf2f8b0ecd5056996194b5bb95e5cc70acc8a7ebb",
-        "note": "Selected native built-in imagegen output retained outside the repository; only the 4K JPEG export ships. Upscaling adds canvas pixels, not native detail."
-      },
-      "coverage": [
-        "ROOT",
-        "SX-RULES",
-        "SX-MILESTONE",
-        "canonical SYSTEMX tasks",
-        "observed harness TODO",
-        "optional bot TODO",
-        "Agent0 authorized reconciliation and readback"
-      ]
-    },
-    {
-      "id": "systemx-guide-lifecycle",
-      "kind": "guide",
-      "title": "PROJECT LIFECYCLE",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1729739,
-        "sha256": "f6e3549424f398b162df0a2bbf01cebadb65005aec5e61606a5e3b090de82562",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 323261,
-        "sha256": "01ef37b437eaa0edb1b5c1b8a4471f2eeecc6ce247dfbc1eb7e9c8af55472e6a"
-      },
-      "export": {
-        "file": "../Infographics/systemx-guide-lifecycle.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 434065,
-        "sha256": "541296fe4d824c354bf3c098ee75f27681d1572f4bc8f2575f3071b57c0c7b04"
-      },
-      "rasterExport": {
-        "fileName": "systemx-guide-lifecycle-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 3024819,
-        "sha256": "10a73904adaf6c77386c869d8ea17393b8c3085ac850a9d3521a5b5818b39afd",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
-    },
-    {
-      "id": "systemx-guide-bot-workspaces",
-      "kind": "guide",
-      "title": "NAMED BOT WORKSPACES",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1604722,
-        "sha256": "e74ca532e9f0354ec9514378481e5d37e6d61fd2fa4b13ceb98d5f4d24d058af",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 265250,
-        "sha256": "5d0c5da047a09c0e28339a0bef9e3711d526c13218d715932a753028af31eaf5"
-      },
-      "export": {
-        "file": "../Infographics/systemx-guide-bot-workspaces.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 356260,
-        "sha256": "c4339748543f6c7636e45ad171c589311debba057bbd35722190c203c92c8d79"
-      },
-      "rasterExport": {
-        "fileName": "systemx-guide-bot-workspaces-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2830948,
-        "sha256": "8c7faef5222137a12c5a8c4a45ab533a1e4e1273c81b5232513084a5687bbee5",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
-    },
-    {
-      "id": "systemx-guide-security-access",
-      "kind": "guide",
-      "title": "SECURITY AND ACCESS",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1599258,
-        "sha256": "31793b69e9dd611ce74aa79e5dd151a33e5cb9b823476b100cd12fbc24c941b1",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 308060,
-        "sha256": "510d1fea11ca6eebcb5216c30b84a36715d946fbdb17300083bc1f607f24e4cb"
-      },
-      "export": {
-        "file": "../Infographics/systemx-guide-security-access.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 413320,
-        "sha256": "d63a9d38d27caee06f5eda45ff1e61b14383301d6850c01911741d4b9bb760ae"
-      },
-      "rasterExport": {
-        "fileName": "systemx-guide-security-access-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 3138168,
-        "sha256": "bd06f9039d5cdb56d2468a824ab8a803faa2d99919d15a2897db65577578ff90",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
-    },
-    {
-      "id": "systemx-guide-access-matrix",
-      "kind": "guide",
-      "title": "ACCESS MATRIX AND AGENDA",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1518441,
-        "sha256": "10fdfc814c6092755843a6786e31a2e7c95931f7ce29d0a2a33645157d77874b",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 262318,
-        "sha256": "7f7018764abc4aa5c12012c8047d3f1ef53395954f206035e728a342cfaf66a2"
-      },
-      "export": {
-        "file": "../Infographics/systemx-guide-access-matrix.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 352334,
-        "sha256": "d251ff4616fab87347fea191bacdfd9305aec7b83d93252a299c32fe48a42770"
-      },
-      "rasterExport": {
-        "fileName": "systemx-guide-access-matrix-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2790777,
-        "sha256": "a5c5b934932f200c56bf533ca8383600add358a4e5bf2ea638f376122b90ecff",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 218703,
+        "sha256": "4aecbcbfa39539c35ebaa1fc361802a3b295ac12754fcabe3460a16008984225",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
       "id": "systemx-agent-0",
-      "kind": "role",
+      "kind": "agent-guide",
       "title": "AGENT 0",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
+      "description": "Agent 0 reads the selected-scope roster, coordinates canonical tasks, integrates evidence and asks the designated owner to accept work.",
+      "file": "../Infographics/systemx-agent-0.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 308668,
+      "sha256": "ea13c9f12e10c03ed46ae9bdba9c98f9ed5cc3da6aff8e09a986b0846312cf1f",
+      "embeddedArt": {
+        "fileName": "agent-0.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1644584,
-        "sha256": "68cad630b9954736c1462826073eba0a5d638c6e82b4efca3959a194f2291ae6",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 273467,
-        "sha256": "78a9de1a5c734434bcfe09fd0ff42f64bec427502d85afb861e0d1df826156ab"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-0.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 366702,
-        "sha256": "e3051754c69f5cae4316acd672d4fd196c9e465a5f0460460daa52a8d2dedccf"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-0-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2821967,
-        "sha256": "65fdc8cfa9324f8969ebb046b93d880318eceab51927423522046435a2e9bf17",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 224990,
+        "sha256": "35ea3d0eb2f7eb4d6ac813336079c9d3cf9e0106e60cf49884b4481ac5f75e2a",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
       "id": "systemx-agent-x",
-      "kind": "role",
+      "kind": "agent-guide",
       "title": "AGENT X",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
+      "description": "Agent X records events, due items and reviewed closure without scheduling execution or delivering notifications.",
+      "file": "../Infographics/systemx-agent-x.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 298866,
+      "sha256": "5820ee502080028d2fabb8881972a9ddf50a388ff1d7bf33c2c6b30f0777923c",
+      "embeddedArt": {
+        "fileName": "agent-x.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1651408,
-        "sha256": "0b03171081f196ed934351731139b39297844979b149a95cb0991fa459a0f7ae",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 264724,
-        "sha256": "73882f059a9c425c80ec9bc54160790a3fb650b63372d5837553ca9f3fbc8b9f"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-x.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 355021,
-        "sha256": "f3de8db8f7f33d5eb1f18337e6273a5e40a25c3c25c5cec4ed1c8f12f9faa89a"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-x-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2772452,
-        "sha256": "26eb1be283b2f777b68efb14ab6162af6f6fd61a388404c0ae9f144853bde505",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 217813,
+        "sha256": "3f099fbffd54298efe643450160897078fe0a0001712303a30b52e8504f0f345",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
       "id": "systemx-agent-y",
-      "kind": "role",
+      "kind": "agent-guide",
       "title": "AGENT Y",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
+      "description": "Agent Y takes one explicitly assigned task through a selected installed CLI and returns bounded branch or PR evidence.",
+      "file": "../Infographics/systemx-agent-y.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 267836,
+      "sha256": "1b61044654787a9c847543a4848cb381b6eaf6892394e72af5279ba5b0dbdbf7",
+      "embeddedArt": {
+        "fileName": "agent-y.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1617804,
-        "sha256": "0149ca899083783253b73f76ba6d3e98c0a57de73269aa8da87498a167e4adbf",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 257585,
-        "sha256": "c0564602004fdcfc3f22b0227f1d10c90388520da9cb1cc2ad559ae9a3e084f3"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-y.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 345521,
-        "sha256": "315293971da8bcb00d4207d5398ffb2bae6dab0057c8b9a5cb21ba85609261be"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-y-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2778809,
-        "sha256": "9424c299f061e950bc560e7ef968afac884279ae7cc18a03347af623405a53fe",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 194493,
+        "sha256": "ff30c29bc9fcd556b1831e064f631f1bc6dec7cda1b931d3af2df590e8e5b2c0",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
       "id": "systemx-agent-z",
-      "kind": "role",
+      "kind": "agent-guide",
       "title": "AGENT Z",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
+      "description": "Agent Z applies a fixed hundred-question evidence policy and returns a versioned advisory scorecard.",
+      "file": "../Infographics/systemx-agent-z.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 496241,
+      "sha256": "2d27f49436017210ca8d31cd82e456b00a2eed4006b36d7e0389a8b31ed78916",
+      "embeddedArt": {
+        "fileName": "agent-z.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1596507,
-        "sha256": "bd0d90c21647d9b63dae378a5caef4003769709ac73d8f7786385d5e37c7733b",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 280736,
-        "sha256": "6893a9812192552e1adfd1b557ca29c903b10ae910e5d44070de1b4f512e5402"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-z.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 376329,
-        "sha256": "9e696a99f58b09a5e0d2397b9bc19d7fa36ee6928350332a5c75f5a8b7f2601f"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-z-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2868544,
-        "sha256": "aeec87d65a76c320af2777552441d707fe1bbc6324d6a1af8b895aa89dbfd1a8",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 365857,
+        "sha256": "5a33b606cc1aa2e4b8b06941faaea6b0f586ac3e1207b63f17450053a83d6a50",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
       "id": "systemx-agent-alpha",
-      "kind": "role",
+      "kind": "agent-guide",
       "title": "AGENT ALPHA",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
+      "description": "Agent Alpha routes selected AUTOBOT references on request; the ten Agenda context settings start unset.",
+      "file": "../Infographics/systemx-agent-alpha.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 493683,
+      "sha256": "695bd6f323c7d97eddbf535d20ffe152af1f0eddd911ae10ffa2264634f2e3d4",
+      "embeddedArt": {
+        "fileName": "agent-alpha.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1767566,
-        "sha256": "74dfef2994a68f1a0faf027d29cf576d65e4f592a7d7e89558616d4a30702ff6",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 361448,
-        "sha256": "dc1a89b96227a31dd8fc2637feffc9f5525ef7235fb0a05b7cbcf4a62dea4557"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-alpha.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 484025,
-        "sha256": "ecf1b032f73021657b420a0d5fb1add07aa8ba7c6d7027e8c87a183a75fb1628"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-alpha-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 3506938,
-        "sha256": "1ecb1348150bdcf3d21e3da200d207f32fb28bf09cb9220e759a8646f89eaaf8",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 363769,
+        "sha256": "077e5913a80763a892664cc23dba74086d44900961d5385950858c846c9fe521",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
       "id": "systemx-agent-beta",
-      "kind": "role",
+      "kind": "agent-guide",
       "title": "AGENT BETA",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
+      "description": "Agent Beta records separately named offline BOT or DOT workspaces and advisory task or access links without connecting a provider.",
+      "file": "../Infographics/systemx-agent-beta.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 349519,
+      "sha256": "51de2dc0b9fe9516505e0bb456a1bf0d7ea20095b3c9f4f0868fbc5729414297",
+      "embeddedArt": {
+        "fileName": "agent-beta.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1609175,
-        "sha256": "0dfe97a49adead855ea77a43c3041c048b9e5469b27ecb398a272befb5b711be",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 249303,
-        "sha256": "a2c3d5542c028fe9784952c3e4cb4268b2685f266a734c3c2fe603d1dcac3751"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-beta.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 334491,
-        "sha256": "64f49e22cfc525d681b2b91551fbe30d93e3f963a88382e5533f9be8c8aab02b"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-beta-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2725562,
-        "sha256": "6e8203ae43a888d3ec4edd7db2f59c6014573478d0d61774c6890c83c997b609",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 255597,
+        "sha256": "cfbcaa70d623a6884b3debd49c05c694343c7fc1109ea39e94b0b67f9be9fb01",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
       "id": "systemx-agent-1",
-      "kind": "role",
+      "kind": "agent-guide",
       "title": "AGENT 1",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per concept; deterministic SVG typography",
-      "textReference": "current-visual-guide.md",
-      "nativeArt": {
-        "format": "PNG",
+      "description": "Agent1 offers warning-only security assessment, four hundred evidence questions and names-only dotenv migration review.",
+      "file": "../Infographics/systemx-agent-1.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 371829,
+      "sha256": "3202274e79c362e2794eefaa58636efb1b41ac37963939b1b4f1ab40da120458",
+      "embeddedArt": {
+        "fileName": "agent-1.jpg",
+        "mime": "image/jpeg",
         "width": 1672,
         "height": 941,
-        "bytes": 1692064,
-        "sha256": "95f140a06f9b7fa66e9eb043f45cd6c7874e12bf6526780655c3df52b6e2c462",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 277159,
-        "sha256": "75f91284665c47aad250e28426dbff0b1c8f0b311dcc3aa9bbd91c0420d310b3"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-1.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 371609,
-        "sha256": "46db7d47e931ef5d3eea33ad9902ac854088f849d358122a2d24cc3e28464122"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-1-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2897396,
-        "sha256": "fc02c7a7618bdc09119db427a146582d91ef98cb77d43d00efbafe5ccba72788",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.69
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from 1672x941"
+        "bytes": 272349,
+        "sha256": "c2a01596822899c03baa5e162d7937e0740a9455fcbd72a78c5ab8cac2546b1f",
+        "note": "Compact derivative; imagegen master remains outside the template."
+      }
     },
     {
-      "id": "systemx-agent-0-detail",
-      "kind": "agent-detail",
-      "title": "AGENT 0",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per agent; deterministic SVG typography and icons",
-      "textReference": "agent-detail-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1797246,
-        "sha256": "f5366cfc8a3934364c3905e2a34528c1c8b5bcfa5dcb1a4448985c6ff6a6ec43",
-        "retention": "external authoring archive; not shipped"
+      "id": "systemx-atlas",
+      "kind": "atlas",
+      "title": "Combined atlas",
+      "description": "Four current system maps and seven current agent guides superimposed into one navigational composition.",
+      "file": "../Infographics/systemx-atlas.svg",
+      "width": 7680,
+      "height": 4320,
+      "bytes": 832145,
+      "sha256": "3c713a95e5653a375a192f96520fc7215fd29892d2cd69c7294d477d90b33fdf",
+      "sources": {
+        "systemx-map-architecture": "5a48058ede271f62fbc08240b5012a60979736e703b83c5e4207f94ea3b61ca0",
+        "systemx-map-task-cycle": "8c430229cf66c6bb368361799a42a292db335cd609839386c1cfab540f681da3",
+        "systemx-map-governance": "d14561ddaf874069d60a5974a9200fd64c29039f997dee2bfcb7db43bf324160",
+        "systemx-map-onboarding": "a00375c98262be4093d98e9f59123e7edbf085da75b80f8aee8f8274262e1f6c",
+        "systemx-agent-0": "ea13c9f12e10c03ed46ae9bdba9c98f9ed5cc3da6aff8e09a986b0846312cf1f",
+        "systemx-agent-x": "5820ee502080028d2fabb8881972a9ddf50a388ff1d7bf33c2c6b30f0777923c",
+        "systemx-agent-y": "1b61044654787a9c847543a4848cb381b6eaf6892394e72af5279ba5b0dbdbf7",
+        "systemx-agent-z": "2d27f49436017210ca8d31cd82e456b00a2eed4006b36d7e0389a8b31ed78916",
+        "systemx-agent-alpha": "695bd6f323c7d97eddbf535d20ffe152af1f0eddd911ae10ffa2264634f2e3d4",
+        "systemx-agent-beta": "51de2dc0b9fe9516505e0bb456a1bf0d7ea20095b3c9f4f0868fbc5729414297",
+        "systemx-agent-1": "3202274e79c362e2794eefaa58636efb1b41ac37963939b1b4f1ab40da120458"
       },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 236282,
-        "sha256": "c3fabf0b7ee48a4516415a6640c543db64f56544ceca20b0667b35bcf99216a0"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-0-detail.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 322684,
-        "sha256": "bcca45bf5a81e7af15209fca0a438a2feed02d89bd5a1ea751c16006d978be48"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-0-detail-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2872385,
-        "sha256": "96971d13ad63bc430db5c08bfae5b730c351d5d6d3ba34a480d983ed22b2544e",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 8.65
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from its native pixels"
-    },
-    {
-      "id": "systemx-agent-x-detail",
-      "kind": "agent-detail",
-      "title": "AGENT X",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per agent; deterministic SVG typography and icons",
-      "textReference": "agent-detail-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1657139,
-        "sha256": "5da6e1a257d2110e41b8c2e18f816f0dbb68d9de62d8b6ed6d97a67430ca450d",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 199565,
-        "sha256": "5eebd5a2c36d0397f56ea3b9411950b07084d2636c8097302ea47adba76ebf11"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-x-detail.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 273393,
-        "sha256": "e82acbce6b19cce4c5cd56c67ae2b5082d70c0983e09af85949a727ee7951e1f"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-x-detail-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2607849,
-        "sha256": "d9eb960593ad83fe76364670a85ec86a00432e185ebaead887060a7041981bb0",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 6.13
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from its native pixels"
-    },
-    {
-      "id": "systemx-agent-y-detail",
-      "kind": "agent-detail",
-      "title": "AGENT Y",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per agent; deterministic SVG typography and icons",
-      "textReference": "agent-detail-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1688492,
-        "sha256": "11983497610e12cbfdbe074cd30d6328e3a288a0c9b3337c35285bdea5eeba78",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 223798,
-        "sha256": "09ee2e775b9938280fe197bf11612979b3b11c7c0b61a9dc86102ff6963785ca"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-y-detail.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 305906,
-        "sha256": "12b646a43f00f7b3721572349b31268cbf5a4f1296074d84e1e5e3254b59c42c"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-y-detail-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2826598,
-        "sha256": "8170c13a4ad76333d840bc5a046a501b9165f334e21257c28c8e12a792715ed5",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 5.86
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from its native pixels"
-    },
-    {
-      "id": "systemx-agent-z-detail",
-      "kind": "agent-detail",
-      "title": "AGENT Z",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per agent; deterministic SVG typography and icons",
-      "textReference": "agent-detail-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1672,
-        "height": 941,
-        "bytes": 1585765,
-        "sha256": "b288f324a11bf68c91ecc325b691a0d976e0000498e2a316150f6e5a2cd7afa9",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 218322,
-        "sha256": "c88972db71379b05f052e83524fd084e0b3308efc8454308010a79c199b09932"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-z-detail.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 298351,
-        "sha256": "32868ce9cd085381eb13485877feb2ca4faaa6ba3bb1d080ff363ab45ef7d59c"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-z-detail-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2632738,
-        "sha256": "9e3bf8f9855112990def4e4b5ed50ffe43a96cd2a20fd58261bdbafbc22a8182",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 5.72
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from its native pixels"
-    },
-    {
-      "id": "systemx-agent-alpha-detail",
-      "kind": "agent-detail",
-      "title": "AGENT ALPHA",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per agent; deterministic SVG typography and icons",
-      "textReference": "agent-detail-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1536,
-        "height": 1024,
-        "bytes": 2242524,
-        "sha256": "152b6149dc80d71f1325d01cc9c0ea8dda08d13de19101889382917b3bd1fdda",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 364375,
-        "sha256": "e07c7bbb5c02b5ee9222ebfd234a94c062fdcf05aa0e329959c1179cbde16594"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-alpha-detail.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 493515,
-        "sha256": "308b3e0414b12d084bba7713b78354d237c731a6e30409ccd13a52cfbc866aa0"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-alpha-detail-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 3063439,
-        "sha256": "5d7438a590ead0b8d19ab83e57115a43a61dc04883d000de6767eeb35098086d",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 8.45
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from its native pixels"
-    },
-    {
-      "id": "systemx-agent-beta-detail",
-      "kind": "agent-detail",
-      "title": "AGENT BETA",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per agent; deterministic SVG typography and icons",
-      "textReference": "agent-detail-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1536,
-        "height": 1024,
-        "bytes": 2225587,
-        "sha256": "682afe542a52d82627ca97b071441f5ad3eb7241d85e24618a841947a85ada3f",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 338139,
-        "sha256": "4a573dd02aaadc72968cf3045488021629832d02979b41294f119198607ac796"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-beta-detail.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 458745,
-        "sha256": "7b2afe2fe9ba14d90c57db04603e37d14bac7081f6ccc2d04f2d9054a8f84338"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-beta-detail-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2783306,
-        "sha256": "8831056940ccb19676a4e40dfad52d1e99762d6850387fd1f1da0aa6b95f1860",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 8.63
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from its native pixels"
-    },
-    {
-      "id": "systemx-agent-1-detail",
-      "kind": "agent-detail",
-      "title": "AGENT 1",
-      "generatedOn": "2026-10-31",
-      "tool": "built-in image_gen; one original call per agent; deterministic SVG typography and icons",
-      "textReference": "agent-detail-guide.md",
-      "nativeArt": {
-        "format": "PNG",
-        "width": 1536,
-        "height": 1024,
-        "bytes": 2106814,
-        "sha256": "4322d45ba498c09697ede00a9483870f703e3b18f9c108372694b0aaca537005",
-        "retention": "external authoring archive; not shipped"
-      },
-      "embeddedBackground": {
-        "format": "JPEG",
-        "width": 1672,
-        "height": 941,
-        "quality": 88,
-        "bytes": 331449,
-        "sha256": "46055b5581db5af2e44017f671ff8ef101dd7899561ba1fcfd5ef9e6663f3071"
-      },
-      "export": {
-        "file": "../Infographics/systemx-agent-1-detail.svg",
-        "format": "SVG",
-        "width": 7680,
-        "height": 4320,
-        "bytes": 449978,
-        "sha256": "66c61942f5a3c447fc8b098a792a38f52d7494576e770b150db344bbee13d054"
-      },
-      "rasterExport": {
-        "fileName": "systemx-agent-1-detail-8k.jpg",
-        "format": "JPEG",
-        "width": 7680,
-        "height": 4320,
-        "quality": 90,
-        "bytes": 2977400,
-        "sha256": "f1f1705cc6ba0296fd66ca99f6c32677676d0888a77fc7a5b849324868c4ca66",
-        "publicationStatus": "prepared for separate GitHub release asset"
-      },
-      "accessibility": {
-        "svgTitleAndDescription": true,
-        "textCompanion": true,
-        "exactVectorLabels": true,
-        "noColorOnlyMeaning": true,
-        "minimumOverlayContrastRatio": 7.83
-      },
-      "renderMethod": "Chrome headless SVG render at 7680x4320; sips JPEG conversion; raster art scaled from its native pixels"
+      "thumbnails": {
+        "systemx-map-architecture": {
+          "fileName": "systemx-map-architecture.jpg",
+          "bytes": 56834,
+          "width": 600,
+          "height": 338,
+          "sha256": "4df52165931c108a103920b1d2a853acb309543783ce41545613b06a988deda9"
+        },
+        "systemx-map-task-cycle": {
+          "fileName": "systemx-map-task-cycle.jpg",
+          "bytes": 54230,
+          "width": 600,
+          "height": 338,
+          "sha256": "232e70ca55575306c6f6d03906bd0b915c304129ea0a3fbcdd2bfd35a8dc3583"
+        },
+        "systemx-map-governance": {
+          "fileName": "systemx-map-governance.jpg",
+          "bytes": 58801,
+          "width": 600,
+          "height": 338,
+          "sha256": "dbf125cb03a5f20bf4aa503ae8953ef62cfa9d79ecba9585316313662134a341"
+        },
+        "systemx-map-onboarding": {
+          "fileName": "systemx-map-onboarding.jpg",
+          "bytes": 54370,
+          "width": 600,
+          "height": 338,
+          "sha256": "98349d01f275ea6b032f8d28b53daf1ab2cf568c73c4217dd864a473889b203f"
+        },
+        "systemx-agent-0": {
+          "fileName": "systemx-agent-0.jpg",
+          "bytes": 53857,
+          "width": 600,
+          "height": 338,
+          "sha256": "73d6995ad00f5956fc74dffa86f6cef7b8398815d5b87d93d30d88badbbbcbe5"
+        },
+        "systemx-agent-x": {
+          "fileName": "systemx-agent-x.jpg",
+          "bytes": 51382,
+          "width": 600,
+          "height": 338,
+          "sha256": "ff832f20b41a746d198cfbc48109740476a6b7b1263bbf3e8f12a21a4775d118"
+        },
+        "systemx-agent-y": {
+          "fileName": "systemx-agent-y.jpg",
+          "bytes": 53640,
+          "width": 600,
+          "height": 338,
+          "sha256": "c37fa5d3a1e88e9f0645dd6e976d8c1a029469bfc318ea94299627c148111825"
+        },
+        "systemx-agent-z": {
+          "fileName": "systemx-agent-z.jpg",
+          "bytes": 56794,
+          "width": 600,
+          "height": 338,
+          "sha256": "6e8602489ba212345ea7424fd70d2b5a352a89676516a82686579931cdb60294"
+        },
+        "systemx-agent-alpha": {
+          "fileName": "systemx-agent-alpha.jpg",
+          "bytes": 62195,
+          "width": 600,
+          "height": 338,
+          "sha256": "ca792fe9c4297c889b7e628bf987e7c611516bdb05d2494c78051b6da111ee0b"
+        },
+        "systemx-agent-beta": {
+          "fileName": "systemx-agent-beta.jpg",
+          "bytes": 55415,
+          "width": 600,
+          "height": 338,
+          "sha256": "e34e788cbcb708f566d1e1ce61d98b11bb22513f20405f55885979dbe4a83a1c"
+        },
+        "systemx-agent-1": {
+          "fileName": "systemx-agent-1.jpg",
+          "bytes": 58475,
+          "width": 600,
+          "height": 338,
+          "sha256": "5fc60122d50a047015b0a5d57360448f1438a79af07544320a4e45389a661348"
+        }
+      }
     }
-  ],
-  "detailBuilder": "docs/media/build_detail_visuals.py"
+  ]
 }

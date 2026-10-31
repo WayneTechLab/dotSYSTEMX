@@ -22,36 +22,31 @@ setup refuses independent case variants to protect project records.
 [Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Setup profiles](config/profiles.json) · [MIT license](LICENSE)
 
-[Media library](MEDIA/README.md): the historical field guide, beta.1 feature
-infographics, agent cards, and accessible text companions. Earlier environment
-cards remain available in their tagged release history.
+[Media library](MEDIA/README.md): four beta.3 system maps, seven detailed
+agent guides, one combined atlas, and one complete
+[text alternative](MEDIA/Reference/visual-guide.md). The old alpha and beta.1
+graphics remain available in [immutable beta.2 history](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-beta.2/.SYSTEMX/MEDIA/Infographics)
+and the verified external archive, without duplicate current copies here.
 
-[![Current beta lifecycle infographic: exact scope, records, verification and release boundaries.](MEDIA/Infographics/systemx-guide-lifecycle.svg)](MEDIA/Reference/current-visual-guide.md)
+[![Current .SYSTEMX atlas showing four system maps and seven agent roles.](MEDIA/Infographics/systemx-atlas.svg)](MEDIA/Reference/visual-guide.md#combined-atlas)
 
-The [beta.1 visual guide](MEDIA/Reference/current-visual-guide.md) has four
-feature infographics for lifecycle, BOT/DOT workspaces, Agent1 security, and
-the Access Matrix, plus one role card for each of Agent 0, X, Y, Z, Alpha,
-Beta, and Agent1. Its standalone SVGs have exact vector labels and icons on a
-7680 × 4320 canvas. Imagegen illustration inside has 1672 × 941 native pixels;
-the 8K canvas is an export size. The text companion preserves a reading-order
-explanation without relying on color or image text alone.
-
-The earlier field guide remains a separately labeled historical baseline:
-
-[![.SYSTEMX field guide overview: ROOT, SX-RULES, SX-MILESTONE, observed harness and optional bot TODOs, Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOT functions, DATA, and named .SYSTEMXP scopes.](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](MEDIA/Reference/systemx-field-guide.md)
-
-[Four-part 4K field guide](MEDIA/Reference/systemx-field-guide.md):
-[1 — Overview](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) ·
-[2 — Agents and TODO reconciliation](MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) ·
-[3 — ROOT planning and AUTOBOT](MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) ·
-[4 — Scopes, DATA, and tools](MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg).
-The ROOT-inclusive media edition `1.11.0-alpha.3` describes the
-`1.11.0-alpha.2` feature baseline. The linked companion provides accessible text,
-commands, and authority boundaries. [SX-RULES](ROOT/SX-RULES.md) and
-[SX-MILESTONE](ROOT/SX-MILESTONE.md) define the internal coordination contract,
-planning, tool cards, and task-state comparisons. Load only the relevant
-section for the current task. The [asset record](MEDIA/Reference/ASSETS.json)
-distinguishes native image size from the selected 3840 × 2160 exports.
+The [architecture](MEDIA/Infographics/systemx-map-architecture.svg),
+[task cycle](MEDIA/Infographics/systemx-map-task-cycle.svg),
+[governance](MEDIA/Infographics/systemx-map-governance.svg), and
+[first-run/toolchain](MEDIA/Infographics/systemx-map-onboarding.svg) maps
+show the selected scope, canonical tasks, optional agents, setup, and
+host-owned direct I/O. One current graphic each covers
+[Agent 0](MEDIA/Infographics/systemx-agent-0.svg),
+[X](MEDIA/Infographics/systemx-agent-x.svg),
+[Y](MEDIA/Infographics/systemx-agent-y.svg),
+[Z](MEDIA/Infographics/systemx-agent-z.svg),
+[Alpha](MEDIA/Infographics/systemx-agent-alpha.svg),
+[Beta](MEDIA/Infographics/systemx-agent-beta.svg), and
+[Agent1](MEDIA/Infographics/systemx-agent-1.svg).
+The SVGs provide selectable vector labels on a 7680 × 4320 canvas; generated
+art inside has separate native resolution. The [asset record](MEDIA/Reference/ASSETS.json)
+identifies the exact sources. [SX-RULES](ROOT/SX-RULES.md) and
+[SX-MILESTONE](ROOT/SX-MILESTONE.md) remain the internal coordination contract.
 
 The [CLI and tools guide](docs/CLI-TOOLS.md) maps the external manager, verified
 managed runner, reviewed folder-only launchers, Python API, and optional provider
@@ -90,8 +85,8 @@ and JetBrains hosts. Native MCP/ACP registration is not installed.
 The [session service](Setup/SERVICE.md) runs only when explicitly
 started through a pipe; it installs no OS daemon. The [Setup](Setup/README.md)
 and [Uninstall](Uninstall/README.md) directories point to the existing external
-manager lifecycle. The original four-part media guide retains its earlier
-recorded baseline; the beta feature and agent images are a separate set.
+manager lifecycle. Historical visual editions retain their earlier baselines
+in tagged history; the current twelve-image suite describes these records.
 `agent-beta access-link` can retain a same-actor reviewed-intent decision after
 a combined BOT/matrix revision check; it never connects or grants access.
 An Agent1 repository/environment secret set requires the active GitHub
@@ -115,7 +110,7 @@ make the installation inspectable while retaining your records in a backup.
 Read the [Technical Guide](docs/TECHNICAL-GUIDE.md),
 [Stack Guide](docs/STACK-GUIDE.md), and [About page](docs/ABOUT.md).
 
-The [current white paper](MEDIA/White-Paper/SYSTEMX-White-Paper.pdf), edition 2.1,
+The [retained white paper](MEDIA/White-Paper/SYSTEMX-White-Paper.pdf), edition 2.1,
 examines the `1.11.0-beta.1` implementation, its new roles and Access Matrix,
 task authority, security boundaries, and release evidence. Its five-page PDF
 has selectable text and linked navigation. Earlier edition 2.0 examined alpha.4

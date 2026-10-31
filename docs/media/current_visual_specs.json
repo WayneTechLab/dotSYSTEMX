@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "maps": [
+    {
+      "id": "systemx-map-architecture",
+      "art": "map-01-architecture",
+      "title": "SYSTEM MAP 1 / ARCHITECTURE",
+      "subtitle": "One portable root, explicit child scopes, one canonical task ledger",
+      "accent": "#70F5CD",
+      "icon": "folder",
+      "sections": [
+        ["CANONICAL ROOT", ".SYSTEMX/GLOBAL/CONTEXT.md", ".SYSTEMX/PLAN/MASTER-PLAN.md"],
+        ["TASK STATE", ".SYSTEMX/WORK/TASKS.json", ".SYSTEMX/WORK/FOCUS.json"],
+        ["SELECTED CHILD", ".SYSTEMX/Projects/NAME/.SYSTEMXP/", "Separate context, tasks, decisions and memory"]
+      ],
+      "flow": ["Choose root", "Register child", "Select scope", "Read records", "Review task"],
+      "boundary": ["One outer .SYSTEMX installation; child records are selected by name.", "A chat or current directory does not silently select a child scope."],
+      "description": "The portable root keeps objective, plan, canonical tasks and focus. Named .SYSTEMXP children keep independent records under one outer toolchain."
+    },
+    {
+      "id": "systemx-map-task-cycle",
+      "art": "map-02-task-cycle",
+      "title": "SYSTEM MAP 2 / TASK + EVIDENCE",
+      "subtitle": "Agent 0 coordinates; X, Y and Z return distinct evidence",
+      "accent": "#A8D7FF",
+      "icon": "route",
+      "sections": [
+        ["TASK AUTHORITY", ".SYSTEMX/WORK/TASKS.json owns task state", "Agent 0 plans, assigns, integrates and reviews"],
+        ["SPECIALIST LANES", "X: event/time   Y: selected CLI task", "Z: fixed evidence review, advisory score"],
+        ["ROOT OBSERVATIONS", "Saved harness and optional BOT TODO snapshots", "root delta compares; it does not contact providers"]
+      ],
+      "flow": ["Objective", "Add task", "Assign / observe", "Return evidence", "Owner accepts"],
+      "boundary": ["Provider output, a scorecard or a draft PR does not accept a task.", "Agent 0 or the designated owner reviews the canonical result."],
+      "description": "The task and evidence cycle connects the objective and canonical task ledger to Agent X timing, Agent Y selected CLI work, Agent Z review, and owner acceptance."
+    },
+    {
+      "id": "systemx-map-governance",
+      "art": "map-03-governance",
+      "title": "SYSTEM MAP 3 / GOVERNANCE",
+      "subtitle": "Alpha, Beta, Agent1 and the Access Matrix record intent",
+      "accent": "#FFE0A0",
+      "icon": "shield",
+      "sections": [
+        ["ALPHA + AGENDA", "Ten reference settings start unset", "autobot context / agenda catalog"],
+        ["ACCESS MATRIX", "20 default-deny roles; no active decisions", "no-row / gap / denied / reviewed-intent"],
+        ["BETA + AGENT1", "AGENTB/.SYSTEMXB-BOT_NAME/ starts offline", "Agent1: 20 x 20 questions, warning-only"]
+      ],
+      "flow": ["Select scope", "Read catalog", "Record intent", "Review evidence", "Owner decides"],
+      "boundary": ["A workbook row, setting or named BOT folder grants no external access.", "Host, GitHub and provider controls enforce real permissions."],
+      "description": "The governance map shows ten unset Agenda context settings, twenty default-deny Access Matrix roles, offline named BOT folders and advisory Agent1 assessment."
+    },
+    {
+      "id": "systemx-map-onboarding",
+      "art": "map-04-onboarding",
+      "title": "SYSTEM MAP 4 / FIRST RUN + TOOLCHAIN",
+      "subtitle": "Preview, select a scope, then connect a host-owned process",
+      "accent": "#8CE8EA",
+      "icon": "terminal",
+      "sections": [
+        ["FIRST RUN", "systemx first-run --target PATH --profile project", "Preview first; explicit --apply installs defaults"],
+        ["HOST I/O", "VS Code / Codex / Cursor / Kiro / JetBrains", "service start --stdio: read-only JSON-lines"],
+        ["DATA + RELEASE", "DATA/ payload is locally ignored by Git", "A source release is not an app deployment"]
+      ],
+      "flow": ["Preview install", "Select scope", "Plan provider", "Read via stdio", "Verify release"],
+      "boundary": ["The host launches the process with its own permissions.", "No native MCP/ACP IDE binding or local secret symlink is installed."],
+      "description": "First-run and toolchain routes connect the reviewed CLI to host-owned IDE processes, selected project scopes, local DATA and separate release and deployment evidence."
+    }
+  ],
+  "agents": [
+    {
+      "id": "systemx-agent-0",
+      "art": "agent-0",
+      "title": "AGENT 0",
+      "subtitle": "Coordination, roster, integration and owner acceptance",
+      "accent": "#70F5A2",
+      "icon": "compass",
+      "folders": [".SYSTEMX/AGENTS/agent.0/", ".SYSTEMX/ROOT/"],
+      "prompt": ["Plan one task, show the roster, gather evidence,", "then ask the owner to review acceptance."],
+      "commands": ["bash .SYSTEMX/SYSTEMX.sh root roster", "bash .SYSTEMX/SYSTEMX.sh root packet --help", "bash .SYSTEMX/SYSTEMX.sh session-settings --compact", "bash .SYSTEMX/SYSTEMX.sh service status"],
+      "flow": ["Select scope", "Read roster", "Plan task", "Review evidence", "Owner accepts"],
+      "boundary": ["Agent 0 coordinates canonical tasks and integrates results.", "A roster entry or context packet grants no access."],
+      "description": "Agent 0 reads the selected-scope roster, coordinates canonical tasks, integrates evidence and asks the designated owner to accept work."
+    },
+    {
+      "id": "systemx-agent-x",
+      "art": "agent-x",
+      "title": "AGENT X",
+      "subtitle": "Event history, timing and due-item records",
+      "accent": "#A8D7FF",
+      "icon": "clock",
+      "folders": [".SYSTEMX/AGENTS/agent.x/", ".SYSTEMX/EVENTS/"],
+      "prompt": ["Record this observed event and its time.", "Show what is due; close only the reviewed record."],
+      "commands": ["bash .SYSTEMX/SYSTEMX.sh agent-x event --help", "bash .SYSTEMX/SYSTEMX.sh agent-x due --help", "bash .SYSTEMX/SYSTEMX.sh agent-x close --help"],
+      "flow": ["Observe", "Record event", "Inspect due", "Close record", "Agent 0 reviews"],
+      "boundary": ["Agent X records time and due status; it is not a scheduler.", "A due item sends no notification or external action."],
+      "description": "Agent X records events, due items and reviewed closure without scheduling execution or delivering notifications."
+    },
+    {
+      "id": "systemx-agent-y",
+      "art": "agent-y",
+      "title": "AGENT Y",
+      "subtitle": "One selected CLI task and a bounded PR handoff",
+      "accent": "#FFB8B8",
+      "icon": "terminal",
+      "folders": [".SYSTEMX/AGENTS/agent.y/"],
+      "prompt": ["Prepare one assigned task for an installed CLI.", "Return branch or PR evidence; do not merge."],
+      "commands": ["bash .SYSTEMX/SYSTEMX.sh agent-y providers", "bash .SYSTEMX/SYSTEMX.sh agent-y prepare --help", "bash .SYSTEMX/SYSTEMX.sh agent-y run --help", "bash .SYSTEMX/SYSTEMX.sh agent-y pr-ready --help"],
+      "flow": ["Assign task", "Prepare lane", "Run bounded", "PR handoff", "Owner reviews"],
+      "boundary": ["Agent Y uses a selected CLI under host permissions.", "A draft PR grants no merge or task-acceptance authority."],
+      "description": "Agent Y takes one explicitly assigned task through a selected installed CLI and returns bounded branch or PR evidence."
+    },
+    {
+      "id": "systemx-agent-z",
+      "art": "agent-z",
+      "title": "AGENT Z",
+      "subtitle": "Fixed, versioned evidence review",
+      "accent": "#DEC4FF",
+      "icon": "review",
+      "folders": [".SYSTEMX/AGENTS/agent.z/", ".SYSTEMX/REVIEWS/"],
+      "prompt": ["Review this evidence against the fixed policy.", "Score supported answers and show the delta."],
+      "commands": ["bash .SYSTEMX/SYSTEMX.sh agent-z policy", "bash .SYSTEMX/SYSTEMX.sh agent-z prepare --help", "bash .SYSTEMX/SYSTEMX.sh agent-z score --help"],
+      "flow": ["Evidence packet", "Prepare", "Score policy", "Compare delta", "Advise owner"],
+      "boundary": ["Agent Z uses 100 fixed questions across 10 categories.", "Its scorecard advises; it does not accept a task."],
+      "description": "Agent Z applies a fixed hundred-question evidence policy and returns a versioned advisory scorecard."
+    },
+    {
+      "id": "systemx-agent-alpha",
+      "art": "agent-alpha",
+      "title": "AGENT ALPHA",
+      "subtitle": "Selected AUTOBOT references and optional Agenda",
+      "accent": "#FFE0A0",
+      "icon": "reference",
+      "folders": [".SYSTEMX/AGENTS/agent.a/", ".SYSTEMX/AUTOBOT/"],
+      "prompt": ["Find one relevant AUTOBOT reference for this task.", "Leave Agenda unset unless I select an option."],
+      "commands": ["bash .SYSTEMX/SYSTEMX.sh autobot list", "bash .SYSTEMX/SYSTEMX.sh autobot context --help", "bash .SYSTEMX/SYSTEMX.sh agenda catalog", "bash .SYSTEMX/SYSTEMX.sh agenda status"],
+      "flow": ["Select reference", "Load context", "Answer request", "Review Agenda", "Share status"],
+      "boundary": ["Agent Alpha routes up to ten bounded references.", "Agenda starts unset; no worker or scheduler starts."],
+      "description": "Agent Alpha routes selected AUTOBOT references on request; the ten Agenda context settings start unset."
+    },
+    {
+      "id": "systemx-agent-beta",
+      "art": "agent-beta",
+      "title": "AGENT BETA",
+      "subtitle": "Named BOT and DOT workspace records",
+      "accent": "#A4FFF1",
+      "icon": "bot",
+      "folders": [".SYSTEMX/AGENTB/", ".SYSTEMX/AGENTB/.SYSTEMXB-BOT_NAME/"],
+      "prompt": ["Set up one named BOT workspace.", "Link reviewed intent to a canonical task."],
+      "commands": ["bash .SYSTEMX/SYSTEMX.sh agent-beta setup", "bash .SYSTEMX/SYSTEMX.sh agent-beta bot-add --help", "bash .SYSTEMX/SYSTEMX.sh agent-beta access-link --help", "bash .SYSTEMX/SYSTEMX.sh agent-beta assign --help"],
+      "flow": ["Set up", "Add named BOT", "Review link", "Assign task", "Agent 0 reviews"],
+      "boundary": ["The named folder records identity and task references.", "It does not log in, launch a provider or grant access."],
+      "description": "Agent Beta records separately named offline BOT or DOT workspaces and advisory task or access links without connecting a provider."
+    },
+    {
+      "id": "systemx-agent-1",
+      "art": "agent-1",
+      "title": "AGENT 1",
+      "subtitle": "Advisory security and access assessment",
+      "accent": "#FFE0A0",
+      "icon": "shield",
+      "folders": [".SYSTEMX/SECURITY/AGENT1/", ".SYSTEMX/AGENTS/agent.1/"],
+      "prompt": ["Review evidence and list .env names only.", "Suggest rotation; never print secret values."],
+      "commands": ["bash .SYSTEMX/SYSTEMX.sh agent-1 setup --help", "bash .SYSTEMX/SYSTEMX.sh agent-1 check --help", "bash .SYSTEMX/SYSTEMX.sh agent-1 env-inventory --help", "bash .SYSTEMX/SYSTEMX.sh agent-1 env-migrate --help"],
+      "flow": ["Set up", "Ask questions", "Check signals", "Preview keys", "Advise owner"],
+      "boundary": ["Agent1 catalogs 20 x 20 questions and ten event buckets.", "Warnings do not prove a device clean or grant secrets."],
+      "description": "Agent1 offers warning-only security assessment, four hundred evidence questions and names-only dotenv migration review."
+    }
+  ]
+}

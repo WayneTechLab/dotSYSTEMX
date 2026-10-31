@@ -1,165 +1,84 @@
-# .SYSTEMX 1.11.0-beta.2 release report
+# .SYSTEMX 1.11.0-beta.3 release report
 
-This is the beta.2 **local source qualification** receipt, before GitHub
-publication. The intended tag is `v1.11.0-beta.2` and
-Python package metadata uses `1.11.0b2`. Exact source, package, and download
-hashes will be recorded at the
-[GitHub release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-beta.2)
-after publication. A template release is separate from project installation,
-provider permission, deployment, device security, and owner acceptance.
+This report records the current source and media qualification for the beta.3
+template. The previous beta.2 report remains available at its
+[immutable release tag](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.2/docs/RELEASE-REPORT.md).
+The [GitHub beta.3 release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-beta.3)
+holds the published asset checksums and exact source identity. A source release
+does not install a downstream project, connect a provider, grant a permission,
+certify a device, or deploy an application.
 
-## Template setup
+## Version and scope
 
-The [Agenda settings catalog](../.SYSTEMX/AUTOBOT/AGENDA-SETTINGS.json) defines
-ten fixed AUTOBOT `context_selection` settings, their Rules paths, and the allowed
-`include` and `exclude` values. Every stock setting is `unset`; the template
-selects no context. The
-[access decision rules](../.SYSTEMX/GLOBAL/ACCESS-DECISION-RULES.json) define no-row, `gap`,
-`denied`, and `reviewed-intent` outcomes and their review fields. Twenty role
-defaults remain default-deny, while the canonical `options` and `decisions` arrays
-remain empty. No catalog, role row, or decision grants OS, GitHub, IDE, or
-provider access.
+- Template version: 1.11.0-beta.3. Python package version: 1.11.0b3.
+- The distribution manifest covers 269 portable files, including 155 Markdown
+  documents. The stock Agenda and Access Matrix records remain unset and
+  default-deny; no credential or provider connection is shipped.
+- The media set has one current infographic per topic: four system maps, seven
+  detailed agent guides, and one final combined atlas. Earlier posters,
+  overlapping role cards, and detail sheets are absent from the current tree.
+- No video, Blender project, narration, or raw generated master is distributed
+  in the source or wheel. The retained white paper is edition 2.1 and explicitly
+  examines the beta.1 research baseline.
 
-`agenda catalog` reads the definitions; status, table, session settings, and
-workbook views expose them beside selected-scope records. `agenda init` previews
-adding absent catalogs to a beta.1 scope without changing its existing options or
-decisions; a partial or altered pair fails closed. The
-[Agent 0 roster](../.SYSTEMX/docs/AGENT-0-ROSTER.md) shows registered roles, named
-instances, task counts, and CLI setup pointers without starting or authenticating
-a provider.
+## Media evidence
 
-## First-time provider and instruction onboarding
+| Check | Result |
+| --- | --- |
+| Current graphic inventory | Exactly 12 SVGs in the portable Infographics directory; 4,810,816 bytes total |
+| Atlas | 832,145-byte SVG; eleven embedded thumbnails rendered from and hash-bound to the eleven final full-size panels |
+| Source art and export | Each embedded illustration is a compact derivative of a 1672 × 941 imagegen master; SVGs declare 7680 × 4320 and retain selectable vector labels |
+| Accessibility and SVG safety | Title and description metadata, adjacent reading-order text guide, no external/active SVG content, checked minimum text contrast 10.43:1 |
+| Functional copy | All printed agent CLI examples returned successfully; four maps, seven roles, ten unset Agenda settings, twenty default-deny Access Matrix roles, and Agent1 20 × 20 questions with ten event buckets match source catalogs |
+| Media verifier | Exact 12-file inventory, embedded image bytes and dimensions, atlas source hashes and thumbnails, text bounds, video absence, and metadata checks passed |
 
-`onboard status` and `onboard plan` read the selected Agent1 setup, Agent 0
-roster summary, and a fixed catalog of CLI, IDE, and external Bot surfaces.
-They do not save provider choices, authenticate accounts, start runtimes, or
-return credential values. A selected credential consumer proposes a new key
-class by default without creating a key. Explicit `--env-file` uses Agent1's
-bounded key-name inventory; no dotenv value is returned. The catalog separates
-OpenAI Codex CLI/IDE from an OpenAI dot, Grok Build CLI from Grok Bot, and Meta
-Muse Code CLI from personal Muse and Meta Model API.
+The [asset record](../.SYSTEMX/MEDIA/Reference/ASSETS.json) contains each
+current SVG hash and its embedded art provenance. The
+[complete text alternative](../.SYSTEMX/MEDIA/Reference/visual-guide.md)
+lists paths, prompts, commands, five-step flows, and authority boundaries.
+The [separate 8K PNG export pack](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.11.0-beta.3/dotsystemx-1.11.0-beta.3-current-graphics-8k.zip)
+contains exactly twelve 7680 × 4320 exports, a source-bound manifest,
+checksums, and the text guide. Its source art does not gain native 8K detail.
 
-The expanded catalog also distinguishes `codex-sdk` as a host application SDK,
-Amazon `kiro-cli` as a manual/discovery CLI, `kiro-ide` as a host IDE,
-`kiro-web` as an offline Agent Beta cloud reference, and `aws-cli` as host
-infrastructure tooling. Six further coding CLIs—`claude-code`,
-`opencode-cli`, `blackbox-cli`, `gemini-cli`, `cursor-agent`, and `aider`—are
-manual/discovery entries. Catalog presence grants no adapter, provider login,
-credential destination, default provider, or live run.
+## Archive and preservation
 
-Source CLI JSON readback lists exactly 20 provider/product IDs and five host
-toolchain IDs. The initial `provider`, `surface`, `accountContext`,
-`credentialConsumer`, and `credentialClass` selections are all null, and
-`nativeHostBindingsInstalled` is false.
+The beta.2 state of all twenty-two infographic files and earlier media
+references was preserved before fifteen paths were removed and the seven
+standard agent paths were refreshed. An owner-held external archive and a
+byte-verified Google Drive copy contain those prior bytes. The media ZIP was
+13,106,820 bytes with SHA-256
+1beef5d3b4a93a7fce2ab08213326e3121a22c09c47b85e6fc8bc9d5e25e2fa9.
+Selected beta.3 original art, compact derivatives, and exact prompts were
+backed up separately: 21,230,605 bytes, SHA-256
+815a3de713d8c42041eb79e2b4590b185b7d759cf5450cb3395d74758472288a.
+Both archives were verified against their member manifests. Prior public
+source remains readable at the beta.2 tag.
 
-The checked-in project-root `AGENTS.md` is a short pointer to the canonical
-`.SYSTEMX/AGENTS.md`. In adopted projects, `onboard bridge` previews that
-pointer and its SHA-256; only explicit digest-guarded apply can create it
-when absent. Existing root files or links are preserved. Guarded apply uses
-POSIX anchored directory operations; native Windows offers preview only in
-this beta. The bridge does not copy rules or grant host permissions.
+## Source, package, and runtime checks
 
-Agent Y now has a source-tested Muse Code CLI adapter in addition to Codex and
-Copilot. It preserves provider approval and sandbox settings and runs only a
-reviewed task in an isolated worktree. A live Muse account, new-worktree trust,
-and provider completion have not been verified. Grok Build remains a manual
-CLI and discovery path without an Agent Y execution adapter. OpenAI dot, Grok
-Bot, and personal Muse remain optional offline Agent Beta identity references,
-not live integrations. The [provider onboarding guide](../.SYSTEMX/docs/CLI-TOOLS.md#first-time-provider-and-credential-plan)
-links the primary provider documentation and exact commands.
+| Boundary | Evidence |
+| --- | --- |
+| Source distribution | Release manifest regenerated: 26,664 bytes, SHA-256 47f1cd41d8b46ee669186e1c986c4287591ca24571b8dd753d96353c498aa121. release.py --check validates 269 files and 155 Markdown documents. |
+| Python suites | Python 3.14.5: 406 tests, OK, 6 skipped, 472.540 seconds. Python 3.11.15 (resolved interpreter path): 406 tests, OK, 6 skipped, 412.163 seconds. Both terminal reruns used the stable beta.3 distribution manifest after media and documentation edits. |
+| Wheel | Clean build: dotsystemx-1.11.0b3-py3-none-any.whl, 4,176,540 bytes, SHA-256 bbc9d09be2c7e5af1db8e576bd8c72486fa39d66de86a5fb95e48c8be0f7955c. The full-wheel gate passed: 269 package files match the current source and manifest byte for byte, expected metadata and entry point are present, and no extra installable member or stale graphic is present. |
+| Installed wheel | Fresh isolated Python 3.11 and 3.14 installations reported beta.3; first-run applied to temporary project roots, and selected-template validate and doctor exited zero on both. |
+| GitHub Actions | Repository Actions permission readback returned enabled=false. |
+| Public pages | README and wiki current embeds point to the twelve beta.3 SVGs; historical media is linked as archived context. Publication and rendered public readback are recorded in the release/wiki receipts. |
 
-The opt-in `service start --stdio` direct-I/O interface now includes bounded,
-read-only `roster`, compact `settings`, and `onboard` methods with no caller
-parameters. It is a custom JSON-lines protocol under the parent process, not
-MCP, ACP, a native IDE plugin, or an installed OS service. Focused session
-service tests passed eight cases on both Python 3.14 and 3.11. Direct
-subprocess smoke tests on each interpreter sent `capabilities`, `roster`,
-`settings`, `onboard`, and `stop`; all five responses were `ok`, with 20 stock
-roster rows, a compact rules summary, an unset provider, and exit code zero.
-These checks do not prove a real IDE or provider integration.
+The first local wheel attempt reused an ignored build cache and included
+nineteen superseded media and companion files. That wheel was rejected.
+The cache was removed, the wheel was rebuilt, and an exact wheel-to-manifest
+payload comparison passed. A reusable
+[wheel verification gate](media/verify_wheel_payload.py) now rejects extra
+installable members as well as missing, stale, or altered portable files.
+The release asset is built only after that gate passes.
 
-Source CLI `root roster` JSON readback lists exactly five toolchain options:
-VS Code, Codex, Cursor, Kiro, and JetBrains. It reports 20 stock role rows and
-`nativeHostBindingsInstalled: false`; the options are setup navigation, not
-installed native IDE bindings.
+## Remaining product boundaries
 
-The source review also corrected an `agenda decision-add --action` argument
-parser collision that overwrote the top-level command. A regression check now
-covers parsing, preview, and apply. The focused Agenda suite passed 26 of 26
-tests on both Python 3.14 and 3.11. In an isolated copied scope,
-`agenda status` supplied the current revision; preview and `--apply` both exited zero,
-reported `applied: false` and `applied: true` respectively, and kept
-`accessGranted: false`. Only the fixture received one `gap` decision row.
-This functional check does not establish an external permission grant.
-The subsequent security review closed an empty-value fallback: an explicit
-`agenda decision-add --action ''` now fails validation and writes zero decisions,
-rather than treating the empty value as an omitted action. A regression test
-covers this case; the focused Agenda suite again passed 26 of 26 on both
-interpreters. The full-suite and wheel receipts below use this exact source
-change.
-
-## Source qualification
-
-| Boundary | Required evidence | Verified local state |
-| --- | --- | --- |
-| Version and manifest | VERSION, SOURCE.json, pyproject.toml, and the regenerated exact-file manifest agree; `release.py --check` passes after all edits. | Current `.SYSTEMX/config/distribution.json`: 28,332 bytes, SHA-256 `579bfe2ec555ef424a7be492c166839f6813bc8d90f2e19e1d123671543a1804`. `python3.14 -I -B .SYSTEMX/scripts/release.py --check` passed: 282 distributed files and 158 Markdown documents after the empty-action validation fix. |
-| Local suites | Full source-matched tests on available interpreters, plus catalog migration, manager compatibility, workbook, and roster checks. Record host, command, counts, skips, and duration. | On this macOS host, Python 3.14.5: `python3.14 -I -B -m unittest discover -s .SYSTEMX/tests -q`, 406 tests, OK, 6 skipped, 450.154 s. Python 3.11.15: `python3.11 -I -B -m unittest discover -s .SYSTEMX/tests -q`, 406 tests, OK, 6 skipped, 403.082 s. Both ran against manifest `579bfe2e...` after the empty-action validation fix. |
-| Access Matrix XLSX | Twenty role rows, ten unset settings, four decision rules, empty active decisions/options, no formulas, and canonical JSON row comparison. | Local `ACCESS-MATRIX.xlsx` asset is 14,195 bytes, SHA-256 `ef94cdcf73ddcdf37f3927c50b8fdcaf5745e2eb219fddf5ee4bb5de8c6fcb0d`. Five sheets pass ZIP integrity and no-formula/external-link/VBA checks; ten settings, four rules, and 20 roster rows with all 13 fields match canonical JSON row by row. All 160 original nonempty cells in the first two sheets are preserved. |
-| Wheel | Build from frozen source, compare every `.SYSTEMX` payload file byte for byte, install in isolation, and read `systemx --version`. | Replacement `dotsystemx-1.11.0b2-py3-none-any.whl`: 12,992,978 bytes, SHA-256 `6f93e871e0f0c96a5f360fd1f828fe85fc7dcf8153d180a9fcbbf00bd7b2eb45`; all 282 `.SYSTEMX` payload files match the current source byte for byte. Fresh Python 3.14 and 3.11 isolated installs reported beta.2 and passed installed-wheel smoke. The prior wheel digest is superseded. |
-| Docs and media | Check local links, public/private paths, and exact `.SYSTEMX/MEDIA/**` byte identity against beta.1. | `validate --template` checked 158 packaged Markdown documents. A separate root/changed-guide pass checked 218 local links in 12 files with no missing target. `git diff --exit-code v1.11.0-beta.1 -- .SYSTEMX/MEDIA` passed, and scoped status found no changed/untracked media or workflow file. |
-
-The staged `ACCESS-MATRIX.xlsx` matches the workbook digest above. The replacement
-`SHA256SUMS` is 188 bytes, SHA-256
-`526f6d80dc757aa1b41cca22e7036ffe7088505ca954c226fa2079da4cd7bca4`.
-Independent `shasum -a 256 -c SHA256SUMS` passed for both staged assets. The
-prior wheel's installed receipts are superseded. On fresh final-wheel targets
-with Python 3.14 and 3.11, `first-run` preview made no change and apply installed
-all 282 packaged files. Root roster readback listed 20 roles; the Codex SDK
-onboarding plan selected the `server-application` consumer. Each target added a
-`Demo` child and passed a child SDK plan. Ordinary installed `validate` checked
-274 files and 149 Markdown documents per target. The managed direct-I/O service
-answered all seven fixed string-ID methods and reported
-`hostPrivileges: inherited-from-launcher`. These are local package checks, not
-a live provider or IDE integration. GitHub upload and downloaded asset bytes
-still need independent readback.
-
-The previous
-[beta.1 release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-beta.1)
-retains the edition 2.1 white paper and 8K export downloads. Beta.2 changes
-template definitions and navigation; it does not create a new visual edition,
-video, or private authoring archive. The checked-in XLSX is a review view; JSON
-remains authoritative for selected-scope choices.
-
-## Security and runtime boundaries
-
-Agent1 remains opt-in and warning-only; its local checks cannot certify a host
-free of malware, spyware, keyloggers, or MFA interception. GitHub Actions secrets
-do not populate a local `.env` through symbolic links. GitHub Agents,
-Codespaces, and Dependabot secrets also have distinct consumers; the onboarding
-plan does not provision any of them. An explicit
-repository/environment secret write requires action-time repository admin
-permission and hidden input; metadata readback does not prove a secret value or
-workflow consumer. Access Matrix intent is not identity verification or external
-permission. Native Windows Agent Y execution and Agent1 file-backed operations
-retain the limits in the [security guide](../.SYSTEMX/docs/SECURITY.md). No
-catalog, roster, or workbook command installs an OS service or starts an agent.
-The direct-I/O service capabilities now state `requiresElevation: false` and
-`hostPrivileges: inherited-from-launcher`. Launch it as a normal user; those
-fields do not attest that the host process lacks elevated privileges. Focused
-service tests passed eight of eight on both Python 3.14 and 3.11 after the fix.
-
-GitHub Actions is disabled for this repository, and beta.2 source must contain no
-`.github/workflows` file. Manual checks qualify only the exact source and host on
-which they run. A macOS PowerShell smoke result cannot prove native Windows
-behavior. A template release does not deploy an application; the
-[release counter](../.SYSTEMX/docs/RELEASE-COUNTERS.md) separates release records from
-deployment records.
-
-## Publication readback
-
-Before calling beta.2 published, verify direct `main` and peeled tag SHAs, tagged
-codeload ZIP size/hash and complete inventory, the immutable prerelease state,
-checksum asset, and every uploaded asset name, size, and SHA-256. Download the
-assets and compare exact bytes. Read back the wiki and owner Page, confirm Actions
-is still disabled, and record the on-demand deployment count. Owner acceptance
-remains a separate decision.
+The diagrams describe current source behavior. Host-owned CLI or stdio
+integration remains explicit; provider labels are discovery records, not
+native IDE bindings or active accounts. Agent1 warnings remain advisory,
+and a workbook row does not grant OS, GitHub, IDE, or provider access.
+The GitHub deployment counter reports observations, not a deployment.
+A downstream project still needs its own installation, configuration,
+security review, and owner acceptance.

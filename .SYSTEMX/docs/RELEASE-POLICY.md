@@ -29,8 +29,8 @@ automatic release every day.
 
 Prior numeric versions and GitHub release labels are retained for compatibility.
 Those historical labels are not a production-readiness certification. The current
-`1.11.0-beta.2` version is a GitHub prerelease; the Python package spells it
-`1.11.0b2`. There is no stable-release date, support SLA, or promise of
+`1.11.0-beta.3` version is a GitHub prerelease; the Python package spells it
+`1.11.0b3`. There is no stable-release date, support SLA, or promise of
 compatibility throughout beta.
 Changes should document migrations and preserve project-owned data.
 
@@ -83,14 +83,14 @@ tool environment first, from outside the project's `.SYSTEMX` folder. Use the
 interpreter belonging to that environment; the example assumes it is activated:
 
 ```bash
-python -m pip --log dotsystemx-beta-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.2"
+python -m pip --log dotsystemx-beta-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.3"
 systemx --version
 systemx status --target "/path/to/project"
-systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.2
-systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.2 --apply
+systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.3
+systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.3 --apply
 systemx policy --target "/path/to/project" --pin none --auto manual
-systemx update --target "/path/to/project" --version 1.11.0-beta.2 --dry-run
-systemx update --target "/path/to/project" --version 1.11.0-beta.2
+systemx update --target "/path/to/project" --version 1.11.0-beta.3 --dry-run
+systemx update --target "/path/to/project" --version 1.11.0-beta.3
 systemx policy --target "/path/to/project" --pin current
 systemx run --target "/path/to/project" --offline -- validate
 systemx run --target "/path/to/project" --offline -- context --agent agent.0

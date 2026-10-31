@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.11.0b2"
+version = "1.11.0b3"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -55,7 +55,7 @@ systemx = ["ROOT/*.md", "ROOT/*.json", "templates/root/*.md", "templates/root/*.
            "docs/*.md", "profiles/*.md", "scripts/*.py", "scripts/*.sh", "tests/*.py",
            "MEDIA/*.md", "MEDIA/White-Paper/*.md", "MEDIA/White-Paper/*.json", "MEDIA/White-Paper/*.pdf", "MEDIA/White-Paper/*.py",
            "MEDIA/White-Paper/figures/*.png", "MEDIA/White-Paper/figures/*.svg",
-           "MEDIA/Infographics/*.jpg", "MEDIA/Infographics/*.svg", "MEDIA/Reference/*.md", "MEDIA/Reference/*.json",
+           "MEDIA/Infographics/*.svg", "MEDIA/Reference/*.md", "MEDIA/Reference/*.json",
            "Projects/*.md", "Projects/*.json", "templates/project/*.md", "templates/project/*.json",
            "templates/project/GLOBAL/*.md", "templates/project/PLAN/*.md",
            "templates/project/MEMORY/*.md", "templates/project/MEMORY/sessions/*.md",

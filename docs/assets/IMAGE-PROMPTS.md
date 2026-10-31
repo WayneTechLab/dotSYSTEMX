@@ -17,14 +17,15 @@ Change only the branding lockup: remove the smaller text "Wayne Tech Lab" comple
 Preserve the exact .SYSTEMX wordmark, visible leading dot, uppercase lettering, folder/branch symbol, neutral monochrome treatment, and solid white background. No replacement subtitle, attribution, slogan, extra brand, or new design element. Keep the rest of the design unchanged.
 ```
 
-The current [four feature guides and seven agent role visuals](../../.SYSTEMX/MEDIA/Reference/current-visual-guide.md)
+The current [four system maps, seven agent guides, and combined atlas](../../.SYSTEMX/MEDIA/Reference/visual-guide.md)
 have separate [provenance and exact-byte hashes](../../.SYSTEMX/MEDIA/Reference/ASSETS.json).
 Their original generated art is retained outside the portable template;
-the current main branch carries one standalone SVG per new concept.
+the current main branch carries one standalone SVG per current topic.
 
 Historical workflow artwork, its original prompt record, and the former
 one-page map remain available in
 [immutable alpha.7 history](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-alpha.7/docs/assets).
 Those files describe earlier feature baselines and are not current runtime
-instructions. The four retained foundational field-guide pages keep their own
-[generation and correction record](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide-prompts.md).
+instructions. The four old foundational field-guide pages and their
+generation record remain in
+[immutable beta.2 history](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-beta.2/.SYSTEMX/MEDIA/Reference).

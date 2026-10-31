@@ -10,7 +10,7 @@ another session can understand the work and continue from an explicit checkpoint
 The format is stack-neutral: it does not require a particular AI model, editor,
 application framework, or cloud provider.
 
-**Template version:** `1.11.0-beta.2` · **Python package metadata:** `1.11.0b2`
+**Template version:** `1.11.0-beta.3` · **Python package metadata:** `1.11.0b3`
 
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
@@ -20,8 +20,7 @@ application framework, or cloud provider.
 [Manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Current release report](docs/RELEASE-REPORT.md) ·
 [White paper](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) ·
-[Beta visual guide](#beta-visual-guide) ·
-[Historical four-part guide](#historical-four-part-guide)
+[Current visual guide](#current-visual-guide)
 
 > **BETA — USE AT YOUR OWN RISK.** The format may change and is provided without
 > warranty. Review and pin a release, keep recoverable backups, and validate the
@@ -52,11 +51,11 @@ On macOS or Linux, run this from the containing project directory:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.2"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.3"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.2
-systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.2 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.3
+systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.3 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 systemx run --target "$PWD" --offline -- onboard plan
@@ -267,76 +266,59 @@ or locally synchronized Drive folder. Existing authorized clients or connectors
 provide transport. Use one cooperating writer per scope and verify revisions
 before switching sessions; a local lock is not a distributed lock.
 
-## Beta visual guide
+## Current visual guide
 
-The beta set contains **18 stock 7680 × 4320 SVGs**: four feature guides,
-seven agent role cards, and seven detailed agent guides. The detail guides map
-each agent's folder, prompt or input, workflow, and CLI boundary. Exact vector
-labels stay readable on the 8K canvas; that canvas does not imply native 8K
-detail in generated illustrative art. Use the
-[accessible text companion](.SYSTEMX/MEDIA/Reference/current-visual-guide.md)
-and [visual library](docs/media/README.md) for the same relationships in
-reading order and asset provenance. The images describe beta source behavior,
-not a live provider connection, security control, or deployment.
+The beta.3 current set has **twelve distinct SVGs**: four system maps, one detailed
+graphic for each of seven agent roles, and one combined atlas assembled after
+the individual guides. Each agent graphic shows its folder, example prompt,
+CLI route, process flow, and boundary. Exact vector labels remain selectable
+on the 7680 × 4320 canvas; the generated illustration inside has its own native
+resolution. See the [full text alternative](.SYSTEMX/MEDIA/Reference/visual-guide.md)
+and [media library](docs/media/README.md) for reading order and provenance.
 
-[![Beta lifecycle guide: selected scope, canonical task authority, validation, and release boundaries.](.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg)](.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg)
+[![.SYSTEMX atlas connecting four system maps and seven agent roles.](.SYSTEMX/MEDIA/Infographics/systemx-atlas.svg)](.SYSTEMX/MEDIA/Reference/visual-guide.md#combined-atlas)
 
-| Current guide | Focus |
+For print or offline review, the [beta.3 8K PNG export pack](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.11.0-beta.3/dotsystemx-1.11.0-beta.3-current-graphics-8k.zip) contains all twelve current images, a source-bound manifest, checksums, and the text alternative. It is a release download, not a second source copy in this template.
+
+| System map | Focus |
 | --- | --- |
-| [Lifecycle](.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg) | Setup, selected scope, verification, update and removal |
-| [BOT/DOT workspaces](.SYSTEMX/MEDIA/Infographics/systemx-guide-bot-workspaces.svg) | Agent Beta metadata and external provider boundary |
-| [Security and access](.SYSTEMX/MEDIA/Infographics/systemx-guide-security-access.svg) | Agent1 warnings, `.env` names, local versus CI secrets |
-| [Access Matrix](.SYSTEMX/MEDIA/Infographics/systemx-guide-access-matrix.svg) | Default-deny roles, reviewed decisions, live workbook export |
+| [1. Architecture](.SYSTEMX/MEDIA/Infographics/systemx-map-architecture.svg) | Selected root and child scopes, context, plan, canonical tasks, and focus |
+| [2. Task and evidence cycle](.SYSTEMX/MEDIA/Infographics/systemx-map-task-cycle.svg) | Agent 0 coordination, optional X/Y/Z work, ROOT observations, and owner acceptance |
+| [3. Governance records](.SYSTEMX/MEDIA/Infographics/systemx-map-governance.svg) | Agent Alpha/Agenda, default-deny Access Matrix, offline Beta records, and Agent1 advice |
+| [4. First run and toolchain](.SYSTEMX/MEDIA/Infographics/systemx-map-onboarding.svg) | Explicit setup, local DATA, host CLI/stdio I/O, and release versus deployment |
 
-| Agent | Role card | Detailed folder, prompt, flow, and CLI guide |
-| --- | --- | --- |
-| Agent 0 | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-0.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-0-detail.svg) |
-| Agent X | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-x.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-x-detail.svg) |
-| Agent Y | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-y.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-y-detail.svg) |
-| Agent Z | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-z.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-z-detail.svg) |
-| Agent Alpha | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-alpha.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-alpha-detail.svg) |
-| Agent Beta | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-beta.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-beta-detail.svg) |
-| Agent1 | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-1.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-1-detail.svg) |
-
-The beta's 18 8K JPEG exports are staged outside the repository as separate
-release assets under final verification. The four retained 4K JPGs below have
-their own alpha media identity. Public SVG links and text remain usable without
-downloading the raster exports.
-
-## Historical four-part guide
-
-[![The four-part .SYSTEMX field guide connects canonical records, ROOT observations, agent roles, selected AUTOBOT detail, local DATA, and independent project scopes.](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)
-
-| Static guide | What it explains |
+| Agent guide | One current detailed graphic |
 | --- | --- |
-| [1. Whole-system overview](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg) | Records, agents, tools, ROOT, AUTOBOT, DATA, and scope |
-| [2. Agent coordination](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg) | Observed task surfaces, authorized reconciliation, and readback |
-| [3. ROOT and reference detail](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg) | Planning links, tool cards, Agent Alpha, and ten AUTOBOT functions |
-| [4. DATA and project scopes](.SYSTEMX/MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg) | Independent child records, shared tools, local payloads, and lifecycle boundaries |
+| Agent 0 | [Coordinator and roster](.SYSTEMX/MEDIA/Infographics/systemx-agent-0.svg) |
+| Agent X | [Events and time](.SYSTEMX/MEDIA/Infographics/systemx-agent-x.svg) |
+| Agent Y | [Selected CLI handoff](.SYSTEMX/MEDIA/Infographics/systemx-agent-y.svg) |
+| Agent Z | [Evidence review](.SYSTEMX/MEDIA/Infographics/systemx-agent-z.svg) |
+| Agent Alpha | [AUTOBOT and Agenda](.SYSTEMX/MEDIA/Infographics/systemx-agent-alpha.svg) |
+| Agent Beta | [Named BOT/DOT workspaces](.SYSTEMX/MEDIA/Infographics/systemx-agent-beta.svg) |
+| Agent1 | [Security and access advice](.SYSTEMX/MEDIA/Infographics/systemx-agent-1.svg) |
 
-The [text companion](.SYSTEMX/MEDIA/Reference/systemx-field-guide.md) provides
-accessible explanations and commands. The
-[asset record](.SYSTEMX/MEDIA/Reference/ASSETS.json) distinguishes generated source
-dimensions from the 3840 × 2160 export canvases. The artwork retains its alpha.3
-media identity. [Use-case graphics](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Use-Case-Infographics)
-and the [visual manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Visual-Guide)
-cover other environments and static diagrams.
+The illustrations explain source behavior, not a live provider connection,
+installed MCP/ACP extension, device-clean finding, permission grant, or
+deployment. The [asset record](.SYSTEMX/MEDIA/Reference/ASSETS.json) separates
+source-art resolution from the vector export size. Earlier four-part JPEGs,
+beta.1 diagrams, role cards, and detail sheets remain in the
+[immutable beta.2 source archive](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-beta.2/.SYSTEMX/MEDIA/Infographics)
+and the verified external media archive; they are no longer current embeds.
 
-## Video guide: The Guided Folder
-
-[![YouTube preview for .SYSTEMX — The Guided Folder.](https://i.ytimg.com/vi/77ZUBxEciXk/maxresdefault.jpg)](https://www.youtube.com/watch?v=77ZUBxEciXk)
+## Historical video guide: The Guided Folder
 
 [Watch .SYSTEMX — The Guided Folder on YouTube](https://www.youtube.com/watch?v=77ZUBxEciXk).
 
 The animated walkthrough demonstrates software **1.11.0-alpha.6**. Its media
 edition is separate from this beta software version; it does not demonstrate
-the Agent Beta, Agent1, or Agenda features. No new video was made for this beta.
+the Agent Beta, Agent1, or Agenda features. No video file ships in this codebase.
 
 ## White paper and operating manual
 
 [**Portable Project Coordination for AI-Assisted Work**](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
 is the retained five-page technical white paper, edition 2.1, examining
-the `1.11.0-beta.1` baseline. It does not describe the beta.2 stock catalogs.
+the `1.11.0-beta.1` baseline. It does not describe the beta.2 stock catalogs
+or the beta.3 visual edition.
 Historical edition 2.0 examined alpha.4 and was published
 with alpha.5; its original bytes remain available in that tagged history.
 Resource examples are illustrative, not measured savings or autonomous

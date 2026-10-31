@@ -14,8 +14,9 @@ __pycache__/
 /docs/media/*
 !/docs/media/README.md
 !/docs/media/build_current_visuals.py
-!/docs/media/build_detail_visuals.py
 !/docs/media/verify_current_visuals.py
+!/docs/media/verify_wheel_payload.py
+!/docs/media/current_visual_specs.json
 
 # Explicit repository-root authoring/output locations.
 /media-production/

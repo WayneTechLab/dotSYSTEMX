@@ -231,18 +231,20 @@ class SystemxTests(unittest.TestCase):
                                 text=True, capture_output=True, timeout=15)
         self.assert_ok(result)
 
-    def test_release_manifest_schema_two_uses_raw_binary_hashes(self):
+    def test_release_manifest_schema_two_uses_raw_media_hashes(self):
         # The current source already requires schema 2. Changing only its
         # version label would make the alpha.8 blank-record inventory look like
         # an older release without actually constructing that historical bundle.
+        binary = "MEDIA/Infographics/systemx-map-architecture.svg"
+        raw = (b'<svg xmlns="http://www.w3.org/2000/svg">\r\n'
+               b'<desc>Byte-exact media fixture</desc>\r\n</svg>\r\n')
+        (self.systemx / binary).write_bytes(raw)
         release = self.systemx / "scripts/release.py"
         result = subprocess.run([sys.executable, "-B", str(release)], cwd=self.temp.name,
                                 text=True, capture_output=True, timeout=15)
         self.assert_ok(result)
         manifest = json.loads((self.systemx / "config/distribution.json").read_text())
         self.assertEqual(manifest["schemaVersion"], 2)
-        binary = "MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg"
-        raw = (self.systemx / binary).read_bytes()
         self.assertIn(b"\r\n", raw)
         self.assertEqual(manifest["files"][binary], hashlib.sha256(raw).hexdigest())
         result = subprocess.run([sys.executable, "-B", str(release), "--check"], cwd=self.temp.name,

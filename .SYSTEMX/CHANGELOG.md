@@ -4,6 +4,23 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-beta.3 — Current visual atlas and media consolidation
+
+- Replace the four historical-baseline JPEG field guides and overlapping
+  feature/agent-card graphics with four current system maps, one detailed SVG
+  for each of the seven roles, and a compact combined atlas. The standalone
+  guides retain exact folder paths, example prompts, CLI routes, process
+  flows, and role boundaries in selectable vector text.
+- Preserve the superseded beta.2 media and authoring references in immutable
+  Git history and a separately verified private archive. Keep only one current
+  infographic per topic in the portable template; no video or raw render
+  payload is distributed.
+- Keep the edition 2.1 white paper labeled as its beta.1 research baseline.
+  The new diagrams explain beta.3 source behavior; they do not claim native
+  IDE bindings, provider login, security assurance, or deployed operation.
+- Continue the beta prerelease line with Python package spelling `1.11.0b3`.
+  GitHub Actions stays disabled for this repository.
+
 ## 1.11.0-beta.2 — Template Agenda settings and access decision rules
 
 - Add a read-only template catalog for the ten fixed AUTOBOT context settings.
