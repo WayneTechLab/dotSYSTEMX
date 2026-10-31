@@ -210,7 +210,10 @@ class PathTests(unittest.TestCase):
         self.sensitive_project()
         shutil.copytree(self.source, self.root / ".SYSTEMX", dirs_exist_ok=True)
         manager.alias(self.root, create=True)
-        result = manager.run(self.root, ["validate", "--template"], offline=True, capture=True)
+        runner = self.root / ".SYSTEMX/scripts/systemx.py"
+        result = subprocess.run([sys.executable, "-I", "-B", str(runner),
+                                 "validate", "--template"], cwd=self.folder,
+                                text=True, capture_output=True, timeout=20)
         self.assertEqual(result.returncode, 2)
         self.assertIn("public template must not include", result.stderr)
 

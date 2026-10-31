@@ -959,6 +959,23 @@ class ManagerTests(unittest.TestCase):
         files[text_name] = files[text_name].replace(b"\n", b"\r\n")
         self.assertEqual(manager.verified_bundle(files)["version"], "1.9.0-alpha.3")
 
+    def test_schema_two_nested_gitignore_accepts_windows_crlf_without_weakening_binary_hashes(self):
+        self.write_manifest()
+        original = manager.read_bundle(self.source)["files"]
+        for name in ("AGENTB/.gitignore", "templates/agentb/.gitignore"):
+            with self.subTest(name=name):
+                self.assertIn(b"\n", original[name])
+                converted = original[name].replace(b"\n", b"\r\n")
+                self.assertNotEqual(converted, original[name])
+                files = dict(original)
+                files[name] = converted
+                self.assertEqual(manager.verified_bundle(files)["version"], self.version)
+        for name in ("MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg",
+                     "MEDIA/fixture-unknown.dat"):
+            with self.subTest(name=name):
+                self.assertNotEqual(manager.distribution_digest(name, b"a\r\nb", 2),
+                                    manager.distribution_digest(name, b"a\nb", 2))
+
     def test_new_release_cannot_downgrade_its_manifest_to_legacy_schema(self):
         self.write_manifest("1.9.0-alpha.3")
         path = self.source / manager.MANIFEST

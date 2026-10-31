@@ -168,7 +168,8 @@ def distribution_digest(name, data, schema):
         return text_digest(data)
     if schema != 2:
         raise InstallError("Unsupported distribution manifest schema")
-    if name in DISTRIBUTION_TEXT_NAMES or PurePosixPath(name).suffix in DISTRIBUTION_TEXT_SUFFIXES:
+    path = PurePosixPath(name)
+    if path.name in DISTRIBUTION_TEXT_NAMES or path.suffix in DISTRIBUTION_TEXT_SUFFIXES:
         try:
             data.decode("utf-8")
         except UnicodeDecodeError as error:
