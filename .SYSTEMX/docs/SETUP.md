@@ -1,6 +1,6 @@
 # Setup
 
-> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+> **Beta: use at your own risk.** See the [release policy](RELEASE-POLICY.md).
 
 New users should start with [First-Time Setup](FIRST-RUN.md), including preview,
 local installation logs, first project facts, verification, and removal planning.

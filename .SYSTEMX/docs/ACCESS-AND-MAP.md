@@ -1,9 +1,9 @@
 # Access matrix and project map
 
-The blank [root access matrix](../GLOBAL/ACCESS-MATRIX.md) and
+The [root access matrix](../GLOBAL/ACCESS-MATRIX.md) and
 [root map](../PLAN/MAP.md) are reusable project records. A selected
-`.SYSTEMXP` child receives its own blank `GLOBAL/ACCESS-MATRIX.md` and
-`PLAN/MAP.md`. Populate only the selected scope after adoption; never copy
+`.SYSTEMXP` child receives its own access guidance and blank `PLAN/MAP.md`.
+Populate decisions only in the selected scope after adoption; never copy
 another project's identities, topology, task history, or private evidence.
 
 ## Access decisions
@@ -23,6 +23,47 @@ actual account, filesystem access, Git remote, branch, and PR permissions as
 separate access paths. Confirm the live account, target, and permission at the
 external boundary before a consequential action. Keep credentials and secret
 values out of records.
+
+The structured [Access Matrix JSON](../GLOBAL/ACCESS-MATRIX.json) ships 20
+standard `roleDefaults` rows: Agent 0/1/X/Y/Z/Alpha/Beta, three instance
+patterns for numeric workers, native subagents and Agent Beta BOT/DOT workspaces,
+and ten fixed AUTOBOT references. Every row has `templateGrant: none` and
+`requiresReview: true`. The checked-in [Excel view](../GLOBAL/ACCESS-MATRIX.xlsx)
+shows those same stock rows. Neither file gives a user, process or provider
+access. The JSON `decisions` array starts empty; reviewed records use stable
+`ACC-` IDs and `reviewed-intent`, `denied`, or `gap` outcomes.
+Agent Alpha's [Agenda JSON](../AUTOBOT/AGENDA.json) can refer to one of those IDs
+when selecting advisory context. `agenda status` and `agenda table --format csv`
+read the canonical JSON and report whether referenced Rules files still match
+their reviewed digests. `agenda status` returns an `accessRevision`; use that
+with `agenda decision-add --expected-revision SHA256` to preview one scoped
+decision, then repeat with `--apply` after review. A registered Agent Beta
+instance uses `agentb:BOT_NAME`; a native worker uses
+`native-subagent:HOST:ID`. The command validates the actor and record shape,
+but `identityVerified` and `accessGranted` remain false until checked at the
+actual provider. In a child scope, `agenda init` previews and adds the stock
+role catalog with empty decisions and settings only after explicit selection.
+For a new BOT/DOT instance, create its blank Agent Beta record first. After
+recording a same-actor `reviewed-intent` decision, `agent-beta access-link
+BOT_NAME --access-decision-id ACC-001` previews the link; repeat it with the
+preview's combined BOT/matrix `revisionBefore` and `--apply`. The link remains
+offline metadata, not a permission change.
+For an adopted legacy matrix without `roleDefaults`, `agenda roles-upgrade
+--expected-revision ACCESS_REV` previews the additive catalog; repeat with
+`--apply` to preserve existing decisions and options while adding the 20
+default-deny rows.
+
+The distributed workbook is a human-readable default catalog. It is not a
+live editor of scoped JSON decisions or an authorization source. For a live
+Excel-readable view, `agenda table --format csv` returns JSON containing
+separate `roleCsv`, `accessCsv`, and `agendaCsv` text. To make a current XLSX,
+preview `agenda workbook-export`, take its `sourceRevision`, then apply with
+`agenda workbook-export --expected-revision SHA256 --apply`. The generated
+formula-free workbook is written only under the selected scope's ignored
+`local/` directory. `agenda workbook-check` compares it with current JSON and
+reports `current: false` after the source changes. Preserve the canonical JSON
+and its revision when exporting or sharing a view.
+
 For [AUTOBOT](AUTOBOT.md), separately record who may view or change detailed
 brand, policy, research, and private-source references. A request's caller label
 is attribution, not permission evidence. [DATA](DATA.md) ignore rules influence

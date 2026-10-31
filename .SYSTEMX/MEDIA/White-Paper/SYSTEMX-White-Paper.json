@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "title": ".SYSTEMX: Portable Project Coordination for AI-Assisted Work",
+  "edition": "2.1",
+  "technicalBaseline": "1.11.0-beta.1",
+  "preparedOn": "2026-10-31",
+  "author": "Lucas (SatoshiUNO)",
+  "publisher": "Wayne Tech Lab LLC",
+  "publicationTag": "v1.11.0-beta.1",
+  "scope": "Current reusable public template; no adopter or host acceptance claimed",
+  "pages": 5,
+  "figures": 0,
+  "pageSize": "US Letter",
+  "pdfTextSelectable": true,
+  "pdfTaggedUa": false,
+  "textAlternative": "SYSTEMX-White-Paper.md",
+  "pdfOutlineEntries": 9,
+  "builder": "build_current_white_paper.py",
+  "builderDependency": "ReportLab 4.4.9 and pypdf 6.10.0 (authoring only)",
+  "checksumMethod": "SHA-256 of exact manuscript and PDF bytes; metadata does not hash itself",
+  "historicalEdition": {
+    "edition": "2.0",
+    "technicalBaseline": "1.11.0-alpha.4",
+    "retainedAt": "v1.11.0-alpha.5"
+  },
+  "files": [
+    {
+      "file": "SYSTEMX-White-Paper.md",
+      "bytes": 15343,
+      "sha256": "fd85f551e0dc38af859617d60e863043645607de80387e6000c0cfcd193bda38"
+    },
+    {
+      "file": "SYSTEMX-White-Paper.pdf",
+      "bytes": 20481,
+      "sha256": "965bfa0f44b167e9ea76797d53572a1f39e3fb696070b80265216dd46f85daa1"
+    },
+    {
+      "file": "build_current_white_paper.py",
+      "bytes": 8250,
+      "sha256": "350818e2b62af411018a652a5effd0968dc5572c8e715b1a5d1a09f4d77a40a1"
+    }
+  ]
+}

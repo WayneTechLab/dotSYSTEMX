@@ -19,8 +19,9 @@ accepted project outcome. See [ROOT rules](../ROOT/SX-RULES.md) and
 [planning and tool cards](../ROOT/SX-MILESTONE.md).
 
 `validate --template` adds the [public distribution checks](../FORMAT.md#public-distribution-versus-adopted-project):
-only the standard file inventory, reviewed blank seed hashes, empty tasks/focus
-and commands, and Agent 0 only. Unlike ordinary validation, it checks normally
+only the standard file inventory, reviewed seed hashes, empty tasks/focus,
+Agenda options and Access Matrix decisions, default-deny role catalog, empty
+commands, and Agent 0 only. Unlike ordinary validation, it checks normally
 ignored folders for extra files. This is a publication check, not a secret scanner.
 
 `bash .SYSTEMX/SYSTEMX.sh check` first validates the folder, then runs the

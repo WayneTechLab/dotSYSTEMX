@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "classificationRule": "Assign one primary bucket to each atomic observed fact. Record source, target, operation, outcome, severity, confidence, and causalEventId as separate fields. Split compound operations into linked events.",
+  "buckets": [
+    {
+      "id": "E01",
+      "title": "Source and dependency change",
+      "ownershipRule": "A revision, file, manifest, lockfile, package, or tool input changes before building.",
+      "examples": [
+        "commit added",
+        "lockfile version changed"
+      ]
+    },
+    {
+      "id": "E02",
+      "title": "Build and test result",
+      "ownershipRule": "A compiler, package, scanner, or test run reports its own result or artifact creation attempt.",
+      "examples": [
+        "unit test failed",
+        "build produced checksum"
+      ]
+    },
+    {
+      "id": "E03",
+      "title": "Release and deployment transition",
+      "ownershipRule": "A built artifact is promoted, deployed, installed, published, rolled back, or withdrawn.",
+      "examples": [
+        "Hosting revision activated",
+        "release asset published"
+      ]
+    },
+    {
+      "id": "E04",
+      "title": "Configuration and policy change",
+      "ownershipRule": "A non-identity runtime setting, feature flag, rule, or operational policy changes.",
+      "examples": [
+        "debug flag disabled",
+        "retention setting revised"
+      ]
+    },
+    {
+      "id": "E05",
+      "title": "Identity and authorization",
+      "ownershipRule": "Authentication, session, account, role, permission, or access decision is observed.",
+      "examples": [
+        "login denied",
+        "role grant revoked"
+      ]
+    },
+    {
+      "id": "E06",
+      "title": "Process and service lifecycle",
+      "ownershipRule": "A process, worker, daemon, task, or local IPC endpoint starts, stops, or changes ownership.",
+      "examples": [
+        "session child started",
+        "listener stopped"
+      ]
+    },
+    {
+      "id": "E07",
+      "title": "Network and IPC activity",
+      "ownershipRule": "A transport connection, DNS lookup, request, webhook, or endpoint exchange occurs or fails.",
+      "examples": [
+        "connection refused",
+        "webhook received"
+      ]
+    },
+    {
+      "id": "E08",
+      "title": "Data and storage lifecycle",
+      "ownershipRule": "An application data record, file, object, archive, or backup is read, written, moved, retained, or deleted.",
+      "examples": [
+        "backup verified",
+        "record deletion completed"
+      ]
+    },
+    {
+      "id": "E09",
+      "title": "Security detection and finding",
+      "ownershipRule": "An assessor or detector reports a vulnerability, suspicious behavior, secret exposure, or policy violation as a finding.",
+      "examples": [
+        "tracked dotenv warning",
+        "unexpected privilege finding"
+      ]
+    },
+    {
+      "id": "E10",
+      "title": "Health and recovery",
+      "ownershipRule": "Runtime availability, resource exhaustion, crash, degraded state, failover, or restoration is observed.",
+      "examples": [
+        "worker crash",
+        "service recovered"
+      ]
+    }
+  ],
+  "tieBreaks": [
+    {
+      "case": "authentication denied during a request",
+      "bucket": "E05",
+      "reason": "The observed fact is the access decision; record the transport request separately only if needed."
+    },
+    {
+      "case": "connection refused before authentication",
+      "bucket": "E07",
+      "reason": "No identity decision occurred."
+    },
+    {
+      "case": "test process exits nonzero",
+      "bucket": "E02",
+      "reason": "A test result is not a runtime outage."
+    },
+    {
+      "case": "runtime worker crashes",
+      "bucket": "E10",
+      "reason": "The observed fact is service health; a separate process exit may be linked as E06."
+    },
+    {
+      "case": "release starts a worker",
+      "bucket": "E03",
+      "reason": "The promotion is E03; the worker start is a separate linked E06 event."
+    },
+    {
+      "case": "source file written by application data workflow",
+      "bucket": "E08",
+      "reason": "Classify by role of the file in the observed operation, not its extension."
+    },
+    {
+      "case": "secret exposure detected",
+      "bucket": "E09",
+      "reason": "The finding is E09; an observed data transfer is a separate E07 or E08 event."
+    },
+    {
+      "case": "IAM role changed",
+      "bucket": "E05",
+      "reason": "Permission transitions own this event even when implemented through cloud configuration."
+    },
+    {
+      "case": "retention policy edited",
+      "bucket": "E04",
+      "reason": "The policy edit is E04; subsequent record deletion is separate E08."
+    }
+  ]
+}

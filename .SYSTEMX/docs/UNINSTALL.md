@@ -177,7 +177,7 @@ receipt. For each artifact, record its owner, intended disposition, observed
 head/state, action taken, and verification result in a private uninstall log.
 If a push or PR action partly completed, inspect the live branch and PR before
 uninstall: the remote mutation may have succeeded even if the local job was not
-updated. This alpha has no automatic remote-reconciliation command.
+updated. This beta has no automatic remote-reconciliation command.
 
 Complete only authorized lifecycle transitions while the selected Agent Y tools
 and task records remain available: an accepted task can make its draft ready;
@@ -194,7 +194,7 @@ cleanup; task acceptance alone is not proof that the result was integrated. A
 stranded same-host `running` job can use
 `agent-y recover Y-ID` to record failure only after its controller process is
 confirmed gone; it preserves work and remote resources for manual inspection.
-Native Windows Agent Y `run --apply` is disabled in this alpha; an independently
+Native Windows Agent Y `run --apply` is disabled in this beta; an independently
 started provider is outside this role's cleanup and needs its own process audit.
 
 ## External sync and bot resources

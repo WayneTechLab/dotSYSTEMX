@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dotsystemx"
-version = "1.11.0a7"
+version = "1.11.0b1"
 description = "Portable project context, coordination, and additive template version management"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -13,7 +13,7 @@ license-files = [".SYSTEMX/LICENSE"]
 dependencies = []
 keywords = ["systemx", "project-memory", "llm", "project-template"]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3",
   "Operating System :: OS Independent",
 ]
@@ -45,13 +45,17 @@ systemx = ["ROOT/*.md", "ROOT/*.json", "templates/root/*.md", "templates/root/*.
            "templates/data/ASSETS/README.md", "templates/data/EXPORTS/README.md",
            "templates/data/CACHE/README.md", "templates/data/ARCHIVE/README.md",
            ".gitignore", ".gitattributes", "LICENSE", "VERSION", "*.md", "*.json", "*.sh", "*.ps1",
-           "config/*.json", "AI/*.md", "AI/*.json", "GLOBAL/*.md", "PLAN/*.md",
+           "config/*.json", "AI/*.md", "AI/*.json", "GLOBAL/*.md", "GLOBAL/*.json", "GLOBAL/*.xlsx", "PLAN/*.md",
+           "AGENTB/*.md", "AGENTB/*.MD", "AGENTB/*.json", "AGENTB/.gitignore",
+           "templates/agentb/*.md", "templates/agentb/*.MD", "templates/agentb/*.json", "templates/agentb/.gitignore",
+           "templates/agenda/*.json",
+           "SECURITY/AGENT1/*.md", "SECURITY/AGENT1/*.json", "Setup/*.md", "Uninstall/*.md",
            "WORK/*.md", "WORK/*.json", "MEMORY/*.md", "MEMORY/sessions/*.md",
            "AGENTS/*.md", "AGENTS/*.json", "AGENTS/agent.0/*.md", "AGENTS/agent.x/*.md", "AGENTS/agent.y/*.md", "AGENTS/agent.z/*.md", "templates/*.md",
            "docs/*.md", "profiles/*.md", "scripts/*.py", "scripts/*.sh", "tests/*.py",
-           "MEDIA/*.md", "MEDIA/White-Paper/*.md", "MEDIA/White-Paper/*.json", "MEDIA/White-Paper/*.pdf",
+           "MEDIA/*.md", "MEDIA/White-Paper/*.md", "MEDIA/White-Paper/*.json", "MEDIA/White-Paper/*.pdf", "MEDIA/White-Paper/*.py",
            "MEDIA/White-Paper/figures/*.png", "MEDIA/White-Paper/figures/*.svg",
-           "MEDIA/Infographics/*.jpg", "MEDIA/Reference/*.md", "MEDIA/Reference/*.json",
+           "MEDIA/Infographics/*.jpg", "MEDIA/Infographics/*.svg", "MEDIA/Reference/*.md", "MEDIA/Reference/*.json",
            "Projects/*.md", "Projects/*.json", "templates/project/*.md", "templates/project/*.json",
            "templates/project/GLOBAL/*.md", "templates/project/PLAN/*.md",
            "templates/project/MEMORY/*.md", "templates/project/MEMORY/sessions/*.md",

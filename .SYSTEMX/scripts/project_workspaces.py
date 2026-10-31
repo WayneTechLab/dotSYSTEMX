@@ -319,9 +319,19 @@ def add_cli(subparsers):
     project_memory.add_cli(Scoped())
     agent_standards.add_cli(commands, scope)
     import autobots
+    import agent_beta
+    import security_agent1
+    import agenda_access
+    import session_service
+    import session_settings
     import data_tools
     import root_coordination
     autobots.add_cli(commands, scope)
+    agent_beta.add_cli(commands, scope)
+    security_agent1.add_cli(commands, scope)
+    agenda_access.add_cli(commands, scope)
+    session_service.add_cli(commands, scope)
+    session_settings.add_cli(commands, scope)
     data_tools.add_cli(commands, scope)
     root_coordination.add_cli(commands, scope)
     for action in ("check", "dev", "build", "deploy"):
@@ -358,12 +368,24 @@ def dispatch(root, defaults, args, run_action):
             if action in agent_standards.COMMANDS:
                 return agent_standards.dispatch(records, defaults, selected)
             import autobots
+            import agent_beta
+            import security_agent1
+            import agenda_access
+            import session_service
+            import session_settings
             import data_tools
             import root_coordination
-            if action in autobots.COMMANDS or action in data_tools.COMMANDS or action in root_coordination.COMMANDS:
-                module = (autobots if action in autobots.COMMANDS else
-                          data_tools if action in data_tools.COMMANDS else root_coordination)
-                print(json.dumps(module.dispatch(records, defaults, selected), indent=2, ensure_ascii=False, allow_nan=False))
+            if action in set().union(autobots.COMMANDS, agent_beta.COMMANDS,
+                                     security_agent1.COMMANDS, agenda_access.COMMANDS,
+                                     session_service.COMMANDS, session_settings.COMMANDS,
+                                     data_tools.COMMANDS,
+                                     root_coordination.COMMANDS):
+                module = next(item for item in (autobots, agent_beta, security_agent1,
+                                                agenda_access, session_service, session_settings, data_tools,
+                                                root_coordination) if action in item.COMMANDS)
+                result = module.dispatch(records, defaults, selected)
+                if action != "service" or selected.service_action != "start":
+                    print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
                 return 0
             print("Selected scope: " + name + "\nRecords: " + str(records))
             print("Shared defaults: " + str(defaults))

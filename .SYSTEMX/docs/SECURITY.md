@@ -20,6 +20,35 @@ review where the project requires one.
 - If a secret is exposed, revoke or rotate it and follow the project incident
   process. Removing a file alone does not invalidate the credential.
 
+Agent1's [advisory review](../SECURITY/AGENT1/README.md) inventories `.env`
+variable names and dependency manifest names without emitting values. It can
+prepare a key-only example and, after an explicit per-name terminal prompt,
+set a GitHub Actions secret. GitHub Actions secrets are write-only workflow
+inputs; they cannot be symlinked into a local `.env` or retrieved as local
+plaintext. Local runtime credential delivery requires a separately reviewed
+store or an interactive prompt. A repo writer may be able to use its Actions
+secrets through workflows, so a guest label in the Access Matrix is not a
+GitHub permission boundary. Preserve historical logs; rotate exposed keys and
+verify the actual provider permission and runtime before retiring a local file.
+For a repository or named-environment secret write, Agent1 checks the active
+GitHub CLI account and requires `permissions.admin == true` for the exact
+repository before prompting. The configured owner/operator/guest label is
+descriptive; a verified guest administrator can proceed, while unknown or
+false provider permission fails closed. After `gh secret set`, the CLI reads
+name/scope metadata only; `metadataReadback.state` can remain `unknown` and no
+value or workflow consumer is verified. Organization secret writes are not
+implemented in this beta CLI.
+
+Agent1 reads dotenv and answer files through anchored, no-follow directory
+handles and refuses linked parent paths. The required file-handle operations
+are unavailable on native Windows in this beta, so `env-inventory`,
+`env-sanitize`, `env-migrate`, and `review --answers` fail closed there. Its
+metadata-only first setup, `status`, `questions`, and advisory `check` remain
+available. A change to an existing setup record requires all eight answers in
+a preview, then `--apply --replace-existing --expect-sha256` with that preview's
+`existingSHA256`; reconfiguration also fails closed on Windows. These limits
+do not establish Windows secret delivery or host malware protection.
+
 ## Identity and authorization
 
 When authentication is needed, use maintained mechanisms, least privilege, and
@@ -31,7 +60,7 @@ for sensitive roles as appropriate.
 Test rejection as well as success: unauthenticated, wrong role, wrong tenant,
 expired session, malformed input, replay, and excessive requests where relevant.
 Document how access is granted, reviewed, revoked, and recovered.
-When access decisions apply, use the blank
+When access decisions apply, use the default-deny
 [access matrix](../GLOBAL/ACCESS-MATRIX.md) or the selected child's own matrix
 to link actors, resources, actions, environments, decision owners, and evidence.
 The [access and map guide](ACCESS-AND-MAP.md) explains how to keep it scoped.
@@ -94,13 +123,13 @@ Codex is invoked with its `workspace-write` sandbox, while Copilot and
 `configured` providers rely on their own permissions and host isolation.
 Controller diff checks can block publication of out-of-scope repository edits,
 but cannot reverse provider writes outside that repository or network calls.
-Native Windows Agent Y `run --apply` is disabled in this alpha before process
+Native Windows Agent Y `run --apply` is disabled in this beta before process
 or worktree creation because child-process termination is not verified; core
 Windows installation and record commands remain available.
 Before opting into Agent Y's draft PR, inspect the target repository's workflows,
 webhooks, protection rules, and visibility. Pushing a branch or opening a PR may
-trigger automation with its own permissions and usage; the template repository's
-disabled Actions setting does not control the destination repository. The
+trigger automation with its own permissions and usage; this template's
+read-only CI workflow does not control the destination repository. The
 `prepare` preview must be read before applying the handoff or running it.
 
 For the SYSTEMX manager itself, select reviewed release versions and prefer an

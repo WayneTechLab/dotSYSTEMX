@@ -85,3 +85,28 @@ below current user/system instructions. `Soul.MD` describes product purpose and
 voice, not consciousness. Keep payloads in ignored [DATA](docs/DATA.md) or an
 approved external store; references do not authorize automatic ingestion, model
 calls, synchronization, or upload. Root and child panels/data stay separate.
+
+## Optional Agent Beta, Agent1, and Agenda
+
+Agent Beta (`agent.b`) records named BOT/DOT workspaces under `AGENTB/` only after
+explicit setup. Each workspace has a reviewed identity and scope; its files do
+not authenticate a provider, grant access, or start an online assistant. Agent Y
+continues to own selected CLI execution and PR handoff, while Agent 0 owns tasks
+and acceptance.
+
+Agent1 may occupy `agent.1` with the `security-access` role when that numeric ID
+is unused. Its All-In-One assessment and local session helper report advisory
+findings by default. An unknown or inapplicable check is never a pass. Treat
+anti-malware, keylogger, and MFA-interception checks as bounded posture signals,
+not proof that a device is clean. Keep secret values out of records, logs, and
+assistant messages. GitHub Actions secrets cannot be read back into a local
+`.env` through a symlink; select a local secret source separately.
+
+Agent Alpha's Agenda is an empty settings table until an owner reviews and
+applies a context choice. The Access Matrix ships 20 default-deny role and
+instance rows, including Agent 0/1/X/Y/Z/Alpha/Beta, ten AUTOBOT references,
+numeric workers, native subagents, and Beta BOT/DOT instances. Its decisions
+remain empty until a selected-scope reviewer records one. Neither the Excel
+view nor a decision applies operating-system or provider permissions.
+Agent X remains the owner of events and due items. None of these records can
+override current user, system, or provider instructions.

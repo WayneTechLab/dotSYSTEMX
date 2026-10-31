@@ -13,6 +13,8 @@ __pycache__/
 # docs/assets and .SYSTEMX/MEDIA instead of film-production subdirectories.
 /docs/media/*
 !/docs/media/README.md
+!/docs/media/build_current_visuals.py
+!/docs/media/verify_current_visuals.py
 
 # Explicit repository-root authoring/output locations.
 /media-production/

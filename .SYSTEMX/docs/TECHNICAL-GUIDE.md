@@ -1,6 +1,6 @@
 # Technical Guide
 
-> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+> **Beta: use at your own risk.** See the [release policy](RELEASE-POLICY.md).
 
 `.SYSTEMX` is a file-based project operating format with optional Python tools.
 It supplies records, local validation, bounded context, version selection, and
@@ -17,10 +17,13 @@ project state; neither diagram adds an execution service to this file format.
 Host project
 └── .SYSTEMX                       exact stored directory name
     ├── GLOBAL, PLAN, MEMORY       project context, outcomes, durable facts
+    │   └── ACCESS-MATRIX.json    default-deny roles and reviewed decisions
     ├── WORK                       canonical tasks and current focus
-    ├── AGENTS                     Agent 0, optional X/Y/Z/Alpha, scoped worker memory
+    ├── AGENTS                     Agent 0, optional X/Y/Z/Alpha/Beta/Agent1
     ├── ROOT                       optional rules, plan links, task observations/cards
-    ├── AUTOBOT                    ten named reference functions and Alpha requests
+    ├── AUTOBOT                    ten named reference functions, Alpha and Agenda
+    ├── AGENTB                     optional named BOT/DOT workspace records
+    ├── SECURITY/AGENT1            fixed assessment questions and event buckets
     ├── DATA                       local payloads ignored by Git except scaffold
     ├── EVENTS                     event and due ledgers after activation
     ├── REVIEWS                    policy, requests, scorecards after activation
@@ -57,11 +60,16 @@ folder. It is different from the nested manager cache. Follow the
 | `scripts/agent_z.py` | Fixed 100-question policy, request/report validation, score math and deltas |
 | `scripts/root_coordination.py` | Optional request/plan references, bounded packets, observed harness/bot mappings, read-only task delta, reference-only tool cards |
 | `scripts/autobots.py` | Explicit Agent Alpha setup, selected specialist context, and reusable reference requests |
+| `scripts/agent_beta.py` | Optional named BOT/DOT records and canonical task references; no provider launch |
+| `scripts/security_agent1.py` | Warning-only local security checks, names-only dotenv inventory, and explicit one-secret Actions path |
+| `scripts/agenda_access.py` | Canonical default-deny role catalog, revision-guarded access decisions, Agenda options, and on-demand workbook export/check |
+| `scripts/session_settings.py` / `session_service.py` | Bounded read-only scope status, compact digest mode, and explicit stdio session |
+| `scripts/release_counters.py` | On-demand GitHub release/deployment observations; no persistent counter or deployment |
 | `scripts/data_tools.py` | Missing DATA scaffold setup and bounded, metadata-only Git exclusion/index audit |
 | `config/distribution.json` | Explicit public file inventory with release fingerprints |
 | `config/template-records.json` | Reviewed blank seed fingerprints |
 
-ROOT, AUTOBOT, and DATA are independent optional features in the selected outer
+ROOT, AUTOBOT, Agent Beta, Agent1, Agenda, and DATA are separate optional features in the selected outer
 or child record scope. Their explicit initialization adds missing blank files
 and preserves existing records; older scopes remain valid without them. Agent
 Alpha registration is separate from X/Y/Z activation. ROOT structure references
@@ -69,6 +77,9 @@ the existing Master Plan and canonical task IDs. Its observations are local
 snapshots, and its delta does not contact a harness or cloud service. Tool cards
 describe bounded available-tool calls without executing them. AUTOBOT supplies
 only selected reference context; DATA audit does not read or upload payloads.
+The 20 Access Matrix role defaults grant nothing. `agenda decision-add` records
+reviewed intent or denial but does not alter external IAM. The checked-in XLSX
+is a stock view; selected-scope workbooks are explicit ignored local exports.
 Use the [ROOT manual](../ROOT/SX-MILESTONE.md), [AUTOBOT guide](AUTOBOT.md), and
 [DATA guide](DATA.md) for exact scope, record, initialization, and output limits.
 
@@ -170,7 +181,7 @@ root. Integrations should preserve that boundary and canonical records. Consult
 the [Stack Guide](STACK-GUIDE.md) and [library API](LIBRARY.md).
 Native Windows still supports the core folder and record tools, but optional
 Agent Y `run --apply` fails closed before worktree/provider execution in this
-alpha because descendant process termination is unverified there.
+beta because descendant process termination is unverified there.
 
 An MCP adapter could later expose bounded read/write operations over this library.
 No MCP server, daemon, remote agent mesh, OAuth registration, or cloud sync engine

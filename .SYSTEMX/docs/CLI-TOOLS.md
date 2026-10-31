@@ -76,6 +76,100 @@ opens the AUTOBOT guide and option **20** runs the read-only DATA audit.
 `root-guide` prints the optional ROOT planning/observation manual; local menu
 option **21** opens the same guide.
 
+## Agent Beta, Agent1, Agenda, and local session commands
+
+The beta release adds optional, selected-scope commands. The local menu
+offers read-only status, setup previews, Agent1's warning-only All-In-One check,
+the update guide, and session settings as options **22–31**. Apply steps remain explicit CLI
+commands so their exact target and arguments can be reviewed.
+
+```bash
+systemx run --target "/path/to/workspace" --offline -- agent-beta setup
+systemx run --target "/path/to/workspace" --offline -- agent-beta setup --apply
+systemx run --target "/path/to/workspace" --offline -- agent-beta bot-add EXAMPLE --kind bot
+systemx run --target "/path/to/workspace" --offline -- agent-beta bot-add EXAMPLE --kind bot --apply
+systemx run --target "/path/to/workspace" --offline -- agent-beta access-link --help
+systemx run --target "/path/to/workspace" --offline -- agent-1 status
+systemx run --target "/path/to/workspace" --offline -- agent-1 setup
+systemx run --target "/path/to/workspace" --offline -- agent-1 check
+systemx run --target "/path/to/workspace" --offline -- agenda status
+systemx run --target "/path/to/workspace" --offline -- agenda table --format csv
+systemx run --target "/path/to/workspace" --offline -- agenda decision-add --help
+systemx run --target "/path/to/workspace" --offline -- agenda roles-upgrade --help
+systemx run --target "/path/to/workspace" --offline -- agenda workbook-export
+systemx run --target "/path/to/workspace" --offline -- agenda workbook-check
+systemx run --target "/path/to/workspace" --offline -- service status
+systemx run --target "/path/to/workspace" --offline -- session-settings
+systemx run --target "/path/to/workspace" --offline -- session-settings --compact
+systemx run --target "/path/to/workspace" --offline -- release-counters
+```
+
+Agent Beta creates local BOT/DOT records only. To retain an Access Matrix
+reference, create the named workspace first, add a `reviewed-intent` decision
+for `agentb:BOT_NAME`, then preview `agent-beta access-link BOT_NAME
+--access-decision-id ACC-001`. The preview's `revisionBefore` fingerprints
+the BOT and matrix; repeat with `--expected-revision REVISION --apply` after
+review. The link never verifies identity, grants access, or opens a provider
+session. `agent-1 setup` reports unanswered
+first-run questions; review personal or enterprise context, repository identity,
+owner/operator/guest role, GitHub Actions target, local secret store, and `.env`
+history/rotation before applying. `agent-1 check` defaults to All-In-One and
+returns warnings with coverage limits. The 400-question policy is an assessment
+catalog; a local filename scan does not answer those questions. The setup
+role label is descriptive. An applied repository/environment
+`env-migrate` requires GitHub's action-time repository admin permission and
+reads back only the secret name/scope metadata; organization secret writes are
+outside this beta CLI. `agenda` starts
+with 20 default-deny role and instance rows, empty decisions, and empty Agenda
+options; it never grants external access. `agenda decision-add` records one
+reviewed intent, denial, or gap after an `accessRevision` check, and reports
+`accessGranted: false`. The checked-in XLSX is a stock view of the role rows;
+`agenda roles-upgrade` can add those rows to an adopted legacy scoped matrix
+after a revision-guarded preview while preserving existing decisions.
+`agenda table --format csv` returns live selected-scope CSV fields within JSON.
+`agenda workbook-export` previews a formula-free XLSX under ignored `local/`;
+repeat with its `sourceRevision` as `--expected-revision` and `--apply` to
+write it. `agenda workbook-check` detects when that view is stale against the
+canonical JSON. `service start --stdio` runs an explicit
+read-only JSON-lines session under the caller's process lifetime; it installs no
+OS daemon. See [Agent1's policy](../SECURITY/AGENT1/README.md), [service setup](../Setup/SERVICE.md),
+and the [Access Matrix](../GLOBAL/ACCESS-MATRIX.md).
+
+For an existing Agent1 setup, preview a proposed change with all eight setup
+answers: `--account-context`, `--repo`, `--review-scope`, `--actor-role`,
+`--secret-target`, `--local-secret-store`, `--env-history-reviewed`, and
+`--rotation-decision`. Review `proposed` and `existingSHA256`, then repeat the
+full command with `--apply --replace-existing --expect-sha256 SHA_FROM_PREVIEW`.
+Missing answers or a changed record stop replacement. On native Windows,
+metadata-only first setup, `status`, `questions`, and warning-only `check` are
+available; `env-inventory`, `env-sanitize`, `env-migrate`, `review --answers`,
+and existing-setup reconfiguration fail closed because anchored file-handle
+operations are unavailable. No Windows Agent1 service is installed.
+
+`session-settings` combines selected-scope Agent Beta, Agent1, and Agenda
+status with fixed AUTOBOT and registered Beta Rules file paths and SHA-256
+hashes. It returns no rule text, secret, account, permission grant, or provider
+state. `--compact` returns a rule count and revision digest in place of the
+per-file path/hash list. A child requires
+`projects session-settings --project NAME`.
+
+For the public template repository, the optional read-only
+`release-counters` command and standalone
+[`release_counters.py`](../scripts/release_counters.py) report GitHub published
+software/media release counts and deployment records separately. It queries on
+demand, reports the observation time, and returns `unknown` if a provider read
+fails. It neither deploys an application nor creates a persistent counter. See
+the [counter guide](RELEASE-COUNTERS.md). From a reviewed folder-only checkout,
+run `python3 -I -B .SYSTEMX/scripts/systemx.py release-counters
+--repository OWNER/REPO`. Local menu option **32** opens the default repository
+counter on demand.
+
+For first run, update, uninstall, and restore, use the external manager commands
+with an explicit `--target`. A copied folder cannot safely update or uninstall
+itself while its own files are in use. The [installation guide](INSTALLATION.md)
+and [uninstall guide](UNINSTALL.md) remain the lifecycle authorities. The menu's
+option **30** opens the update guide and option **14** opens the uninstall guide.
+
 To use a reviewed folder-only copy directly, run the launcher from the containing
 directory. Managed launchers select their verified cache; malformed or missing
 managed state must be repaired through reviewed tools, never used as a reason
@@ -267,7 +361,7 @@ Scope routing, worktrees, allowed-path checks, and PR gates are workflow control
 not an OS sandbox. External CLIs and configured application commands have their
 host account's filesystem/network access. For untrusted workers, use an isolated
 OS identity or container without controller credentials or `.SYSTEMX` write
-access. This alpha's Agent Y native Windows `run --apply` fails closed because
+access. This beta's Agent Y native Windows `run --apply` fails closed because
 descendant process termination is unverified there; core record tools and
 PowerShell launchers remain available.
 

@@ -5,25 +5,44 @@ accessible text companions, and their reference provenance. Film production,
 narration, captions, editable scenes, render output, and publication workspaces
 are maintained separately from this source distribution.
 
-## White paper edition 2.0
+## Current white paper, edition 2.1
 
-*Portable Project Coordination for AI-Assisted Work* explains the record model,
-agent responsibilities, ROOT observations, project scopes, evidence, security,
-and evaluation limits. Its examined software is `1.11.0-alpha.4`; its publication
-identity is `1.11.0-alpha.5`. Those historical identities do not change when the
-current template is updated.
+*.SYSTEMX: Portable Project Coordination for AI-Assisted Work* examines the
+`1.11.0-beta.1` record model, agent roles, Access Matrix, security boundaries,
+release accounting, external authoring-data boundary, and evaluation limits.
+The current five-page PDF has selectable text and navigation.
 
-[Clickable PDF](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf) ·
-[Readable manuscript](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.md) ·
-[Edition provenance](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.json) ·
-[Figures](../../.SYSTEMX/MEDIA/White-Paper/figures/) ·
+[Clickable PDF](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) ·
+[Readable manuscript](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.md) ·
+[Edition provenance](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.json) ·
 [White-paper manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper)
 
-The published PDF and figure bytes are retained. Earlier published editions and
-release evidence remain in their versioned history. Optional publishing and
-narration tools are not dependencies of the template runtime.
+Earlier edition 2.0 examined `1.11.0-alpha.4` and was published with
+`1.11.0-alpha.5`. Its original PDF, figures, manuscript, and provenance remain
+available from that [immutable release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-alpha.5).
+Optional publishing and narration tools are not dependencies of the template runtime.
 
 ## Static guides
+
+[Current beta visual guide and accessible text](../../.SYSTEMX/MEDIA/Reference/current-visual-guide.md) ·
+[Lifecycle infographic](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg) ·
+[BOT/DOT workspaces](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-bot-workspaces.svg) ·
+[Security and access](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-security-access.svg) ·
+[Access Matrix](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-access-matrix.svg)
+
+The current set has four beta feature infographics and seven agent role cards
+on 7680 × 4320 SVG canvases, with exact vector labels and a reading-order text
+companion. Imagegen illustrations have 1672 × 941 native pixels; the 8K canvas
+is an export size. These graphics explain source behavior and boundaries,
+not live provider, device, or deployment status.
+
+The [visual builder](build_current_visuals.py) reconstructs the stock SVG set
+from reviewed local inputs. The [visual verifier](verify_current_visuals.py)
+checks current asset hashes, SVG structure and contrast, and optional external
+8K raster export hashes. Raw generated art and raster exports remain outside
+the portable template; the SVGs are the current main-branch copies.
+
+### Historical field guide
 
 [Four-part field guide and accessible text](../../.SYSTEMX/MEDIA/Reference/systemx-field-guide.md) ·
 [Portable reference library](../../.SYSTEMX/MEDIA/README.md) ·

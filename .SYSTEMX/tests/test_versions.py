@@ -1,4 +1,4 @@
-"""Public alpha IDs, stable isolation, ordering, and bounded release discovery."""
+"""Public prerelease IDs, channel isolation, ordering, and bounded discovery."""
 
 import importlib.util
 import json
@@ -18,20 +18,23 @@ def release(version, prerelease=False, draft=False):
 
 class VersionTests(unittest.TestCase):
     def test_exact_ids_and_python_mapping(self):
-        for value in ("0.0.0", "1.5.0", "1.6.0-alpha.1", "1.6.0-alpha.10"):
+        for value in ("0.0.0", "1.5.0", "1.6.0-alpha.1", "1.6.0-alpha.10", "1.6.0-beta.1"):
             self.assertEqual(manager.version_id(value), value)
         self.assertEqual(manager.package_version("1.6.0-alpha.1"), "1.6.0a1")
+        self.assertEqual(manager.package_version("1.6.0-beta.1"), "1.6.0b1")
+        self.assertEqual(manager.release_channel("1.6.0-beta.1"), "beta")
         self.assertEqual(manager.package_version("1.5.0"), "1.5.0")
 
     def test_ambiguous_and_escaping_ids_rejected(self):
         for value in (None, 1, "v1.6.0", "Alpha1", "01.6.0", "1.6.0-alpha.0",
-                      "1.6.0-alpha.01", "1.6.0a1", "1.6.0-beta.1", "1.6.0+local",
+                      "1.6.0-alpha.01", "1.6.0a1", "1.6.0-beta.0", "1.6.0-beta.01", "1.6.0+local",
                       "1.6.0-alpha.1/../x", "1.6.0\n", "1.6.٠"):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 manager.version_id(value)
 
     def test_numeric_order_and_final_graduation(self):
-        expected = ["1.5.0", "1.6.0-alpha.2", "1.6.0-alpha.10", "1.6.0", "1.6.1-alpha.1", "2.0.0"]
+        expected = ["1.5.0", "1.6.0-alpha.2", "1.6.0-alpha.10", "1.6.0-beta.1",
+                    "1.6.0-beta.10", "1.6.0", "1.6.1-alpha.1", "2.0.0"]
         self.assertEqual(sorted(reversed(expected), key=manager.version_key), expected)
 
     def test_stable_never_accepts_alpha_or_drafts(self):
@@ -49,9 +52,9 @@ class VersionTests(unittest.TestCase):
     def test_alpha_discovery_orders_and_ignores_mislabeled_releases(self):
         values = [release("1.6.0-alpha.2", True), release("1.5.0"), release("1.6.0-alpha.10", True),
                   release("2.0.0-alpha.1"), release("9.0.0", True), release("9.0.0", draft=True),
-                  release("latest"), release("8.0.0-beta.1", True)]
+                  release("latest"), release("1.6.0-beta.1", True)]
         with patch.object(manager, "get_url", return_value=json.dumps(values).encode()):
-            self.assertEqual(manager.latest_version(channel="alpha"), "1.6.0-alpha.10")
+            self.assertEqual(manager.latest_version(channel="alpha"), "1.6.0-beta.1")
         values.append(release("1.6.0"))
         with patch.object(manager, "get_url", return_value=json.dumps(values).encode()):
             self.assertEqual(manager.latest_version(channel="alpha"), "1.6.0")

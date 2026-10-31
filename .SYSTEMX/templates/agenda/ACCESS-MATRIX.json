@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "roleDefaults": [
+    {
+      "id": "ROLE-001",
+      "actor": "agent.0",
+      "kind": "agent",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Scope coordination and acceptance"
+    },
+    {
+      "id": "ROLE-002",
+      "actor": "agent.1",
+      "kind": "agent",
+      "instanceRule": "Opt-in security-access only if this numeric ID is free",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Security and Access review"
+    },
+    {
+      "id": "ROLE-003",
+      "actor": "agent.a",
+      "kind": "agent",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Agent Alpha advisory context coordinator"
+    },
+    {
+      "id": "ROLE-004",
+      "actor": "agent.b",
+      "kind": "agent",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Agent Beta BOT/DOT workspace coordinator"
+    },
+    {
+      "id": "ROLE-005",
+      "actor": "agent.x",
+      "kind": "agent",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Event and due-item records"
+    },
+    {
+      "id": "ROLE-006",
+      "actor": "agent.y",
+      "kind": "agent",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Assigned CLI branch and PR lane"
+    },
+    {
+      "id": "ROLE-007",
+      "actor": "agent.z",
+      "kind": "agent",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Bounded review policy"
+    },
+    {
+      "id": "ROLE-008",
+      "actor": "agent.numeric-worker",
+      "kind": "agent-pattern",
+      "instanceRule": "agent.[1-9][0-9]* in selected-scope AGENTS/REGISTRY.json",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Other optional numeric workers"
+    },
+    {
+      "id": "ROLE-009",
+      "actor": "native.subagent",
+      "kind": "subagent-pattern",
+      "instanceRule": "Host-assigned unique session ID with one bounded task",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Host-managed finite subagent assignments"
+    },
+    {
+      "id": "ROLE-010",
+      "actor": "agentb.instance",
+      "kind": "bot-pattern",
+      "instanceRule": "AGENTB/.SYSTEMXB-[A-Z][A-Z0-9_]{0,31} with a BOTS.json record",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Named BOT/DOT workspace instances"
+    },
+    {
+      "id": "ROLE-011",
+      "actor": "autobot.design",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Interface and accessibility references"
+    },
+    {
+      "id": "ROLE-012",
+      "actor": "autobot.soul",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Purpose and interaction references"
+    },
+    {
+      "id": "ROLE-013",
+      "actor": "autobot.memory",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Accepted context references"
+    },
+    {
+      "id": "ROLE-014",
+      "actor": "autobot.rules",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Project constraints and authority references"
+    },
+    {
+      "id": "ROLE-015",
+      "actor": "autobot.research",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Source and uncertainty references"
+    },
+    {
+      "id": "ROLE-016",
+      "actor": "autobot.brand",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Company and product identity references"
+    },
+    {
+      "id": "ROLE-017",
+      "actor": "autobot.media",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Asset and media-rights references"
+    },
+    {
+      "id": "ROLE-018",
+      "actor": "autobot.tokens",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Design token and theme references"
+    },
+    {
+      "id": "ROLE-019",
+      "actor": "autobot.data",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Dataset provenance references"
+    },
+    {
+      "id": "ROLE-020",
+      "actor": "autobot.archive",
+      "kind": "autobot",
+      "instanceRule": "",
+      "templateGrant": "none",
+      "requiresReview": true,
+      "purpose": "Retention and recall references"
+    }
+  ],
+  "decisions": []
+}

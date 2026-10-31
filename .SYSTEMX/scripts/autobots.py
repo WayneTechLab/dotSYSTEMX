@@ -31,7 +31,7 @@ SEEDS = ("README.md", "AGENTA.MD", "CATALOG.json", "REQUESTS.json") + tuple(slot
 REQUIRED = ("scripts/autobots.py", "tests/test_autobots.py", "templates/AGENT-A-MEMORY.md",
             "AGENTS/agent.a/README.md") + tuple("AUTOBOT/" + name for name in SEEDS) + tuple(
                 "templates/autobot/" + name for name in SEEDS)
-CALLERS = ("agent.0", "agent.x", "agent.y", "agent.z", "agent.a", "tools")
+CALLERS = ("agent.0", "agent.x", "agent.y", "agent.z", "agent.a", "agent.b", "tools")
 LIMIT = ("Advisory context only. Caller labels are local claims, not authenticated identities. "
          "No model, process, tool, network, DATA scan, task acceptance, or automatic loop is started.")
 
@@ -117,7 +117,7 @@ def _selected(bots):
 
 def _caller(root, caller, known=None):
     if caller not in CALLERS:
-        raise ValueError("Caller must be agent.0, agent.x, agent.y, agent.z, agent.a, or tools")
+        raise ValueError("Caller must be a registered agent.0/a/b/x/y/z role or tools")
     if known is None:
         _, registry = memory.load(root)
         known = {item["id"] for item in registry["agents"]}

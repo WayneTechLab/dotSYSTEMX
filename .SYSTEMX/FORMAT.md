@@ -1,6 +1,6 @@
 # .SYSTEMX format contract
 
-> **Alpha: use at your own risk; may change daily.** See the [release policy](docs/RELEASE-POLICY.md).
+> **Beta: use at your own risk.** See the [release policy](docs/RELEASE-POLICY.md).
 
 SYSTEMX defines a reusable project operating format. It is a project-maintained
 convention, not a certification or an externally ratified industry standard.
@@ -39,6 +39,10 @@ do not start one.
 | `AGENTS/REGISTRY.json` | Stable role IDs and memory paths | Each role's scoped memory |
 | `MEMORY/PROJECT.md` | Verified durable facts, decisions, lessons | Dated session checkpoints |
 | `AUTOBOT/` | Optional detailed reference functions and bounded Agent Alpha requests | Exactly ten named `.MD` functions and `AGENTA.MD` charter |
+| `AUTOBOT/AGENDA.json` | Optional Agent Alpha context-selection settings | Blank by default; does not schedule work or grant access |
+| `GLOBAL/ACCESS-MATRIX.json` | Default-deny role catalog and structured, owner-reviewed decisions | `GLOBAL/ACCESS-MATRIX.xlsx` is the stock human view; external systems enforce permissions |
+| `AGENTB/` | Optional Agent Beta registry of named BOT/DOT workspaces | Per-bot metadata under `.SYSTEMXB-BOT_NAME`; no provider credentials or process |
+| `SECURITY/AGENT1/` | Agent1 assessment policy and advisory findings | The selected `agent.1` worker is opt-in; no blocking or service by default |
 | `DATA/` | Local payload storage with effective Git exclusion checks | Ignored payloads; exact scaffold README and `.gitignore` files remain portable |
 | `project.json` | Explicit host-project commands | Empty `config/project.example.json` |
 | `INSTALLATION.json` (managed installs) | Selected defaults release, version pin, profile, update policy, fingerprints | Retained defaults under `.systemx/releases/<version>/` |
@@ -47,12 +51,16 @@ Keep raw/private runtime artifacts in ignored local storage. A role is not a
 running process; a report is not an authorization grant; a generated view is
 not a second editable ledger. Preserve original evidence when superseding it.
 
-`GLOBAL/ACCESS-MATRIX.md` and `PLAN/MAP.md` are blank supporting records in the
-root and in each new `.SYSTEMXP` child. The matrix documents reviewed access
-intent and evidence, while external systems enforce real permissions. The map
+`GLOBAL/ACCESS-MATRIX.md` and `PLAN/MAP.md` are supporting records in the root
+and each new `.SYSTEMXP` child. The matrix describes a 20-row default-deny role
+catalog; reviewed decisions start empty. External systems enforce real
+permissions. The map
 points to source-backed structure and boundaries; it does not discover topology
 or carry a second task status. Open them when relevant rather than loading them
 into every agent context packet. See the [access and map guide](docs/ACCESS-AND-MAP.md).
+The structured access decisions and Agent Alpha Agenda options are separate
+optional records; their empty arrays create no access grant, scheduled action,
+or bot session.
 
 ## SYSTEMX PROJECTS, schema version 1
 
@@ -131,8 +139,11 @@ pointers are rejected. Selection replaces the whole focus; it never changes task
 `AGENTS/REGISTRY.json` contains exactly `schemaVersion` and `agents`. Each agent
 has `id`, `role`, and `memory`. IDs are unique `agent.0`, `agent.1`, etc., without
 leading zeroes, plus reserved standard roles `agent.x` (`event-time`),
-`agent.y` (`cli-worker`), `agent.z` (`review`), and `agent.a`
+`agent.y` (`cli-worker`), `agent.z` (`review`), `agent.a`
 (`autobot-coordinator`) when explicitly activated using compatible tools.
+`agent.b` (`bot-coordinator`) is reserved for optional named BOT/DOT workspaces.
+`agent.1` can be selected for Agent1 security-access only when it is not already
+registered for another worker role; no public template registers it.
 Agent Alpha setup is separate from X/Y/Z setup. Agent 0 must have role
 `coordinator`; other roles are
 nonempty descriptions. Memory must exist at `AGENTS/<id>/MEMORY.md`, without
@@ -304,6 +315,50 @@ retains its branch for manual disposition. Automated branch deletion needs
 exact ownership/head verification and a retained local bundle. Merge requires
 separate authorization. See
 [Agent Y](docs/AGENT-Y.md).
+
+## Agent Beta, Agent1, and Agenda records
+
+Agent Beta reserves `agent.b` with role `bot-coordinator`; `agent-beta setup`
+previews its selected-scope registration. `AGENTB/BOTS.json` has exactly
+`schemaVersion: 1` and `bots`, empty in the public template. Each explicitly
+created `.SYSTEMXB-BOT_NAME` folder contains bounded metadata, blank memory,
+README, and `Rules.MD`. Uppercase ASCII names prevent ambiguous case variants.
+`online: false` means no provider session was established, even when a
+nonsecret online identity is documented. Task references identify existing
+canonical tasks but never change their state. For a new named BOT/DOT, create
+its record, add a same-actor `reviewed-intent` Access Matrix decision, then
+preview and revision-guard `agent-beta access-link` to retain the ACC reference.
+The link grants nothing and keeps `online: false`. See [Agent Beta](AGENTB/README.md).
+
+Agent1 uses numeric `agent.1` with role `security-access` only when that ID is
+available. `SECURITY/AGENT1/questions.json` carries twenty categories with
+twenty stable evidence questions each; `event_buckets.json` has ten diagnostic
+classes. The All-In-One profile is the default on explicit assessment. A local
+filename check answers zero catalog questions and reports coverage limits.
+First-run answers go to ignored `local/AGENT1-CONFIG.json` in the selected
+scope. A complete answer file can be syntax-checked without treating its
+evidence references as authenticated. Findings are advisory by default;
+neither a score nor a successful stdio response certifies a device or cloud
+deployment. See [Agent1](SECURITY/AGENT1/README.md).
+
+`AUTOBOT/AGENDA.json` has exactly `schemaVersion: 1` and `options`; the public
+array is empty. Agent Alpha remains the coordinator for the existing ten fixed
+AUTOBOT references. An Agenda option may select advisory context and pin its
+Rules file digest to a reviewed `GLOBAL/ACCESS-MATRIX.json` decision ID.
+The new structured matrix has `schemaVersion: 1`, 20 fixed `roleDefaults` rows,
+and an empty `decisions` array. All default rows grant nothing and require
+review. A decision records `reviewed-intent`, `denied`, or `gap`, never a
+permission grant. `GLOBAL/ACCESS-MATRIX.xlsx` is the distributed default
+catalog for human review; JSON remains machine-readable authority. A selected
+scope can add a guarded decision with `agenda decision-add`, request live CSV
+fields with `agenda table --format csv`, and explicitly export a formula-free
+`local/` workbook using `agenda workbook-export`. A workbook check detects
+drift after JSON changes. Agent X retains
+events and due items, and external IAM retains enforcement. See the
+[access guide](docs/ACCESS-AND-MAP.md).
+`session-settings` produces a bounded, read-only aggregate of these role
+statuses and the fixed AUTOBOT and registered Beta Rules paths and SHA-256
+hashes. It contains no Rules text, secret values, or live provider state.
 
 ## AUTOBOT, Agent Alpha, and DATA records
 

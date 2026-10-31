@@ -1,15 +1,15 @@
-# Alpha release policy
+# Prerelease policy
 
-**.SYSTEMX is alpha. Use at your own risk. It may change daily.** Guidance,
-interfaces, defaults, and compatibility may change during development. The MIT
+**.SYSTEMX is beta. Use at your own risk.** Guidance, interfaces, defaults,
+and compatibility may change during prerelease development. The MIT
 license provides the terms and warranty disclaimer. Passing template tests does
 not certify a downstream project for production. Keep recoverable backups and
 test your workflows before adopting or updating.
 
 ## Branches and exact versions
 
-`main` is the default public template branch. `Alpha1` is the integration branch
-for this alpha series. Both contain the consolidated history of the earlier
+`main` is the default public template branch. `Alpha1` is the historical integration branch
+for the earlier alpha series. Both contain the consolidated history of the earlier
 template branches at the first alpha publication. Branches are moving references;
 use an exact release tag for repeatable installation. Earlier branches and tags
 remain available as history.
@@ -29,26 +29,28 @@ automatic release every day.
 
 Prior numeric versions and GitHub release labels are retained for compatibility.
 Those historical labels are not a production-readiness certification. The current
-development series is explicitly published as GitHub prereleases. There is no
-stable-release date, support SLA, or promise of compatibility throughout alpha.
+`1.11.0-beta.1` version is a GitHub prerelease; the Python package spells it
+`1.11.0b1`. There is no stable-release date, support SLA, or promise of
+compatibility throughout beta.
 Changes should document migrations and preserve project-owned data.
 
 ## Pins and update channels
 
 - New projects are pinned to their chosen version and use manual updates.
-- An exact alpha tag or reviewed alpha source explicitly selects alpha defaults.
+- An exact alpha or beta tag, or reviewed source, selects that prerelease channel.
 - Final-version projects discover only final releases, whether the result is a
   startup notice or an unpinned manual selection. An alpha tag incorrectly
   labeled final on GitHub is refused by stable discovery.
-- Alpha projects discover published alpha and final releases for notices and
-  unpinned manual selection, ordered numerically: `alpha.2 < alpha.10 < final`
-  for the same base version. A final selected version returns the project to
-  final-only discovery.
+- Alpha projects discover published alpha, beta, and final releases for notices
+  and unpinned manual selection. Beta projects discover published beta and final
+  releases, never an older alpha on implicit update. For the same base version,
+  ordering is `alpha.2 < alpha.10 < beta.1 < beta.10 < final`. A final selected
+  version returns the project to final-only discovery.
 - Opt-in `--auto on-start` checks for a published release at most daily after a
   successful check and reports it. This works while a project remains pinned.
   The metadata discovery wait is capped at five seconds; on timeout the run
   warns and continues with its installed defaults without caching success.
-  Startup never downloads or selects a release. Alpha releases can change
+  Startup never downloads or selects a release. Prereleases can change
   interfaces within a major version; review every version before a manual update.
 - A manual selection of a release that changes root bootstrap or launcher files
   requires an external reviewed tool to perform an explicit backed-up
@@ -69,26 +71,26 @@ No new setting is inserted into user
 task or policy records. Schema-1 `INSTALLATION.json` files are read compatibly and
 gain schema-2 archive-digest receipts on a later manager state write. Receipts for
 previously installed releases are `null`; they cannot retroactively prove a
-remote digest. Alpha discovery inspects
+remote digest. Prerelease discovery inspects
 up to 1,000 GitHub releases and fails with exact-version guidance if that bound is
 exhausted. Drafts, unsupported version forms, and inconsistently labeled releases
 are excluded. Failed startup checks retain verified installed defaults.
 
-## Upgrade an existing project to alpha
+## Upgrade an existing project to beta
 
-Managers from 1.5.0 and earlier cannot parse alpha IDs. Upgrade the external
+Managers from 1.5.0 and earlier cannot parse prerelease IDs. Upgrade the external
 tool environment first, from outside the project's `.SYSTEMX` folder. Use the
 interpreter belonging to that environment; the example assumes it is activated:
 
 ```bash
-python -m pip --log dotsystemx-alpha-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.7"
+python -m pip --log dotsystemx-beta-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.1"
 systemx --version
 systemx status --target "/path/to/project"
-systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-alpha.7
-systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-alpha.7 --apply
+systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.1
+systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.1 --apply
 systemx policy --target "/path/to/project" --pin none --auto manual
-systemx update --target "/path/to/project" --version 1.11.0-alpha.7 --dry-run
-systemx update --target "/path/to/project" --version 1.11.0-alpha.7
+systemx update --target "/path/to/project" --version 1.11.0-beta.1 --dry-run
+systemx update --target "/path/to/project" --version 1.11.0-beta.1
 systemx policy --target "/path/to/project" --pin current
 systemx run --target "/path/to/project" --offline -- validate
 systemx run --target "/path/to/project" --offline -- context --agent agent.0
@@ -103,7 +105,7 @@ for the eight recognized stock root bootstrap and launcher files. A customized o
 unrecognized bootstrap is a conflict for manual review. Use the reviewed new
 external tool to select and run cached defaults; customized wrappers are not
 automatically upgraded or verified by this step. Do not reinstall the old
-tool to operate a project still selecting an alpha version. The new manager can
+tool to operate a project still selecting a prerelease version. The new manager can
 inspect an older selected installation with `status` and run its verified
 retained snapshot through an isolated compatibility shim while it is migrated
 through the reviewed external bootstrap/update path. That old selected code
@@ -143,9 +145,24 @@ older preserved root manager may retain its old startup-selection behavior;
 refresh that stock bootstrap with a reviewed external tool before enabling
 `on-start`, or keep `--auto manual` until the migration is complete.
 
-GitHub Actions is disabled for this repository, and no workflow is shipped.
-Maintainers run release
-validation and tests locally, then attach the resulting evidence to the release:
+The previous alpha series and the unpublished local alpha.8 draft are not
+silently relabeled. New beta defaults include 20 default-deny Access Matrix
+role rows with no access decisions; an adopted project's existing matrix and
+other records remain owned by that project. Review any scoped migration
+explicitly; `agenda roles-upgrade` provides a revision-guarded additive path.
+A template release is a distribution event, not evidence of an
+application deployment. The optional [release counter](RELEASE-COUNTERS.md)
+reads GitHub release and deployment records separately and reports unknown when
+a provider read is unavailable.
+
+The repository ships a read-only
+[`template-ci.yml`](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/.github/workflows/template-ci.yml) workflow for
+selected Python versions on Ubuntu, Windows, and macOS. It uses read-only
+repository permissions, does not persist checkout credentials, and contains no
+deployment or secret operation. A workflow file is not a passing provider run;
+maintainers check its actual result after push. The matrix samples supported
+hosts and does not cover every Python/OS combination. Maintainers also run
+release validation and tests locally, then attach the resulting evidence to the release:
 
 ```bash
 python3 -I -B .SYSTEMX/scripts/release.py --check

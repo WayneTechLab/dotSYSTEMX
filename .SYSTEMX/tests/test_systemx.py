@@ -218,24 +218,16 @@ class SystemxTests(unittest.TestCase):
         self.assert_ok(result)
 
     def test_release_manifest_schema_two_uses_raw_binary_hashes(self):
-        version = "1.9.0-alpha.3"
-        (self.systemx / "VERSION").write_text(version + "\n")
-        source = self.systemx / "SOURCE.json"
-        provenance = json.loads(source.read_text())
-        provenance["templateVersion"] = version
-        source.write_text(json.dumps(provenance))
-        metadata = self.root / "pyproject.toml"
-        if metadata.is_file():
-            old_version = (SOURCE / "VERSION").read_text().strip().replace("-alpha.", "a")
-            metadata.write_text(metadata.read_text().replace('version = "' + old_version + '"',
-                                                          'version = "1.9.0a3"'))
+        # The current source already requires schema 2. Changing only its
+        # version label would make the alpha.8 blank-record inventory look like
+        # an older release without actually constructing that historical bundle.
         release = self.systemx / "scripts/release.py"
         result = subprocess.run([sys.executable, "-B", str(release)], cwd=self.temp.name,
                                 text=True, capture_output=True, timeout=15)
         self.assert_ok(result)
         manifest = json.loads((self.systemx / "config/distribution.json").read_text())
         self.assertEqual(manifest["schemaVersion"], 2)
-        binary = "MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf"
+        binary = "MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg"
         raw = (self.systemx / binary).read_bytes()
         self.assertIn(b"\r\n", raw)
         self.assertEqual(manifest["files"][binary], hashlib.sha256(raw).hexdigest())

@@ -60,6 +60,17 @@ class ManagerTests(unittest.TestCase):
                         path.parent.mkdir(parents=True, exist_ok=True)
                         shutil.copy2(SOURCE / name, path)
                     seeds["sha256"][name] = current["sha256"][name]
+            if manager.version_key(version) < manager.version_key("1.11.0-alpha.8"):
+                for name in manager.SEEDS_FROM_1_11_0_ALPHA_8:
+                    seeds["sha256"].pop(name, None)
+            else:
+                current = json.loads((SOURCE / "config/template-records.json").read_text())
+                for name in manager.SEEDS_FROM_1_11_0_ALPHA_8:
+                    path = self.source / name
+                    if not path.exists():
+                        path.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(SOURCE / name, path)
+                    seeds["sha256"][name] = current["sha256"][name]
             seeds_path.write_text(json.dumps(seeds))
         selected_version = (self.source / "VERSION").read_text().strip()
         schema = manager.distribution_schema(selected_version)
@@ -723,6 +734,96 @@ class ManagerTests(unittest.TestCase):
         for name, data in before.items():
             self.assertEqual((self.root / ".SYSTEMX" / name).read_bytes(), data)
 
+    def test_beta_update_preserves_records_and_discovers_only_beta_or_stable(self):
+        self.write_manifest("1.11.0-beta.1")
+        self.install()
+        manager.set_policy(self.root, pin="none", auto_update="on-start")
+        before = self.root_files()
+        self.next_release("1.11.0-beta.2")
+        bundle = manager.read_bundle(self.source)
+        with patch.object(manager, "latest_version", return_value=bundle["version"]) as latest, \
+             patch.object(manager, "remote_bundle", side_effect=AssertionError("Startup must not fetch an archive")), \
+             redirect_stderr(io.StringIO()):
+            manager.startup_update(self.root)
+            latest.assert_called_once_with(manager.DEFAULT_REPOSITORY, channel="beta")
+        self.assertEqual(manager.status(self.root)["activeVersion"], "1.11.0-beta.1")
+        manager.update(self.root, source=self.source)
+        self.assertEqual(manager.status(self.root)["releaseChannel"], "beta")
+        self.write_manifest("1.11.0")
+        manager.update(self.root, source=self.source)
+        self.assertEqual(manager.status(self.root)["releaseChannel"], "stable")
+        self.assertEqual(manager.status(self.root)["retainedVersions"],
+                         ["1.11.0-beta.1", "1.11.0-beta.2", "1.11.0"])
+        for name, data in before.items():
+            self.assertEqual((self.root / ".SYSTEMX" / name).read_bytes(), data)
+
+    def test_alpha_to_beta_keeps_legacy_scope_matrix_and_adds_new_defaults(self):
+        names = ("GLOBAL/ACCESS-MATRIX.json", "templates/agenda/ACCESS-MATRIX.json")
+        legacy = b'{"schemaVersion": 1, "decisions": []}\n'
+        self.write_manifest("1.11.0-alpha.8")
+        seed_path = self.source / "config/template-records.json"
+        seeds = json.loads(seed_path.read_text())
+        for name in names:
+            (self.source / name).write_bytes(legacy)
+            seeds["sha256"][name] = manager.text_digest(legacy)
+        seed_path.write_text(json.dumps(seeds))
+        self.write_manifest()
+        self.install()
+        manager.set_policy(self.root, pin="none")
+
+        for name in names + ("config/template-records.json",):
+            shutil.copy2(SOURCE / name, self.source / name)
+        self.write_manifest("1.11.0-beta.1")
+        manager.update(self.root, source=self.source)
+
+        self.assertEqual(manager.status(self.root)["activeVersion"], "1.11.0-beta.1")
+        self.assertEqual((self.root / ".SYSTEMX" / names[0]).read_bytes(), legacy)
+        selected_defaults = self.root / ".SYSTEMX/.systemx/releases/1.11.0-beta.1"
+        self.assertEqual(json.loads((selected_defaults / names[0]).read_text())["decisions"], [])
+        self.assertEqual(len(json.loads((selected_defaults / names[0]).read_text())["roleDefaults"]), 20)
+
+    def test_prerelease_discovery_advances_channels_without_alpha_fallback(self):
+        def listed(version, prerelease):
+            return {"tag_name": "v" + version, "prerelease": prerelease, "draft": False}
+
+        candidates = [listed("1.11.0-alpha.9", True), listed("1.11.0-beta.1", True),
+                      listed("1.11.0-beta.2", False), listed("1.11.0", True)]
+        with patch.object(manager, "get_url", return_value=json.dumps(candidates).encode()):
+            self.assertEqual(manager.latest_version(channel="alpha"), "1.11.0-beta.1")
+            self.assertEqual(manager.latest_version(channel="beta"), "1.11.0-beta.1")
+
+        candidates.append(listed("1.11.0", False))
+        with patch.object(manager, "get_url", return_value=json.dumps(candidates).encode()):
+            self.assertEqual(manager.latest_version(channel="alpha"), "1.11.0")
+            self.assertEqual(manager.latest_version(channel="beta"), "1.11.0")
+
+        with patch.object(manager, "get_url", return_value=json.dumps([candidates[0]]).encode()):
+            with self.assertRaisesRegex(manager.InstallError, "No compatible published release"):
+                manager.latest_version(channel="beta")
+
+    def test_beta_bundle_rejects_permissive_access_matrix_seed(self):
+        for mutation in ("grant", "decision"):
+            with self.subTest(mutation=mutation):
+                names = ("GLOBAL/ACCESS-MATRIX.json", "templates/agenda/ACCESS-MATRIX.json")
+                for name in names + ("config/template-records.json",):
+                    shutil.copy2(SOURCE / name, self.source / name)
+                self.write_manifest("1.11.0-beta.1")
+                matrix = json.loads((self.source / names[0]).read_text())
+                if mutation == "grant":
+                    matrix["roleDefaults"][0]["templateGrant"] = "write"
+                else:
+                    matrix["decisions"].append({"id": "ACC-001"})
+                raw = json.dumps(matrix, indent=2).encode() + b"\n"
+                seeds_path = self.source / "config/template-records.json"
+                seeds = json.loads(seeds_path.read_text())
+                for name in names:
+                    (self.source / name).write_bytes(raw)
+                    seeds["sha256"][name] = manager.text_digest(raw)
+                seeds_path.write_text(json.dumps(seeds))
+                self.write_manifest()
+                with self.assertRaisesRegex(manager.InstallError, "default-deny roles and no decisions|malformed or permissive"):
+                    manager.read_bundle(self.source)
+
     def test_implicit_downgrade_rejected_but_compatible_explicit_rollback_allowed(self):
         self.write_manifest("1.8.7-alpha.10")
         self.install()
@@ -825,7 +926,7 @@ class ManagerTests(unittest.TestCase):
     def test_previous_release_blank_manifest_remains_readable_after_new_seed_paths(self):
         seeds_path = self.source / "config/template-records.json"
         seeds = json.loads(seeds_path.read_text())
-        for name in manager.SEEDS_FROM_1_8_9:
+        for name in manager.SEEDS_FROM_1_8_9 + manager.SEEDS_FROM_1_11_0_ALPHA_8:
             seeds["sha256"].pop(name, None)
             path = self.source / name
             if path.exists():
@@ -842,7 +943,7 @@ class ManagerTests(unittest.TestCase):
         self.write_manifest("1.9.0-alpha.3")
         manifest = json.loads((self.source / manager.MANIFEST).read_text())
         self.assertEqual(manifest["schemaVersion"], 2)
-        known = "MEDIA/Infographics/codex-github-main-4k.jpg"
+        known = "MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg"
         self.assertIn(b"\r\n", (self.source / known).read_bytes())
         for name in (known, "MEDIA/fixture-unknown.dat"):
             with self.subTest(name=name):

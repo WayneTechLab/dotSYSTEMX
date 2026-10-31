@@ -1,6 +1,6 @@
 # About .SYSTEMX
 
-> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+> **Beta: use at your own risk.** See the [release policy](RELEASE-POLICY.md).
 
 `.SYSTEMX` is an open, reusable project operating format for people and AI
 assistants. Its purpose is continuity: keep project context, accepted outcomes,
@@ -53,5 +53,7 @@ for architecture and the [Stack Guide](STACK-GUIDE.md) for integration boundarie
 Release IDs and history live in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 The historical white paper has a separate
-[edition 1.2 citation erratum](../MEDIA/White-Paper/ERRATA.md); its published PDF
-and Markdown remain unchanged.
+[edition 1.2 citation erratum](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.5/.SYSTEMX/MEDIA/White-Paper/ERRATA.md);
+its published PDF and Markdown remain available in tagged history. The current
+[edition 2.1 paper](../MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) examines the
+beta implementation.

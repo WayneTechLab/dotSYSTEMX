@@ -166,9 +166,13 @@ def validate_optional(root):
     # Optional references are validated in their selected scope only. DATA
     # validates scaffold metadata without traversing or reading user payloads.
     import autobots
+    import agent_beta
+    import agenda_access
     import data_tools
     import root_coordination
     autobots.validate_optional(root)
+    agent_beta.validate_optional(root)
+    agenda_access.validate_optional(root)
     data_tools.validate_optional(root)
     root_coordination.validate_optional(root)
 

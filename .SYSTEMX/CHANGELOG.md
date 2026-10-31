@@ -4,6 +4,38 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-beta.1 — Agent Beta, Agent1, and Agenda
+
+- Add optional named BOT/DOT workspaces for Agent Beta, with separate records
+  and no provider activation in the public seed. A guarded `agent-beta
+  access-link` can attach a same-actor reviewed-intent ACC decision to an
+  existing BOT/DOT record without connecting a provider or granting access.
+- Add Agent1 advisory security and access assessment, a first-run setup path,
+  and a bounded read-only stdio session. Secrets stay outside portable records.
+  An explicit repository/environment Actions secret set requires a verified
+  action-time repository admin permission and reads back name/scope metadata;
+  first-run actor labels do not authorize writes. Organization secret writes
+  remain outside the beta CLI.
+- Add 20 default-deny Access Matrix role and instance rows to canonical JSON
+  and an Excel review workbook. Reviewed decisions and Agent Alpha Agenda
+  options start empty. Guarded `agenda decision-add` records intent, never an
+  actual access grant; Agent X events and canonical task status stay separate.
+- Add `session-settings --compact`: on the blank root template, output shrank
+  from 3,248 to 1,043 bytes (67.9% fewer bytes), with no claim about billed
+  tokens or latency. Add a read-only, on-demand GitHub release/deployment
+  counter that reports observation time and unknown when data is unavailable.
+- Support SemVer `alpha < beta < final` release discovery and Python package
+  spelling `1.11.0b1`; existing projects keep their own records during update.
+  Add a bounded read-only GitHub Actions compatibility matrix for selected
+  Python versions on Ubuntu, Windows and macOS. A source test or CI job does
+  not certify a downstream app or device.
+- Publish a separate current white-paper edition 2.1 and new beta infographics
+  while retaining older editions and working media in historical archives.
+  No video or raw Blender authoring data is added to the reusable template.
+- Extend the CLI, setup/uninstall guides, format contract, wiki-ready manuals,
+  and asset inventory. The local alpha.8 work was a draft, not a published
+  release or immutable tag.
+
 ## 1.11.0-alpha.7 — Generic template and reference-library cleanup
 
 - Remove the current repository's film-companion directories and the optional

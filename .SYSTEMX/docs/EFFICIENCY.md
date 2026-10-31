@@ -31,6 +31,13 @@ those records as part of actual work.
 | Scoped `task-packet` and worker memory | Less unrelated context per worker | Give each worker the actual acceptance criteria and dependencies |
 | Project memory with source references | Less repeated discovery | Keep durable facts concise and recheck volatile facts |
 | Argument-array local commands | Less repeated command reconstruction | Configure real checks and preserve their results and scope |
+| `session-settings --compact` | Shorter read-only role and rule-status packet when paths are unnecessary | Load individual rule paths or content only for the selected task |
+
+For the blank root template, the compact status packet measured 1,043 output
+bytes versus 3,248 bytes for the full packet, a 67.9% reduction in **output
+bytes** for that command. The compact form retains a rule count, absent IDs,
+and a revision digest. It does not measure billed tokens, elapsed time, model
+quality, or the cost of a complete task.
 
 The current context command limits individual document excerpts to 6,000
 characters, task summaries to 2,000 characters, and displayed relevant tasks to

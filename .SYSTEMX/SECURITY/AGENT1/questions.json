@@ -1,0 +1,1868 @@
+{
+  "schemaVersion": 1,
+  "defaultProfile": "all-in-one",
+  "categories": [
+    {
+      "id": "C01",
+      "title": "Scope and trust boundaries",
+      "scope": "Asset and actor boundaries before any technical verdict",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C01.Q01",
+          "text": "Which signed scope record identifies the exact repository revision and selected project?"
+        },
+        {
+          "id": "C01.Q02",
+          "text": "Which inventory lists every app, service, device, and cloud resource in scope?"
+        },
+        {
+          "id": "C01.Q03",
+          "text": "Which evidence distinguishes production assets from test and synthetic fixtures?"
+        },
+        {
+          "id": "C01.Q04",
+          "text": "Which diagram names every trust boundary crossed by user or machine input?"
+        },
+        {
+          "id": "C01.Q05",
+          "text": "Which record identifies the human owner of each in-scope surface?"
+        },
+        {
+          "id": "C01.Q06",
+          "text": "Which list identifies third-party systems that the review may contact?"
+        },
+        {
+          "id": "C01.Q07",
+          "text": "Which list identifies systems explicitly excluded from this review?"
+        },
+        {
+          "id": "C01.Q08",
+          "text": "Which evidence identifies all local and remote execution environments?"
+        },
+        {
+          "id": "C01.Q09",
+          "text": "Which record ties each review target to a stable identifier and version?"
+        },
+        {
+          "id": "C01.Q10",
+          "text": "Which diagram shows where data enters, transforms, and leaves the system?"
+        },
+        {
+          "id": "C01.Q11",
+          "text": "Which evidence identifies administrator, developer, customer, and automation actors?"
+        },
+        {
+          "id": "C01.Q12",
+          "text": "Which record identifies assets shared with another tenant or project?"
+        },
+        {
+          "id": "C01.Q13",
+          "text": "Which evidence shows whether the target is source, local runtime, staging, or live?"
+        },
+        {
+          "id": "C01.Q14",
+          "text": "Which decision record defines the permitted read-only inspection boundary?"
+        },
+        {
+          "id": "C01.Q15",
+          "text": "Which map identifies side effects a scanner could trigger by opening files?"
+        },
+        {
+          "id": "C01.Q16",
+          "text": "Which evidence distinguishes owned endpoints from unrelated local listeners?"
+        },
+        {
+          "id": "C01.Q17",
+          "text": "Which record identifies unsupported platforms without treating them as passed?"
+        },
+        {
+          "id": "C01.Q18",
+          "text": "Which evidence identifies integrations that require separate provider authorization?"
+        },
+        {
+          "id": "C01.Q19",
+          "text": "Which current inventory records temporary mounts, symlinks, and external volumes?"
+        },
+        {
+          "id": "C01.Q20",
+          "text": "Which owner sign-off confirms that this inventory matches the intended review scope?"
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "title": "Source and change provenance",
+      "scope": "Repository history, ownership, and change custody",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C02.Q01",
+          "text": "Which remote URL and repository identity are recorded for the checkout?"
+        },
+        {
+          "id": "C02.Q02",
+          "text": "Which commit hash identifies the source actually reviewed?"
+        },
+        {
+          "id": "C02.Q03",
+          "text": "Which evidence shows local tracked, staged, and untracked changes separately?"
+        },
+        {
+          "id": "C02.Q04",
+          "text": "Which record identifies the protected default branch and its current upstream?"
+        },
+        {
+          "id": "C02.Q05",
+          "text": "Which evidence shows that the reviewed commit exists on the intended remote?"
+        },
+        {
+          "id": "C02.Q06",
+          "text": "Which signatures or attestations verify the reviewed source commit?"
+        },
+        {
+          "id": "C02.Q07",
+          "text": "Which pull request links the change to an approved review?"
+        },
+        {
+          "id": "C02.Q08",
+          "text": "Which evidence identifies who authored and who approved each sensitive change?"
+        },
+        {
+          "id": "C02.Q09",
+          "text": "Which diff isolates generated changes from human-authored source changes?"
+        },
+        {
+          "id": "C02.Q10",
+          "text": "Which evidence records branch divergence before synchronization?"
+        },
+        {
+          "id": "C02.Q11",
+          "text": "Which record explains any force push or rewritten history affecting the target?"
+        },
+        {
+          "id": "C02.Q12",
+          "text": "Which file ownership rules cover security-sensitive paths?"
+        },
+        {
+          "id": "C02.Q13",
+          "text": "Which evidence shows that hooks and automation did not silently rewrite source?"
+        },
+        {
+          "id": "C02.Q14",
+          "text": "Which record identifies submodules and their pinned commits?"
+        },
+        {
+          "id": "C02.Q15",
+          "text": "Which evidence confirms vendored code has its original provenance?"
+        },
+        {
+          "id": "C02.Q16",
+          "text": "Which change log maps product behavior to the source revision that introduced it?"
+        },
+        {
+          "id": "C02.Q17",
+          "text": "Which evidence shows that release notes match actual source changes?"
+        },
+        {
+          "id": "C02.Q18",
+          "text": "Which record explains exceptions to normal change review?"
+        },
+        {
+          "id": "C02.Q19",
+          "text": "Which evidence identifies mutable tags or branch references used by deployment?"
+        },
+        {
+          "id": "C02.Q20",
+          "text": "Which owner acceptance explicitly names the source revision under review?"
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "title": "Dependencies and supply chain",
+      "scope": "Third-party package and tool provenance",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C03.Q01",
+          "text": "Which manifest enumerates direct runtime dependencies?"
+        },
+        {
+          "id": "C03.Q02",
+          "text": "Which lockfile pins the full resolved dependency graph?"
+        },
+        {
+          "id": "C03.Q03",
+          "text": "Which evidence identifies package registries and mirrors used during resolution?"
+        },
+        {
+          "id": "C03.Q04",
+          "text": "Which package sources use immutable digests rather than floating tags?"
+        },
+        {
+          "id": "C03.Q05",
+          "text": "Which record identifies unmaintained or end-of-life direct dependencies?"
+        },
+        {
+          "id": "C03.Q06",
+          "text": "Which advisory evidence is current for the exact resolved versions?"
+        },
+        {
+          "id": "C03.Q07",
+          "text": "Which evidence distinguishes development-only from shipped dependencies?"
+        },
+        {
+          "id": "C03.Q08",
+          "text": "Which inventory identifies bundled native libraries and binary tools?"
+        },
+        {
+          "id": "C03.Q09",
+          "text": "Which provenance record covers downloaded build tools and installers?"
+        },
+        {
+          "id": "C03.Q10",
+          "text": "Which policy defines approved package sources and verification methods?"
+        },
+        {
+          "id": "C03.Q11",
+          "text": "Which evidence shows checksum or signature verification for fetched artifacts?"
+        },
+        {
+          "id": "C03.Q12",
+          "text": "Which record identifies licenses for shipped third-party components?"
+        },
+        {
+          "id": "C03.Q13",
+          "text": "Which dependency has install scripts with filesystem or network side effects?"
+        },
+        {
+          "id": "C03.Q14",
+          "text": "Which evidence shows that dependency updates receive independent review?"
+        },
+        {
+          "id": "C03.Q15",
+          "text": "Which SBOM corresponds to the exact built artifact under review?"
+        },
+        {
+          "id": "C03.Q16",
+          "text": "Which record identifies transitive components with privileged host access?"
+        },
+        {
+          "id": "C03.Q17",
+          "text": "Which evidence shows package integrity checks on a clean restore?"
+        },
+        {
+          "id": "C03.Q18",
+          "text": "Which record identifies dependency exceptions and their expiration dates?"
+        },
+        {
+          "id": "C03.Q19",
+          "text": "Which evidence shows that private package credentials are not embedded in manifests?"
+        },
+        {
+          "id": "C03.Q20",
+          "text": "Which alert process connects a new advisory to affected deployed revisions?"
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "title": "Build and artifact integrity",
+      "scope": "Reproducible build inputs and output custody",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C04.Q01",
+          "text": "Which build recipe corresponds to the reviewed source commit?"
+        },
+        {
+          "id": "C04.Q02",
+          "text": "Which evidence identifies every environment variable that can alter output?"
+        },
+        {
+          "id": "C04.Q03",
+          "text": "Which runner image or toolchain digest was used for the build?"
+        },
+        {
+          "id": "C04.Q04",
+          "text": "Which build log proves the target artifact was produced successfully?"
+        },
+        {
+          "id": "C04.Q05",
+          "text": "Which evidence distinguishes local test artifacts from distributable artifacts?"
+        },
+        {
+          "id": "C04.Q06",
+          "text": "Which artifact checksum binds the published file to the build receipt?"
+        },
+        {
+          "id": "C04.Q07",
+          "text": "Which provenance statement links source, builder, inputs, and output digest?"
+        },
+        {
+          "id": "C04.Q08",
+          "text": "Which evidence shows that build scripts cannot read unrelated host files?"
+        },
+        {
+          "id": "C04.Q09",
+          "text": "Which record identifies generated code inputs and generator versions?"
+        },
+        {
+          "id": "C04.Q10",
+          "text": "Which evidence shows that release packaging excludes tests and local secrets?"
+        },
+        {
+          "id": "C04.Q11",
+          "text": "Which artifact manifest lists files and permissions in the package?"
+        },
+        {
+          "id": "C04.Q12",
+          "text": "Which evidence shows binary signatures verify on a fresh machine?"
+        },
+        {
+          "id": "C04.Q13",
+          "text": "Which record explains differences between repeat builds from identical inputs?"
+        },
+        {
+          "id": "C04.Q14",
+          "text": "Which test confirms that a clean checkout can build without hidden state?"
+        },
+        {
+          "id": "C04.Q15",
+          "text": "Which evidence shows build failures block artifact promotion?"
+        },
+        {
+          "id": "C04.Q16",
+          "text": "Which record identifies post-build transformations such as minification or signing?"
+        },
+        {
+          "id": "C04.Q17",
+          "text": "Which evidence proves the inspected artifact is the one deployed or installed?"
+        },
+        {
+          "id": "C04.Q18",
+          "text": "Which checksum protects downloaded release assets from silent replacement?"
+        },
+        {
+          "id": "C04.Q19",
+          "text": "Which record identifies externally generated assets that enter the build?"
+        },
+        {
+          "id": "C04.Q20",
+          "text": "Which acceptance receipt names the final artifact digest?"
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "title": "Runtime configuration",
+      "scope": "Settings and environment that govern live behavior",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C05.Q01",
+          "text": "Which configuration file is actually loaded by the selected runtime?"
+        },
+        {
+          "id": "C05.Q02",
+          "text": "Which evidence records precedence among defaults, environment, and command flags?"
+        },
+        {
+          "id": "C05.Q03",
+          "text": "Which settings enable network listeners or external API calls?"
+        },
+        {
+          "id": "C05.Q04",
+          "text": "Which settings enable destructive or privileged operations?"
+        },
+        {
+          "id": "C05.Q05",
+          "text": "Which evidence shows debug mode is disabled in production?"
+        },
+        {
+          "id": "C05.Q06",
+          "text": "Which configuration values are required for safe startup?"
+        },
+        {
+          "id": "C05.Q07",
+          "text": "Which schema rejects unknown or malformed configuration keys?"
+        },
+        {
+          "id": "C05.Q08",
+          "text": "Which evidence shows runtime settings are not sourced from untrusted workspace files?"
+        },
+        {
+          "id": "C05.Q09",
+          "text": "Which record identifies configuration drift from the approved baseline?"
+        },
+        {
+          "id": "C05.Q10",
+          "text": "Which test proves missing required settings fail closed?"
+        },
+        {
+          "id": "C05.Q11",
+          "text": "Which setting controls feature flags and their rollout state?"
+        },
+        {
+          "id": "C05.Q12",
+          "text": "Which evidence shows test endpoints cannot be selected in live mode accidentally?"
+        },
+        {
+          "id": "C05.Q13",
+          "text": "Which config records the selected data region and tenant boundary?"
+        },
+        {
+          "id": "C05.Q14",
+          "text": "Which evidence shows local port selection does not collide with unrelated services?"
+        },
+        {
+          "id": "C05.Q15",
+          "text": "Which record identifies configuration reload behavior and timing?"
+        },
+        {
+          "id": "C05.Q16",
+          "text": "Which evidence shows stale configuration is detected before operation?"
+        },
+        {
+          "id": "C05.Q17",
+          "text": "Which setting determines log level without exposing sensitive values?"
+        },
+        {
+          "id": "C05.Q18",
+          "text": "Which configuration toggles have a named owner and expiration?"
+        },
+        {
+          "id": "C05.Q19",
+          "text": "Which evidence shows an upgrade preserves intended settings?"
+        },
+        {
+          "id": "C05.Q20",
+          "text": "Which readback confirms the running process consumed the expected configuration?"
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "title": "Identity and session",
+      "scope": "Authentication, session creation, and revocation",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C06.Q01",
+          "text": "Which evidence identifies every user and machine authentication entry point?"
+        },
+        {
+          "id": "C06.Q02",
+          "text": "Which provider validates primary credentials for each entry point?"
+        },
+        {
+          "id": "C06.Q03",
+          "text": "Which proof shows failed authentication does not create a session?"
+        },
+        {
+          "id": "C06.Q04",
+          "text": "Which session identifier is rotated after privilege elevation?"
+        },
+        {
+          "id": "C06.Q05",
+          "text": "Which evidence shows logout invalidates server-side session state?"
+        },
+        {
+          "id": "C06.Q06",
+          "text": "Which record states session idle and absolute expiration limits?"
+        },
+        {
+          "id": "C06.Q07",
+          "text": "Which proof shows expired tokens are rejected by the resource server?"
+        },
+        {
+          "id": "C06.Q08",
+          "text": "Which evidence shows password recovery cannot bypass identity verification?"
+        },
+        {
+          "id": "C06.Q09",
+          "text": "Which proof shows multi-factor enrollment and recovery are protected?"
+        },
+        {
+          "id": "C06.Q10",
+          "text": "Which record identifies service identities separately from human users?"
+        },
+        {
+          "id": "C06.Q11",
+          "text": "Which evidence shows disabled accounts lose active access?"
+        },
+        {
+          "id": "C06.Q12",
+          "text": "Which proof shows concurrent sessions are visible or controllable as designed?"
+        },
+        {
+          "id": "C06.Q13",
+          "text": "Which evidence shows authentication errors avoid account enumeration?"
+        },
+        {
+          "id": "C06.Q14",
+          "text": "Which record identifies token issuer, audience, and allowed algorithms?"
+        },
+        {
+          "id": "C06.Q15",
+          "text": "Which proof shows signature and claim validation on every protected request?"
+        },
+        {
+          "id": "C06.Q16",
+          "text": "Which evidence shows session cookies use secure transport attributes?"
+        },
+        {
+          "id": "C06.Q17",
+          "text": "Which test shows refresh token reuse is detected or bounded?"
+        },
+        {
+          "id": "C06.Q18",
+          "text": "Which record documents device trust and reauthentication requirements?"
+        },
+        {
+          "id": "C06.Q19",
+          "text": "Which evidence shows federated identity mappings cannot collide across tenants?"
+        },
+        {
+          "id": "C06.Q20",
+          "text": "Which evidence tests phishing-resistant MFA and flags suspicious enrollment, recovery, or token interception?"
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "title": "Authorization and least privilege",
+      "scope": "Action permissions after identity is known",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C07.Q01",
+          "text": "Which permission matrix maps roles to actions and resources?"
+        },
+        {
+          "id": "C07.Q02",
+          "text": "Which server-side check authorizes each sensitive API operation?"
+        },
+        {
+          "id": "C07.Q03",
+          "text": "Which test denies a user access to another tenant's object?"
+        },
+        {
+          "id": "C07.Q04",
+          "text": "Which evidence shows client-visible buttons are not the only authorization gate?"
+        },
+        {
+          "id": "C07.Q05",
+          "text": "Which policy limits automation identities to needed operations?"
+        },
+        {
+          "id": "C07.Q06",
+          "text": "Which record identifies administrator-only actions and their audit trail?"
+        },
+        {
+          "id": "C07.Q07",
+          "text": "Which evidence shows default roles grant minimum practical permissions?"
+        },
+        {
+          "id": "C07.Q08",
+          "text": "Which test blocks direct object reference changes across owners?"
+        },
+        {
+          "id": "C07.Q09",
+          "text": "Which proof shows policy changes take effect on existing sessions?"
+        },
+        {
+          "id": "C07.Q10",
+          "text": "Which evidence shows delegated permissions cannot be escalated by the delegate?"
+        },
+        {
+          "id": "C07.Q11",
+          "text": "Which record identifies resource-level exceptions and expiration dates?"
+        },
+        {
+          "id": "C07.Q12",
+          "text": "Which test denies a missing or malformed identity claim?"
+        },
+        {
+          "id": "C07.Q13",
+          "text": "Which proof shows background jobs recheck permission at execution time?"
+        },
+        {
+          "id": "C07.Q14",
+          "text": "Which evidence shows cloud IAM bindings match the application permission model?"
+        },
+        {
+          "id": "C07.Q15",
+          "text": "Which record identifies human break-glass access and review?"
+        },
+        {
+          "id": "C07.Q16",
+          "text": "Which test prevents privilege gain through mass assignment?"
+        },
+        {
+          "id": "C07.Q17",
+          "text": "Which evidence shows bulk actions enforce per-item permissions?"
+        },
+        {
+          "id": "C07.Q18",
+          "text": "Which proof shows read-only roles cannot mutate through alternate endpoints?"
+        },
+        {
+          "id": "C07.Q19",
+          "text": "Which record identifies who approved each high-privilege grant?"
+        },
+        {
+          "id": "C07.Q20",
+          "text": "Which current readback confirms revoked privileges no longer work?"
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "title": "Secrets and cryptography",
+      "scope": "Credentials, keys, encryption, and rotation",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C08.Q01",
+          "text": "Which inventory names secrets without exposing their values?"
+        },
+        {
+          "id": "C08.Q02",
+          "text": "Which evidence shows secret values are absent from tracked source and artifacts?"
+        },
+        {
+          "id": "C08.Q03",
+          "text": "Which store owns each runtime secret and its access policy?"
+        },
+        {
+          "id": "C08.Q04",
+          "text": "Which proof shows a secret is not passed through command arguments or logs?"
+        },
+        {
+          "id": "C08.Q05",
+          "text": "Which record identifies key generation and approved algorithms?"
+        },
+        {
+          "id": "C08.Q06",
+          "text": "Which evidence shows encryption keys are separate from encrypted data?"
+        },
+        {
+          "id": "C08.Q07",
+          "text": "Which proof shows transport certificates are valid for expected endpoints?"
+        },
+        {
+          "id": "C08.Q08",
+          "text": "Which record states rotation cadence and emergency replacement steps?"
+        },
+        {
+          "id": "C08.Q09",
+          "text": "Which evidence shows old keys are retired after rotation?"
+        },
+        {
+          "id": "C08.Q10",
+          "text": "Which proof shows secret access is limited to the process that needs it?"
+        },
+        {
+          "id": "C08.Q11",
+          "text": "Which evidence shows client bundles contain no server-only credentials?"
+        },
+        {
+          "id": "C08.Q12",
+          "text": "Which record identifies backup and recovery custody for encryption keys?"
+        },
+        {
+          "id": "C08.Q13",
+          "text": "Which test shows missing decryption keys fail safely?"
+        },
+        {
+          "id": "C08.Q14",
+          "text": "Which evidence shows random values come from a cryptographic source?"
+        },
+        {
+          "id": "C08.Q15",
+          "text": "Which record identifies password hashing parameters and migration rules?"
+        },
+        {
+          "id": "C08.Q16",
+          "text": "Which proof shows secret-handling APIs avoid copying values into diagnostic objects?"
+        },
+        {
+          "id": "C08.Q17",
+          "text": "Which evidence shows temporary secret files have restricted permissions?"
+        },
+        {
+          "id": "C08.Q18",
+          "text": "Which record distinguishes GitHub secret storage from local dotenv files?"
+        },
+        {
+          "id": "C08.Q19",
+          "text": "Which proof shows deleted secrets are absent from active provider configuration?"
+        },
+        {
+          "id": "C08.Q20",
+          "text": "Which owner receipt confirms secret migration without printing values?"
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "title": "Input and parsing",
+      "scope": "Validation of untrusted bytes before use",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C09.Q01",
+          "text": "Which schema validates each externally supplied message?"
+        },
+        {
+          "id": "C09.Q02",
+          "text": "Which evidence shows size limits apply before expensive parsing?"
+        },
+        {
+          "id": "C09.Q03",
+          "text": "Which test rejects unknown fields when they could alter behavior?"
+        },
+        {
+          "id": "C09.Q04",
+          "text": "Which proof shows numeric bounds reject overflow and nonfinite values?"
+        },
+        {
+          "id": "C09.Q05",
+          "text": "Which evidence shows path inputs cannot escape their selected root?"
+        },
+        {
+          "id": "C09.Q06",
+          "text": "Which test rejects symlink traversal at sensitive file boundaries?"
+        },
+        {
+          "id": "C09.Q07",
+          "text": "Which proof shows shell arguments are passed without command interpolation?"
+        },
+        {
+          "id": "C09.Q08",
+          "text": "Which evidence shows SQL parameters are bound rather than concatenated?"
+        },
+        {
+          "id": "C09.Q09",
+          "text": "Which test rejects malicious archive paths during extraction?"
+        },
+        {
+          "id": "C09.Q10",
+          "text": "Which parser limits recursion depth or nested payload complexity?"
+        },
+        {
+          "id": "C09.Q11",
+          "text": "Which evidence shows file uploads validate content independent of extension?"
+        },
+        {
+          "id": "C09.Q12",
+          "text": "Which proof shows Unicode normalization cannot bypass identifiers or allowlists?"
+        },
+        {
+          "id": "C09.Q13",
+          "text": "Which test rejects duplicate JSON keys where ambiguity matters?"
+        },
+        {
+          "id": "C09.Q14",
+          "text": "Which evidence shows cross-origin inputs receive the same validation as direct API calls?"
+        },
+        {
+          "id": "C09.Q15",
+          "text": "Which proof shows URL parsers reject unexpected schemes and hosts?"
+        },
+        {
+          "id": "C09.Q16",
+          "text": "Which test covers malformed multipart and boundary framing?"
+        },
+        {
+          "id": "C09.Q17",
+          "text": "Which evidence shows deserializers cannot instantiate arbitrary classes?"
+        },
+        {
+          "id": "C09.Q18",
+          "text": "Which proof shows server validation is repeated after client validation?"
+        },
+        {
+          "id": "C09.Q19",
+          "text": "Which record identifies validation bypasses and why they remain necessary?"
+        },
+        {
+          "id": "C09.Q20",
+          "text": "Which fuzz or adversarial test covers the highest-risk parser?"
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "title": "Output and content",
+      "scope": "Safe rendering, serialization, and generated content",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C10.Q01",
+          "text": "Which template engine escapes untrusted text for its output context?"
+        },
+        {
+          "id": "C10.Q02",
+          "text": "Which test shows HTML injection remains inert in rendered views?"
+        },
+        {
+          "id": "C10.Q03",
+          "text": "Which evidence shows JSON serialization cannot emit nonfinite or unsafe values?"
+        },
+        {
+          "id": "C10.Q04",
+          "text": "Which proof shows downloadable filenames cannot set response headers?"
+        },
+        {
+          "id": "C10.Q05",
+          "text": "Which output path prevents user text from becoming shell commands?"
+        },
+        {
+          "id": "C10.Q06",
+          "text": "Which evidence shows generated links reject unsafe URL schemes?"
+        },
+        {
+          "id": "C10.Q07",
+          "text": "Which test shows Markdown rendering strips active script content?"
+        },
+        {
+          "id": "C10.Q08",
+          "text": "Which proof shows error messages omit stack traces and secret values in production?"
+        },
+        {
+          "id": "C10.Q09",
+          "text": "Which evidence shows API responses expose only approved fields?"
+        },
+        {
+          "id": "C10.Q10",
+          "text": "Which test prevents tenant data from appearing in another tenant's response?"
+        },
+        {
+          "id": "C10.Q11",
+          "text": "Which proof shows logs encode control characters safely?"
+        },
+        {
+          "id": "C10.Q12",
+          "text": "Which evidence shows model-generated text is treated as untrusted content?"
+        },
+        {
+          "id": "C10.Q13",
+          "text": "Which test shows prompt-injection text cannot grant tool permissions?"
+        },
+        {
+          "id": "C10.Q14",
+          "text": "Which proof shows CSV exports neutralize spreadsheet formula execution?"
+        },
+        {
+          "id": "C10.Q15",
+          "text": "Which evidence shows image or document previews cannot execute embedded code?"
+        },
+        {
+          "id": "C10.Q16",
+          "text": "Which test validates content type and download disposition headers?"
+        },
+        {
+          "id": "C10.Q17",
+          "text": "Which record identifies user-visible claims requiring human review?"
+        },
+        {
+          "id": "C10.Q18",
+          "text": "Which proof shows output redaction is applied before external publication?"
+        },
+        {
+          "id": "C10.Q19",
+          "text": "Which evidence shows localized output preserves escaping rules?"
+        },
+        {
+          "id": "C10.Q20",
+          "text": "Which rendered readback verifies the actual selected route or surface?"
+        }
+      ]
+    },
+    {
+      "id": "C11",
+      "title": "Data lifecycle",
+      "scope": "Storage, retention, deletion, and tenant isolation",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C11.Q01",
+          "text": "Which data inventory names each stored personal or business field?"
+        },
+        {
+          "id": "C11.Q02",
+          "text": "Which evidence identifies the authoritative store for each record type?"
+        },
+        {
+          "id": "C11.Q03",
+          "text": "Which schema documents data ownership and tenant partition keys?"
+        },
+        {
+          "id": "C11.Q04",
+          "text": "Which test prevents cross-tenant reads in database queries?"
+        },
+        {
+          "id": "C11.Q05",
+          "text": "Which test prevents cross-tenant writes through indirect references?"
+        },
+        {
+          "id": "C11.Q06",
+          "text": "Which evidence shows retention periods are enforced for each data class?"
+        },
+        {
+          "id": "C11.Q07",
+          "text": "Which deletion receipt proves user-requested removal reached every active store?"
+        },
+        {
+          "id": "C11.Q08",
+          "text": "Which record identifies backups that retain deleted data temporarily?"
+        },
+        {
+          "id": "C11.Q09",
+          "text": "Which proof shows exported data matches the requesting user's scope?"
+        },
+        {
+          "id": "C11.Q10",
+          "text": "Which evidence shows database migrations preserve constraints and existing records?"
+        },
+        {
+          "id": "C11.Q11",
+          "text": "Which test verifies transactions avoid partial multi-record changes?"
+        },
+        {
+          "id": "C11.Q12",
+          "text": "Which record defines idempotency for retried write operations?"
+        },
+        {
+          "id": "C11.Q13",
+          "text": "Which evidence shows staging data cannot flow into production stores?"
+        },
+        {
+          "id": "C11.Q14",
+          "text": "Which proof shows encrypted storage covers the intended fields?"
+        },
+        {
+          "id": "C11.Q15",
+          "text": "Which record identifies data replication destinations and legal regions?"
+        },
+        {
+          "id": "C11.Q16",
+          "text": "Which evidence shows archived records remain readable after schema evolution?"
+        },
+        {
+          "id": "C11.Q17",
+          "text": "Which test covers concurrent updates to the same logical object?"
+        },
+        {
+          "id": "C11.Q18",
+          "text": "Which proof shows a failed import leaves the prior store unchanged?"
+        },
+        {
+          "id": "C11.Q19",
+          "text": "Which record identifies data processors and their purpose?"
+        },
+        {
+          "id": "C11.Q20",
+          "text": "Which owner acceptance verifies that deletion and recovery requirements align?"
+        }
+      ]
+    },
+    {
+      "id": "C12",
+      "title": "Network and transport",
+      "scope": "Listeners, routes, egress, and channel security",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C12.Q01",
+          "text": "Which listener inventory identifies bound addresses and owners?"
+        },
+        {
+          "id": "C12.Q02",
+          "text": "Which evidence shows a local-only service binds only the intended interface?"
+        },
+        {
+          "id": "C12.Q03",
+          "text": "Which firewall rule exposes each public endpoint?"
+        },
+        {
+          "id": "C12.Q04",
+          "text": "Which proof shows TLS negotiation rejects obsolete protocol versions?"
+        },
+        {
+          "id": "C12.Q05",
+          "text": "Which evidence shows certificate names match the contacted hosts?"
+        },
+        {
+          "id": "C12.Q06",
+          "text": "Which record identifies outbound destinations and their business purpose?"
+        },
+        {
+          "id": "C12.Q07",
+          "text": "Which test prevents server-side requests to forbidden internal addresses?"
+        },
+        {
+          "id": "C12.Q08",
+          "text": "Which proof shows redirects cannot escape the allowed destination set?"
+        },
+        {
+          "id": "C12.Q09",
+          "text": "Which evidence shows proxy settings cannot silently change trust boundaries?"
+        },
+        {
+          "id": "C12.Q10",
+          "text": "Which record identifies DNS dependencies and failure handling?"
+        },
+        {
+          "id": "C12.Q11",
+          "text": "Which test shows connection timeouts are finite and bounded?"
+        },
+        {
+          "id": "C12.Q12",
+          "text": "Which proof shows retries do not duplicate irreversible network actions?"
+        },
+        {
+          "id": "C12.Q13",
+          "text": "Which evidence shows request bodies are capped before buffering?"
+        },
+        {
+          "id": "C12.Q14",
+          "text": "Which record identifies webhook origins and signature verification?"
+        },
+        {
+          "id": "C12.Q15",
+          "text": "Which proof shows network responses are not treated as trusted instructions?"
+        },
+        {
+          "id": "C12.Q16",
+          "text": "Which evidence shows cross-region traffic matches the declared data policy?"
+        },
+        {
+          "id": "C12.Q17",
+          "text": "Which test rejects malformed transport framing or headers?"
+        },
+        {
+          "id": "C12.Q18",
+          "text": "Which proof shows external APIs are disabled in offline review mode?"
+        },
+        {
+          "id": "C12.Q19",
+          "text": "Which record identifies all published ports in containers and hosts?"
+        },
+        {
+          "id": "C12.Q20",
+          "text": "Which live probe confirms the intended endpoint serves the intended process?"
+        }
+      ]
+    },
+    {
+      "id": "C13",
+      "title": "Browser and web client",
+      "scope": "Browser-specific state and execution boundaries",
+      "profiles": [
+        "webapp"
+      ],
+      "questions": [
+        {
+          "id": "C13.Q01",
+          "text": "Which content security policy is sent on the actual page response?"
+        },
+        {
+          "id": "C13.Q02",
+          "text": "Which evidence shows third-party scripts are approved and pinned?"
+        },
+        {
+          "id": "C13.Q03",
+          "text": "Which test shows unsafe inline script cannot execute?"
+        },
+        {
+          "id": "C13.Q04",
+          "text": "Which proof shows cookies use Secure, HttpOnly, and SameSite as intended?"
+        },
+        {
+          "id": "C13.Q05",
+          "text": "Which evidence shows state-changing requests enforce CSRF protection?"
+        },
+        {
+          "id": "C13.Q06",
+          "text": "Which test shows cross-origin requests obey the intended origin allowlist?"
+        },
+        {
+          "id": "C13.Q07",
+          "text": "Which proof shows local storage contains no server-only secret or entitlement?"
+        },
+        {
+          "id": "C13.Q08",
+          "text": "Which evidence shows browser routes enforce authorization on data fetches?"
+        },
+        {
+          "id": "C13.Q09",
+          "text": "Which test shows deep-link navigation cannot bypass access checks?"
+        },
+        {
+          "id": "C13.Q10",
+          "text": "Which proof shows service-worker caches exclude sensitive responses?"
+        },
+        {
+          "id": "C13.Q11",
+          "text": "Which evidence shows cached assets update after a release?"
+        },
+        {
+          "id": "C13.Q12",
+          "text": "Which test shows untrusted iframe content is sandboxed?"
+        },
+        {
+          "id": "C13.Q13",
+          "text": "Which proof shows postMessage validates origin and message schema?"
+        },
+        {
+          "id": "C13.Q14",
+          "text": "Which evidence shows browser permissions are requested only when needed?"
+        },
+        {
+          "id": "C13.Q15",
+          "text": "Which test shows URL fragments and query strings cannot inject active content?"
+        },
+        {
+          "id": "C13.Q16",
+          "text": "Which proof shows DOM updates avoid unsafe HTML sinks?"
+        },
+        {
+          "id": "C13.Q17",
+          "text": "Which evidence shows source maps are published only by policy?"
+        },
+        {
+          "id": "C13.Q18",
+          "text": "Which test shows login state changes propagate across relevant tabs?"
+        },
+        {
+          "id": "C13.Q19",
+          "text": "Which proof shows the selected responsive layout remains usable with keyboard input?"
+        },
+        {
+          "id": "C13.Q20",
+          "text": "Which browser readback captures the real deployed route and revision?"
+        }
+      ]
+    },
+    {
+      "id": "C14",
+      "title": "API and service behavior",
+      "scope": "Endpoint contracts and side effects",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud"
+      ],
+      "questions": [
+        {
+          "id": "C14.Q01",
+          "text": "Which API inventory lists methods, paths, and owners?"
+        },
+        {
+          "id": "C14.Q02",
+          "text": "Which contract defines successful response codes and schemas?"
+        },
+        {
+          "id": "C14.Q03",
+          "text": "Which test shows unsupported methods cannot mutate state?"
+        },
+        {
+          "id": "C14.Q04",
+          "text": "Which evidence shows every write endpoint has an idempotency policy?"
+        },
+        {
+          "id": "C14.Q05",
+          "text": "Which proof shows pagination enforces bounded page sizes?"
+        },
+        {
+          "id": "C14.Q06",
+          "text": "Which test shows bulk endpoints apply limits before work starts?"
+        },
+        {
+          "id": "C14.Q07",
+          "text": "Which evidence shows async jobs expose durable state and terminal outcomes?"
+        },
+        {
+          "id": "C14.Q08",
+          "text": "Which proof shows cancellation does not leave half-committed side effects?"
+        },
+        {
+          "id": "C14.Q09",
+          "text": "Which contract defines webhook replay and ordering behavior?"
+        },
+        {
+          "id": "C14.Q10",
+          "text": "Which test shows duplicate webhooks do not duplicate fulfillment?"
+        },
+        {
+          "id": "C14.Q11",
+          "text": "Which evidence shows rate limits are enforced per relevant identity?"
+        },
+        {
+          "id": "C14.Q12",
+          "text": "Which proof shows long-running requests have deadlines and cleanup?"
+        },
+        {
+          "id": "C14.Q13",
+          "text": "Which test shows API version changes preserve declared compatibility?"
+        },
+        {
+          "id": "C14.Q14",
+          "text": "Which evidence shows deprecated endpoints have an owner and removal date?"
+        },
+        {
+          "id": "C14.Q15",
+          "text": "Which proof shows downstream failures map to stable client errors?"
+        },
+        {
+          "id": "C14.Q16",
+          "text": "Which test shows cache keys include tenant and permission scope?"
+        },
+        {
+          "id": "C14.Q17",
+          "text": "Which evidence shows side-effecting methods require explicit caller intent?"
+        },
+        {
+          "id": "C14.Q18",
+          "text": "Which proof shows background workers use the same validation contract?"
+        },
+        {
+          "id": "C14.Q19",
+          "text": "Which contract identifies retryable versus permanent errors?"
+        },
+        {
+          "id": "C14.Q20",
+          "text": "Which live response readback matches the documented API behavior?"
+        }
+      ]
+    },
+    {
+      "id": "C15",
+      "title": "Host and device integration",
+      "scope": "OS permissions, processes, files, and device state",
+      "profiles": [
+        "app",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C15.Q01",
+          "text": "Which process identity runs the host component on each supported OS?"
+        },
+        {
+          "id": "C15.Q02",
+          "text": "Which evidence shows startup is opt-in and not auto-installed?"
+        },
+        {
+          "id": "C15.Q03",
+          "text": "Which proof shows the process exits when its owning session ends?"
+        },
+        {
+          "id": "C15.Q04",
+          "text": "Which record identifies every host permission the component requests?"
+        },
+        {
+          "id": "C15.Q05",
+          "text": "Which test shows denied OS permission yields a safe warning?"
+        },
+        {
+          "id": "C15.Q06",
+          "text": "Which evidence shows device identifiers are not collected unnecessarily?"
+        },
+        {
+          "id": "C15.Q07",
+          "text": "Which proof shows temporary files stay in an owner-restricted directory?"
+        },
+        {
+          "id": "C15.Q08",
+          "text": "Which test shows another user's process cannot access local IPC?"
+        },
+        {
+          "id": "C15.Q09",
+          "text": "Which evidence shows local sockets or pipes have explicit access controls?"
+        },
+        {
+          "id": "C15.Q10",
+          "text": "Which proof shows child processes cannot outlive the owning job unexpectedly?"
+        },
+        {
+          "id": "C15.Q11",
+          "text": "Which record identifies files outside the workspace that may be read?"
+        },
+        {
+          "id": "C15.Q12",
+          "text": "Which test shows external drive disconnects fail without data loss?"
+        },
+        {
+          "id": "C15.Q13",
+          "text": "Which evidence shows symlinked workspace roots are handled explicitly?"
+        },
+        {
+          "id": "C15.Q14",
+          "text": "Which proof shows the component cannot silently elevate privileges?"
+        },
+        {
+          "id": "C15.Q15",
+          "text": "Which test shows uninstallation leaves no scheduled service or daemon?"
+        },
+        {
+          "id": "C15.Q16",
+          "text": "Which endpoint-protection evidence covers malware and spyware signals without claiming a clean device?"
+        },
+        {
+          "id": "C15.Q17",
+          "text": "Which bounded host check looks for unauthorized input capture or keylogger indicators within OS permissions?"
+        },
+        {
+          "id": "C15.Q18",
+          "text": "Which proof shows the selected device's actual installed version?"
+        },
+        {
+          "id": "C15.Q19",
+          "text": "Which test shows a host crash leaves a recoverable session state?"
+        },
+        {
+          "id": "C15.Q20",
+          "text": "Which owner readback confirms the device-visible result?"
+        }
+      ]
+    },
+    {
+      "id": "C16",
+      "title": "Cloud control plane",
+      "scope": "Cloud resource ownership and provider configuration",
+      "profiles": [
+        "cloud",
+        "webapp",
+        "app"
+      ],
+      "questions": [
+        {
+          "id": "C16.Q01",
+          "text": "Which provider account and project IDs own the target resources?"
+        },
+        {
+          "id": "C16.Q02",
+          "text": "Which resource inventory identifies region and environment for each service?"
+        },
+        {
+          "id": "C16.Q03",
+          "text": "Which evidence shows infrastructure configuration matches the reviewed revision?"
+        },
+        {
+          "id": "C16.Q04",
+          "text": "Which proof shows public storage buckets are intentional and scoped?"
+        },
+        {
+          "id": "C16.Q05",
+          "text": "Which record identifies cross-project trust relationships?"
+        },
+        {
+          "id": "C16.Q06",
+          "text": "Which inventory identifies the service account attached to each cloud resource?"
+        },
+        {
+          "id": "C16.Q07",
+          "text": "Which provider project stores control-plane audit records for these resources?"
+        },
+        {
+          "id": "C16.Q08",
+          "text": "Which record identifies disabled versus enabled provider features?"
+        },
+        {
+          "id": "C16.Q09",
+          "text": "Which evidence shows quota and budget limits are configured?"
+        },
+        {
+          "id": "C16.Q10",
+          "text": "Which proof shows cloud resources are tagged with owner and environment?"
+        },
+        {
+          "id": "C16.Q11",
+          "text": "Which record identifies network ingress policy at the provider edge?"
+        },
+        {
+          "id": "C16.Q12",
+          "text": "Which evidence shows private resources lack unintended public endpoints?"
+        },
+        {
+          "id": "C16.Q13",
+          "text": "Which proof shows backup location and restore rights are independent?"
+        },
+        {
+          "id": "C16.Q14",
+          "text": "Which record identifies managed encryption-key ownership?"
+        },
+        {
+          "id": "C16.Q15",
+          "text": "Which evidence shows provider rules are deployed to the intended project?"
+        },
+        {
+          "id": "C16.Q16",
+          "text": "Which proof shows stale infrastructure resources are inventoried before cleanup?"
+        },
+        {
+          "id": "C16.Q17",
+          "text": "Which record identifies regions where data is replicated by provider defaults?"
+        },
+        {
+          "id": "C16.Q18",
+          "text": "Which evidence shows infrastructure drift detection has a named owner?"
+        },
+        {
+          "id": "C16.Q19",
+          "text": "Which proof shows read-only inspection did not mutate cloud resources?"
+        },
+        {
+          "id": "C16.Q20",
+          "text": "Which provider readback confirms the exact live resource revision?"
+        }
+      ]
+    },
+    {
+      "id": "C17",
+      "title": "Deployment and rollback",
+      "scope": "Promotion, publication, and installed-state boundaries",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C17.Q01",
+          "text": "Which deployment manifest names the exact artifact digest?"
+        },
+        {
+          "id": "C17.Q02",
+          "text": "Which evidence shows the destination environment was selected explicitly?"
+        },
+        {
+          "id": "C17.Q03",
+          "text": "Which proof shows pre-deployment checks passed for this revision?"
+        },
+        {
+          "id": "C17.Q04",
+          "text": "Which record identifies approver and time for promotion?"
+        },
+        {
+          "id": "C17.Q05",
+          "text": "Which evidence shows deploy commands did not include unrelated resources?"
+        },
+        {
+          "id": "C17.Q06",
+          "text": "Which proof shows a rollout can be paused before full exposure?"
+        },
+        {
+          "id": "C17.Q07",
+          "text": "Which record states the rollback artifact and data compatibility limits?"
+        },
+        {
+          "id": "C17.Q08",
+          "text": "Which test proves rollback can restore service without losing new data?"
+        },
+        {
+          "id": "C17.Q09",
+          "text": "Which evidence shows the provider accepted the deployment request?"
+        },
+        {
+          "id": "C17.Q10",
+          "text": "Which provider readback proves the new revision became active?"
+        },
+        {
+          "id": "C17.Q11",
+          "text": "Which live HTTP or app probe reaches the selected route?"
+        },
+        {
+          "id": "C17.Q12",
+          "text": "Which rendered readback shows the expected user-facing revision?"
+        },
+        {
+          "id": "C17.Q13",
+          "text": "Which evidence shows caches and CDNs serve current assets?"
+        },
+        {
+          "id": "C17.Q14",
+          "text": "Which record distinguishes source push from provider activation?"
+        },
+        {
+          "id": "C17.Q15",
+          "text": "Which proof shows installed devices received the intended build?"
+        },
+        {
+          "id": "C17.Q16",
+          "text": "Which evidence shows a failed rollout triggers an owned response?"
+        },
+        {
+          "id": "C17.Q17",
+          "text": "Which record identifies release immutability and asset checksums?"
+        },
+        {
+          "id": "C17.Q18",
+          "text": "Which proof shows publication links lead to the intended content?"
+        },
+        {
+          "id": "C17.Q19",
+          "text": "Which acceptance record distinguishes technical delivery from owner approval?"
+        },
+        {
+          "id": "C17.Q20",
+          "text": "Which evidence shows no unrelated publication was triggered?"
+        }
+      ]
+    },
+    {
+      "id": "C18",
+      "title": "Telemetry and incident response",
+      "scope": "Operational evidence, alerting, and investigation",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C18.Q01",
+          "text": "Which event schema gives each observation a stable identifier?"
+        },
+        {
+          "id": "C18.Q02",
+          "text": "Which log schema excludes raw request and response bodies before collection?"
+        },
+        {
+          "id": "C18.Q03",
+          "text": "Which record maps event bucket, severity, and outcome to separate fields?"
+        },
+        {
+          "id": "C18.Q04",
+          "text": "Which proof shows timestamps use a documented clock and timezone?"
+        },
+        {
+          "id": "C18.Q05",
+          "text": "Which evidence shows logs preserve enough context to identify the affected revision?"
+        },
+        {
+          "id": "C18.Q06",
+          "text": "Which test shows duplicate events are deduplicated without losing history?"
+        },
+        {
+          "id": "C18.Q07",
+          "text": "Which record identifies alert owners and response windows?"
+        },
+        {
+          "id": "C18.Q08",
+          "text": "Which proof shows security alerts reach the intended on-call surface?"
+        },
+        {
+          "id": "C18.Q09",
+          "text": "Which evidence shows routine unchanged status stays quiet by default?"
+        },
+        {
+          "id": "C18.Q10",
+          "text": "Which test shows a failed alert delivery is visible to an operator?"
+        },
+        {
+          "id": "C18.Q11",
+          "text": "Which record defines incident severity independently of event type?"
+        },
+        {
+          "id": "C18.Q12",
+          "text": "Which proof shows audit records resist unauthorized modification?"
+        },
+        {
+          "id": "C18.Q13",
+          "text": "Which evidence identifies retention and deletion periods for logs?"
+        },
+        {
+          "id": "C18.Q14",
+          "text": "Which test shows an operator can trace a request across services?"
+        },
+        {
+          "id": "C18.Q15",
+          "text": "Which record identifies what evidence must be preserved after an incident?"
+        },
+        {
+          "id": "C18.Q16",
+          "text": "Which proof shows alert links open the relevant source record?"
+        },
+        {
+          "id": "C18.Q17",
+          "text": "Which evidence shows provider monitoring was read-only where required?"
+        },
+        {
+          "id": "C18.Q18",
+          "text": "Which test shows an untrusted log message cannot become an agent instruction?"
+        },
+        {
+          "id": "C18.Q19",
+          "text": "Which record identifies who may acknowledge or close an incident?"
+        },
+        {
+          "id": "C18.Q20",
+          "text": "Which incident drill confirms the escalation and recovery path?"
+        }
+      ]
+    },
+    {
+      "id": "C19",
+      "title": "Resilience and recovery",
+      "scope": "Failure containment, backups, and restoration",
+      "profiles": [
+        "app",
+        "webapp",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C19.Q01",
+          "text": "Which dependency map identifies single points of failure?"
+        },
+        {
+          "id": "C19.Q02",
+          "text": "Which evidence shows service health checks detect a stuck process?"
+        },
+        {
+          "id": "C19.Q03",
+          "text": "Which test shows a failed dependency produces bounded degradation?"
+        },
+        {
+          "id": "C19.Q04",
+          "text": "Which proof shows retry budgets prevent runaway work?"
+        },
+        {
+          "id": "C19.Q05",
+          "text": "Which evidence shows work queues preserve or reject jobs during restart?"
+        },
+        {
+          "id": "C19.Q06",
+          "text": "Which record states recovery time and recovery point objectives?"
+        },
+        {
+          "id": "C19.Q07",
+          "text": "Which backup manifest identifies exact files and versions retained?"
+        },
+        {
+          "id": "C19.Q08",
+          "text": "Which proof shows backup checksums match restored files?"
+        },
+        {
+          "id": "C19.Q09",
+          "text": "Which test restores a sample backup into an isolated environment?"
+        },
+        {
+          "id": "C19.Q10",
+          "text": "Which evidence shows backup credentials are separate from runtime credentials?"
+        },
+        {
+          "id": "C19.Q11",
+          "text": "Which proof shows a corrupted backup is detected before use?"
+        },
+        {
+          "id": "C19.Q12",
+          "text": "Which record identifies off-site or cross-device recovery copies?"
+        },
+        {
+          "id": "C19.Q13",
+          "text": "Which test shows storage exhaustion fails without partial publication?"
+        },
+        {
+          "id": "C19.Q14",
+          "text": "Which evidence shows process restart does not duplicate writes?"
+        },
+        {
+          "id": "C19.Q15",
+          "text": "Which proof shows external volume removal is detected and reported?"
+        },
+        {
+          "id": "C19.Q16",
+          "text": "Which record identifies disaster recovery decision owners?"
+        },
+        {
+          "id": "C19.Q17",
+          "text": "Which test shows failover preserves tenant isolation?"
+        },
+        {
+          "id": "C19.Q18",
+          "text": "Which evidence shows recovery procedures are current for this release?"
+        },
+        {
+          "id": "C19.Q19",
+          "text": "Which proof shows rollback does not erase incident evidence?"
+        },
+        {
+          "id": "C19.Q20",
+          "text": "Which owner acceptance records a completed restoration drill?"
+        }
+      ]
+    },
+    {
+      "id": "C20",
+      "title": "Verification and acceptance",
+      "scope": "Evidence quality, limits, and owner decisions",
+      "profiles": [
+        "app",
+        "webapp",
+        "code",
+        "cloud",
+        "device"
+      ],
+      "questions": [
+        {
+          "id": "C20.Q01",
+          "text": "Which test plan maps each claimed control to an observable assertion?"
+        },
+        {
+          "id": "C20.Q02",
+          "text": "Which evidence identifies the revision, environment, and time of every test?"
+        },
+        {
+          "id": "C20.Q03",
+          "text": "Which negative test demonstrates a control rejects a prohibited action?"
+        },
+        {
+          "id": "C20.Q04",
+          "text": "Which proof distinguishes a unit test from live behavior?"
+        },
+        {
+          "id": "C20.Q05",
+          "text": "Which record identifies tests skipped because a platform was unavailable?"
+        },
+        {
+          "id": "C20.Q06",
+          "text": "Which evidence shows test fixtures contain no real credentials?"
+        },
+        {
+          "id": "C20.Q07",
+          "text": "Which proof shows tests do not merely mirror implementation branches?"
+        },
+        {
+          "id": "C20.Q08",
+          "text": "Which record identifies independent reviewers for high-risk findings?"
+        },
+        {
+          "id": "C20.Q09",
+          "text": "Which evidence shows a reported issue is reproducible from a bounded fixture?"
+        },
+        {
+          "id": "C20.Q10",
+          "text": "Which proof shows a fix addresses the reported failure mechanism?"
+        },
+        {
+          "id": "C20.Q11",
+          "text": "Which record separates source readiness from provider publication?"
+        },
+        {
+          "id": "C20.Q12",
+          "text": "Which evidence distinguishes a passing build from device installation?"
+        },
+        {
+          "id": "C20.Q13",
+          "text": "Which proof shows a scanner warning was reviewed by a human?"
+        },
+        {
+          "id": "C20.Q14",
+          "text": "Which record marks unknown evidence as unknown rather than pass?"
+        },
+        {
+          "id": "C20.Q15",
+          "text": "Which evidence identifies stale provider or runtime observations?"
+        },
+        {
+          "id": "C20.Q16",
+          "text": "Which proof shows the final report lists material limits and exclusions?"
+        },
+        {
+          "id": "C20.Q17",
+          "text": "Which record states who can accept residual risk?"
+        },
+        {
+          "id": "C20.Q18",
+          "text": "Which evidence shows owner acceptance names the exact revision and surface?"
+        },
+        {
+          "id": "C20.Q19",
+          "text": "Which proof shows the requested user workflow was tested end to end?"
+        },
+        {
+          "id": "C20.Q20",
+          "text": "Which final receipt links claims to artifacts that can still be read?"
+        }
+      ]
+    }
+  ]
+}

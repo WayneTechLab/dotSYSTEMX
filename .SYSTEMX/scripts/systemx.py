@@ -65,6 +65,12 @@ for _name, _path in (
         ("agent_y", SCRIPTS / "agent_y.py"),
         ("agent_z", SCRIPTS / "agent_z.py"),
         ("autobots", SCRIPTS / "autobots.py"),
+        ("agent_beta", SCRIPTS / "agent_beta.py"),
+        ("security_agent1", SCRIPTS / "security_agent1.py"),
+        ("agenda_access", SCRIPTS / "agenda_access.py"),
+        ("session_service", SCRIPTS / "session_service.py"),
+        ("session_settings", SCRIPTS / "session_settings.py"),
+        ("release_counters", SCRIPTS / "release_counters.py"),
         ("data_tools", SCRIPTS / "data_tools.py"),
         ("root_coordination", SCRIPTS / "root_coordination.py")):
     _load_local(_name, _path)
@@ -75,6 +81,12 @@ from versions import version_id
 import project_workspaces
 import agent_standards
 import autobots
+import agent_beta
+import security_agent1
+import agenda_access
+import session_service
+import session_settings
+import release_counters
 import data_tools
 import root_coordination
 
@@ -84,7 +96,7 @@ REQUIRED = (
     ".gitignore", ".gitattributes", "README.md", "STANDARD.md", "LICENSE", "VERSION",
     "CHANGELOG.md", "SOURCE.json", "SYSTEMX.sh", "WSG-MENU.sh",
     "config/project.example.json", "docs/SETUP.md", "docs/DEVELOPMENT.md",
-    "docs/ACCESS-AND-MAP.md", "GLOBAL/ACCESS-MATRIX.md", "PLAN/MAP.md",
+    "docs/ACCESS-AND-MAP.md", "GLOBAL/ACCESS-MATRIX.md", "GLOBAL/ACCESS-MATRIX.xlsx", "PLAN/MAP.md",
     "docs/SECURITY.md", "docs/QUALITY.md", "docs/OPERATIONS.md",
     "AI/README.md", "AI/AGENT-MESH-STANDARD.md", "AI/agent-mesh.schema.json",
     "AI/TOOLCALLING-AND-BROWSER-AUTOMATION.md",
@@ -96,51 +108,49 @@ REQUIRED = (
     "FORMAT.md", "config/template-records.json",
     "__init__.py", "__main__.py", "cli.py", "manager.py", "INSTALL.sh", "INSTALL.ps1", "SYSTEMX.ps1",
     "config/distribution.json", "config/profiles.json", "scripts/release.py", "tests/test_manager.py",
+    "scripts/release_counters.py", "tests/test_release_counters.py", "docs/RELEASE-COUNTERS.md",
     "profiles/project.md", "profiles/directory.md", "profiles/drive.md", "profiles/chat.md",
     "docs/INSTALLATION.md", "docs/LIBRARY.md", "docs/EXACT-CASE.md", "systemx_paths.py", "tests/test_paths.py",
     "lifecycle.py", "tests/test_lifecycle.py", "docs/FIRST-RUN.md", "docs/UNINSTALL.md",
+    "Setup/README.md", "Uninstall/README.md",
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
     "docs/ONE-SHOT-PROJECT.md", "docs/SHARED-WORKSPACES.md", "docs/CLI-TOOLS.md",
-    "MEDIA/Infographics/chatgpt-google-drive-4k.jpg",
-    "MEDIA/Infographics/codex-copilot-cli-local-4k.jpg",
-    "MEDIA/Infographics/codex-github-main-4k.jpg",
-    "MEDIA/Infographics/dots-codex-cloud-4k.jpg",
     "MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg",
     "MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg",
     "MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg",
     "MEDIA/Infographics/systemx-field-guide-04-data-projects-4k.jpg",
+    "MEDIA/Infographics/systemx-guide-lifecycle.svg",
+    "MEDIA/Infographics/systemx-guide-bot-workspaces.svg",
+    "MEDIA/Infographics/systemx-guide-security-access.svg",
+    "MEDIA/Infographics/systemx-guide-access-matrix.svg",
+    "MEDIA/Infographics/systemx-agent-0.svg",
+    "MEDIA/Infographics/systemx-agent-x.svg",
+    "MEDIA/Infographics/systemx-agent-y.svg",
+    "MEDIA/Infographics/systemx-agent-z.svg",
+    "MEDIA/Infographics/systemx-agent-alpha.svg",
+    "MEDIA/Infographics/systemx-agent-beta.svg",
+    "MEDIA/Infographics/systemx-agent-1.svg",
     "MEDIA/README.md",
     "MEDIA/Reference/ASSETS.json",
-    "MEDIA/Reference/IMAGE-PROMPTS.md",
-    "MEDIA/Reference/chatgpt-google-drive.md",
-    "MEDIA/Reference/codex-copilot-cli-local.md",
-    "MEDIA/Reference/codex-github-main.md",
-    "MEDIA/Reference/dots-codex-cloud.md",
-    "MEDIA/Reference/cli-projects.md",
+    "MEDIA/Reference/current-visual-guide.md",
     "MEDIA/Reference/systemx-field-guide.md",
     "MEDIA/Reference/systemx-field-guide-prompts.md",
-    "MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.json",
-    "MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.md",
-    "MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf",
-    "MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0-verification.json",
-    "MEDIA/White-Paper/figures/paper2-01-architecture.png",
-    "MEDIA/White-Paper/figures/paper2-01-architecture.svg",
-    "MEDIA/White-Paper/figures/paper2-02-coordination.png",
-    "MEDIA/White-Paper/figures/paper2-02-coordination.svg",
-    "MEDIA/White-Paper/figures/paper2-03-records.png",
-    "MEDIA/White-Paper/figures/paper2-03-records.svg",
-    "MEDIA/White-Paper/figures/paper2-04-evidence.png",
-    "MEDIA/White-Paper/figures/paper2-04-evidence.svg",
-    "MEDIA/White-Paper/ERRATA.md",
+    "MEDIA/White-Paper/SYSTEMX-White-Paper.json",
+    "MEDIA/White-Paper/SYSTEMX-White-Paper.md",
+    "MEDIA/White-Paper/SYSTEMX-White-Paper.pdf",
+    "MEDIA/White-Paper/build_current_white_paper.py",
     "docs/AUTOBOT.md", "docs/DATA.md",
-) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED + autobots.REQUIRED + data_tools.REQUIRED + root_coordination.REQUIRED
+) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED + autobots.REQUIRED + agent_beta.REQUIRED + security_agent1.REQUIRED + agenda_access.REQUIRED + session_service.REQUIRED + session_settings.REQUIRED + data_tools.REQUIRED + root_coordination.REQUIRED
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "GLOBAL/ACCESS-MATRIX.md",
     "PLAN/MASTER-PLAN.md", "PLAN/MAP.md", "MEMORY/PROJECT.md",
     "AGENTS/agent.0/MEMORY.md", "AGENTS/REGISTRY.json", "WORK/TASKS.json",
     "WORK/FOCUS.json", "config/project.example.json",
     "templates/project/GLOBAL/ACCESS-MATRIX.md", "templates/project/PLAN/MAP.md",
+    "AGENTB/BOTS.json", "AUTOBOT/AGENDA.json", "GLOBAL/ACCESS-MATRIX.json",
+    "templates/agentb/BOTS.json", "templates/agenda/AGENDA.json",
+    "templates/agenda/ACCESS-MATRIX.json",
 )
 IGNORED_DIRS = {"local", "logs", "state", ".git", ".systemx", "__pycache__", "node_modules", "DATA"}
 LINK = re.compile(r"\]\((?:<([^>]+)>|([^\s)]+))(?:\s+\"[^\"]*\")?\)")
@@ -259,6 +269,9 @@ def distribution_issues(files):
         import agent_z
         agent_z.validate_policy(agent_standards.read(SYSTEMX, "config/agent-z-policy.json"))
         autobots.validate_template(SYSTEMX, DEFAULTS)
+        agent_beta.validate_template(SYSTEMX, DEFAULTS)
+        agenda_access.validate_template(SYSTEMX, DEFAULTS)
+        security_agent1.validate_template(SYSTEMX, DEFAULTS)
         data_tools.validate_template(SYSTEMX, DEFAULTS)
         root_coordination.validate_template(SYSTEMX, DEFAULTS)
     except (ConfigError, OSError, ValueError) as error:
@@ -459,7 +472,12 @@ def menu():
                "15": ("projects-guide", False), "16": ("projects-list", False),
                "17": ("standard-roles-guide", False), "18": ("tools-guide", False),
                "19": ("autobot-guide", False), "20": ("data-guide", False),
-               "21": ("root-guide", False)}
+               "21": ("root-guide", False), "30": ("update-guide", False)}
+    nested = {"22": ("agent-beta", "status"), "23": ("agent-beta", "setup"),
+              "24": ("agent-1", "status"), "25": ("agent-1", "setup"),
+              "26": ("agent-1", "check"), "27": ("agenda", "status"),
+              "28": ("agenda", "table"), "29": ("service", "status"),
+              "31": ("session-settings",), "32": ("release-counters",)}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
@@ -470,18 +488,29 @@ def menu():
               "17) Agent X, Agent Y, and Agent Z setup and review guide\n"
               "18) CLI, tools, and .SYSTEMXP routing guide\n"
               "19) Agent Alpha and on-demand AUTOBOT guide\n20) Local DATA and Git-ignore audit guide\n"
-              "21) ROOT planning, tool cards, and observed task delta guide\n0) Exit")
+              "21) ROOT planning, tool cards, and observed task delta guide\n"
+              "22) Agent Beta status\n23) Agent Beta setup preview\n"
+              "24) Agent1 setup status\n25) Agent1 first-run questions preview\n"
+              "26) Agent1 All-In-One advisory check\n27) Agenda and Access Matrix status\n"
+              "28) Agenda and Access Matrix table\n29) Local session service status\n"
+              "30) Update and release guide\n31) Scoped session settings and Rules hashes\n"
+              "32) Public GitHub release and deployment record counters\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
             return 0
         if choice.lower() in {"0", "q", "quit", "exit"}:
             return 0
-        if choice not in choices:
+        if choice not in choices and choice not in nested:
             print("Choose a listed option.")
             continue
-        action, dry_run = choices[choice]
         try:
+            if choice in nested:
+                result = main(["--root", str(SYSTEMX), *nested[choice]])
+                if result:
+                    print("Action exited with status {}.".format(result))
+                continue
+            action, dry_run = choices[choice]
             if action == "deploy" and not dry_run:
                 run_action("deploy", dry_run=True)
                 if input("Type DEPLOY to execute this configured plan: ") != "DEPLOY":
@@ -508,6 +537,9 @@ def dispatch(action, dry_run=False):
         return 0
     if action == "tools-guide":
         print((DEFAULTS / "docs/CLI-TOOLS.md").read_text(encoding="utf-8"))
+        return 0
+    if action == "update-guide":
+        print((DEFAULTS / "docs/INSTALLATION.md").read_text(encoding="utf-8"))
         return 0
     if action == "standard-roles-guide":
         for name in ("AGENT-X.md", "AGENT-Y.md", "AGENT-Z.md"):
@@ -561,19 +593,27 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Standalone .SYSTEMX project operations (exact-case directory)")
     parser.add_argument("--root", type=Path, action=RootSelector, help="project record directory when running versioned defaults")
     subparsers = parser.add_subparsers(dest="action")
-    for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide", "tools-guide", "autobot-guide", "data-guide", "root-guide"):
+    for action in ("validate", "doctor", "init", "menu", "help", "paths", "setup-guide", "removal-guide", "tools-guide", "update-guide", "autobot-guide", "data-guide", "root-guide"):
         command_parser = subparsers.add_parser(action)
         if action == "validate":
             command_parser.add_argument("--template", action="store_true",
                                         help="require only distribution files and reviewed blank project records")
     command_parser = subparsers.add_parser("alias", help="inspect the local lowercase compatibility alias")
     command_parser.add_argument("--create", action="store_true", help="create a relative link if this filesystem needs one")
+    command_parser = subparsers.add_parser("release-counters", help="read public GitHub release and deployment record counts")
+    command_parser.add_argument("--repository", default=release_counters.DEFAULT_REPOSITORY,
+                                type=release_counters.repository_id, help="GitHub OWNER/REPO")
     for action in ("check", "dev", "build", "deploy"):
         command_parser = subparsers.add_parser(action)
         command_parser.add_argument("--dry-run", action="store_true", help="print plan without executing commands")
     project_memory.add_cli(subparsers)
     agent_standards.add_cli(subparsers)
     autobots.add_cli(subparsers)
+    agent_beta.add_cli(subparsers)
+    security_agent1.add_cli(subparsers)
+    agenda_access.add_cli(subparsers)
+    session_service.add_cli(subparsers)
+    session_settings.add_cli(subparsers)
     data_tools.add_cli(subparsers)
     root_coordination.add_cli(subparsers)
     project_workspaces.add_cli(subparsers)
@@ -586,12 +626,23 @@ def main(argv=None):
         PROJECT_ROOT = SYSTEMX.parent
         if args.action == "projects":
             return project_workspaces.dispatch(SYSTEMX, DEFAULTS, args, run_scoped_action)
+        if args.action == "release-counters":
+            result = release_counters.snapshot(args.repository)
+            print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
+            return 0 if result["complete"] else 2
         if args.action in agent_standards.COMMANDS:
             return agent_standards.dispatch(SYSTEMX, DEFAULTS, args)
-        if args.action in autobots.COMMANDS or args.action in data_tools.COMMANDS or args.action in root_coordination.COMMANDS:
-            module = (autobots if args.action in autobots.COMMANDS else
-                      data_tools if args.action in data_tools.COMMANDS else root_coordination)
-            print(json.dumps(module.dispatch(SYSTEMX, DEFAULTS, args), indent=2, ensure_ascii=False, allow_nan=False))
+        if args.action in set().union(autobots.COMMANDS, agent_beta.COMMANDS,
+                                      security_agent1.COMMANDS, agenda_access.COMMANDS,
+                                      session_service.COMMANDS, session_settings.COMMANDS,
+                                      data_tools.COMMANDS,
+                                      root_coordination.COMMANDS):
+            module = next(item for item in (autobots, agent_beta, security_agent1,
+                                            agenda_access, session_service, session_settings, data_tools,
+                                            root_coordination) if args.action in item.COMMANDS)
+            result = module.dispatch(SYSTEMX, DEFAULTS, args)
+            if args.action != "service" or args.service_action != "start":
+                print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
             return 0
         if args.action == "alias":
             return dispatch("alias-create" if args.create else "paths")

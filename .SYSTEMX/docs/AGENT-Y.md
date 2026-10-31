@@ -91,7 +91,7 @@ Running a job needs a local Git repository, the selected installed CLI, and its
 own authorized account. PR actions also need a reviewed GitHub remote and
 authenticated GitHub CLI access. The folder can still be used without Agent Y
 in a chat, Drive, or non-Git project.
-On native Windows, this alpha refuses `agent-y run Y-ID --apply` before it
+On native Windows, this beta refuses `agent-y run Y-ID --apply` before it
 creates a worktree or starts a provider because safe termination of descendant
 processes is not yet verified. Role setup, provider detection, prepare previews,
 and job inspection remain available; a prepared job cannot be run on that host.
@@ -440,7 +440,7 @@ recorded result before retrying. Repository rules and the user's instructions
 take precedence over a stored role name or policy example.
 
 Push, PR creation, ready, close, or cleanup can succeed remotely before a
-subsequent read or local record write fails. This alpha has no idempotent
+subsequent read or local record write fails. This beta has no idempotent
 remote-reconciliation command. Stop on that uncertainty, preserve the worktree
 and any local archive, inspect the exact remote branch/PR identity and head against
 the portable job, and have Agent 0 decide the reviewed recovery. Do not rerun
@@ -488,7 +488,7 @@ Copilot and `configured` invocations do not gain an equivalent OS sandbox from
 Agent Y; their provider permissions, local account, and host controls still
 determine what they can access. The post-run Git diff check can reject
 publication, but it cannot undo out-of-repository side effects.
-Native Windows Agent Y execution fails closed in this alpha. Do not work around
+Native Windows Agent Y execution fails closed in this beta. Do not work around
 that guard with a broader provider invocation; use a reviewed supported host
 for the CLI lane.
 Treat the selected repository's Git configuration as executable input:
@@ -524,7 +524,7 @@ For the controller-owned PR steps, consult GitHub CLI's
 preview in Agent Y is read-only; do not substitute `gh pr create --dry-run`
 for it because that command's documented dry run can still push a branch.
 
-This alpha's provider contract has been checked with disposable fake
+This beta's provider contract has been checked with disposable fake
 executables, not a live end-to-end Copilot or Codex task. In the inspected local
 Copilot CLI 1.0.61, help text describes a broader noninteractive permission
 requirement than GitHub's current scoped programmatic examples. Scoped-only

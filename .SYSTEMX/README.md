@@ -1,12 +1,12 @@
 # .SYSTEMX
 
-> **ALPHA — USE AT YOUR OWN RISK.** `.SYSTEMX` is experimental and may change daily.
+> **BETA — USE AT YOUR OWN RISK.** `.SYSTEMX` is a prerelease and may change.
 > Interfaces, defaults, and guidance may change before a stable release. Pin a
 > reviewed version, keep recoverable backups, and validate it in your own project.
 > It is provided without warranty; template checks do not establish production readiness.
 
 [Versions and changelog](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog) ·
-[Alpha release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
+[Release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
 
 **One project operating format, wherever the work lives.**
 
@@ -22,9 +22,21 @@ setup refuses independent case variants to protect project records.
 [Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Setup profiles](config/profiles.json) · [MIT license](LICENSE)
 
-[Use-case media library](MEDIA/README.md): ChatGPT + Drive, Codex + GitHub,
-Dots / Codex Cloud, and Codex / Copilot CLI on a local drive, with 4K cards
-and accessible text guides.
+[Media library](MEDIA/README.md): the current field guide, beta feature
+infographics, agent cards, and accessible text companions. Earlier environment
+cards remain available in their tagged release history.
+
+[![Current beta lifecycle infographic: exact scope, records, verification and release boundaries.](MEDIA/Infographics/systemx-guide-lifecycle.svg)](MEDIA/Reference/current-visual-guide.md)
+
+The [current beta visual guide](MEDIA/Reference/current-visual-guide.md) has four
+feature infographics for lifecycle, BOT/DOT workspaces, Agent1 security, and
+the Access Matrix, plus one role card for each of Agent 0, X, Y, Z, Alpha,
+Beta, and Agent1. Its standalone SVGs have exact vector labels and icons on a
+7680 × 4320 canvas. Imagegen illustration inside has 1672 × 941 native pixels;
+the 8K canvas is an export size. The text companion preserves a reading-order
+explanation without relying on color or image text alone.
+
+The earlier field guide remains a separately labeled historical baseline:
 
 [![.SYSTEMX field guide overview: ROOT, SX-RULES, SX-MILESTONE, observed harness and optional bot TODOs, Agent 0/X/Y/Z, Agent Alpha, ten AUTOBOT functions, DATA, and named .SYSTEMXP scopes.](MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg)](MEDIA/Reference/systemx-field-guide.md)
 
@@ -46,6 +58,25 @@ managed runner, reviewed folder-only launchers, Python API, and optional provide
 tools. It includes explicit `.SYSTEMXP` selection and the working directory for
 child application commands. Print it with `tools-guide` or local menu option 18.
 
+The beta release adds optional [Agent Beta BOT/DOT workspaces](AGENTB/README.md),
+[Agent1 security and access review](SECURITY/AGENT1/README.md), and Agent Alpha
+[Agenda and Access Matrix settings](docs/ACCESS-AND-MAP.md). The Access Matrix
+ships 20 default-deny role rows with no reviewed access decisions; project
+records and Agenda options start blank. The [session service](Setup/SERVICE.md) runs only when explicitly
+started through a pipe; it installs no OS daemon. The [Setup](Setup/README.md)
+and [Uninstall](Uninstall/README.md) directories point to the existing external
+manager lifecycle. The original four-part media guide retains its earlier
+recorded baseline; the beta feature and agent images are a separate set.
+`agent-beta access-link` can retain a same-actor reviewed-intent decision after
+a combined BOT/matrix revision check; it never connects or grants access.
+An Agent1 repository/environment secret set requires the active GitHub
+account's repository admin permission before hidden input and checks only
+name/scope metadata afterward; a first-run actor label is descriptive.
+The read-only `session-settings` command returns the selected scope's Agent
+Beta, Agent1, and Agenda status with bounded canonical Rules file paths and
+hashes for an IDE or harness to load without copying rule text into the status.
+`session-settings --compact` replaces the per-file list with a count and digest.
+
 ## Focused context and reversible setup
 
 Current focus, a single task ledger, bounded context, and scoped agent memory can
@@ -59,13 +90,14 @@ make the installation inspectable while retaining your records in a backup.
 Read the [Technical Guide](docs/TECHNICAL-GUIDE.md),
 [Stack Guide](docs/STACK-GUIDE.md), and [About page](docs/ABOUT.md).
 
-The [edition 2.0 white paper](MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.pdf)
-introduces the operating model, then explains task authority, Agent 0/X/Y/Z,
-Agent Alpha, ROOT, project scopes, and evidence boundaries against the pinned
-`1.11.0-alpha.4` implementation. Four figures and a reproducible local example
-support the explanation; token savings remain a testable proposition.
-[Editable text](MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.md) ·
-[Edition metadata](MEDIA/White-Paper/SYSTEMX-White-Paper-v2.0.json) ·
+The [current white paper](MEDIA/White-Paper/SYSTEMX-White-Paper.pdf), edition 2.1,
+examines the `1.11.0-beta.1` implementation, its new roles and Access Matrix,
+task authority, security boundaries, and release evidence. Its five-page PDF
+has selectable text and linked navigation. Earlier edition 2.0 examined alpha.4
+and remains available at the immutable alpha.5 tag. Token savings remain a
+testable proposition, not a measured product claim.
+[Editable text](MEDIA/White-Paper/SYSTEMX-White-Paper.md) ·
+[Edition metadata](MEDIA/White-Paper/SYSTEMX-White-Paper.json) ·
 [Public paper guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper).
 
 ## Start here

@@ -95,6 +95,9 @@ SEEDS = ("GLOBAL/CONTEXT.md", "PLAN/MASTER-PLAN.md", "MEMORY/PROJECT.md",
          "WORK/FOCUS.json", "config/project.example.json")
 SEEDS_FROM_1_8_9 = ("GLOBAL/ACCESS-MATRIX.md", "PLAN/MAP.md",
                     "templates/project/GLOBAL/ACCESS-MATRIX.md", "templates/project/PLAN/MAP.md")
+SEEDS_FROM_1_11_0_ALPHA_8 = ("AGENTB/BOTS.json", "AUTOBOT/AGENDA.json",
+                            "GLOBAL/ACCESS-MATRIX.json", "templates/agentb/BOTS.json",
+                            "templates/agenda/AGENDA.json", "templates/agenda/ACCESS-MATRIX.json")
 BOOTSTRAP_FILES = ("manager.py", "lifecycle.py", "versions.py", "systemx_paths.py",
                    "SYSTEMX.sh", "SYSTEMX.ps1", "INSTALL.sh", "INSTALL.ps1")
 ISOLATED_RUNNER_FLOOR = "1.8.7-alpha.1"
@@ -258,7 +261,10 @@ def verified_bundle(files):
         raise InstallError("Invalid distribution inventory")
     if set(files) != set(inventory) | {MANIFEST}:
         raise InstallError("Distribution inventory does not match the supplied files")
-    seed_names = SEEDS + (SEEDS_FROM_1_8_9 if version_key(manifest["version"])[:3] >= (1, 8, 9) else ())
+    seed_names = (SEEDS +
+                  (SEEDS_FROM_1_8_9 if version_key(manifest["version"])[:3] >= (1, 8, 9) else ()) +
+                  (SEEDS_FROM_1_11_0_ALPHA_8 if version_key(manifest["version"]) >=
+                   version_key("1.11.0-alpha.8") else ()))
     required = {"VERSION", "LICENSE", "SOURCE.json", "STANDARD.md", "START-HERE.md",
                 "manager.py", "scripts/systemx.py", "scripts/project_memory.py",
                 "config/template-records.json", *seed_names}
@@ -294,6 +300,22 @@ def verified_bundle(files):
         required.update({"scripts/root_coordination.py", "tests/test_root_coordination.py"})
         required.update(base + "/" + name for base in ("ROOT", "templates/root") for name in
                         ("SX-RULES.md", "SX-MILESTONE.md", "PLAN.json", "MIRRORS.json"))
+    if version_key(manifest["version"]) >= version_key("1.11.0-alpha.8"):
+        required.update({"scripts/agent_beta.py", "scripts/security_agent1.py",
+                         "scripts/agenda_access.py", "scripts/session_service.py",
+                         "scripts/session_settings.py", "tests/test_session_settings.py",
+                         "tests/test_agent_beta.py", "tests/test_security_agent1.py",
+                         "tests/test_agenda_access.py", "tests/test_session_service.py",
+                         "GLOBAL/ACCESS-MATRIX.json", "GLOBAL/ACCESS-MATRIX.xlsx",
+                         "AUTOBOT/AGENDA.json", "AGENTB/BOTS.json", "AGENTB/README.md",
+                         "AGENTB/AGENTB.MD", "AGENTB/MEMORY.md", "AGENTB/.gitignore",
+                         "templates/agentb/README.md", "templates/agentb/AGENTB.MD",
+                         "templates/agentb/MEMORY.md", "templates/agentb/BOTS.json",
+                         "templates/agentb/.gitignore", "templates/agenda/AGENDA.json",
+                         "templates/agenda/ACCESS-MATRIX.json",
+                         "SECURITY/AGENT1/questions.json", "SECURITY/AGENT1/event_buckets.json",
+                         "SECURITY/AGENT1/README.md", "Setup/README.md",
+                         "Setup/SERVICE.md", "Uninstall/README.md"})
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -344,6 +366,39 @@ def verified_bundle(files):
         for leaf in ("SX-RULES.md", "SX-MILESTONE.md"):
             if files["ROOT/" + leaf] != files["templates/root/" + leaf]:
                 raise InstallError("Distribution ROOT documentation and dedicated seeds must match")
+    if version_key(manifest["version"]) >= version_key("1.11.0-alpha.8"):
+        blank_tables = {"AGENTB/BOTS.json": {"schemaVersion": 1, "bots": []},
+                        "AUTOBOT/AGENDA.json": {"schemaVersion": 1, "options": []},
+                        "GLOBAL/ACCESS-MATRIX.json": {"schemaVersion": 1, "decisions": []},
+                        "templates/agentb/BOTS.json": {"schemaVersion": 1, "bots": []},
+                        "templates/agenda/AGENDA.json": {"schemaVersion": 1, "options": []},
+                        "templates/agenda/ACCESS-MATRIX.json": {"schemaVersion": 1, "decisions": []}}
+        if version_key(manifest["version"]) >= version_key("1.11.0-beta.1"):
+            for name in ("GLOBAL/ACCESS-MATRIX.json", "templates/agenda/ACCESS-MATRIX.json"):
+                blank_tables.pop(name)
+            matrix = decode(files["templates/agenda/ACCESS-MATRIX.json"])
+            if (not isinstance(matrix, dict) or set(matrix) != {"schemaVersion", "roleDefaults", "decisions"} or
+                    type(matrix["schemaVersion"]) is not int or matrix["schemaVersion"] != 1 or
+                    matrix["decisions"] != [] or not isinstance(matrix["roleDefaults"], list) or
+                    len(matrix["roleDefaults"]) != 20):
+                raise InstallError("Distribution Access Matrix must contain fixed default-deny roles and no decisions")
+            actors = set()
+            for index, row in enumerate(matrix["roleDefaults"], 1):
+                if (not isinstance(row, dict) or set(row) != {"id", "actor", "kind", "instanceRule",
+                                                           "templateGrant", "requiresReview", "purpose"} or
+                        row["id"] != "ROLE-{:03d}".format(index) or
+                        any(not isinstance(row[field], str) for field in
+                            ("actor", "kind", "instanceRule", "purpose")) or
+                        not row["actor"] or row["actor"] in actors or
+                        not row["kind"] or not row["purpose"] or
+                        row["templateGrant"] != "none" or row["requiresReview"] is not True):
+                    raise InstallError("Distribution Access Matrix role defaults are malformed or permissive")
+                actors.add(row["actor"])
+            if decode(files["GLOBAL/ACCESS-MATRIX.json"]) != matrix:
+                raise InstallError("Distribution Access Matrix must match its reviewed default-deny template")
+        for name, expected_seed in blank_tables.items():
+            if decode(files[name]) != expected_seed:
+                raise InstallError("Distribution contains a populated optional seed: " + name)
     if base_version >= (1, 7, 0):
         if decode(files["Projects/REGISTRY.json"]) != {"schemaVersion": 1, "projects": []}:
             raise InstallError("Distribution project registry must be empty")
@@ -457,10 +512,11 @@ def get_url(url, limit):
 
 def latest_version(repository=DEFAULT_REPOSITORY, channel="stable"):
     repository_id(repository)
-    if channel not in {"stable", "alpha"}:
+    if channel not in {"stable", "alpha", "beta"}:
         raise InstallError("Unknown release channel")
-    # Stable installations never discover alpha releases implicitly. Alpha users
-    # explicitly selected an alpha first; they can also graduate to a final tag.
+    # Stable installations discover only final releases. Pre-release users
+    # discover their selected channel and later channels, so alpha can advance
+    # through beta and final while beta never falls back to alpha.
     base = "https://api.github.com/repos/" + repository + "/releases"
     if channel == "stable":
         release = decode(get_url(base + "/latest", MAX_FILE))
@@ -469,9 +525,10 @@ def latest_version(repository=DEFAULT_REPOSITORY, channel="stable"):
         tag = release.get("tag_name", "")
         value = version_id(tag[1:] if isinstance(tag, str) and tag.startswith("v") else tag)
         if release_channel(value) != "stable":
-            raise InstallError("Stable discovery refused an alpha tag")
+            raise InstallError("Stable discovery refused a pre-release tag")
         return value
     candidates = []
+    allowed_channels = {"stable", "beta"} if channel == "beta" else {"stable", "beta", "alpha"}
     # Bounded discovery; fail rather than silently select from a truncated list.
     for page in range(1, 11):
         releases = decode(get_url(base + "?per_page=100&page=" + str(page), MAX_ARCHIVE))
@@ -485,12 +542,13 @@ def latest_version(repository=DEFAULT_REPOSITORY, channel="stable"):
                 value = version_id(tag[1:] if isinstance(tag, str) and tag.startswith("v") else tag)
             except ValueError:
                 continue
-            expected_prerelease = release_channel(value) == "alpha"
-            if release.get("prerelease") is expected_prerelease:
+            candidate_channel = release_channel(value)
+            expected_prerelease = candidate_channel != "stable"
+            if candidate_channel in allowed_channels and release.get("prerelease") is expected_prerelease:
                 candidates.append(value)
         if len(releases) < 100:
             if not candidates:
-                raise InstallError("No compatible published alpha or final release found")
+                raise InstallError("No compatible published release found")
             return max(candidates, key=version_key)
     raise InstallError("Release discovery limit reached; select an exact --version")
 

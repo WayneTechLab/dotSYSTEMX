@@ -1,6 +1,6 @@
 # First-Time Setup
 
-> **Alpha: use at your own risk; may change daily.** See the [release policy](RELEASE-POLICY.md).
+> **Beta: use at your own risk.** See the [release policy](RELEASE-POLICY.md).
 
 This guide takes a new user from choosing a workspace to a project with a pinned
 `.SYSTEMX` installation, empty command configuration, and a clear next step.
@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.7"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.1"
 "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-alpha.7"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.1"
 & "$HOME\.venvs\dotsystemx\Scripts\python.exe" -I -B -m systemx --help
 ```
 
@@ -137,6 +137,27 @@ Menu option 13 opens this guide. Option 14 opens the removal guide. Selecting
 these guide entries makes no setup or removal changes. Option 18 opens the
 [CLI and tools guide](CLI-TOOLS.md), also available as `tools-guide` through
 the local launcher or managed `run` command.
+
+For optional Agent1 first run in the beta release, run `agent-1 status`
+and `agent-1 setup` in the selected scope to see the required personal or
+enterprise, repository, role, secret target, local store, and rotation questions.
+Use `agent-1 check` for the warning-only All-In-One local review. `agent-beta
+setup` previews a separate BOT/DOT record panel; `agenda status` reads the
+blank Agent Alpha settings and structured Access Matrix. None starts a bot,
+uploads a credential, grants access, or installs a background service. Read the
+[CLI tools guide](CLI-TOOLS.md), [security policy](../SECURITY/AGENT1/README.md),
+and [service protocol](../Setup/SERVICE.md) before applying optional setup.
+
+Supply all eight setup answers before the first `--apply`: account context,
+exact `OWNER/REPO`, review scope, actor role, Actions secret target, local store,
+tracked-history review, and rotation decision. To change an existing setup,
+preview again with **all eight** corresponding flags. Review its `proposed`
+record and `existingSHA256`, then repeat the full command with
+`--apply --replace-existing --expect-sha256 SHA_FROM_PREVIEW`. A missing answer
+or stale digest stops replacement. On native Windows, metadata-only first
+setup, `status`, `questions`, and advisory `check` work, while dotenv
+inventory/sanitization/migration, `review --answers`, and changing an existing
+setup fail closed because anchored file-handle operations are unavailable.
 
 ## Optional: initialize multiple projects
 
