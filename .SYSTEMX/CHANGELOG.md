@@ -26,9 +26,9 @@ This copy travels with the folder for offline use.
   counter that reports observation time and unknown when data is unavailable.
 - Support SemVer `alpha < beta < final` release discovery and Python package
   spelling `1.11.0b1`; existing projects keep their own records during update.
-  Add a bounded read-only GitHub Actions compatibility matrix for selected
-  Python versions on Ubuntu, Windows and macOS. A source test or CI job does
-  not certify a downstream app or device.
+  Keep GitHub Actions disabled for this repository and ship no workflow.
+  Maintainers document local checks and host-specific verification separately;
+  a source test does not certify a downstream app or device.
 - Publish a separate current white-paper edition 2.1 and new beta infographics
   while retaining older editions and working media in historical archives.
   No video or raw Blender authoring data is added to the reusable template.

@@ -25,19 +25,23 @@ Optional publishing and narration tools are not dependencies of the template run
 ## Static guides
 
 [Current beta visual guide and accessible text](../../.SYSTEMX/MEDIA/Reference/current-visual-guide.md) ·
+[Detailed agent sheets and text transcript](../../.SYSTEMX/MEDIA/Reference/agent-detail-guide.md) ·
 [Lifecycle infographic](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg) ·
 [BOT/DOT workspaces](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-bot-workspaces.svg) ·
 [Security and access](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-security-access.svg) ·
 [Access Matrix](../../.SYSTEMX/MEDIA/Infographics/systemx-guide-access-matrix.svg)
 
-The current set has four beta feature infographics and seven agent role cards
-on 7680 × 4320 SVG canvases, with exact vector labels and a reading-order text
-companion. Imagegen illustrations have 1672 × 941 native pixels; the 8K canvas
-is an export size. These graphics explain source behavior and boundaries,
+The current set has four beta feature infographics, seven agent role cards,
+and seven detailed agent sheets on 7680 × 4320 SVG canvases, with exact vector
+labels and reading-order text companions. The detailed sheets show the folder,
+example prompt, CLI subcommand map, process flow, and boundary for every role.
+Imagegen illustrations have 1672 × 941 or 1536 × 1024 native pixels; the 8K
+canvas is an export size. These graphics explain source behavior and boundaries,
 not live provider, device, or deployment status.
 
-The [visual builder](build_current_visuals.py) reconstructs the stock SVG set
-from reviewed local inputs. The [visual verifier](verify_current_visuals.py)
+The [first-set builder](build_current_visuals.py) and
+[detailed-sheet builder](build_detail_visuals.py) reconstruct the stock SVGs
+from reviewed external inputs. The [visual verifier](verify_current_visuals.py)
 checks current asset hashes, SVG structure and contrast, and optional external
 8K raster export hashes. Raw generated art and raster exports remain outside
 the portable template; the SVGs are the current main-branch copies.

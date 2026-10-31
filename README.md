@@ -211,13 +211,15 @@ before switching sessions; a local lock is not a distributed lock.
 
 ## Beta visual guide
 
-The current imagegen-assisted AeroGlass infographics use a 7680 × 4320 SVG
-canvas with exact vector labels and icons. Generated illustrative art has
-1672 × 941 native pixels; the 8K canvas is an export size, not native generated
-detail. Each guide has an [accessible text companion](.SYSTEMX/MEDIA/Reference/current-visual-guide.md)
-with the same relationships in reading order. The images describe this beta
-source; they do not claim that a provider connection, security control, or
-deployment is live.
+The beta set contains **18 stock 7680 × 4320 SVGs**: four feature guides,
+seven agent role cards, and seven detailed agent guides. The detail guides map
+each agent's folder, prompt or input, workflow, and CLI boundary. Exact vector
+labels stay readable on the 8K canvas; that canvas does not imply native 8K
+detail in generated illustrative art. Use the
+[accessible text companion](.SYSTEMX/MEDIA/Reference/current-visual-guide.md)
+and [visual library](docs/media/README.md) for the same relationships in
+reading order and asset provenance. The images describe beta source behavior,
+not a live provider connection, security control, or deployment.
 
 [![Beta lifecycle guide: selected scope, canonical task authority, validation, and release boundaries.](.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg)](.SYSTEMX/MEDIA/Infographics/systemx-guide-lifecycle.svg)
 
@@ -228,11 +230,20 @@ deployment is live.
 | [Security and access](.SYSTEMX/MEDIA/Infographics/systemx-guide-security-access.svg) | Agent1 warnings, `.env` names, local versus CI secrets |
 | [Access Matrix](.SYSTEMX/MEDIA/Infographics/systemx-guide-access-matrix.svg) | Default-deny roles, reviewed decisions, live workbook export |
 
-There is also one [role card for each of Agent 0, X, Y, Z, Alpha, Beta and
-Agent1](.SYSTEMX/MEDIA/Reference/current-visual-guide.md#agent-role-cards). The
-[asset record](.SYSTEMX/MEDIA/Reference/ASSETS.json) identifies each file and
-its generated-source and 8K canvas dimensions. Public links and text remain
-usable without downloading a high-resolution raster export.
+| Agent | Role card | Detailed folder, prompt, flow, and CLI guide |
+| --- | --- | --- |
+| Agent 0 | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-0.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-0-detail.svg) |
+| Agent X | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-x.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-x-detail.svg) |
+| Agent Y | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-y.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-y-detail.svg) |
+| Agent Z | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-z.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-z-detail.svg) |
+| Agent Alpha | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-alpha.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-alpha-detail.svg) |
+| Agent Beta | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-beta.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-beta-detail.svg) |
+| Agent1 | [Card](.SYSTEMX/MEDIA/Infographics/systemx-agent-1.svg) | [Detail](.SYSTEMX/MEDIA/Infographics/systemx-agent-1-detail.svg) |
+
+The beta's 18 8K JPEG exports are staged outside the repository as separate
+release assets under final verification. The four retained 4K JPGs below have
+their own alpha media identity. Public SVG links and text remain usable without
+downloading the raster exports.
 
 ## Historical four-part guide
 
@@ -261,7 +272,7 @@ cover other environments and static diagrams.
 
 The animated walkthrough demonstrates software **1.11.0-alpha.6**. Its media
 edition is separate from this beta software version; it does not demonstrate
-the Agent Beta, Agent1, or Agenda features.
+the Agent Beta, Agent1, or Agenda features. No new video was made for this beta.
 
 ## White paper and operating manual
 
@@ -309,9 +320,9 @@ credentials and files. Role labels, an access matrix, and allowed-path checks ar
 not authentication or operating-system access control. The template installs no
 hosted application, background agent runtime, cloud connector, or MCP server.
 Application SDKs, business integrations, and live credentials belong in the
-adopting project. The repository's [template CI](.github/workflows/template-ci.yml)
-runs read-only tests on a small OS/Python matrix; it does not use secrets or
-deploy an application. An on-demand [release counter](.SYSTEMX/docs/RELEASE-COUNTERS.md)
+adopting project. GitHub Actions is disabled for this repository, and this
+template ships no workflow. Maintainers run the documented checks locally.
+An on-demand [release counter](.SYSTEMX/docs/RELEASE-COUNTERS.md)
 reports published template releases separately from GitHub deployment records,
 with an observation time and unknown status when the provider cannot be read.
 Run `bash .SYSTEMX/SYSTEMX.sh release-counters` from a reviewed checkout or

@@ -1,15 +1,18 @@
 # Current visual guide and agent roles
 
 These four guides extend the [foundational four-part field guide](systemx-field-guide.md).
-Seven role cards describe the registered agent roles. The diagrams explain
+Seven role cards and [seven detailed agent sheets](agent-detail-guide.md) describe
+the registered agent roles. The diagrams explain
 file-backed responsibilities; they do not create processes or grant permissions.
 Read the [current manuals](../../docs/CLI-TOOLS.md) before running a command.
 
-Each image is a standalone SVG with selectable text, a title and description,
-and one embedded generated art background. The 7680 × 4320 SVG canvas and
-matching 8K raster exports provide crisp vector labels. The background art was
-generated at 1672 × 941 and then scaled; the larger export does not add native
-art detail. [Asset provenance](ASSETS.json) records exact hashes and dimensions.
+Each beta image is a standalone SVG with selectable text, a title and description,
+and one embedded generated art background. The 7680 × 4320 SVG canvas has
+selectable vector labels; matching 8K raster exports preserve their rendered
+detail. The first-set art was
+generated at 1672 × 941; detailed-sheet art was generated at 1672 × 941 or
+1536 × 1024. The larger export does not add native art detail.
+[Asset provenance](ASSETS.json) records exact hashes and dimensions.
 The art uses glass panels and role accents, while every step and boundary is
 also written as text. Color alone does not carry meaning.
 
@@ -47,7 +50,8 @@ Unknown and inapplicable answers do not count as passes. The local `.env` review
 inventories variable names without returning values. Adding a GitHub Actions
 secret requires explicit target selection and hidden terminal entry; Actions
 secrets are write-only and cannot be read back to a local `.env` through a
-symlink. Local execution needs a separately chosen local secret source. Findings
+symlink. Actions is disabled for this repository, and no workflow ships with
+the template. Local execution needs a separately chosen local secret source. Findings
 are advisory by default and do not prove a device is malware-free.
 
 ### Access Matrix and Agenda
@@ -80,3 +84,22 @@ one of these seven role registrations merely by appearing in a diagram or
 workbook. The [Access Matrix guide](../../docs/ACCESS-AND-MAP.md) and
 [Agent Beta, Agent1, and Agenda specification](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/docs/agent-beta-security-agenda.md)
 provide the operational details.
+
+## Detailed agent sheets
+
+The second set adds one [accessible folder, prompt, CLI, flow, and boundary
+transcript](agent-detail-guide.md) for every agent. Each sheet keeps the
+illustration separate from exact vector text and icons. Each CLI panel begins
+with a project-local Bash launcher help command; pipe-separated names denote
+alternative subcommands, not one literal shell line. The transcript also gives
+the PowerShell launcher form for Windows and host-specific limits.
+
+| Agent | Detailed sheet |
+| --- | --- |
+| Agent 0 | [Project coordination](../Infographics/systemx-agent-0-detail.svg) |
+| Agent X | [Events and due records](../Infographics/systemx-agent-x-detail.svg) |
+| Agent Y | [Bounded CLI and PR handoff](../Infographics/systemx-agent-y-detail.svg) |
+| Agent Z | [Fixed evidence review](../Infographics/systemx-agent-z-detail.svg) |
+| Agent Alpha | [AUTOBOT and Agenda](../Infographics/systemx-agent-alpha-detail.svg) |
+| Agent Beta | [Named BOT/DOT workspace](../Infographics/systemx-agent-beta-detail.svg) |
+| Agent1 | [Security and access](../Infographics/systemx-agent-1-detail.svg) |

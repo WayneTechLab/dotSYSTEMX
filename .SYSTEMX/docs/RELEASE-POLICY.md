@@ -155,14 +155,9 @@ application deployment. The optional [release counter](RELEASE-COUNTERS.md)
 reads GitHub release and deployment records separately and reports unknown when
 a provider read is unavailable.
 
-The repository ships a read-only
-[`template-ci.yml`](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/.github/workflows/template-ci.yml) workflow for
-selected Python versions on Ubuntu, Windows, and macOS. It uses read-only
-repository permissions, does not persist checkout credentials, and contains no
-deployment or secret operation. A workflow file is not a passing provider run;
-maintainers check its actual result after push. The matrix samples supported
-hosts and does not cover every Python/OS combination. Maintainers also run
-release validation and tests locally, then attach the resulting evidence to the release:
+GitHub Actions is disabled for this repository, and the template ships no
+workflow. Maintainers run release validation and tests locally, then attach
+source-matched evidence to the release:
 
 ```bash
 python3 -I -B .SYSTEMX/scripts/release.py --check

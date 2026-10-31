@@ -67,6 +67,20 @@ class SystemxTests(unittest.TestCase):
         self.assert_ok(self.run_cli("validate", "--template"))
         self.assertFalse((self.systemx / "project.json").exists())
 
+    def test_direct_entrypoint_preserves_spaced_path_and_child_exit(self):
+        marker = self.root / "SUBPROCESS-SHADOWED"
+        planted = self.systemx / "scripts" / "subprocess.py"
+        planted.write_text("from pathlib import Path\nPath(" + repr(str(marker)) +
+                           ").write_text('executed')\n")
+        self.assertIn(" ", str(self.runner))
+        result = subprocess.run([sys.executable, "-B", str(self.runner), "unknown-command"],
+                                cwd=self.temp.name,
+                                env={**os.environ, "PYTHONPATH": str(planted.parent)},
+                                text=True, capture_output=True, timeout=15)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("invalid choice", result.stderr)
+        self.assertFalse(marker.exists())
+
     def test_strict_template_rejects_extra_data_before_parsing_payload(self):
         path = self.systemx / "DATA/LARGE/unexpected.json"
         path.write_bytes(b"PRIVATE_DATA_NOT_VALID_JSON")

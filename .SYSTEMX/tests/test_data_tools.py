@@ -84,7 +84,8 @@ class DataToolsTests(unittest.TestCase):
                 # Reviewed text seeds permit normal Git CRLF checkout conversion.
                 for relative in data_tools.SCAFFOLD:
                     path = child / "DATA" / relative
-                    path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+                    original = path.read_bytes().replace(b"\r\n", b"\n")
+                    path.write_bytes(original.replace(b"\n", b"\r\n"))
                 data_tools.validate_template(child, defaults)
 
     @unittest.skipUnless(shutil.which("git"), "Git required for effective-rule checks")

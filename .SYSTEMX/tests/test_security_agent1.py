@@ -17,6 +17,13 @@ sys.path.insert(0, str(HERE / "scripts"))
 import security_agent1 as agent1  # noqa: E402
 
 
+# The file-backed Agent 1 paths use POSIX anchored handles. Windows support is
+# intentionally limited to metadata and filename-level checks until equivalent
+# containment can be proved; the unsupported-platform tests below still run.
+REQUIRES_ANCHORED_FILES = unittest.skipUnless(
+    agent1._secure_file_ops_available(), "POSIX anchored file operations required")
+
+
 class Agent1Tests(unittest.TestCase):
     def setUp(self):
         self.scratch = tempfile.TemporaryDirectory(prefix="systemx-agent1-")
@@ -88,6 +95,7 @@ class Agent1Tests(unittest.TestCase):
                  for p in self.project.rglob("*") if p.is_file() and ".git" not in p.parts}
         self.assertEqual(before, after)
 
+    @REQUIRES_ANCHORED_FILES
     def test_dotenv_inventory_and_migration_preview_never_return_values(self):
         secret = "SYNTHETIC_TOP_SECRET_VALUE"
         (self.project / ".env").write_text("# fixture\nexport API_KEY=" + secret + "\nAPI_KEY=duplicate\nBAD LINE\n")
@@ -102,6 +110,7 @@ class Agent1Tests(unittest.TestCase):
         self.assertEqual(preview["credentialClass"], "new")
         self.assertNotIn(secret, json.dumps(inventory) + json.dumps(preview))
 
+    @REQUIRES_ANCHORED_FILES
     def test_names_only_example_is_previewed_then_created_without_changing_source(self):
         secret = "SYNTHETIC_VALUE_NOT_FOR_EXAMPLE"
         source = self.project / ".env"
@@ -121,6 +130,7 @@ class Agent1Tests(unittest.TestCase):
         self.assertFalse(applied["localStoreWired"])
         self.assertTrue(applied["rotationStillRequired"])
 
+    @REQUIRES_ANCHORED_FILES
     def test_example_replacement_requires_existing_hash_guard(self):
         (self.project / ".env").write_text("KEY=synthetic\n")
         example = self.project / ".env.example"
@@ -142,6 +152,7 @@ class Agent1Tests(unittest.TestCase):
         self.assertTrue(result["changed"])
         self.assertEqual(example.read_text().splitlines()[-1], "KEY=")
 
+    @REQUIRES_ANCHORED_FILES
     def test_existing_credential_is_explicit_test_only(self):
         (self.project / ".env").write_text("KEY=synthetic\n")
         args = self.parse("env-migrate", "--env-file", ".env", "--repo", "owner/repo",
@@ -201,6 +212,7 @@ class Agent1Tests(unittest.TestCase):
         self.assertFalse(applied["registration"]["changed"])
         self.assertEqual(memory.read_text(), "Existing private checkpoint\n")
 
+    @REQUIRES_ANCHORED_FILES
     def test_setup_reconfiguration_is_previewed_and_sha_guarded(self):
         initial = self.parse("setup", "--apply", "--account-context", "personal", "--actor-role", "guest",
                              "--repo", "owner/repo", "--review-scope", "root", "--secret-target", "none",
@@ -236,6 +248,7 @@ class Agent1Tests(unittest.TestCase):
         registry = json.loads((self.project / ".SYSTEMX" / "AGENTS" / "REGISTRY.json").read_text())
         self.assertEqual([item["id"] for item in registry["agents"]].count("agent.1"), 1)
 
+    @REQUIRES_ANCHORED_FILES
     def test_child_systemxp_scope_and_complete_review_matrix(self):
         child = Path(self.scratch.name) / "child"
         child.mkdir()
@@ -265,6 +278,7 @@ class Agent1Tests(unittest.TestCase):
         report = agent1.assess(self.project, self.defaults)
         self.assertIn(".env", report["inventory"]["dotenvFileNames"])
 
+    @REQUIRES_ANCHORED_FILES
     def test_parent_directory_symlink_is_refused_for_dotenv_operations(self):
         external = Path(self.scratch.name) / "external"
         external.mkdir()
@@ -277,6 +291,7 @@ class Agent1Tests(unittest.TestCase):
                             self.parse("env-sanitize", "--env-file", "linked/.env", "--apply"))
         self.assertFalse((external / ".env.example").exists())
 
+    @REQUIRES_ANCHORED_FILES
     def test_post_open_byte_limit_blocks_growth_past_initial_stat(self):
         (self.project / ".env").write_bytes(b"TOKEN=" + b"x" * 64)
         with patch.object(agent1, "MAX_ENV_BYTES", 32), \
@@ -333,6 +348,20 @@ class Agent1Tests(unittest.TestCase):
             runner.assert_not_called()
         self.assertFalse((self.project / ".env.example").exists())
 
+    @unittest.skipIf(agent1._secure_file_ops_available(),
+                     "native unsupported-platform check requires Windows-style file handles")
+    def test_native_unsupported_platform_refuses_file_backed_review_and_env(self):
+        (self.project / ".env").write_text("TOKEN=synthetic\n")
+        (self.project / "answers.json").write_text('{"answers":[]}\n')
+        with self.assertRaisesRegex(ValueError, "unavailable on this OS"):
+            agent1.env_inventory(self.project, ".env")
+        with self.assertRaisesRegex(ValueError, "unavailable on this OS"):
+            agent1.dispatch(self.project, self.defaults,
+                            self.parse("env-sanitize", "--env-file", ".env", "--apply"))
+        with self.assertRaisesRegex(ValueError, "unavailable on this OS"):
+            agent1.review_answers(self.project, self.defaults, "answers.json")
+        self.assertFalse((self.project / ".env.example").exists())
+
     def test_unsupported_handle_platform_keeps_metadata_first_run_but_refuses_reconfigure(self):
         initial = self.parse("setup", "--apply", "--account-context", "personal", "--actor-role", "owner",
                              "--repo", "owner/repo", "--review-scope", "root", "--secret-target", "none",
@@ -349,6 +378,7 @@ class Agent1Tests(unittest.TestCase):
                                            "--secret-target", "repository", "--local-secret-store", "none",
                                            "--env-history-reviewed", "yes", "--rotation-decision", "needed"))
 
+    @REQUIRES_ANCHORED_FILES
     def test_secret_upload_requires_explicit_apply_and_hidden_terminal(self):
         (self.project / ".env").write_text("TOKEN=synthetic\n")
         setup_args = self.parse("setup", "--apply", "--account-context", "personal", "--actor-role", "owner",
@@ -364,6 +394,7 @@ class Agent1Tests(unittest.TestCase):
             self.assertFalse(any(call.args and call.args[0][:2] == ["gh", "secret"]
                                  for call in runner.call_args_list))
 
+    @REQUIRES_ANCHORED_FILES
     def test_guest_with_verified_repo_admin_can_set_and_read_back_name_only(self):
         self.setup_secret_target(actor_role="guest")
         secret = "SYNTHETIC_HIDDEN_INPUT"
@@ -402,6 +433,7 @@ class Agent1Tests(unittest.TestCase):
         self.assertFalse(result["valueVerified"])
         self.assertNotIn(secret, json.dumps(result))
 
+    @REQUIRES_ANCHORED_FILES
     def test_environment_readback_failure_is_unknown_after_set(self):
         self.setup_secret_target(target="environment")
         commands = []
@@ -432,6 +464,7 @@ class Agent1Tests(unittest.TestCase):
         self.assertEqual(result["metadataReadback"],
                          {"state": "unknown", "scope": "environment", "name": "TOKEN"})
 
+    @REQUIRES_ANCHORED_FILES
     def test_false_missing_or_failed_admin_capability_stops_before_secret_prompt(self):
         self.setup_secret_target(actor_role="guest")
         args = self.parse("env-migrate", "--env-file", ".env", "--repo", "owner/repo",

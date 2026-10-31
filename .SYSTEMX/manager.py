@@ -8,7 +8,26 @@ if __name__ == "__main__" and not __package__ and not sys.flags.isolated:
     if _bootstrap_os is None or not sys.executable:
         sys.exit("SYSTEMX manager requires Python's initialized OS module to enter isolated mode")
     try:
-        _bootstrap_os.execv(sys.executable, [sys.executable, "-I", "-B", __file__, *sys.argv[1:]])
+        _argv = [sys.executable, "-I", "-B", __file__, *sys.argv[1:]]
+        if _bootstrap_os.name == "nt":
+            # Keep paths with spaces intact and wait for the isolated child's
+            # actual exit status. Search only the interpreter's stdlib first.
+            _base = _bootstrap_os.path.normcase(_bootstrap_os.path.realpath(sys.base_prefix))
+            _stdlib = []
+            for _entry in sys.path:
+                if not _entry:
+                    continue
+                try:
+                    _real = _bootstrap_os.path.normcase(_bootstrap_os.path.realpath(_entry))
+                    if (_bootstrap_os.path.commonpath((_base, _real)) == _base
+                            and "site-packages" not in _real.lower().split(_bootstrap_os.sep)):
+                        _stdlib.append(_entry)
+                except (OSError, ValueError):
+                    pass
+            sys.path[:] = _stdlib
+            import subprocess as _bootstrap_subprocess
+            sys.exit(_bootstrap_subprocess.call(_argv))
+        _bootstrap_os.execv(sys.executable, _argv)
     except OSError as error:
         sys.exit("SYSTEMX manager could not enter isolated mode: " + str(error))
 

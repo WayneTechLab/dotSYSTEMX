@@ -129,7 +129,7 @@ Windows installation and record commands remain available.
 Before opting into Agent Y's draft PR, inspect the target repository's workflows,
 webhooks, protection rules, and visibility. Pushing a branch or opening a PR may
 trigger automation with its own permissions and usage; this template's
-read-only CI workflow does not control the destination repository. The
+disabled GitHub Actions setting does not control the destination repository. The
 `prepare` preview must be read before applying the handoff or running it.
 
 For the SYSTEMX manager itself, select reviewed release versions and prefer an

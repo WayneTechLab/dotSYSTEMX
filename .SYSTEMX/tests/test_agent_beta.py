@@ -66,7 +66,9 @@ class AgentBetaTests(unittest.TestCase):
             path = self.systemx / relative
             original = path.read_bytes()
             self.assertIn(b"\n", original)
-            path.write_bytes(original.replace(b"\n", b"\r\n"))
+            # Git may already have checked out text files with CRLF on Windows.
+            # Normalize first so this fixture never introduces CRCRLF.
+            path.write_bytes(original.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
         self.assertEqual(agent_beta._text(self.systemx, "AGENTB/MEMORY.md"),
                          agent_beta.BLANK_MEMORY)
         self.assertEqual(agent_beta._text(self.systemx, "AGENTB/.gitignore"),

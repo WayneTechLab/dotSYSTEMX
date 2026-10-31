@@ -382,10 +382,16 @@ class RootCoordinationTests(unittest.TestCase):
             args += ["--evidence", str(index).zfill(3) + "x" * 2045]
         before = self.payloads()
         for suffix in ([], ["--apply"]):
-            result = self.run_cli(*args, *suffix)
-            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
-            self.assertIn("ROOT output exceeds 128 KiB", result.stderr)
-            self.assertNotIn("Traceback", result.stderr)
+            if sys.platform == "win32":
+                # CreateProcess caps the entire command line below this 200 KiB
+                # fixture; exercise the same dispatch/output guard in process.
+                with self.assertRaisesRegex(ValueError, "ROOT output exceeds 128 KiB"):
+                    self.call("observe", *args[2:], *suffix)
+            else:
+                result = self.run_cli(*args, *suffix)
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                self.assertIn("ROOT output exceeds 128 KiB", result.stderr)
+                self.assertNotIn("Traceback", result.stderr)
             self.assertEqual(before, self.payloads())
         self.assertEqual(self.read(root_tools.MIRRORS)["observations"], [])
 

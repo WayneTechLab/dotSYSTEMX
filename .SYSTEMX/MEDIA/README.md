@@ -1,7 +1,8 @@
 # .SYSTEMX reference library
 
 This folder ships the current white paper, the four foundational field-guide
-JPEGs, four new feature guides, seven agent-role images, and readable text
+JPEGs, four beta feature guides, seven agent-role cards, seven detailed agent
+sheets, and readable text
 companions. Read only the references relevant to the selected task. Project
 facts, task history, memory, and owner payloads belong in the selected project
 records and DATA.
@@ -50,12 +51,17 @@ executable syntax and installed-version behavior.
 
 ## Current feature guides and agents
 
-The current set uses standalone AeroGlass-style SVGs with exact vector labels,
+The current set uses eighteen standalone AeroGlass-style SVGs with exact vector labels,
 embedded generated art, title/description metadata, and a
 [full text companion](Reference/current-visual-guide.md). Each SVG declares a
-7680 × 4320 canvas. Its art source was generated at 1672 × 941; the 8K raster
+7680 × 4320 canvas. Art sources were generated at 1672 × 941 or 1536 × 1024;
+the 8K raster
 release exports scale that art while preserving crisp vector-derived labels.
-Color is supplemental to printed names and boundaries.
+Color is supplemental to printed names and boundaries. The seven detailed
+sheets add folder locations, example prompts, CLI subcommand maps, process
+flows, and role boundaries. Their [full text transcript](Reference/agent-detail-guide.md)
+explains pipe-separated alternatives and gives project-local Bash and
+PowerShell launcher forms.
 
 | Guide | Standalone SVG | Text explanation |
 | --- | --- | --- |
@@ -73,6 +79,16 @@ Color is supplemental to printed names and boundaries.
 | Agent Alpha | [Open image](Infographics/systemx-agent-alpha.svg) | [AUTOBOT references](Reference/current-visual-guide.md#agent-role-cards) |
 | Agent Beta | [Open image](Infographics/systemx-agent-beta.svg) | [Named bot records](Reference/current-visual-guide.md#agent-role-cards) |
 | Agent1 | [Open image](Infographics/systemx-agent-1.svg) | [Security and access](Reference/current-visual-guide.md#agent-role-cards) |
+
+| Detailed agent sheet | Standalone SVG | Text transcript |
+| --- | --- | --- |
+| Agent 0 | [Open image](Infographics/systemx-agent-0-detail.svg) | [Folder, CLI, flow](Reference/agent-detail-guide.md#agent-0) |
+| Agent X | [Open image](Infographics/systemx-agent-x-detail.svg) | [Folder, CLI, flow](Reference/agent-detail-guide.md#agent-x) |
+| Agent Y | [Open image](Infographics/systemx-agent-y-detail.svg) | [Folder, CLI, flow](Reference/agent-detail-guide.md#agent-y) |
+| Agent Z | [Open image](Infographics/systemx-agent-z-detail.svg) | [Folder, CLI, flow](Reference/agent-detail-guide.md#agent-z) |
+| Agent Alpha | [Open image](Infographics/systemx-agent-alpha-detail.svg) | [Folder, CLI, flow](Reference/agent-detail-guide.md#agent-alpha) |
+| Agent Beta | [Open image](Infographics/systemx-agent-beta-detail.svg) | [Folder, CLI, flow](Reference/agent-detail-guide.md#agent-beta) |
+| Agent1 | [Open image](Infographics/systemx-agent-1-detail.svg) | [Folder, CLI, flow](Reference/agent-detail-guide.md#agent-1) |
 
 The images describe file-backed roles. They do not launch a model or service,
 grant account access, reconcile remote tasks, or accept an external result.

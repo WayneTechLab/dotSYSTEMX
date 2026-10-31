@@ -26,13 +26,13 @@
   "files": [
     {
       "file": "SYSTEMX-White-Paper.md",
-      "bytes": 15343,
-      "sha256": "fd85f551e0dc38af859617d60e863043645607de80387e6000c0cfcd193bda38"
+      "bytes": 15677,
+      "sha256": "300bcc5d9e3134bf9f5d824d6189523ebaf24249cf82d6dc7836a17a4cc66c1c"
     },
     {
       "file": "SYSTEMX-White-Paper.pdf",
-      "bytes": 20481,
-      "sha256": "965bfa0f44b167e9ea76797d53572a1f39e3fb696070b80265216dd46f85daa1"
+      "bytes": 20669,
+      "sha256": "8c281616a492fd9c754aff84d9be7e766af2f47401497a536c857b973299ae79"
     },
     {
       "file": "build_current_white_paper.py",

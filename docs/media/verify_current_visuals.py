@@ -55,7 +55,16 @@ def verify_svg(path: Path, item: dict) -> float:
              for element in elements if element.tag.endswith("rect") and
              element.attrib.get("fill") == BACKGROUND and
              "fill-opacity" not in element.attrib]
-    if ("0", "162") not in bands or ("754", "187") not in bands:
+    detail = item.get("kind") == "agent-detail"
+    if detail:
+        if not any(element.tag.endswith("rect") and element.attrib.get("width") == "1600" and
+                   element.attrib.get("height") == "900" and element.attrib.get("fill") == BACKGROUND
+                   for element in elements):
+            raise ValueError("Opaque detailed-sheet canvas missing: " + path.name)
+        if sum(element.tag.endswith("rect") and element.attrib.get("fill") == "#09263D"
+               for element in elements) < 5:
+            raise ValueError("Detailed-sheet text panels missing: " + path.name)
+    elif ("0", "162") not in bands or ("754", "187") not in bands:
         raise ValueError("Opaque title/caption bands missing: " + path.name)
     observed = []
     for element in elements:
@@ -72,7 +81,8 @@ def verify_svg(path: Path, item: dict) -> float:
                 if hashlib.sha256(data).hexdigest() != item["embeddedBackground"]["sha256"]:
                     raise ValueError("Embedded JPEG checksum mismatch: " + path.name)
         if element.tag.endswith("text"):
-            observed.append(contrast(element.attrib["fill"], BACKGROUND))
+            backgrounds = (BACKGROUND, "#09263D", "#103A57") if detail else (BACKGROUND,)
+            observed.extend(contrast(element.attrib["fill"], background) for background in backgrounds)
     if not observed or min(observed) < 4.5:
         raise ValueError("Overlay text contrast below WCAG AA normal-text ratio: " + path.name)
     return min(observed)
@@ -84,8 +94,8 @@ def main() -> None:
                         help="optional directory containing separate 8K JPEG release exports")
     args = parser.parse_args()
     index = json.loads(INDEX.read_text(encoding="utf-8"))
-    if index.get("schemaVersion") != 3 or len(index.get("assets", [])) != 15:
-        raise ValueError("Expected the 4+11 current asset inventory")
+    if index.get("schemaVersion") != 3 or len(index.get("assets", [])) != 22:
+        raise ValueError("Expected the 4+11+7 current asset inventory")
     ids = set()
     minimum = float("inf")
     for item in index["assets"]:
@@ -107,9 +117,9 @@ def main() -> None:
             if args.raster_dir:
                 raster = args.raster_dir / item["rasterExport"]["fileName"]
                 check_file(raster, item["rasterExport"])
-    print(f"Verified {len(ids)} current assets; 11 SVGs; minimum overlay contrast {minimum:.2f}:1")
+    print(f"Verified {len(ids)} current assets; 18 SVGs; minimum overlay contrast {minimum:.2f}:1")
     if args.raster_dir:
-        print("Verified 11 separate 8K raster export hashes")
+        print("Verified 18 separate 8K raster export hashes")
 
 
 if __name__ == "__main__":
