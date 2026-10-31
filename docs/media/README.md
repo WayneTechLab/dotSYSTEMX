@@ -1,8 +1,8 @@
 # Published reference library
 
-The beta.3 source distribution has twelve current infographic SVGs: four
-system maps, seven detailed agent guides, and one atlas built from the final
-individual guides. Each topic has one current file in
+The beta.4 source distribution retains twelve current infographic SVGs from
+the beta.3 visual edition: four system maps, seven detailed agent guides, and
+one atlas built from the final individual guides. Each topic has one current file in
 [the media library](../../.SYSTEMX/MEDIA/README.md). Use the
 [complete text alternative](../../.SYSTEMX/MEDIA/Reference/visual-guide.md)
 for the reading order, exact commands, paths, flow, and role boundaries.
@@ -37,9 +37,12 @@ artwork. The atlas is an overview; open the individual guides for small text.
 The [current builder](build_current_visuals.py) uses reviewed external art
 sources and adds deterministic labels, diagrams, and accessibility metadata.
 The [visual verifier](verify_current_visuals.py) checks exact current inventory,
-SVG structure, embedded-source integrity, and legibility. Raw generated art
-and Blender files stay in the owner archive outside the public template. The
-public repository carries one final SVG per current topic and no video files.
+SVG structure, embedded-source integrity, and legibility. Its media baseline
+may precede the template version when unchanged artwork is carried into a later
+release; the beta.3 asset record remains the provenance for this beta.4 paper
+release. Raw generated art and Blender files stay in the owner archive outside
+the public template. The public repository carries one final SVG per current
+topic and no video files.
 
 Before shipping a Python wheel, remove stale generated `build/` and
 `*.egg-info/` directories, then build from the reviewed source. Set the wheel
@@ -57,14 +60,15 @@ build output added an old image or document, if a file is missing, or if
 content differs. It requires only Python's standard library and does not
 change the source tree.
 
-## Retained research paper
+## Current technical paper
 
-[Portable Project Coordination for AI-Assisted Work, edition 2.1](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
-is retained with a [Markdown text alternative](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.md)
+[Portable Project Coordination for AI-Assisted Work, edition 2.2](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
+examines the `1.11.0-beta.4` source and package baseline. It includes a
+[Markdown text alternative](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.md)
 and [provenance](../../.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.json).
-That edition examines `1.11.0-beta.1`. It is a historical research baseline,
-not a claim that its text has been updated for beta.3. The PDF has selectable
-text but is not tagged PDF/UA. Edition 2.0 remains in
+The PDF has selectable text but is not tagged PDF/UA.
+[Edition 2.1](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
+examined beta.1; edition 2.0 remains in
 [immutable alpha.5 history](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-alpha.5).
 
 ## Previous visual editions and hosted films

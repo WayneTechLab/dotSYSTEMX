@@ -1,7 +1,8 @@
 # .SYSTEMX media library
 
-The beta.3 portable template ships **one current graphic per topic**: four system
-maps, seven detailed agent guides, and one combined atlas. The
+The beta.4 portable template retains **one current graphic per topic** from
+the beta.3 visual edition: four system maps, seven detailed agent guides, and
+one combined atlas. The
 [reading-order text alternative](Reference/visual-guide.md) provides every
 folder location, example prompt, CLI route, process, and boundary without
 requiring the images. The [asset record](Reference/ASSETS.json) lists exact
@@ -48,15 +49,15 @@ is supplemental to printed labels and the full text companion. These graphics
 explain source behavior; they do not activate providers, install a native IDE
 binding, grant access, certify a device, or deploy an application.
 
-## Retained white paper and historical media
+## Current white paper and historical media
 
-[Portable Project Coordination for AI-Assisted Work, edition 2.1](White-Paper/SYSTEMX-White-Paper.pdf)
-remains a selectable-text research paper with a
+[Portable Project Coordination for AI-Assisted Work, edition 2.2](White-Paper/SYSTEMX-White-Paper.pdf)
+is the current selectable-text technical paper with a
 [Markdown text alternative](White-Paper/SYSTEMX-White-Paper.md) and
 [edition provenance](White-Paper/SYSTEMX-White-Paper.json). It examines the
-`1.11.0-beta.1` implementation and is retained at that stated baseline; it is
-not silently relabeled as the current software release. Earlier edition 2.0
-remains in [immutable alpha.5 history](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-alpha.5/.SYSTEMX/MEDIA/White-Paper).
+`1.11.0-beta.4` source and package baseline. [Edition 2.1](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
+remains at its beta.1 baseline; edition 2.0 remains in
+[immutable alpha.5 history](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-alpha.5/.SYSTEMX/MEDIA/White-Paper).
 The PDF is not tagged PDF/UA; use the manuscript for a text alternative.
 
 The four old alpha field-guide JPEGs, beta.1 feature guides, agent cards, and

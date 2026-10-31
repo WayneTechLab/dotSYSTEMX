@@ -41,6 +41,17 @@ ALLOWED_ATTRIBUTES = {
     "text-anchor", "transform", "viewBox", "width", "x", "y",
 }
 VIDEO = {".mp4", ".mov", ".m4v", ".webm", ".mkv", ".avi", ".wmv"}
+FIRST_CURRENT_MEDIA_VERSION = "1.11.0-beta.3"
+
+
+def version_order(value: str) -> tuple[int, int, int, int, int]:
+    """Order supported release IDs without treating an art baseline as HEAD."""
+    match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)(?:-(alpha|beta)\.(\d+))?", value)
+    if not match:
+        raise ValueError("Invalid media or template release version: " + value)
+    major, minor, patch, channel, sequence = match.groups()
+    return (int(major), int(minor), int(patch),
+            {"alpha": 0, "beta": 1, None: 2}[channel], int(sequence or 0))
 
 
 def sha(data: bytes) -> str:
@@ -247,9 +258,12 @@ def main() -> None:
         raise ValueError("Public asset index contains a private host path")
     if index.get("schemaVersion") != 4 or index.get("product") != ".SYSTEMX":
         raise ValueError("Current media requires schemaVersion 4")
-    if index.get("softwareBaseline") != (
-            ROOT / ".SYSTEMX" / "VERSION").read_text(encoding="utf-8").strip():
-        raise ValueError("Media baseline does not match .SYSTEMX/VERSION")
+    baseline = index.get("softwareBaseline")
+    current = (ROOT / ".SYSTEMX" / "VERSION").read_text(encoding="utf-8").strip()
+    if not isinstance(baseline, str) or not (
+            version_order(FIRST_CURRENT_MEDIA_VERSION) <= version_order(baseline)
+            <= version_order(current)):
+        raise ValueError("Media baseline must be between its first publication and the current template")
     assets = index.get("assets", [])
     if tuple(item["id"] for item in assets) != EXPECTED:
         raise ValueError("Expected four maps, seven agents and one atlas in fixed order")

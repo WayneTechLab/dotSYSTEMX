@@ -30,8 +30,8 @@ SOURCE = HERE / "SYSTEMX-White-Paper.md"
 OUTPUT = HERE / "SYSTEMX-White-Paper.pdf"
 PROVENANCE = HERE / "SYSTEMX-White-Paper.json"
 TITLE = ".SYSTEMX: Portable Project Coordination for AI-Assisted Work"
-EDITION = "2.1"
-SOFTWARE = "1.11.0-beta.1"
+EDITION = "2.2"
+SOFTWARE = "1.11.0-beta.4"
 PREPARED = "2026-10-31"
 NAVY = colors.HexColor("#14263e")
 TEAL = colors.HexColor("#0d7892")
@@ -76,7 +76,7 @@ def furniture(canvas, doc):
     canvas.line(57, 51, width - 57, 51)
     canvas.setFont("Helvetica", 7.4)
     canvas.setFillColor(GRAY)
-    canvas.drawString(57, 39, "WAYNE TECH LAB  /  .SYSTEMX  /  WHITE PAPER 2.1")
+    canvas.drawString(57, 39, "WAYNE TECH LAB  /  .SYSTEMX  /  WHITE PAPER 2.2")
     canvas.drawRightString(width - 57, 39, f"{doc.page}")
     if doc.page > 1:
         canvas.setFont("Helvetica-Bold", 7.4)
@@ -119,7 +119,7 @@ def build():
         if paragraph:
             text = " ".join(part.strip() for part in paragraph)
             entry = Paragraph(inline(text), source_style if in_sources else body)
-            if text.startswith("`agenda decision-add` previews"):
+            if text.startswith(("Agent 0 coordinates", "`agenda decision-add` previews")):
                 story.append(KeepTogether([entry]))
             else:
                 story.append(entry)
@@ -132,7 +132,7 @@ def build():
         if line.startswith("## "):
             flush()
             name = line[3:]
-            if name.startswith("7. "):
+            if name.startswith("8. "):
                 story.append(PageBreak())
             in_sources = name == "Source notes"
             entry = Paragraph(html.escape(name), heading)
@@ -155,8 +155,8 @@ def build():
     document.build(story, onFirstPage=furniture, onLaterPages=furniture)
     pdf = PdfReader(str(OUTPUT))
     extracted = "\n".join(page.extract_text() or "" for page in pdf.pages)
-    for phrase in ("Access Matrix", "Agent Beta", "Agent 1", "1.11.0-beta.1",
-                   "GitHub Actions", "Blender", "Source notes"):
+    for phrase in ("Access Matrix", "Agent Beta", "Agent 1", "1.11.0-beta.4",
+                   "GitHub Actions", "Blender", "JSON-lines", "Source notes"):
         if phrase not in extracted:
             raise ValueError("PDF text missing: " + phrase)
 
@@ -186,11 +186,12 @@ def build():
         "builderDependency": (f"ReportLab {reportlab_version} and pypdf {pypdf_version} "
                               "(authoring only)"),
         "checksumMethod": "SHA-256 of exact manuscript and PDF bytes; metadata does not hash itself",
-        "historicalEdition": {
-            "edition": "2.0",
-            "technicalBaseline": "1.11.0-alpha.4",
-            "retainedAt": "v1.11.0-alpha.5",
-        },
+        "historicalEditions": [
+            {"edition": "2.1", "technicalBaseline": "1.11.0-beta.1",
+             "retainedAt": "v1.11.0-beta.1"},
+            {"edition": "2.0", "technicalBaseline": "1.11.0-alpha.4",
+             "retainedAt": "v1.11.0-alpha.5"},
+        ],
         "files": [file_record(SOURCE), file_record(OUTPUT), file_record(Path(__file__))],
     }
     PROVENANCE.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")

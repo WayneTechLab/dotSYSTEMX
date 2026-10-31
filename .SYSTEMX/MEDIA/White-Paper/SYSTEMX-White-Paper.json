@@ -1,43 +1,50 @@
 {
   "schemaVersion": 1,
   "title": ".SYSTEMX: Portable Project Coordination for AI-Assisted Work",
-  "edition": "2.1",
-  "technicalBaseline": "1.11.0-beta.1",
+  "edition": "2.2",
+  "technicalBaseline": "1.11.0-beta.4",
   "preparedOn": "2026-10-31",
   "author": "Lucas (SatoshiUNO)",
   "publisher": "Wayne Tech Lab LLC",
-  "publicationTag": "v1.11.0-beta.1",
+  "publicationTag": "v1.11.0-beta.4",
   "scope": "Current reusable public template; no adopter or host acceptance claimed",
-  "pages": 5,
+  "pages": 6,
   "figures": 0,
   "pageSize": "US Letter",
   "pdfTextSelectable": true,
   "pdfTaggedUa": false,
   "textAlternative": "SYSTEMX-White-Paper.md",
-  "pdfOutlineEntries": 9,
+  "pdfOutlineEntries": 10,
   "builder": "build_current_white_paper.py",
   "builderDependency": "ReportLab 4.4.9 and pypdf 6.10.0 (authoring only)",
   "checksumMethod": "SHA-256 of exact manuscript and PDF bytes; metadata does not hash itself",
-  "historicalEdition": {
-    "edition": "2.0",
-    "technicalBaseline": "1.11.0-alpha.4",
-    "retainedAt": "v1.11.0-alpha.5"
-  },
+  "historicalEditions": [
+    {
+      "edition": "2.1",
+      "technicalBaseline": "1.11.0-beta.1",
+      "retainedAt": "v1.11.0-beta.1"
+    },
+    {
+      "edition": "2.0",
+      "technicalBaseline": "1.11.0-alpha.4",
+      "retainedAt": "v1.11.0-alpha.5"
+    }
+  ],
   "files": [
     {
       "file": "SYSTEMX-White-Paper.md",
-      "bytes": 15677,
-      "sha256": "300bcc5d9e3134bf9f5d824d6189523ebaf24249cf82d6dc7836a17a4cc66c1c"
+      "bytes": 21154,
+      "sha256": "0cd978e8b4784a66ded5991f7ef2ab8ac5a7d04c3ad1b9562d7a075a47d556c7"
     },
     {
       "file": "SYSTEMX-White-Paper.pdf",
-      "bytes": 20669,
-      "sha256": "8c281616a492fd9c754aff84d9be7e766af2f47401497a536c857b973299ae79"
+      "bytes": 27182,
+      "sha256": "6008ef999e329f19e0795995ecb7bd02a2915e8c6cf32fa39219447ead87ab12"
     },
     {
       "file": "build_current_white_paper.py",
-      "bytes": 8250,
-      "sha256": "350818e2b62af411018a652a5effd0968dc5572c8e715b1a5d1a09f4d77a40a1"
+      "bytes": 8396,
+      "sha256": "690bfcbc7a9b1f0469db6fb955103a0e68f925fa27dfc4bdcba908e99cc3c7fd"
     }
   ]
 }

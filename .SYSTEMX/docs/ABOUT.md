@@ -55,5 +55,6 @@ Release IDs and history live in the
 The historical white paper has a separate
 [edition 1.2 citation erratum](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-alpha.5/.SYSTEMX/MEDIA/White-Paper/ERRATA.md);
 its published PDF and Markdown remain available in tagged history. The current
-[edition 2.1 paper](../MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) examines the
-beta implementation.
+[edition 2.2 paper](../MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) examines the
+`1.11.0-beta.4` source and package baseline. [Edition 2.1](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
+remains at its beta.1 baseline.

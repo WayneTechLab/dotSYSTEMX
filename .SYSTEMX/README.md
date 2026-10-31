@@ -110,12 +110,14 @@ make the installation inspectable while retaining your records in a backup.
 Read the [Technical Guide](docs/TECHNICAL-GUIDE.md),
 [Stack Guide](docs/STACK-GUIDE.md), and [About page](docs/ABOUT.md).
 
-The [retained white paper](MEDIA/White-Paper/SYSTEMX-White-Paper.pdf), edition 2.1,
-examines the `1.11.0-beta.1` implementation, its new roles and Access Matrix,
-task authority, security boundaries, and release evidence. Its five-page PDF
-has selectable text and linked navigation. Earlier edition 2.0 examined alpha.4
-and remains available at the immutable alpha.5 tag. Token savings remain a
-testable proposition, not a measured product claim.
+The [current white paper](MEDIA/White-Paper/SYSTEMX-White-Paper.pdf), edition 2.2,
+examines the `1.11.0-beta.4` source and package baseline, including the stock
+Agenda and Access Matrix catalogs, current beta.3 visual set, provider toolchain
+boundaries, and release evidence. Its PDF has selectable text and linked
+navigation. [Edition 2.1](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
+examined beta.1; edition 2.0 examined alpha.4 and remains at the immutable
+alpha.5 tag. Token savings remain a testable proposition, not a measured
+product claim.
 [Editable text](MEDIA/White-Paper/SYSTEMX-White-Paper.md) ·
 [Edition metadata](MEDIA/White-Paper/SYSTEMX-White-Paper.json) ·
 [Public paper guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/White-Paper).

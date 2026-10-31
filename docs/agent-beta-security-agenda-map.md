@@ -56,7 +56,7 @@ Selected .SYSTEMX root or Projects/NAME/.SYSTEMXP child
 |   +-- Manual source/package verification, immutable beta tag;
 |   |   GitHub Actions disabled for this repository
 |   +-- Release counter: on-demand GitHub software/media/deployment records
-|   +-- Current public images; retained beta.1 white paper and prior media
+|   +-- Current beta.3 images and edition 2.2 paper; prior editions tagged
 |   +-- Raw Blender/large authoring data: external or ignored storage
 |
 +-- External authorities

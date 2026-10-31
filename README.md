@@ -10,7 +10,7 @@ another session can understand the work and continue from an explicit checkpoint
 The format is stack-neutral: it does not require a particular AI model, editor,
 application framework, or cloud provider.
 
-**Template version:** `1.11.0-beta.3` · **Python package metadata:** `1.11.0b3`
+**Template version:** `1.11.0-beta.4` · **Python package metadata:** `1.11.0b4`
 
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
@@ -51,11 +51,11 @@ On macOS or Linux, run this from the containing project directory:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.3"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.4"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.3
-systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.3 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.4
+systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.4 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
 systemx run --target "$PWD" --offline -- onboard plan
@@ -316,11 +316,12 @@ the Agent Beta, Agent1, or Agenda features. No video file ships in this codebase
 ## White paper and operating manual
 
 [**Portable Project Coordination for AI-Assisted Work**](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
-is the retained five-page technical white paper, edition 2.1, examining
-the `1.11.0-beta.1` baseline. It does not describe the beta.2 stock catalogs
-or the beta.3 visual edition.
-Historical edition 2.0 examined alpha.4 and was published
-with alpha.5; its original bytes remain available in that tagged history.
+is the current technical white paper, edition 2.2, examining the
+`1.11.0-beta.4` source and package baseline. It covers the beta.2 stock
+catalogs and beta.3 visual edition with their source, local, and provider
+boundaries. [Edition 2.1](https://github.com/WayneTechLab/dotSYSTEMX/blob/v1.11.0-beta.1/.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
+examined beta.1; [edition 2.0](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-alpha.5/.SYSTEMX/MEDIA/White-Paper)
+examined alpha.4. Their original bytes remain in tagged history.
 Resource examples are illustrative, not measured savings or autonomous
 completion claims.
 

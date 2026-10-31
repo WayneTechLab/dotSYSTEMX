@@ -4,6 +4,21 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-beta.4 — Current white paper edition
+
+- Publish white-paper edition 2.2 against the beta.4 source baseline, with a
+  selectable-text PDF, Markdown alternative, and exact-byte provenance.
+  Edition 2.1 remains available at the immutable beta.3 tag and in the
+  separately verified owner archive.
+- Correct the paper's current media inventory to four system maps, seven
+  agent guides, and one atlas. Document beta.2 stock catalogs and Agent 0
+  roster/provider navigation while preserving source, host, and provider
+  acceptance boundaries.
+- Keep the current beta.3 visual art set and its 8K export pack at their
+  original release identity; this paper-only release adds no video or raw
+  authoring media. Continue the beta prerelease line with Python package
+  spelling `1.11.0b4`. GitHub Actions remains disabled for this repository.
+
 ## 1.11.0-beta.3 — Current visual atlas and media consolidation
 
 - Replace the four historical-baseline JPEG field guides and overlapping
