@@ -40,7 +40,10 @@ def _text(root, relative):
     raw = path.read_bytes()
     if len(raw) > MAX_FILE_BYTES or b"\x00" in raw:
         raise ValueError("Agent Beta files must be bounded UTF-8 text without NUL bytes: " + relative)
-    return raw.decode("utf-8")
+    text = raw.decode("utf-8").replace("\r\n", "\n")
+    if "\r" in text:
+        raise ValueError("Agent Beta text contains a bare carriage return: " + relative)
+    return text
 
 
 def _json(root, relative):

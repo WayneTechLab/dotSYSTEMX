@@ -60,6 +60,31 @@ class AgentBetaTests(unittest.TestCase):
         self.assertEqual(self.setup_beta()["add"], [])
         self.assertEqual(after, self.files())
 
+    def test_crlf_beta_memory_and_ignore_seeds_validate_and_initialize(self):
+        for relative in ("AGENTB/MEMORY.md", "AGENTB/.gitignore",
+                         "templates/agentb/MEMORY.md", "templates/agentb/.gitignore"):
+            path = self.systemx / relative
+            original = path.read_bytes()
+            self.assertIn(b"\n", original)
+            path.write_bytes(original.replace(b"\n", b"\r\n"))
+        self.assertEqual(agent_beta._text(self.systemx, "AGENTB/MEMORY.md"),
+                         agent_beta.BLANK_MEMORY)
+        self.assertEqual(agent_beta._text(self.systemx, "AGENTB/.gitignore"),
+                         agent_beta.BLANK_GITIGNORE)
+        agent_beta.validate_template(self.systemx, self.systemx)
+        before = self.files()
+        self.assertEqual(agent_beta.initialize(self.systemx, self.systemx)["register"], ["agent.b"])
+        self.assertEqual(before, self.files())
+        self.assertTrue(agent_beta.initialize(self.systemx, self.systemx, apply=True)["applied"])
+        self.assertEqual((self.systemx / agent_beta.MEMORY).read_bytes(),
+                         agent_beta.BLANK_MEMORY.encode("utf-8"))
+        agent_beta.validate_optional(self.systemx)
+
+        ignore = self.systemx / "AGENTB/.gitignore"
+        ignore.write_bytes(b"/.SYSTEMXB-*/\r")
+        with self.assertRaisesRegex(ValueError, "bare carriage return"):
+            agent_beta.validate_optional(self.systemx)
+
     def test_populated_root_does_not_seed_child_bot_index(self):
         self.setup_beta()
         agent_beta.add_bot(self.systemx, "ROOTBOT", apply=True)
