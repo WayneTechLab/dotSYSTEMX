@@ -2,14 +2,16 @@
 
 Agent Y is the optional **CLI delegation** role (`agent.y`). Agent 0 remains the
 coordinator for the selected root or `.SYSTEMXP` project. Agent Y carries one
-bounded task into a separately installed command-line AI provider, such as Codex
-CLI or GitHub Copilot CLI, then returns the result for integration. It is a role
-and workflow, not a second task ledger, a model router, a credential broker, or
+bounded task into a separately installed command-line coding agent, such as
+OpenAI Codex CLI, GitHub Copilot CLI, or Meta Muse Code, then returns the
+result for integration. Agent Y is a role and workflow, not a second task
+ledger, a model router, a credential broker, or
 an automatically running service. The host app's subagents and external CLI
 processes may work at the same time, but each needs a distinct write scope.
 For example, Agent 0 in the Codex app or VS Code may dispatch native subagents
-inside that app while Agent Y runs a separate terminal Codex/Copilot process for
-one owned task. The CLI process does not inherit the app conversation.
+inside that app while Agent Y runs a separate terminal Codex, Copilot, or
+Muse Code process for one owned task. The CLI process does not inherit the app
+conversation.
 
 The user chooses the installed provider per task and confirms which account
 that CLI will actually use; Agent Y does not switch accounts. Model and
@@ -58,9 +60,44 @@ bash .SYSTEMX/SYSTEMX.sh agent-y providers
 
 For a registered child, use `projects roles-init --project NAME --apply` and
 `projects agent-y COMMAND --project NAME`. The provider check reports local
-availability; it does not install software or authenticate an account. Built-in
-provider names are `codex` and `copilot`; an explicitly configured adapter may
-be used when supported by the selected runner. Choose one provider per task.
+availability; it does not install software or authenticate an account. Use
+`onboard plan --provider CHOICE` to review the broader product catalog before
+preparing any handoff. That catalog does not expand Agent Y's executable
+adapters. Choose one provider per task.
+
+| Product or surface | Agent Y treatment |
+| --- | --- |
+| [OpenAI Codex CLI](https://learn.chatgpt.com/docs/codex/cli), [GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview) | Built-in `codex` and `copilot` task adapters when installed, authorized, and selected. |
+| [Meta Muse Code](https://dev.meta.ai/docs/muse-code) | Built-in `muse` task adapter when installed, authorized, and selected; a live provider run is still unverified. |
+| [xAI Grok Build](https://docs.x.ai/build/overview) | Separate `grok` terminal coding agent; onboarding discovers its name, but this release supplies no reviewed Agent Y execution adapter. Review and operate it manually outside an Agent Y job. |
+| [Kiro CLI](https://kiro.dev/docs/cli/) | Amazon's current terminal coding tool following the [Q Developer CLI rebrand](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/upgrade-to-kiro.html). Onboarding only; no built-in Agent Y Kiro adapter or implied AWS account authority. |
+| [Claude Code](https://code.claude.com/docs/en/cli-reference), [OpenCode](https://dev.opencode.ai/v2/docs/cli), [BLACKBOX AI CLI](https://docs.blackbox.ai/features/blackbox-cli/commands-reference) | Three officially documented CLI examples for manual provider setup; no built-in Agent Y adapter. Check provider login, background or multi-agent behavior, and branch ownership before any configured handoff. |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/cli-reference.md), [Cursor CLI](https://cursor.com/docs/cli/installation), [Aider](https://aider.chat/docs/usage.html) | Three more documented CLI examples for manual setup. Cursor's command is the generic `agent`, so onboarding does not infer its identity from that name. Aider can commit automatically; no built-in adapter is supplied. |
+| [Codex SDK](https://learn.chatgpt.com/docs/codex-sdk), [Kiro IDE](https://kiro.dev/docs/getting-started/installation/), [Kiro Web](https://kiro.dev/docs/web/setup/) | Application, IDE, and cloud-agent surfaces with separate authentication and permission boundaries; none is an Agent Y CLI adapter. Kiro Web can be an Agent Beta offline reference. |
+| [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html) | Host infrastructure and account tooling. A selected IAM Identity Center profile is independent of Kiro sign-in and Agent Y task handoff. |
+| [Codex IDE extension](https://learn.chatgpt.com/docs/codex/ide), [OpenAI dot](https://learn.chatgpt.com/docs/dots), [Grok Bot](https://docs.x.ai/grok-bot/overview), personal [Muse](https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/) | IDE, cloud agent, or Bot surfaces, not an Agent Y CLI. Record external Bot identity through Agent Beta only when useful; a record is not a connection. |
+| [Meta Model API](https://dev.meta.ai/docs/overview) | API for an application or custom agent, not a Muse Code CLI login or Agent Y adapter. |
+
+The Muse adapter invokes `muse exec` with an isolated worktree and private
+task packet, requests no session log, and keeps contributor mode off. It does
+not bypass Muse's normal approval, sandbox, network, or
+[workspace trust and authentication](https://dev.meta.ai/docs/muse-code/auth).
+Run `muse --version` and an interactive `muse` session in the selected project
+to review provider sign-in before a handoff. A newly created Agent Y worktree
+may require a separate trust decision; the source-tested adapter has not been
+validated against a live Muse account. A missing trust or account prerequisite
+can stop the run without producing accepted task evidence.
+
+An explicitly configured CLI adapter may be used only after its own argument,
+input, output, and termination behavior has been reviewed for this controller.
+It does not make every installed program compatible. `agent-y providers`
+and the selected runner's `agent-y prepare --help` are the current executable
+capability readback; `onboard` is a navigation aid.
+The six additional CLI entries above are examples with documented commands,
+not a popularity ranking or a compatibility assertion. Their sign-in,
+model access, filesystem writes, background processes, and Git defaults stay
+under each provider's own controls. The stock template selects none of them.
+
 `prepare --model NAME` is an optional selector for built-in providers only;
 confirm that the installed CLI and account actually support the model. A
 `configured` handoff instead needs a reviewed regular, unlinked absolute

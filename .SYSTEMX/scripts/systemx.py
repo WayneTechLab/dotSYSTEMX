@@ -92,7 +92,9 @@ for _name, _path in (
         ("session_settings", SCRIPTS / "session_settings.py"),
         ("release_counters", SCRIPTS / "release_counters.py"),
         ("data_tools", SCRIPTS / "data_tools.py"),
-        ("root_coordination", SCRIPTS / "root_coordination.py")):
+        ("root_coordination", SCRIPTS / "root_coordination.py"),
+        ("agent_guide_bridge", SCRIPTS / "agent_guide_bridge.py"),
+        ("onboarding", SCRIPTS / "onboarding.py")):
     _load_local(_name, _path)
 
 import project_memory
@@ -109,6 +111,8 @@ import session_settings
 import release_counters
 import data_tools
 import root_coordination
+import agent_guide_bridge
+import onboarding
 
 SYSTEMX = DEFAULTS
 PROJECT_ROOT = SYSTEMX.parent
@@ -136,6 +140,7 @@ REQUIRED = (
     "docs/TECHNICAL-GUIDE.md", "docs/STACK-GUIDE.md", "docs/ABOUT.md", "docs/EFFICIENCY.md",
     "versions.py", "tests/test_versions.py", "docs/RELEASE-POLICY.md",
     "docs/ONE-SHOT-PROJECT.md", "docs/SHARED-WORKSPACES.md", "docs/CLI-TOOLS.md",
+    "docs/TOOLCHAIN-IO.md",
     "MEDIA/Infographics/systemx-field-guide-01-overview-4k.jpg",
     "MEDIA/Infographics/systemx-field-guide-02-agent-coordination-4k.jpg",
     "MEDIA/Infographics/systemx-field-guide-03-autobot-panel-4k.jpg",
@@ -168,8 +173,8 @@ REQUIRED = (
     "MEDIA/White-Paper/SYSTEMX-White-Paper.md",
     "MEDIA/White-Paper/SYSTEMX-White-Paper.pdf",
     "MEDIA/White-Paper/build_current_white_paper.py",
-    "docs/AUTOBOT.md", "docs/DATA.md",
-) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED + autobots.REQUIRED + agent_beta.REQUIRED + security_agent1.REQUIRED + agenda_access.REQUIRED + session_service.REQUIRED + session_settings.REQUIRED + data_tools.REQUIRED + root_coordination.REQUIRED
+    "docs/AUTOBOT.md", "docs/DATA.md", "docs/AGENT-0-ROSTER.md",
+) + project_memory.REQUIRED + project_workspaces.REQUIRED + agent_standards.REQUIRED + autobots.REQUIRED + agent_beta.REQUIRED + security_agent1.REQUIRED + agenda_access.REQUIRED + session_service.REQUIRED + session_settings.REQUIRED + data_tools.REQUIRED + root_coordination.REQUIRED + onboarding.REQUIRED + ("scripts/agent_guide_bridge.py", "tests/test_agent_guide_bridge.py")
 BLANK_RECORDS = (
     "GLOBAL/CONTEXT.md", "GLOBAL/ACCESS-MATRIX.md",
     "PLAN/MASTER-PLAN.md", "PLAN/MAP.md", "MEMORY/PROJECT.md",
@@ -505,7 +510,10 @@ def menu():
               "24": ("agent-1", "status"), "25": ("agent-1", "setup"),
               "26": ("agent-1", "check"), "27": ("agenda", "status"),
               "28": ("agenda", "table"), "29": ("service", "status"),
-              "31": ("session-settings",), "32": ("release-counters",)}
+              "31": ("session-settings",), "32": ("release-counters",),
+              "33": ("root", "roster"), "34": ("onboard", "status"),
+              "35": ("onboard", "plan"), "36": ("onboard", "bridge"),
+              "37": ("agent-y", "providers"), "38": ("agenda", "catalog")}
     while True:
         print("\n.SYSTEMX\n1) Validate template\n2) Doctor\n3) Initialize config\n"
               "4) Project checks\n5) Development\n6) Build\n7) Preview deploy plan\n8) Deploy\n"
@@ -522,7 +530,11 @@ def menu():
               "26) Agent1 All-In-One advisory check\n27) Agenda and Access Matrix status\n"
               "28) Agenda and Access Matrix table\n29) Local session service status\n"
               "30) Update and release guide\n31) Scoped session settings and Rules hashes\n"
-              "32) Public GitHub release and deployment record counters\n0) Exit")
+              "32) Public GitHub release and deployment record counters\n"
+              "33) Agent 0 agent, AUTOBOT, BOT, and CLI channel roster\n"
+              "34) First-time provider and security status\n35) First-time provider setup plan\n"
+              "36) Preview project AGENTS.md instruction bridge\n37) Installed CLI names\n"
+              "38) Agenda settings and access decision rules\n0) Exit")
         try:
             choice = input("Choice: ").strip()
         except EOFError:
@@ -644,6 +656,7 @@ def main(argv=None):
     session_settings.add_cli(subparsers)
     data_tools.add_cli(subparsers)
     root_coordination.add_cli(subparsers)
+    onboarding.add_cli(subparsers)
     project_workspaces.add_cli(subparsers)
     args = parser.parse_args(argv)
     if args.action == "help":
@@ -663,14 +676,17 @@ def main(argv=None):
         if args.action in set().union(autobots.COMMANDS, agent_beta.COMMANDS,
                                       security_agent1.COMMANDS, agenda_access.COMMANDS,
                                       session_service.COMMANDS, session_settings.COMMANDS,
-                                      data_tools.COMMANDS,
+                                      data_tools.COMMANDS, onboarding.COMMANDS,
                                       root_coordination.COMMANDS):
             module = next(item for item in (autobots, agent_beta, security_agent1,
-                                            agenda_access, session_service, session_settings, data_tools,
+                                            agenda_access, session_service, session_settings, data_tools, onboarding,
                                             root_coordination) if args.action in item.COMMANDS)
             result = module.dispatch(SYSTEMX, DEFAULTS, args)
             if args.action != "service" or args.service_action != "start":
-                print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
+                if args.action == "onboard" and getattr(args, "format", "json") == "text":
+                    print(onboarding.format_text(result))
+                else:
+                    print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
             return 0
         if args.action == "alias":
             return dispatch("alias-create" if args.create else "paths")

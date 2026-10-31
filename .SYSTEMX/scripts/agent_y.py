@@ -218,7 +218,7 @@ def load_jobs(root):
             raise ValueError("Duplicate Agent Y job ID")
         ids.add(job["id"])
         if (not isinstance(job["state"], str) or job["state"] not in STATES or
-                not isinstance(job["provider"], str) or job["provider"] not in {"codex", "copilot", "configured"}):
+                not isinstance(job["provider"], str) or job["provider"] not in {"codex", "copilot", "muse", "configured"}):
             raise ValueError("Invalid Agent Y state or provider")
         if (not isinstance(job["task"], str) or not re.fullmatch(r"TASK-[0-9]{3,}", job["task"]) or
                 not isinstance(job["repoId"], str) or (job["repoId"] and not re.fullmatch(
@@ -400,7 +400,7 @@ def _bound_repo(sidecar, job):
 
 def providers():
     return {name: {"installed": shutil.which(name) is not None, "execution": "opt-in; auth and model availability not verified"}
-            for name in ("codex", "copilot", "gh")}
+            for name in ("codex", "copilot", "muse", "gh")}
 
 
 def prepare(root, args):
@@ -524,6 +524,15 @@ def _provider_argv(job, worktree, packet_file=None, sidecar=None):
         instruction = "Read the local task packet at .agent-y-packet.md; edit only its allowed paths; do not push or alter PRs."
         argv = [executable, "-p", instruction, "--no-ask-user", "--output-format=json",
                 "--allow-tool=write", "--disable-builtin-mcps"]
+        if job["model"]:
+            argv += ["--model", job["model"]]
+        return argv, False
+    if job["provider"] == "muse":
+        if packet_file is None:
+            raise ValueError("Muse Code CLI is unavailable or packet is missing")
+        argv = [executable, "exec", "--workspace", str(worktree),
+                "--prompt-file", str(packet_file),
+                "--no-session-log", "--contributor-mode", "off"]
         if job["model"]:
             argv += ["--model", job["model"]]
         return argv, False
@@ -687,15 +696,18 @@ def run(root, args):
         _check_allowed_pre_run(worktree, job["allowPaths"])
         packet = _packet(root, job, prompt_bytes)
         packet_file = worktree / ".agent-y-packet.md"
-        if job["provider"] == "copilot":
-            with packet_file.open("x", encoding="utf-8") as output:
-                os.chmod(packet_file, 0o600)
-                output.write(packet)
+        packet_created = False
         try:
+            if job["provider"] in {"copilot", "muse"}:
+                flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0)
+                descriptor = os.open(packet_file, flags, 0o600)
+                packet_created = True
+                with os.fdopen(descriptor, "w", encoding="utf-8") as output:
+                    output.write(packet)
             argv, send_stdin = _provider_argv(job, worktree, packet_file, sidecar)
             exit_code = _run_provider(argv, worktree, packet, send_stdin=send_stdin, sidecar=sidecar)
         finally:
-            if packet_file.exists():
+            if packet_created and (packet_file.exists() or packet_file.is_symlink()):
                 packet_file.unlink()
         if exit_code:
             raise ValueError("Selected CLI provider exited without success ({}); no push or PR was attempted".format(exit_code))
@@ -1137,7 +1149,7 @@ def add_cli(subparsers, scope=None):
     scope(subparsers.add_parser("providers", help="detect installed CLI names; no model or auth probe"))
     command = scope(subparsers.add_parser("prepare", help="preview an explicit Agent 0 to CLI handoff"))
     command.add_argument("--task", required=True)
-    command.add_argument("--provider", choices=("codex", "copilot", "configured"), required=True)
+    command.add_argument("--provider", choices=("codex", "copilot", "muse", "configured"), required=True)
     command.add_argument("--repo", required=True)
     command.add_argument("--base", required=True)
     command.add_argument("--prompt-file", required=True)

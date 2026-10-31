@@ -1,6 +1,6 @@
 # Agent Beta, Agent1, and Agenda: architecture map
 
-This is a text map of the `1.11.0-beta.1` design. It separates record
+This is a text map of the `1.11.0-beta.2` design. It separates record
 ownership, runtime processes, and external authorities. A file link or role
 name does not prove that a service, provider connection, or permission exists.
 
@@ -12,6 +12,7 @@ Selected .SYSTEMX root or Projects/NAME/.SYSTEMXP child
 +-- Agent 0: canonical task planning, delegation, integration, acceptance
 |   +-- WORK/TASKS.json: one task status and acceptance authority
 |   +-- GLOBAL/CONTEXT.md and PLAN/: accepted project facts and milestones
+|   +-- root roster: read-only role and instance navigation
 |
 +-- Agent Beta (agent.b): optional BOT/DOT workspace metadata
 |   +-- AGENTB/: named offline workspaces, kind, canonical task references
@@ -34,7 +35,9 @@ Selected .SYSTEMX root or Projects/NAME/.SYSTEMXP child
 |   +-- Read-only stdio session: status/start; ping/capabilities/assess/stop
 |
 +-- Agent Alpha (agent.a): selected reference requests
-|   +-- Agenda: blank settings and access-matrix view
+|   +-- Agenda: stock setting definitions; selected options empty
+|   +-- Access Decision Rules: stock outcomes and review fields;
+|   |   selected project decisions empty
 |   +-- AUTOBOT/: existing bounded reference panel
 |   +-- No scheduling or notification process
 |   +-- session-settings --compact: rule count and revision digest
@@ -43,15 +46,17 @@ Selected .SYSTEMX root or Projects/NAME/.SYSTEMXP child
 |   +-- due is read-only; external scheduler remains separate
 |
 +-- Agent Y: one authorized CLI provider handoff in JOBS.json
+|   +-- Multiple installed CLI choices may coexist; select one per task
 |   +-- Provider account, worktree, branch/PR are separately verified
 |
 +-- Agent Z: requested evidence review
 |
 +-- Template lifecycle (outside selected project task authority)
 |   +-- VERSION + SOURCE.json + Python package metadata + release manifest
-|   +-- Read-only template CI, local verification, immutable beta tag
+|   +-- Manual source/package verification, immutable beta tag;
+|   |   GitHub Actions disabled for this repository
 |   +-- Release counter: on-demand GitHub software/media/deployment records
-|   +-- Current public images and white paper; prior media in tagged history
+|   +-- Current public images; retained beta.1 white paper and prior media
 |   +-- Raw Blender/large authoring data: external or ignored storage
 |
 +-- External authorities
@@ -72,10 +77,13 @@ Selected .SYSTEMX root or Projects/NAME/.SYSTEMXP child
 | Agent1 | Access matrix | Read/view and proposed decisions | Matrix describes reviewed intent; actual OS/GitHub ACL is checked separately. |
 | Private `.env` | Agent1 inventory / GitHub Actions | Names-only inventory; optional one-name interactive Actions set | Confirm account/repo/scope, enter one value through hidden input, test the consumer, rotate as needed. The current command does not import into a local store or read values from `.env`. |
 | IDE/client | Agent1 stdio session | Bounded JSON-lines requests | Explicit launch, selected scope, fixed methods, no credential fields, no network listener or daemon. |
-| Agent Alpha | Agenda | Read selected blank settings/access view | No recurrence or notification side effect. |
+| Template catalogs | Agenda and Access Matrix | Fixed AUTOBOT choices, `unset` defaults, decision outcomes and required review fields | Reference definitions only; no selected option, project decision, IAM grant, or automatic execution. |
+| Agent Alpha | Agenda | Read selected options and access view, initially empty | No recurrence or notification side effect. |
 | Agent X | `EVENTS/` | Event/due observations | `due` is read-only; external scheduler controls any actual recurrence. |
 | Agent Y | Provider/GitHub | Scoped CLI handoff | Verify provider account, binary, repo, branch, write scope, and actual PR state under Agent Y's existing contract. |
 | Agent 0 | `WORK/TASKS.json` | Acceptance and current state | Original evidence and selected scope; no other component creates a competing status authority. |
+| Agent 0 | `root roster` | Read selected-scope role/instance references and existing setup-command pointers | Local records only; no provider login, execution, or grant is verified. |
+| Agent Y | `agent-y providers` | Detect installed external CLI names | Several CLIs may be installed; choose and verify one account/executable for each bounded task. GitHub CLI `gh` serves PR operations separately. |
 | Selected IDE or harness | `session-settings` | One read-only packet with Beta/Agent1/Agenda status and bounded Rules paths and SHA-256 hashes | No Rules text, secret, provider account, access grant, or live cloud state is asserted. |
 | Selected reviewer | `agenda decision-add` | One revision-guarded selected-scope decision for a fixed role or named instance | Preview before apply; a record of intent is not proof of actor identity or an IAM change. |
 | Maintainer | `release_counters.py` | Timestamped GitHub release and deployment record counts | `unknown` on missing provider data; a template release is not an application deployment. |
@@ -104,6 +112,11 @@ agent registration, BOT/DOT creation, provider authentication, and native
 subagent identity are separate observations. A workbook row or CLI decision
 does not grant access. The checked-in XLSX is the stock catalog; selected-scope
 changes live in canonical JSON and can be exported as CSV for spreadsheet use.
+The [Agenda settings catalog](../.SYSTEMX/AUTOBOT/AGENDA-SETTINGS.json) and
+[Access Decision Rules catalog](../.SYSTEMX/GLOBAL/ACCESS-DECISION-RULES.json)
+define stock values and review conditions. `agenda catalog` reads them without
+creating an option or decision. Use `agenda status` to inspect the selected
+scope and revisions before any preview/apply action.
 
 ## Ownership and lifecycle
 

@@ -643,6 +643,98 @@ class AgentYTests(unittest.TestCase):
         self.assertEqual(task["owner"], "agent.y")
         self.assert_ok(self.cli("agent-y", "validate"))
 
+    def test_muse_code_uses_private_prompt_file_and_keeps_sandbox(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        invocation = Path(self.temp.name) / "muse-invocation.json"
+        env["META_API_KEY"] = "sentinel-never-expose-to-provider"
+        env["GH_TOKEN"] = "sentinel-never-expose-to-provider"
+        self.fake_executable(folder, "muse", "import json, os, stat, sys\n"
+                             "from pathlib import Path\n"
+                             "argv = sys.argv[1:]\n"
+                             "packet_file = Path(argv[argv.index('--prompt-file') + 1])\n"
+                             "worktree = Path(argv[argv.index('--workspace') + 1])\n"
+                             "packet = packet_file.read_text()\n"
+                             "(worktree / 'app.txt').write_text('Approved fixture change\\n')\n"
+                             "Path(" + repr(str(invocation)) + ").write_text(json.dumps({"
+                             "'argv': argv, 'cwd': os.getcwd(), 'packet': str(packet_file), "
+                             "'mode': stat.S_IMODE(packet_file.stat().st_mode), "
+                             "'got_prompt': " + repr(PROMPT_MARKER) + " in packet, "
+                             "'leaked': [name for name in ('META_API_KEY', 'GH_TOKEN') if name in os.environ]}))\n")
+        available = self.value("agent-y", "providers", env=env)
+        self.assertTrue(available["providers"]["muse"]["installed"])
+        prepared = self.value(*self.prepare_args(provider="muse"),
+                              "--model", "muse-spark-1.3", "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        self.assertEqual(prepared["job"]["provider"], "muse")
+        self.assertFalse(invocation.exists())
+        self.assertFalse(self.value("agent-y", "run", identifier, env=env)["applied"])
+        self.assertFalse(invocation.exists())
+        result = self.value("agent-y", "run", identifier, "--apply", env=env)
+        observed = json.loads(invocation.read_text())
+        argv = observed["argv"]
+        self.assertEqual(argv[0], "exec")
+        self.assertNotIn("--disable-approval", argv)
+        self.assertIn("--no-session-log", argv)
+        self.assertEqual(argv[argv.index("--contributor-mode") + 1], "off")
+        self.assertEqual(argv[argv.index("--model") + 1], "muse-spark-1.3")
+        self.assertNotIn("--yolo", argv)
+        self.assertNotIn("--disable-sandbox", argv)
+        self.assertNotIn("--trust-workspace", argv)
+        self.assertTrue(observed["got_prompt"])
+        self.assertEqual(observed["leaked"], [])
+        if os.name != "nt":
+            self.assertEqual(observed["mode"], 0o600)
+        self.assertFalse(Path(observed["packet"]).exists())
+        self.assertEqual(result["job"]["state"], "review_pending")
+        self.assertNotIn(PROMPT_MARKER, (self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+        self.assertNotIn("sentinel-never-expose", (self.systemx / "AGENTS/agent.y/JOBS.json").read_text())
+        self.assert_ok(self.cli("agent-y", "validate"))
+
+    @unittest.skipIf(os.name == "nt", "Creating a test symlink requires platform-specific Windows privileges")
+    def test_muse_packet_broken_symlink_is_removed_after_provider_failure(self):
+        self.ready_task()
+        folder, env = self.fake_path()
+        marker = Path(self.temp.name) / "muse-broken-packet-path.txt"
+        self.fake_executable(folder, "muse", "import sys\n"
+                             "from pathlib import Path\n"
+                             "argv = sys.argv[1:]\n"
+                             "packet_file = Path(argv[argv.index('--prompt-file') + 1])\n"
+                             "packet_file.unlink()\n"
+                             "packet_file.symlink_to(Path(" + repr(str(marker)) + "))\n"
+                             "raise SystemExit(1)\n")
+        prepared = self.value(*self.prepare_args(provider="muse"), "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        self.rejected("agent-y", "run", identifier, "--apply", env=env)
+        job = json.loads((self.systemx / "AGENTS/agent.y/JOBS.json").read_text())["jobs"][0]
+        self.assertEqual(job["state"], "failed")
+        sidecar = json.loads((self.systemx / "state/agent-y" / (identifier + ".json")).read_text())
+        worktree = Path(sidecar["worktree"])
+        # The worktree is retained for review, but no prompt-file symlink remains.
+        self.assertFalse((worktree / ".agent-y-packet.md").is_symlink())
+        self.assertFalse(marker.exists())
+
+    def test_muse_existing_packet_name_is_preserved_when_exclusive_create_fails(self):
+        self.ready_task()
+        existing = self.root / ".agent-y-packet.md"
+        existing.write_text("preexisting tracked file\n")
+        self.git("add", ".agent-y-packet.md")
+        self.git("commit", "-m", "Fixture packet name collision")
+        self.git("push", "origin", "main")
+        self.git("fetch", "origin", "main")
+        folder, env = self.fake_path()
+        marker = Path(self.temp.name) / "muse-ran-despite-collision"
+        self.fake_executable(folder, "muse", "from pathlib import Path\n"
+                             "Path(" + repr(str(marker)) + ").write_text('ran')\n")
+        prepared = self.value(*self.prepare_args(provider="muse"), "--apply", env=env)
+        identifier = prepared["job"]["id"]
+        self.rejected("agent-y", "run", identifier, "--apply", env=env)
+        self.assertFalse(marker.exists())
+        sidecar = json.loads((self.systemx / "state/agent-y" / (identifier + ".json")).read_text())
+        worktree = Path(sidecar["worktree"])
+        self.assertEqual((worktree / ".agent-y-packet.md").read_text(),
+                         "preexisting tracked file\n")
+
     def test_out_of_scope_provider_edits_fail_without_publishing_or_task_acceptance(self):
         self.ready_task()
         folder, env = self.fake_path()

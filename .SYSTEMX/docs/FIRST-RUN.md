@@ -38,7 +38,7 @@ macOS/Linux:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip --log "$HOME/dotsystemx-install.log" install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.2"
 "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx --help
 ```
 
@@ -46,7 +46,7 @@ Windows PowerShell:
 
 ```powershell
 py -3 -m venv "$HOME\.venvs\dotsystemx"
-& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.1"
+& "$HOME\.venvs\dotsystemx\Scripts\python.exe" -m pip --log "$HOME\dotsystemx-install.log" install "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.2"
 & "$HOME\.venvs\dotsystemx\Scripts\python.exe" -I -B -m systemx --help
 ```
 
@@ -114,9 +114,11 @@ folder without configuration initialization. Both workflows use the same default
 - Define outcomes, milestones, and acceptance in `.SYSTEMX/PLAN/MASTER-PLAN.md`.
 - Add only known commands to `.SYSTEMX/project.json`; keep unsupported operations
   empty. Check the selected [stack](STACK-GUIDE.md).
-- Merge the optional root [agent entry-point template](../templates/AGENT-ENTRYPOINT.md)
-  into existing host instructions if needed. No host instruction is installed
-  automatically. Record any manual integration so you can reverse it later.
+- Use `onboard bridge` to preview a short root `AGENTS.md` pointer when no
+  root instruction file exists. If one already exists, review and manually
+  merge the [entry-point template](../templates/AGENT-ENTRYPOINT.md) with it.
+  No host instruction is installed automatically; record any manual integration
+  so you can reverse it later.
 - Start with `agent.0`; create worker records only for authorized assignments.
 
 ## 5. Verify and start work
@@ -138,13 +140,92 @@ these guide entries makes no setup or removal changes. Option 18 opens the
 [CLI and tools guide](CLI-TOOLS.md), also available as `tools-guide` through
 the local launcher or managed `run` command.
 
-For optional Agent1 first run in the beta release, run `agent-1 status`
-and `agent-1 setup` in the selected scope to see the required personal or
-enterprise, repository, role, secret target, local store, and rotation questions.
-Use `agent-1 check` for the warning-only All-In-One local review. `agent-beta
-setup` previews a separate BOT/DOT record panel; `agenda status` reads the
-blank Agent Alpha settings and structured Access Matrix. None starts a bot,
-uploads a credential, grants access, or installs a background service. Read the
+## Optional: review provider, instruction, and credential setup
+
+Use `onboard plan` after installation to select an entry point, provider
+surface, and credential consumer without starting a provider. `onboard status`
+shows the selected-scope catalog and current Agent1/roster state. Omitted
+provider, surface, account, and consumer choices remain unset. A chosen
+consumer proposes a new key class unless `none` or `existing-test` is supplied;
+no key is created. For example, to plan a local Codex CLI:
+
+```bash
+systemx run --target "/path/to/project" --offline -- onboard status
+systemx run --target "/path/to/project" --offline -- onboard plan \
+  --account-context personal --surface cli --provider codex-cli \
+  --credential-consumer local-cli --credential-class new
+systemx run --target "/path/to/project" --offline -- agent-1 setup
+systemx run --target "/path/to/project" --offline -- agent-y providers
+```
+
+An application embedding the [Codex SDK](https://learn.chatgpt.com/docs/codex-sdk)
+uses a separate plan. A human using [Kiro CLI](https://kiro.dev/docs/cli/)
+can select its CLI surface to read provider setup steps:
+
+```bash
+systemx run --target "/path/to/project" --offline -- onboard plan \
+  --surface sdk --provider codex-sdk --credential-consumer server-application
+systemx run --target "/path/to/project" --offline -- onboard plan \
+  --surface cli --provider kiro-cli --credential-consumer local-cli
+```
+
+The SDK is owned by that application; the plan does not inherit a Codex CLI
+login or store a key. These examples leave all template defaults unset.
+
+For a registered child, use `systemx projects --target "/path/to/project"
+-- onboard plan --project Project-A` with the desired selection flags. The
+catalog separates Codex CLI/IDE from an OpenAI dot, Grok Build CLI from Grok
+Bot, and Muse Code CLI from personal Muse and Meta Model API. A dot, Grok Bot,
+or personal Muse is an external Agent Beta reference in this template; catalog
+selection does not connect one. Grok Build is discoverable for manual use while
+Agent Y execution awaits a reviewed adapter. Kiro CLI, Kiro IDE, and Kiro Web
+are separate [Amazon coding surfaces](https://kiro.dev/docs/); the AWS CLI is
+separate infrastructure account tooling. The six documented third-party CLI
+choices, `claude-code`, `opencode-cli`, `blackbox-cli`, `gemini-cli`,
+`cursor-agent`, and `aider`, are manual discovery paths until each has a
+reviewed Agent Y adapter. Their own sign-in and repository permissions apply.
+See [CLI and tools](CLI-TOOLS.md)
+and the [Agent 0 roster](AGENT-0-ROSTER.md) for the role lanes.
+
+Run `agent-1 status` and `agent-1 setup` in the selected scope to see the
+required personal or enterprise, repository, role, secret target, local store,
+and rotation questions. `agent-1 check` performs a warning-only All-In-One
+local review. If a dotenv file exists, select it explicitly with `onboard plan
+--env-file .env` or `agent-1 env-inventory --env-file .env` to inspect key
+names, duplicates, unsupported lines, and Git tracking without returning
+values. `agent-1 env-sanitize --env-file .env` previews a names-only
+`.env.example`; `--apply` creates it without deleting the source or rotating
+credentials. Prefer a newly issued credential for the actual consumer; an
+existing value is test-only until rotation is reviewed.
+
+Choose the credential consumer before selecting a remote secret target.
+[GitHub Actions secrets](https://docs.github.com/en/code-security/reference/secret-security/secret-types)
+are available to Actions workflows, not a local CLI or VS Code process.
+[GitHub Agents secrets](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/configure-secrets-and-variables),
+Codespaces secrets, and Dependabot secrets have distinct consumers and access
+rules. The repository publishing this template currently has GitHub Actions
+disabled; downstream projects set their own policy. Agent1 `env-migrate`
+currently targets only repository or environment **Actions** secrets, one
+name at a time through hidden terminal input after account and admin checks.
+It does not populate a local `.env` or OS credential store.
+
+`onboard bridge` previews an optional fixed project-root `AGENTS.md` pointer
+to `.SYSTEMX/AGENTS.md`. If the root file is absent, review `contentSha256`
+and apply with `onboard bridge --apply --expected-sha256 HASH_FROM_PREVIEW`.
+Existing files, links, and directories are preserved as conflicts. The bridge
+does not authorize a provider or copy all rules into every harness. Preview is
+available on Windows; applying the bridge requires POSIX anchored directory
+operations and fails closed on native Windows in this beta.
+Tools vary in whether they read `AGENTS.md` directly. The
+[provider guide](CLI-TOOLS.md#first-time-provider-and-credential-plan) lists
+the documented Kiro/OpenCode behavior and Claude/Gemini conditions; the bridge
+does not create parallel rules files for each product.
+
+`agent-beta setup` previews a separate BOT/DOT record panel; `agenda status`
+reads empty project selections and the Access Matrix. `agenda catalog` reads
+stock setting definitions and decision rules without activating an option or
+recording a decision. These setup and catalog commands do not start a bot,
+upload a credential, grant access, or install a background service. Read the
 [CLI tools guide](CLI-TOOLS.md), [security policy](../SECURITY/AGENT1/README.md),
 and [service protocol](../Setup/SERVICE.md) before applying optional setup.
 

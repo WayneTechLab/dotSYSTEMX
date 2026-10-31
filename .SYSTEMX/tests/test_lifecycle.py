@@ -25,6 +25,11 @@ class LifecycleTests(unittest.TestCase):
     def test_first_run_previews_then_initializes_without_commands_or_overwrites(self):
         result = manager.first_run(self.root, source=self.source)
         self.assertFalse(result["applied"])
+        steps = " ".join(result["nextSteps"])
+        self.assertIn("onboard status", steps)
+        self.assertIn("agent-1 env-inventory", steps)
+        self.assertIn("onboard bridge", steps)
+        self.assertIn("do not put values in project records", steps)
         self.assertFalse(self.root.exists())
         result = manager.first_run(self.root, source=self.source, apply=True)
         self.assertEqual(result["config"], "created-empty")

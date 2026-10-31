@@ -22,13 +22,13 @@ setup refuses independent case variants to protect project records.
 [Documentation](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Setup profiles](config/profiles.json) · [MIT license](LICENSE)
 
-[Media library](MEDIA/README.md): the current field guide, beta feature
+[Media library](MEDIA/README.md): the historical field guide, beta.1 feature
 infographics, agent cards, and accessible text companions. Earlier environment
 cards remain available in their tagged release history.
 
 [![Current beta lifecycle infographic: exact scope, records, verification and release boundaries.](MEDIA/Infographics/systemx-guide-lifecycle.svg)](MEDIA/Reference/current-visual-guide.md)
 
-The [current beta visual guide](MEDIA/Reference/current-visual-guide.md) has four
+The [beta.1 visual guide](MEDIA/Reference/current-visual-guide.md) has four
 feature infographics for lifecycle, BOT/DOT workspaces, Agent1 security, and
 the Access Matrix, plus one role card for each of Agent 0, X, Y, Z, Alpha,
 Beta, and Agent1. Its standalone SVGs have exact vector labels and icons on a
@@ -57,12 +57,37 @@ The [CLI and tools guide](docs/CLI-TOOLS.md) maps the external manager, verified
 managed runner, reviewed folder-only launchers, Python API, and optional provider
 tools. It includes explicit `.SYSTEMXP` selection and the working directory for
 child application commands. Print it with `tools-guide` or local menu option 18.
+After installation, `onboard status` and `onboard plan` show selected-scope
+Agent1 state, an Agent 0 roster summary, provider lanes, and questions about the
+credential consumer. A plan does not select, authenticate, or start a provider.
+`onboard bridge` previews an optional project-root `AGENTS.md` pointer to the
+canonical [.SYSTEMX guide](AGENTS.md); applying it requires a reviewed preview
+digest and an absent root file. See [first-time setup](docs/FIRST-RUN.md).
 
 The beta release adds optional [Agent Beta BOT/DOT workspaces](AGENTB/README.md),
 [Agent1 security and access review](SECURITY/AGENT1/README.md), and Agent Alpha
 [Agenda and Access Matrix settings](docs/ACCESS-AND-MAP.md). The Access Matrix
-ships 20 default-deny role rows with no reviewed access decisions; project
-records and Agenda options start blank. The [session service](Setup/SERVICE.md) runs only when explicitly
+ships 20 default-deny role rows. Beta.2 also supplies ten fixed
+[Agenda setting definitions](AUTOBOT/AGENDA-SETTINGS.json) and
+[access decision rules](GLOBAL/ACCESS-DECISION-RULES.json) for a first-time
+review. `agenda catalog` reads the allowed values and review requirements.
+Project-specific Agenda options and access decisions start empty; stock rows
+grant nothing. The [Agent 0 roster](docs/AGENT-0-ROSTER.md) lists selected-scope
+roles, named instances, and CLI setup pointers without activating them.
+The onboarding catalog distinguishes Codex CLI, IDE, SDK, and OpenAI dots;
+Grok Build from Grok Bot; Muse Code from personal Muse; and Kiro CLI, IDE,
+and Web from the separate AWS CLI account tool. It also lists six independent
+third-party coding CLIs for manual discovery. Provider and credential choices
+remain unset in the stock template. Online Bots remain offline Agent Beta
+references here. Muse Code has a source-tested Agent Y adapter, while a live
+account/worktree run remains unverified. The newly listed CLIs have no built-in
+Agent Y execution adapter; use
+the [provider guide](docs/CLI-TOOLS.md#first-time-provider-and-credential-plan)
+for current execution and credential boundaries.
+The [Agent 0 toolchain I/O guide](docs/TOOLCHAIN-IO.md) covers the selected-scope
+JSON CLI and opt-in read-only stdio route for VS Code, Codex, Cursor, Kiro,
+and JetBrains hosts. Native MCP/ACP registration is not installed.
+The [session service](Setup/SERVICE.md) runs only when explicitly
 started through a pipe; it installs no OS daemon. The [Setup](Setup/README.md)
 and [Uninstall](Uninstall/README.md) directories point to the existing external
 manager lifecycle. The original four-part media guide retains its earlier

@@ -35,6 +35,20 @@ child from the blank creation templates. Reviewed additions preserve edited file
 The user and host instructions retain authority; no AUTOBOT may accept tasks,
 start provider tools, delete archives, or route recursively to another AUTOBOT.
 
+## Agenda setting defaults
+
+The `AUTOBOT/AGENDA-SETTINGS.json` catalog defines the ten fixed
+`context_selection` choices, their allowed `include` and `exclude` values, and
+the safe `unset` default when no choice is recorded. Use `agenda catalog` to
+read the stock definitions. This catalog is reference data; the selected
+`AUTOBOT/AGENDA.json` record starts with `options: []`. Absence is `unset`,
+meaning Agenda includes no reference automatically; `exclude` is a separate
+explicit reviewed value. An `include` needs a reviewed
+same-scope Access Matrix decision, a matching Rules file digest, a reason, a
+review time, and evidence. Neither `include` nor `exclude` starts a worker or
+grants access. See `docs/ACCESS-AND-MAP.md` before
+recording a project-specific choice.
+
 ## Files and data
 
 Store compact policy, metadata, and references here. Put local temporary or large

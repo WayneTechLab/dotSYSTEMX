@@ -1,18 +1,33 @@
 # Access matrix
 
-Template state: unconfigured. The companion `ACCESS-MATRIX.json` lists fixed
-agent, AUTOBOT, native-subagent, and BOT/DOT role defaults with no template
+Template state: stock rules configured, project decisions unconfigured. The
+companion `ACCESS-MATRIX.json` lists fixed agent, AUTOBOT, native-subagent,
+and BOT/DOT role defaults with no template
 grants. Its `decisions` array is empty. No actor/resource permission or approval
 has been recorded for an adopted project. The workbook is a readable view of
 that JSON record and does not update it.
+
+The [decision-rules catalog](ACCESS-DECISION-RULES.json) supplies the stock
+field definitions, allowed outcomes, and review conditions for a project
+decision. No decision row is an operating-system, GitHub, IDE, or provider
+grant. `reviewed-intent` records a reviewed plan with a nonsecret policy
+reference; `denied` records a refusal; `gap` records unresolved access work.
+No row means no reviewed access intent. Every actual actor, resource, action,
+environment, owner, and evidence source must be selected for the adopted
+project. Use `agenda catalog` to inspect the fixed rules and `agenda status`
+to see the current selected-scope revisions.
 
 For a selected scope, `agenda status` supplies the access revision. Use
 `agenda decision-add` first as a preview, then with `--apply` and that revision
 to record one reviewed intent, denial, or gap. `agenda table --format json`
 reads the current rows. `agenda table --format csv` returns JSON containing
-three CSV strings (`roleCsv`, `accessCsv`, and `agendaCsv`).
+five CSV strings (`roleCsv`, `accessCsv`, `agendaCsv`, `settingCsv`, and
+`decisionRuleCsv`). The last two describe fixed definitions, not applied
+project settings or approvals.
 
-The checked-in workbook is the reusable seed view. `agenda workbook-check`
+The checked-in five-sheet workbook is the reusable seed view of role defaults,
+empty project rows, setting definitions, decision rules, and the Agent 0
+roster. `agenda workbook-check`
 compares a generated workbook in ignored `local/` with current selected-scope
 JSON. `agenda workbook-export` previews its source revision and target; use
 `--apply --expected-revision REVISION` to write the current formula-free XLSX

@@ -1,6 +1,6 @@
 # Agent Beta, Agent1, and Agenda
 
-> Source companion for the `1.11.0-beta.1` GitHub Wiki page. Verify the selected
+> Source companion for the `1.11.0-beta.2` GitHub Wiki page. Verify the selected
 > release and command help before operating a project.
 
 `.SYSTEMX` keeps one project task authority while offering three optional
@@ -10,7 +10,7 @@ extensions:
 | --- | --- | --- |
 | Agent Beta (`agent.b`) | Named BOT/DOT workspaces and canonical task references in `AGENTB/`; an `online-reference` may retain nonsecret provider/identity aliases and an access-decision reference. All current records remain offline. | A connected provider, synchronized remote workspace, model process, or credential permission. |
 | Agent1 (`agent.1`, `security-access`) | A guided local security/access assessment, safe credential-name inventory and migration plan, plus an explicitly started read-only stdio session. | A secret vault, GitHub admin role, automatic upload or rotation, permanent daemon, or task acceptance. |
-| Agent Alpha Agenda | Blank settings and access-matrix view for the selected project. | A scheduler or notification worker. Agent X owns observed events and due items. |
+| Agent Alpha Agenda | Stock setting and decision-rule definitions, with empty selected project options and decisions. | A scheduler or notification worker. Agent X owns observed events and due items. |
 
 Agent 0 remains the coordinator. `WORK/TASKS.json` remains the only task-status
 and acceptance record. Agent Y's CLI jobs, Agent Z's reviews, Agent X's event
@@ -25,13 +25,15 @@ last chat or current shell directory. The managed first-run command previews
 the installation and empty configuration before `--apply`. It installs no OS
 service or scheduler. See [First-Time Setup](https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/docs/FIRST-RUN.md)
 and the [operator setup page](https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/Setup/README.md)
-after these files reach `main`.
+for the current source.
 
 An Agent1 first-run review asks for the project owner, host and OS, actual
 owner/guest roles, GitHub account and repository, permitted Actions use,
 credential **names** and destinations, suspected exposure, and backup/cleanup
 plan. Unknown answers remain unknown. Beta's online workspaces and Alpha's
-Agenda settings start blank and are opted into separately.
+Agenda has stock setting definitions, but selected options start empty and
+are opted into separately. The decision-rule catalog defines allowed outcomes;
+it does not supply a project-specific decision.
 
 ## Keep local and CI secrets separate
 
@@ -74,11 +76,32 @@ A `.SYSTEMX` Access Matrix ships 20 standard role rows with `templateGrant:
 none` and `requiresReview: true`: seven agent roles, ten AUTOBOT references,
 and instance patterns for numeric workers, native subagents, and Agent Beta
 BOT/DOT workspaces. Its reviewed `decisions` array starts empty. Use
+the [Agenda settings catalog](https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/AUTOBOT/AGENDA-SETTINGS.json)
+and [Access Decision Rules catalog](https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/GLOBAL/ACCESS-DECISION-RULES.json)
+to inspect allowed values, `unset` defaults, and required review
+fields. `agenda catalog` reads both definitions without changing the selected
+scope. From the containing project directory:
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh agenda catalog
+bash .SYSTEMX/SYSTEMX.sh agenda status
+bash .SYSTEMX/SYSTEMX.sh agenda decision-add --help
+bash .SYSTEMX/SYSTEMX.sh agenda set --help
+```
+
+For Windows PowerShell, use `pwsh -File .SYSTEMX/SYSTEMX.ps1 agenda catalog`.
+An absent option is `unset`: Agenda includes nothing automatically. An
+explicit `exclude` records a reviewed exclusion;
+`include` requires a reviewed-intent access row and current Rules digest. A
+decision outcome can be `gap`, `denied`, or `reviewed-intent`; none is an
+external access grant. Use
 `agenda status` to obtain `accessRevision` and `agenda decision-add` with that
 revision to preview or apply one selected-scope intent, denial, or gap. The
-checked-in XLSX shows the default rows; live CSV fields from `agenda table
---format csv` reflect scoped JSON records. An explicit `agenda workbook-export`
-writes a current, formula-free workbook under ignored `local/`, guarded by the
+checked-in five-sheet XLSX shows the default rows and Agent 0 roster. Live CSV
+fields from `agenda table --format csv` reflect scoped JSON records and fixed
+definition catalogs. An
+explicit `agenda workbook-export` writes a current, formula-free six-sheet
+workbook under ignored `local/`, guarded by the
 source revision; `agenda workbook-check` detects drift. None is an OS or
 GitHub grant. An adopted older matrix can preview `agenda roles-upgrade` to
 add the stock role rows without replacing decisions, then apply it with the
@@ -111,7 +134,9 @@ bytes; that is a byte count, not a billed-token benchmark.
 The first Agent1 service is a short-lived stdio process. `service status`
 reports local capability; `service start --stdio` starts the protocol for a
 client that owns both pipes. It accepts fixed `ping`, `capabilities`, `assess`,
-and `stop` methods. It has no listening port, background installation, or
+`roster`, `settings`, `onboard`, and `stop` methods. The last three expose
+selected-scope Agent 0 and setup views. It is custom JSON-lines, not MCP or
+ACP. It has no listening port, background installation, or
 secret-field input. An `assess` response is advisory local evidence, not proof
 of remote IAM, a working secret, or a running deployment. The
 [service protocol](https://github.com/WayneTechLab/dotSYSTEMX/blob/main/.SYSTEMX/Setup/SERVICE.md)

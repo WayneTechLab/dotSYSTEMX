@@ -105,6 +105,119 @@ class RootCoordinationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.call("status")
 
+    def test_roster_is_read_only_and_works_without_root_plan(self):
+        before = self.payloads()
+        report = self.call("roster")
+        self.assertEqual(report["counts"], {"standardRoles": 20, "registeredAgents": 1,
+                                            "registeredBots": 0, "cliChannels": 0,
+                                            "accessDecisions": 0, "rows": 20})
+        self.assertEqual(report["rows"][0]["actorId"], "agent.0")
+        self.assertEqual(report["rows"][0]["registrationState"], "registered")
+        self.assertEqual(report["rows"][1]["registrationState"], "unregistered")
+        self.assertEqual(report["rows"][10]["registrationState"], "catalog-only")
+        self.assertEqual(report["cliProviderOptions"], ["codex", "copilot", "muse", "configured"])
+        self.assertEqual(report["toolchainOptions"], ["vscode", "codex", "cursor", "kiro", "jetbrains"])
+        self.assertFalse(report["nativeHostBindingsInstalled"])
+        self.assertIn("agent-y providers", report["setupCommands"])
+        self.assertFalse(report["identityVerified"] or report["accessGranted"] or report["runtimeStarted"])
+        self.assertEqual(before, self.payloads())
+        cli = self.run_cli("root", "roster", "--actor", "agent.0")
+        self.assert_ok(cli)
+        self.assertEqual(json.loads(cli.stdout)["page"]["totalRows"], 1)
+        menu = self.run_cli("menu", input_text="33\n0\n")
+        self.assert_ok(menu)
+        self.assertIn("33) Agent 0 agent, AUTOBOT, BOT, and CLI channel roster", menu.stdout)
+        self.assertIn('"standardRoles": 20', menu.stdout)
+        shutil.rmtree(self.systemx / "ROOT")
+        self.assertEqual(self.call("roster")["sourceRevision"], report["sourceRevision"])
+        self.assertEqual(self.call("roster", "--offset", "2", "--limit", "3")["page"]["nextRowOffset"], 5)
+        with self.assertRaises(ValueError):
+            self.call("roster", "--limit", "51")
+
+    def test_roster_discovers_registered_worker_bot_and_scoped_decisions(self):
+        self.assert_ok(self.run_cli("agent-add", "agent.2", "--role", "worker"))
+        self.assert_ok(self.run_cli("agent-beta", "setup", "--apply"))
+        self.assert_ok(self.run_cli("agent-beta", "bot-add", "DEMO", "--apply"))
+        bot_metadata = self.read("AGENTB/.SYSTEMXB-DEMO/BOT.json")
+        bot_metadata.update({"source": "online-reference", "provider": "example",
+                             "providerIdentity": "private-account-alias"})
+        self.save("AGENTB/.SYSTEMXB-DEMO/BOT.json", bot_metadata)
+        matrix = self.read("GLOBAL/ACCESS-MATRIX.json")
+        matrix["decisions"] = [
+            {"id": "ACC-001", "actor": "agent.2", "resource": "project source",
+             "action": "read", "environment": "local", "decision": "reviewed-intent",
+             "owner": "fixture-owner", "policyRef": "fixture-policy", "evidence": ["fixture-proof"],
+             "reviewedAt": "2026-01-01T00:00:00Z", "recheck": ""},
+            {"id": "ACC-002", "actor": "agent.2", "resource": "release branch",
+             "action": "write", "environment": "github", "decision": "denied",
+             "owner": "fixture-owner", "policyRef": "", "evidence": ["fixture-proof"],
+             "reviewedAt": "2026-01-01T00:00:00Z", "recheck": ""},
+            {"id": "ACC-003", "actor": "native-subagent:codex:review-1", "resource": "task packet",
+             "action": "read", "environment": "local", "decision": "gap",
+             "owner": "fixture-owner", "policyRef": "", "evidence": ["fixture-proof"],
+             "reviewedAt": "2026-01-01T00:00:00Z", "recheck": ""},
+            {"id": "ACC-004", "actor": "human:owner", "resource": "release",
+             "action": "approve", "environment": "github", "decision": "reviewed-intent",
+             "owner": "fixture-owner", "policyRef": "fixture-policy", "evidence": ["fixture-proof"],
+             "reviewedAt": "2026-01-01T00:00:00Z", "recheck": ""},
+        ]
+        self.save("GLOBAL/ACCESS-MATRIX.json", matrix)
+        before = self.payloads()
+        report = self.call("roster", "--actor", "agent.2", "--decision-limit", "1")
+        self.assertEqual(before, self.payloads())
+        self.assertEqual(report["counts"]["registeredBots"], 1)
+        self.assertEqual(report["counts"]["registeredAgents"], 3)
+        self.assertEqual(report["rows"][0]["accessDecisionIds"], ["ACC-001", "ACC-002"])
+        self.assertEqual(report["rows"][0]["reviewedIntentCount"], 1)
+        self.assertEqual(report["rows"][0]["deniedCount"], 1)
+        self.assertFalse(report["rows"][0]["externalRightsVerified"])
+        self.assertEqual(report["decisions"][0]["resource"], "project source")
+        self.assertEqual(report["page"]["nextDecisionOffset"], 1)
+        self.assertEqual(self.call("roster", "--actor", "agent.2", "--decision-offset", "1")["decisions"][0]["environment"], "github")
+        bot = self.call("roster", "--actor", "agentb:DEMO")["rows"][0]
+        self.assertEqual((bot["kind"], bot["registrationState"], bot["workspace"]),
+                         ("bot", "registered-offline", "AGENTB/.SYSTEMXB-DEMO"))
+        self.assertEqual(bot["providerAlias"], "example")
+        self.assertNotIn("private-account-alias", json.dumps(self.call("roster")))
+        native = self.call("roster", "--actor", "native-subagent:codex:review-1")["rows"][0]
+        self.assertEqual((native["kind"], native["registrationState"], native["gapCount"]),
+                         ("native-subagent", "decision-only", 1))
+        human = self.call("roster", "--actor", "human:owner")["rows"][0]
+        self.assertEqual((human["kind"], human["registrationState"], human["reviewedIntentCount"]),
+                         ("access-actor", "decision-only", 1))
+        self.assertFalse(human["externalRightsVerified"])
+        with self.assertRaises(ValueError):
+            self.call("roster", "--actor", "agent-y-job:missing")
+
+    def test_roster_lists_recorded_agent_y_channel_without_host_probe(self):
+        self.assert_ok(self.run_cli("roles-init", "--apply"))
+        before = self.call("roster")["sourceRevision"]
+        jobs = self.read("AGENTS/agent.y/JOBS.json")
+        jobs["jobs"] = [{
+            "id": "Y-" + "a" * 20, "task": "TASK-001", "provider": "codex", "model": "",
+            "repoId": "", "repoPathSha256": "a" * 64, "base": "main", "baseOid": "b" * 40,
+            "branch": "codex/agent-y/TASK-001-fixture", "promptSha256": "c" * 64,
+            "allowPaths": ["src/app.py"], "openDraftPr": False, "state": "prepared",
+            "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-01T00:00:00Z",
+            "headOid": "", "pr": {"number": 0, "url": "", "headOid": ""},
+            "exitCode": None, "error": "", "evidence": [], "runId": "",
+        }]
+        self.save("AGENTS/agent.y/JOBS.json", jobs)
+        with patch("agent_y.providers", side_effect=AssertionError("Host provider probe is forbidden")):
+            report = self.call("roster", "--actor", "agent-y-job:Y-" + "a" * 20)
+        self.assertNotEqual(report["sourceRevision"], before)
+        self.assertEqual(report["counts"]["cliChannels"], 1)
+        channel = report["rows"][0]
+        self.assertEqual((channel["kind"], channel["registrationState"], channel["providerAlias"]),
+                         ("cli-channel", "recorded-prepared", "codex"))
+        self.assertEqual(channel["taskCount"], 1)
+        self.assertFalse(channel["externalRightsVerified"])
+        self.assertEqual(report["decisions"], [])
+        for args in (("--offset", "-1"), ("--decision-offset", "-1"),
+                     ("--limit", "0"), ("--decision-limit", "51")):
+            with self.assertRaises(ValueError):
+                self.call("roster", *args)
+
     def test_init_preview_preserves_private_guides_adds_missing_records_and_logs(self):
         shutil.rmtree(self.systemx / "ROOT")
         (self.systemx / "ROOT").mkdir()

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "defaultState": "no-row",
+  "templateGrant": "none",
+  "decisionScope": [
+    "actor",
+    "resource",
+    "action",
+    "environment"
+  ],
+  "newRecordRequiredFields": [
+    "id",
+    "actor",
+    "resource",
+    "action",
+    "environment",
+    "decision",
+    "owner",
+    "evidence",
+    "reviewedAt"
+  ],
+  "rules": [
+    {
+      "state": "no-row",
+      "recorded": false,
+      "meaning": "No reviewed decision exists; no access is inferred.",
+      "policyRefRequiredForNewRecord": false,
+      "ownerRequired": false,
+      "evidenceRequired": false,
+      "identityVerifiedByTemplate": false,
+      "accessGrantedByTemplate": false
+    },
+    {
+      "state": "gap",
+      "recorded": true,
+      "meaning": "An access question remains open; resolve it before relying on this path.",
+      "policyRefRequiredForNewRecord": false,
+      "ownerRequired": true,
+      "evidenceRequired": true,
+      "identityVerifiedByTemplate": false,
+      "accessGrantedByTemplate": false
+    },
+    {
+      "state": "denied",
+      "recorded": true,
+      "meaning": "A reviewer recorded denial; do not use this access path.",
+      "policyRefRequiredForNewRecord": false,
+      "ownerRequired": true,
+      "evidenceRequired": true,
+      "identityVerifiedByTemplate": false,
+      "accessGrantedByTemplate": false
+    },
+    {
+      "state": "reviewed-intent",
+      "recorded": true,
+      "meaning": "A reviewer recorded intended access; verify real identity and permission at the external boundary.",
+      "policyRefRequiredForNewRecord": true,
+      "ownerRequired": true,
+      "evidenceRequired": true,
+      "identityVerifiedByTemplate": false,
+      "accessGrantedByTemplate": false
+    }
+  ]
+}

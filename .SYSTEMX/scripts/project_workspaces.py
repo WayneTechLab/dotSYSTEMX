@@ -326,6 +326,7 @@ def add_cli(subparsers):
     import session_settings
     import data_tools
     import root_coordination
+    import onboarding
     autobots.add_cli(commands, scope)
     agent_beta.add_cli(commands, scope)
     security_agent1.add_cli(commands, scope)
@@ -334,6 +335,7 @@ def add_cli(subparsers):
     session_settings.add_cli(commands, scope)
     data_tools.add_cli(commands, scope)
     root_coordination.add_cli(commands, scope)
+    onboarding.add_cli(commands, scope)
     for action in ("check", "dev", "build", "deploy"):
         command = scope(commands.add_parser(action))
         command.add_argument("--dry-run", action="store_true")
@@ -375,17 +377,21 @@ def dispatch(root, defaults, args, run_action):
             import session_settings
             import data_tools
             import root_coordination
+            import onboarding
             if action in set().union(autobots.COMMANDS, agent_beta.COMMANDS,
                                      security_agent1.COMMANDS, agenda_access.COMMANDS,
                                      session_service.COMMANDS, session_settings.COMMANDS,
-                                     data_tools.COMMANDS,
+                                     data_tools.COMMANDS, onboarding.COMMANDS,
                                      root_coordination.COMMANDS):
                 module = next(item for item in (autobots, agent_beta, security_agent1,
                                                 agenda_access, session_service, session_settings, data_tools,
-                                                root_coordination) if action in item.COMMANDS)
+                                                root_coordination, onboarding) if action in item.COMMANDS)
                 result = module.dispatch(records, defaults, selected)
                 if action != "service" or selected.service_action != "start":
-                    print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
+                    if action == "onboard" and getattr(selected, "format", "json") == "text":
+                        print(onboarding.format_text(result))
+                    else:
+                        print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
                 return 0
             print("Selected scope: " + name + "\nRecords: " + str(records))
             print("Shared defaults: " + str(defaults))

@@ -26,6 +26,28 @@ MAX_OBSERVATIONS = 10000
 MAX_CARDS = 2000
 MAX_PACKET_BYTES = 64 * 1024
 MAX_OUTPUT_BYTES = 128 * 1024
+MAX_ROSTER_ROWS = 5000
+ROSTER_PAGE_LIMIT = 50
+ROSTER_SETUP_COMMANDS = (
+    "roles-init --help",
+    "agent-1 setup --help",
+    "autobot init --help",
+    "agent-beta setup --help",
+    "agent-beta bot-add --help",
+    "agent-add --help",
+    "agent-y providers",
+    "service status",
+    "service start --help",
+    "onboard status",
+    "onboard plan --help",
+    "onboard bridge --help",
+    "agent-y prepare --help",
+    "agenda init --help",
+    "agenda decision-add --help",
+)
+# Host toolchains are navigation targets, not actors or Agent Y providers.
+# Every host must opt into the portable CLI or JSON-lines subprocess itself.
+TOOLCHAIN_OPTIONS = ("vscode", "codex", "cursor", "kiro", "jetbrains")
 KINDS = ("milestone", "wave", "phase", "group", "task", "subtask", "action")
 STATES = ("pending", "running", "blocked", "completed", "cancelled", "unknown", "unavailable")
 REQUIRED = ("scripts/root_coordination.py", "tests/test_root_coordination.py") + tuple(
@@ -124,6 +146,111 @@ def _public(root, result, packet=False):
             raise ValueError("ROOT packet exceeds 64 KiB; select fewer TASK IDs or retain large evidence behind references")
         raise ValueError("ROOT output exceeds 128 KiB; request a smaller selected task set")
     return result
+
+
+def roster(root):
+    """Derive Agent 0's local roster from validated records, without probing providers."""
+    import agenda_access
+    import agent_beta
+    import agent_y
+    import autobots
+
+    root = Path(root)
+    ledger, registry = memory.load(root)
+    registered = {item["id"]: item for item in registry["agents"]}
+    autobots.validate_optional(root)
+    agent_beta.validate_optional(root)
+    _, access = agenda_access._load(root)
+    access = access or {"schemaVersion": 1, "decisions": []}
+    catalog_path = records.safe(root, autobots.CATALOG)
+    catalog = autobots.validate_catalog(records.read(root, autobots.CATALOG)) if catalog_path.is_file() else None
+    bot_path = records.safe(root, agent_beta.INDEX)
+    bots = agent_beta.load_bots(root) if bot_path.is_file() else {"schemaVersion": 1, "bots": []}
+    job_path = records.safe(root, agent_y.JOBS)
+    if "agent.y" in registered and not job_path.is_file():
+        raise ValueError("Registered Agent Y is missing its selected-scope job ledger")
+    jobs = agent_y.load_jobs(root)["jobs"] if job_path.is_file() else []
+    task_counts = {}
+    for task in ledger["tasks"]:
+        task_counts[task["owner"]] = task_counts.get(task["owner"], 0) + 1
+
+    decisions = [{key: item[key] for key in ("id", "actor", "resource", "action", "environment", "decision")}
+                 for item in access["decisions"]]
+    decisions.sort(key=lambda item: (int(item["id"].split("-", 1)[1]), item["id"]))
+    by_actor = {}
+    for decision in decisions:
+        by_actor.setdefault(decision["actor"], []).append(decision)
+
+    def row(actor, kind, name, state, source, workspace="", provider="", tasks=0,
+            access_actor=None):
+        matches = by_actor.get(access_actor or actor, [])
+        return {"actorId": actor, "kind": kind, "displayName": name,
+                "registrationState": state, "sourceRecord": source,
+                "workspace": workspace, "providerAlias": provider,
+                "taskCount": tasks,
+                "accessDecisionIds": [item["id"] for item in matches],
+                "reviewedIntentCount": sum(item["decision"] == "reviewed-intent" for item in matches),
+                "deniedCount": sum(item["decision"] == "denied" for item in matches),
+                "gapCount": sum(item["decision"] == "gap" for item in matches),
+                "externalRightsVerified": False}
+
+    rows = []
+    role_defaults = access.get("roleDefaults", list(agenda_access.ROLE_DEFAULTS))
+    catalog_names = {item["id"]: item["name"] for item in catalog["bots"]} if catalog else {}
+    for role in role_defaults:
+        actor, kind = role["actor"], role["kind"]
+        if kind == "agent":
+            state = "registered" if actor in registered else "unregistered"
+            source = "AGENTS/REGISTRY.json" if actor in registered else agenda_access.ACCESS
+            workspace = "AGENTS/" + actor
+        elif kind == "autobot":
+            state = "available-reference" if "agent.a" in registered else "catalog-only"
+            source = autobots.CATALOG if catalog else agenda_access.ACCESS
+            workspace = next((item["file"] for item in catalog["bots"] if item["id"] == actor), "") if catalog else ""
+        else:
+            state, source, workspace = "pattern-only", agenda_access.ACCESS, ""
+        rows.append(row(actor, kind, catalog_names.get(actor, actor), state, source,
+                        workspace, tasks=task_counts.get(actor, 0)))
+
+    standard_ids = {item["actor"] for item in role_defaults}
+    for item in sorted(registry["agents"], key=lambda agent: agent["id"]):
+        if item["id"] not in standard_ids:
+            rows.append(row(item["id"], "agent", item["role"], "registered",
+                            "AGENTS/REGISTRY.json", "AGENTS/" + item["id"],
+                            tasks=task_counts.get(item["id"], 0)))
+    for item in sorted(bots["bots"], key=lambda bot: bot["name"]):
+        metadata = agent_beta._json(root, item["path"] + "/BOT.json")
+        rows.append(row("agentb:" + item["name"], item["kind"], item["name"],
+                        "registered-offline", agent_beta.INDEX, item["path"],
+                        metadata["provider"], len(metadata["taskIds"])))
+    known_actors = {item["actorId"] for item in rows}
+    for actor in sorted(by_actor):
+        if actor in known_actors:
+            continue
+        if re.fullmatch(r"native-subagent:[a-z][a-z0-9-]{0,31}:[A-Za-z0-9][A-Za-z0-9_.-]{0,63}", actor):
+            rows.append(row(actor, "native-subagent", actor, "decision-only",
+                            agenda_access.ACCESS))
+            continue
+        # An older or manually authored decision may name a human or service.
+        # Show its recorded intent without inventing registration or a runtime.
+        rows.append(row(actor, "access-actor", actor, "decision-only",
+                        agenda_access.ACCESS))
+    for job in sorted(jobs, key=lambda item: item["id"]):
+        rows.append(row("agent-y-job:" + job["id"], "cli-channel", job["id"],
+                        "recorded-" + job["state"], agent_y.JOBS, provider=job["provider"], tasks=1))
+    if len(rows) > MAX_ROSTER_ROWS:
+        raise ValueError("Agent 0 roster exceeds its 5000-row view limit")
+    return {"rows": rows, "decisions": decisions,
+            "counts": {"standardRoles": len(role_defaults), "registeredAgents": len(registered),
+                       "registeredBots": len(bots["bots"]), "cliChannels": len(jobs),
+                       "accessDecisions": len(decisions), "rows": len(rows)},
+            "cliProviderOptions": ["codex", "copilot", "muse", "configured"],
+            "toolchainOptions": list(TOOLCHAIN_OPTIONS),
+            "portableIO": "selected-scope-cli-json-and-stdio-json-lines",
+            "nativeHostBindingsInstalled": False,
+            "setupCommands": list(ROSTER_SETUP_COMMANDS),
+            "sourceRevision": records.fingerprint({"rows": rows, "decisions": decisions}),
+            "identityVerified": False, "accessGranted": False, "runtimeStarted": False}
 
 
 def _token(value, prefix):
@@ -655,6 +782,15 @@ def add_cli(subparsers, scope=None):
     command = scope(commands.add_parser("init", help="preview missing blank ROOT references; no runtime"))
     command.add_argument("--apply", action="store_true")
     scope(commands.add_parser("status", help="bounded counts and observed-record limits"))
+    command = scope(commands.add_parser("roster", help="read-only Agent 0 agent, BOT, AUTOBOT, and CLI channel view"))
+    command.add_argument("--actor", default="", help="show one exact actor or recorded CLI channel ID")
+    command.add_argument("--offset", type=int, default=0, help="first roster row (default: 0)")
+    command.add_argument("--limit", type=int, default=ROSTER_PAGE_LIMIT,
+                         help="roster rows per page (1-50)")
+    command.add_argument("--decision-offset", type=int, default=0,
+                         help="first scoped access decision (default: 0)")
+    command.add_argument("--decision-limit", type=int, default=ROSTER_PAGE_LIMIT,
+                         help="scoped access decisions per page (1-50)")
     command = scope(commands.add_parser("packet", help="bounded selected work packet, maximum 10 tasks and 64 KiB"))
     command.add_argument("--task", action="append")
     command.add_argument("--limit", type=int, default=10)
@@ -718,6 +854,26 @@ def dispatch(root, defaults, args):
                   "observations": len(mirrors["observations"]), "cards": len(mirrors["cards"]),
                   "liveSyncVerified": False, "statusAuthority": "WORK/TASKS.json",
                   "progress": _progress(plan, tasks)}
+    elif action == "roster":
+        if (args.offset < 0 or args.decision_offset < 0 or
+                not 1 <= args.limit <= ROSTER_PAGE_LIMIT or
+                not 1 <= args.decision_limit <= ROSTER_PAGE_LIMIT):
+            raise ValueError("Roster offsets must be nonnegative and page limits must be 1-50")
+        result = roster(root)
+        rows = result["rows"]
+        decisions = result["decisions"]
+        if args.actor:
+            rows = [item for item in rows if item["actorId"] == args.actor]
+            decisions = [item for item in decisions if item["actor"] == args.actor]
+            if not rows and not decisions:
+                raise ValueError("Actor or CLI channel is absent from the selected-scope roster")
+        result["rows"] = rows[args.offset:args.offset + args.limit]
+        result["decisions"] = decisions[args.decision_offset:args.decision_offset + args.decision_limit]
+        result["page"] = {"totalRows": len(rows), "rowOffset": args.offset,
+                          "nextRowOffset": args.offset + args.limit if args.offset + args.limit < len(rows) else None,
+                          "totalDecisions": len(decisions), "decisionOffset": args.decision_offset,
+                          "nextDecisionOffset": args.decision_offset + args.decision_limit
+                          if args.decision_offset + args.decision_limit < len(decisions) else None}
     elif action == "packet":
         result = packet(root, args.task, args.limit)
     elif action == "request":

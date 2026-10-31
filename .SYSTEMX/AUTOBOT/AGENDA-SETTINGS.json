@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "defaultState": "unset",
+  "settings": [
+    {
+      "id": "SETTING-001",
+      "botId": "autobot.design",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Design.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Design reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-002",
+      "botId": "autobot.soul",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Soul.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Soul reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-003",
+      "botId": "autobot.memory",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Memory.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Memory reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-004",
+      "botId": "autobot.rules",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Rules.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Rules reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-005",
+      "botId": "autobot.research",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Research.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Research reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-006",
+      "botId": "autobot.brand",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Brand.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Brand reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-007",
+      "botId": "autobot.media",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Media.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Media reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-008",
+      "botId": "autobot.tokens",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Tokens.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Tokens reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-009",
+      "botId": "autobot.data",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Data.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Data reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    },
+    {
+      "id": "SETTING-010",
+      "botId": "autobot.archive",
+      "setting": "context_selection",
+      "defaultValue": "unset",
+      "allowedValues": [
+        "include",
+        "exclude"
+      ],
+      "providerRulesPath": "AUTOBOT/Archive.MD",
+      "reviewRequired": true,
+      "includeRequiresAccessDecision": true,
+      "reviewQuestion": "Should Archive reference context be included or excluded for this selected scope?",
+      "effect": "Advisory context only; no worker, schedule, or permission starts."
+    }
+  ]
+}

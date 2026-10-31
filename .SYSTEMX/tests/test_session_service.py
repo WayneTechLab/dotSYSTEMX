@@ -37,6 +37,9 @@ class SessionServiceTests(unittest.TestCase):
         self.assertEqual(responses[0], {"id": "p1", "ok": True, "result": {"alive": True}})
         self.assertFalse(responses[1]["result"]["persistentInstall"])
         self.assertFalse(responses[1]["result"]["networkListener"])
+        self.assertFalse(responses[1]["result"]["requiresElevation"])
+        self.assertNotIn("privileged", responses[1]["result"])
+        self.assertEqual(responses[1]["result"]["hostPrivileges"], "inherited-from-launcher")
         self.assertEqual(before, sorted(path.relative_to(self.root).as_posix() for path in self.root.rglob("*")))
 
     def test_assessment_is_fixed_and_stop_ends_the_session(self):
@@ -49,14 +52,35 @@ class SessionServiceTests(unittest.TestCase):
         self.assertEqual(responses[0]["result"]["profile"], "all-in-one")
         self.assertEqual(responses[1]["result"]["ended"], "requested")
 
+    def test_agent0_and_setup_io_are_fixed_read_only_methods(self):
+        with patch.object(service, "_roster", return_value={"rows": [], "accessGranted": False}) as roster, \
+             patch.object(service, "_settings", return_value={"rulesSummary": {"count": 0},
+                                                                 "executed": False}) as settings, \
+             patch.object(service, "_onboard", return_value={"selection": {"provider": None},
+                                                                "valuesReturned": False}) as onboard:
+            result, responses = self.serve(
+                b'{"id":"r1","method":"roster"}\n',
+                b'{"id":"s1","method":"settings"}\n',
+                b'{"id":"o1","method":"onboard"}\n')
+        self.assertEqual(result, {"ended": "eof", "requestsHandled": 3})
+        roster.assert_called_once_with(self.root)
+        settings.assert_called_once_with(self.root, self.root)
+        onboard.assert_called_once_with(self.root)
+        self.assertEqual([row["id"] for row in responses], ["r1", "s1", "o1"])
+        self.assertTrue(all(row["ok"] for row in responses))
+        self.assertFalse(responses[0]["result"]["accessGranted"])
+        self.assertFalse(responses[1]["result"]["executed"])
+        self.assertIsNone(responses[2]["result"]["selection"]["provider"])
+
     def test_rejects_extra_fields_duplicate_fields_and_commands(self):
         result, responses = self.serve(
             b'{"id":"a1","method":"ping","command":"rm"}\n',
             b'{"id":"a2","id":"a3","method":"ping"}\n',
             b'{"id":"a4","method":"execute"}\n',
+            b'{"id":"a5","method":"roster","project":"other"}\n',
             b'{"id":"ok","method":"ping"}\n')
-        self.assertEqual(result["requestsHandled"], 4)
-        self.assertEqual([row["ok"] for row in responses], [False, False, False, True])
+        self.assertEqual(result["requestsHandled"], 5)
+        self.assertEqual([row["ok"] for row in responses], [False, False, False, False, True])
         self.assertTrue(all("rm" not in json.dumps(row) for row in responses))
 
     def test_oversized_request_ends_without_echoing_payload(self):

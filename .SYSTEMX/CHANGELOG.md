@@ -4,6 +4,36 @@ The public release history is maintained in the
 [Versions and changelog wiki](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 This copy travels with the folder for offline use.
 
+## 1.11.0-beta.2 — Template Agenda settings and access decision rules
+
+- Add a read-only template catalog for the ten fixed AUTOBOT context settings.
+  Each definition names its Rules file, allowed `include`/`exclude` values,
+  and the unset initial state. No context is selected by a stock template.
+- Add a separate access decision rules catalog describing the permitted
+  `reviewed-intent`, `denied`, and `gap` outcomes and required review evidence.
+  The 20 default-deny role rows remain; no owner, decision, identity proof,
+  provider permission, or external grant is invented for a new project.
+- Expose the catalogs through read-only Agenda views and the Access Matrix
+  workbook. Existing project-owned option and decision records remain intact;
+  adding missing stock catalog files is an explicit, previewed step.
+- Add a read-only Agent 0 roster for selected-scope role and named-instance
+  navigation, task counts, and separate CLI setup pointers. It does not select
+  a provider, dispatch work, authenticate an identity, or grant access.
+- Add first-time provider and credential-consumer navigation for Codex CLI,
+  IDE, and SDK; separate Grok, Muse, and Kiro product surfaces; AWS CLI as a
+  host account tool; and six independently documented coding CLIs. Provider
+  and credential choices remain unset. Only Codex, Copilot, and Muse Code have
+  built-in Agent Y task adapters; the other coding CLIs are manual discovery
+  until an execution contract is reviewed. Existing root `AGENTS.md` pointers
+  remain optional and do not override a provider's instruction rules.
+- Extend the opt-in, bounded JSON-lines session with read-only Agent 0 roster,
+  compact settings, and unset onboarding views. List VS Code and Codex plus
+  Cursor, Kiro, and JetBrains as explicit host I/O targets. No native MCP/ACP
+  registration or IDE extension is installed by this beta.
+- Continue the beta prerelease line with Python package spelling `1.11.0b2`.
+  Preserve the beta.1 white paper and imagery as their labeled historical
+  baseline. GitHub Actions remains disabled and no new media or video is made.
+
 ## 1.11.0-beta.1 — Agent Beta, Agent1, and Agenda
 
 - Add optional named BOT/DOT workspaces for Agent Beta, with separate records

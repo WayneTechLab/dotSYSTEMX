@@ -10,10 +10,13 @@ another session can understand the work and continue from an explicit checkpoint
 The format is stack-neutral: it does not require a particular AI model, editor,
 application framework, or cloud provider.
 
-**Template version:** `1.11.0-beta.1` · **Python package metadata:** `1.11.0b1`
+**Template version:** `1.11.0-beta.2` · **Python package metadata:** `1.11.0b2`
 
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
+[Getting Started](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started) ·
+[Agent 0 and subagents](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents) ·
+[Agent 0 roster](docs/agent-0-roster.md) ·
 [Manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Current release report](docs/RELEASE-REPORT.md) ·
 [White paper](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) ·
@@ -27,9 +30,10 @@ application framework, or cloud provider.
 > [release policy](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Release-Policy)
 > and [version history](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Versions-and-Changelog).
 
-This beta adds opt-in Agent Beta BOT/DOT workspaces, Agent1 advisory security
-checks, Agent Alpha Agenda settings, and default-deny role rows in the Access
-Matrix. Existing projects retain their adopted files and update policy; a
+This beta includes opt-in Agent Beta BOT/DOT workspaces, Agent1 advisory
+security checks, Agent Alpha Agenda settings with stock definitions, and
+default-deny role rows and decision rules in the Access Matrix. Existing
+projects retain their adopted files and update policy; a
 template update does not start an agent or service or upload a secret.
 
 ## Add the folder to a project
@@ -48,13 +52,14 @@ On macOS or Linux, run this from the containing project directory:
 ```bash
 python3 -m venv "$HOME/.venvs/dotsystemx"
 "$HOME/.venvs/dotsystemx/bin/python" -m pip install \
-  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.1"
+  "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.2"
 systemx() { "$HOME/.venvs/dotsystemx/bin/python" -I -B -m systemx "$@"; }
 
-systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.1
-systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.1 --apply
+systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.2
+systemx first-run --target "$PWD" --profile project --version 1.11.0-beta.2 --apply
 systemx status --target "$PWD"
 systemx run --target "$PWD" --offline -- validate
+systemx run --target "$PWD" --offline -- onboard plan
 ```
 
 Inspect the preview before applying it. This short example selects an exact
@@ -64,6 +69,9 @@ record and supply `--archive-sha256`. That digest differs from a folder-only
 release archive's checksum. The
 [installation guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Installation-and-Updates)
 explains verification, existing-installation migration, and recovery.
+The read-only onboarding plan lists optional provider entry points and Agent1
+security setup questions for this exact project. A provider name in that
+catalog does not install, sign in, or run the provider.
 
 For [Windows PowerShell](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup),
 a reviewed folder copy, or [chat and Drive profiles](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started),
@@ -87,7 +95,9 @@ provide complete adoption and resume examples.
 | `.SYSTEMX/MEMORY/PROJECT.md` | Reviewed facts and useful checkpoints |
 | `.SYSTEMX/AGENTS/<id>/MEMORY.md` | A worker's scoped observations and handoff |
 | `.SYSTEMX/GLOBAL/ACCESS-MATRIX.json` | Default-deny role catalog and optional reviewed access decisions; no external grant |
-| `.SYSTEMX/GLOBAL/ACCESS-MATRIX.xlsx` | Human review view of the 20 stock role rows; JSON is authoritative |
+| `.SYSTEMX/GLOBAL/ACCESS-MATRIX.xlsx` | Five-sheet stock view of role defaults, Agenda settings, decision rules, and Agent 0 roster; JSON is authoritative |
+| `.SYSTEMX/GLOBAL/ACCESS-DECISION-RULES.json` | Stock decision outcomes, required fields, and review rules; no project decision |
+| `.SYSTEMX/AUTOBOT/AGENDA-SETTINGS.json` | Stock context-setting values and safe defaults for the ten AUTOBOT references |
 | `.SYSTEMX/GLOBAL/ACCESS-MATRIX.md` | Access intent, gaps, and evidence guidance |
 | `.SYSTEMX/PLAN/MAP.md` | Optional source locations, interfaces, and system boundaries |
 
@@ -120,12 +130,39 @@ come from the chosen app or IDE. Assign useful independent work with distinct
 write scopes, serialize shared-record updates, and verify combined results.
 The available host capacity determines concurrency.
 
+Agent 0 can inspect the selected role and instance roster without starting a
+worker: `bash .SYSTEMX/SYSTEMX.sh root roster` from the containing project
+directory. The [installable roster guide](.SYSTEMX/docs/AGENT-0-ROSTER.md)
+explains source records, setup commands, and access boundaries. Multiple
+external CLI programs may be installed, but Agent Y selects one verified
+provider per bounded task. `bash .SYSTEMX/SYSTEMX.sh agent-y providers` detects
+installed names only; authentication and permissions must be checked at the
+chosen provider. The installed `systemx` command manages template lifecycle,
+while GitHub CLI `gh` serves repository and PR operations.
+The [provider onboarding guide](.SYSTEMX/docs/CLI-TOOLS.md#first-time-provider-and-credential-plan)
+separates Codex CLI, IDE, SDK, and dot; Muse Code and personal Muse; Grok Build
+and Grok Bot; and Kiro CLI, IDE, Web, and AWS account tooling. It also lists
+six documented third-party CLI choices: Claude Code, OpenCode, BLACKBOX AI,
+Gemini CLI, Cursor Agent, and Aider. `onboard plan` asks which surface and
+credential consumer a project intends to use; those choices start unset, and
+it starts no provider. A selected consumer proposes a new credential class
+but creates no key. Only Codex CLI, Copilot CLI, and Muse Code have built-in
+Agent Y task adapters in this beta. The Muse adapter is source-tested, with
+live account and worktree trust still unverified. Other coding CLI entries
+remain discovery and manual setup paths pending adapter review.
+`onboard bridge` can preview a
+short project-root `AGENTS.md` pointer to `.SYSTEMX/AGENTS.md` and only creates
+it with an explicit, digest-guarded apply when the root file is absent.
+
 The optional [Agent Beta, Agent1, and Agenda guide](docs/agent-beta-security-agenda.md)
 defines the selected-scope records and commands. GitHub Actions secrets are
 for workflow runtime and cannot be linked into a local `.env`. Agent1 separates
 GitHub secret metadata and authorized upload from local credential handling;
 the Access Matrix documents reviewed intent without granting permissions. A
 read-only stdio session can be started explicitly and ends with its parent.
+The [Agent 0 direct I/O guide](.SYSTEMX/docs/TOOLCHAIN-IO.md) gives a fixed
+JSON-lines pipe example for CLI or IDE-owned processes and a separate guarded
+CLI write route. It is not a native MCP, ACP, or IDE chat integration.
 For an explicit repository or environment secret set, the CLI checks the
 active GitHub account's repository admin permission before hidden input, then
 reads back only name/scope metadata. A configured guest label is descriptive;
@@ -139,9 +176,30 @@ their required anchored file-handle operations are unavailable. See the
 [platform and setup limits](docs/agent-beta-security-agenda.md#session-and-platform-status)
 before using those workflows.
 
-The checked-in XLSX shows stock default-deny roles; `agenda workbook-export`
-creates a revision-guarded, current spreadsheet under an adopted scope's
-ignored `local/` directory. JSON decisions remain authoritative.
+The checked-in five-sheet XLSX shows stock default-deny roles, setting and
+decision-rule definitions, and the Agent 0 roster. `agenda catalog` reads the
+fixed Agenda and decision-rule definitions;
+the selected `AUTOBOT/AGENDA.json` `options` and Access Matrix `decisions`
+arrays still start empty. With no Agenda option, the stock state is `unset`:
+nothing is included automatically. `exclude` records an explicit reviewed
+choice. `agenda workbook-export` creates a revision-guarded, current
+spreadsheet under an adopted scope's ignored `local/` directory. JSON options
+and decisions remain authoritative.
+
+From the containing project directory, inspect the catalog and active scope:
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh agenda catalog
+bash .SYSTEMX/SYSTEMX.sh agenda status
+bash .SYSTEMX/SYSTEMX.sh agenda workbook-export
+```
+
+On Windows, use `pwsh -File .SYSTEMX/SYSTEMX.ps1 agenda catalog`. Preview a
+real `agenda decision-add` or `agenda set` with the selected scope's current
+revision; repeat the reviewed command with `--apply` only after checking its
+proposed row. The [settings and access guide](.SYSTEMX/docs/ACCESS-AND-MAP.md)
+lists the required fields and the boundary between recorded intent and actual
+provider permissions.
 Agent Beta can attach a same-actor reviewed decision to an existing BOT/DOT
 record through `agent-beta access-link` after a combined record/matrix revision
 check; the link leaves the workspace offline and grants no external access.
@@ -277,8 +335,9 @@ the Agent Beta, Agent1, or Agenda features. No new video was made for this beta.
 ## White paper and operating manual
 
 [**Portable Project Coordination for AI-Assisted Work**](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf)
-is the current five-page technical white paper, edition 2.1, examining
-`1.11.0-beta.1`. Historical edition 2.0 examined alpha.4 and was published
+is the retained five-page technical white paper, edition 2.1, examining
+the `1.11.0-beta.1` baseline. It does not describe the beta.2 stock catalogs.
+Historical edition 2.0 examined alpha.4 and was published
 with alpha.5; its original bytes remain available in that tagged history.
 Resource examples are illustrative, not measured savings or autonomous
 completion claims.

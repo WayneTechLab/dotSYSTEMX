@@ -23,12 +23,16 @@ import project_memory as memory
 COMMANDS = {"agenda"}
 AGENDA = "AUTOBOT/AGENDA.json"
 ACCESS = "GLOBAL/ACCESS-MATRIX.json"
+SETTING_CATALOG = "AUTOBOT/AGENDA-SETTINGS.json"
+DECISION_CATALOG = "GLOBAL/ACCESS-DECISION-RULES.json"
 SEEDS = {
     AGENDA: "templates/agenda/AGENDA.json",
     ACCESS: "templates/agenda/ACCESS-MATRIX.json",
+    SETTING_CATALOG: "templates/agenda/AGENDA-SETTINGS.json",
+    DECISION_CATALOG: "templates/agenda/ACCESS-DECISION-RULES.json",
 }
 REQUIRED = ("scripts/agenda_access.py", "tests/test_agenda_access.py", AGENDA, ACCESS,
-            *SEEDS.values())
+            SETTING_CATALOG, DECISION_CATALOG, *SEEDS.values())
 OPTION_COLUMNS = ("id", "botId", "setting", "value", "providerRulesPath",
                   "providerRulesSha256", "accessDecisionId", "reason", "reviewedAt", "evidence")
 ACCESS_COLUMNS = ("id", "actor", "resource", "action", "environment", "decision",
@@ -36,6 +40,15 @@ ACCESS_COLUMNS = ("id", "actor", "resource", "action", "environment", "decision"
 ROLE_COLUMNS = ("id", "actor", "kind", "instanceRule", "templateGrant",
                 "requiresReview", "purpose")
 TABLE_COLUMNS = OPTION_COLUMNS + ("accessDecision", "accessOwner", "accessConflict", "rulesCurrent")
+SETTING_COLUMNS = ("id", "botId", "setting", "defaultValue", "allowedValues",
+                   "providerRulesPath", "reviewRequired", "includeRequiresAccessDecision",
+                   "reviewQuestion", "effect")
+DECISION_RULE_COLUMNS = ("state", "recorded", "meaning", "policyRefRequiredForNewRecord",
+                         "ownerRequired", "evidenceRequired", "identityVerifiedByTemplate",
+                         "accessGrantedByTemplate")
+ROSTER_COLUMNS = ("actorId", "kind", "displayName", "registrationState", "sourceRecord",
+                  "workspace", "providerAlias", "taskCount", "accessDecisionIds",
+                  "reviewedIntentCount", "deniedCount", "gapCount", "externalRightsVerified")
 DECISIONS = ("reviewed-intent", "denied", "gap")
 MAX_ROWS = 1024
 MAX_RULE_BYTES = 256 * 1024
@@ -71,6 +84,44 @@ ROLE_DEFAULTS = tuple({"id": "ROLE-{:03d}".format(index), "actor": actor,
                        "kind": kind, "instanceRule": rule, "templateGrant": "none",
                        "requiresReview": True, "purpose": purpose}
                       for index, (actor, kind, rule, purpose) in enumerate(STANDARD_ROLES, 1))
+SETTING_DEFAULTS = tuple({
+    "id": "SETTING-{:03d}".format(index), "botId": "autobot." + slug,
+    "setting": "context_selection", "defaultValue": "unset",
+    "allowedValues": ["include", "exclude"],
+    "providerRulesPath": "AUTOBOT/" + filename,
+    "reviewRequired": True, "includeRequiresAccessDecision": True,
+    "reviewQuestion": "Should " + name + " reference context be included or excluded for this selected scope?",
+    "effect": "Advisory context only; no worker, schedule, or permission starts."}
+    for index, (slug, name, filename) in enumerate(autobots.SLOTS, 1))
+DECISION_RULES = (
+    {"state": "no-row", "recorded": False,
+     "meaning": "No reviewed decision exists; no access is inferred.",
+     "policyRefRequiredForNewRecord": False, "ownerRequired": False,
+     "evidenceRequired": False, "identityVerifiedByTemplate": False,
+     "accessGrantedByTemplate": False},
+    {"state": "gap", "recorded": True,
+     "meaning": "An access question remains open; resolve it before relying on this path.",
+     "policyRefRequiredForNewRecord": False, "ownerRequired": True,
+     "evidenceRequired": True, "identityVerifiedByTemplate": False,
+     "accessGrantedByTemplate": False},
+    {"state": "denied", "recorded": True,
+     "meaning": "A reviewer recorded denial; do not use this access path.",
+     "policyRefRequiredForNewRecord": False, "ownerRequired": True,
+     "evidenceRequired": True, "identityVerifiedByTemplate": False,
+     "accessGrantedByTemplate": False},
+    {"state": "reviewed-intent", "recorded": True,
+     "meaning": "A reviewer recorded intended access; verify real identity and permission at the external boundary.",
+     "policyRefRequiredForNewRecord": True, "ownerRequired": True,
+     "evidenceRequired": True, "identityVerifiedByTemplate": False,
+     "accessGrantedByTemplate": False},
+)
+SETTING_POLICY = {"schemaVersion": 1, "defaultState": "unset",
+                  "settings": list(SETTING_DEFAULTS)}
+DECISION_POLICY = {"schemaVersion": 1, "defaultState": "no-row", "templateGrant": "none",
+                   "decisionScope": ["actor", "resource", "action", "environment"],
+                   "newRecordRequiredFields": ["id", "actor", "resource", "action", "environment",
+                                               "decision", "owner", "evidence", "reviewedAt"],
+                   "rules": list(DECISION_RULES)}
 
 
 def _string(value, label, maximum=2048, required=True):
@@ -189,8 +240,25 @@ def validate_agenda(data, access=None, root=None):
     return data
 
 
+def _catalog_pair(root):
+    """Accept absent beta.1 catalogs, but never a partial or altered pair."""
+    paths = (SETTING_CATALOG, DECISION_CATALOG)
+    present = [records.safe(root, relative).is_file() for relative in paths]
+    if any(present) and not all(present):
+        raise ValueError("Agenda and access-decision catalogs must be installed together")
+    if not any(present):
+        return None
+    catalogs = {relative: records.read(root, relative) for relative in paths}
+    if catalogs[SETTING_CATALOG] != SETTING_POLICY:
+        raise ValueError("Agenda setting catalog must match the fixed default-inactive policy")
+    if catalogs[DECISION_CATALOG] != DECISION_POLICY:
+        raise ValueError("Access-decision rule catalog must match the fixed no-grant policy")
+    return catalogs
+
+
 def _load(root):
     root = Path(root)
+    _catalog_pair(root)
     agenda_exists, access_exists = records.safe(root, AGENDA).is_file(), records.safe(root, ACCESS).is_file()
     if agenda_exists != access_exists:
         raise ValueError("Agenda and Access Matrix JSON must be initialized together")
@@ -213,13 +281,17 @@ def _blank_seeds(defaults):
     if seeds[AGENDA] != {"schemaVersion": 1, "options": []} or seeds[ACCESS] != {
             "schemaVersion": 1, "roleDefaults": list(ROLE_DEFAULTS), "decisions": []}:
         raise ValueError("Agenda templates must have blank options and decisions with fixed default-deny roles")
+    if seeds[SETTING_CATALOG] != SETTING_POLICY or seeds[DECISION_CATALOG] != DECISION_POLICY:
+        raise ValueError("Agenda templates must have fixed default-inactive and no-grant catalogs")
     return seeds
 
 
 def validate_template(root, defaults=None):
     seeds = _blank_seeds(defaults or root)
     agenda, access = _load(root)
-    if agenda != seeds[AGENDA] or access != seeds[ACCESS]:
+    catalogs = _catalog_pair(root)
+    if (agenda != seeds[AGENDA] or access != seeds[ACCESS] or catalogs is None or
+            any(catalogs[relative] != seeds[relative] for relative in (SETTING_CATALOG, DECISION_CATALOG))):
         raise ValueError("Public Agenda and Access Matrix records must match blank distribution templates")
 
 
@@ -232,13 +304,22 @@ def _alpha_active(root):
 def initialize(root, defaults, apply=False):
     root, defaults = Path(root), Path(defaults)
     seeds = _blank_seeds(defaults)
-    missing = [relative for relative in (AGENDA, ACCESS) if not records.safe(root, relative).exists()]
-    if len(missing) != 2 and missing:
+    records_missing = [relative for relative in (AGENDA, ACCESS) if not records.safe(root, relative).exists()]
+    catalogs_missing = [relative for relative in (SETTING_CATALOG, DECISION_CATALOG)
+                        if not records.safe(root, relative).exists()]
+    if len(records_missing) == 1:
         raise ValueError("Agenda/Access Matrix initialization is incomplete; inspect the selected scope")
-    if not missing:
-        _load(root)
+    if len(catalogs_missing) == 1:
+        raise ValueError("Agenda/access-decision catalog installation is incomplete; inspect the selected scope")
+    missing = records_missing + catalogs_missing
+    _load(root)
+    preserve = [relative for relative in SEEDS if relative not in missing]
+    preserve_hashes = {relative: hashlib.sha256(records.safe(root, relative).read_bytes()).hexdigest()
+                       for relative in preserve}
     result = {"applied": False, "add": missing, "preserve": [relative for relative in (AGENDA, ACCESS)
-                                                         if relative not in missing],
+                                                         if relative not in missing] +
+              [relative for relative in (SETTING_CATALOG, DECISION_CATALOG) if relative not in missing],
+              "catalogsInstalled": not catalogs_missing,
               "runtimeStarted": False, "accessGranted": False}
     if not apply or not missing:
         return result
@@ -246,18 +327,28 @@ def initialize(root, defaults, apply=False):
     with memory.coordination_lock(root):
         if any(records.safe(root, relative).exists() for relative in missing):
             raise ValueError("Agenda initialization changed during preview; retry after inspection")
+        if any(hashlib.sha256(records.safe(root, relative).read_bytes()).hexdigest() != digest
+               for relative, digest in preserve_hashes.items()):
+            raise ValueError("Agenda initialization changed existing records during preview; retry")
         for relative in missing:
             records.write(root, relative, seeds[relative])
-    return {**result, "applied": True}
+    return {**result, "applied": True, "catalogsInstalled": True}
 
 
 def status(root):
     agenda, access = _load(root)
+    catalogs = _catalog_pair(root)
+    catalog_status = {"catalogsInstalled": catalogs is not None,
+                      "settingDefinitions": len(catalogs[SETTING_CATALOG]["settings"]) if catalogs else 0,
+                      "decisionRules": len(catalogs[DECISION_CATALOG]["rules"]) if catalogs else 0,
+                      "defaultContextState": "unset" if catalogs else None,
+                      "defaultAccessState": "no-row" if catalogs else None}
     if agenda is None:
         return {"initialized": False, "agendaOptions": 0, "accessDecisions": 0,
                 "roleDefaults": 0,
                 "agendaRevision": None, "accessRevision": None, "staleRules": 0,
                 "accessConflicts": 0,
+                **catalog_status,
                 "executed": False, "accessGranted": False}
     stale = sum(_rule_digest(root, row["providerRulesPath"]) != row["providerRulesSha256"]
                 for row in agenda["options"])
@@ -270,7 +361,22 @@ def status(root):
             "roleDefaults": len(access.get("roleDefaults", [])),
             "accessRevision": records.fingerprint(access), "staleRules": stale,
             "accessConflicts": conflicts,
+            **catalog_status,
             "executed": False, "accessGranted": False}
+
+
+def catalog(root, defaults):
+    """Read definitions, including a clearly marked preview for beta.1 scopes."""
+    agenda, access = _load(root)
+    installed = _catalog_pair(root)
+    definitions = installed or _blank_seeds(defaults)
+    return {"installed": installed is not None,
+            "source": "selected-scope" if installed else "distribution-preview",
+            "settingCatalog": definitions[SETTING_CATALOG],
+            "decisionCatalog": definitions[DECISION_CATALOG],
+            "agendaOptions": len(agenda["options"]) if agenda else 0,
+            "accessDecisions": len(access["decisions"]) if access else 0,
+            "executed": False, "identityVerified": False, "accessGranted": False}
 
 
 def _csv_cell(value):
@@ -294,6 +400,7 @@ def table(root, format="json"):
     if format not in ("json", "csv"):
         raise ValueError("Agenda table format must be json or csv")
     agenda, access = _load(root)
+    catalogs = _catalog_pair(root)
     initialized = agenda is not None
     agenda = agenda or {"schemaVersion": 1, "options": []}
     access = access or {"schemaVersion": 1, "decisions": []}
@@ -311,11 +418,19 @@ def table(root, format="json"):
               "accessColumns": list(ACCESS_COLUMNS), "agendaRows": rows,
               "accessRows": access["decisions"], "roleColumns": list(ROLE_COLUMNS),
               "roleRows": access.get("roleDefaults", []),
+              "catalogsInstalled": catalogs is not None,
+              "settingColumns": list(SETTING_COLUMNS),
+              "settingRows": catalogs[SETTING_CATALOG]["settings"] if catalogs else [],
+              "decisionRuleColumns": list(DECISION_RULE_COLUMNS),
+              "decisionRuleRows": catalogs[DECISION_CATALOG]["rules"] if catalogs else [],
               "executed": False, "accessGranted": False}
     if format == "csv":
         return {"format": "csv", "agendaCsv": _csv(TABLE_COLUMNS, rows),
                 "accessCsv": _csv(ACCESS_COLUMNS, access["decisions"]),
                 "roleCsv": _csv(ROLE_COLUMNS, access.get("roleDefaults", [])),
+                "catalogsInstalled": catalogs is not None,
+                "settingCsv": _csv(SETTING_COLUMNS, result["settingRows"]),
+                "decisionRuleCsv": _csv(DECISION_RULE_COLUMNS, result["decisionRuleRows"]),
                 "executed": False, "accessGranted": False}
     return {"format": "json", **result}
 
@@ -357,8 +472,9 @@ def add_decision(root, args):
     if args.expected_revision != before:
         raise ValueError("Access Matrix changed since the observed revision; inspect current status")
     actor_kind = _decision_actor(root, args.actor)
+    decision_action = getattr(args, "decision_action", None) or args.action
     row = {"id": args.id, "actor": args.actor, "resource": args.resource,
-           "action": args.action, "environment": args.environment,
+           "action": decision_action, "environment": args.environment,
            "decision": args.decision, "owner": args.owner,
            "policyRef": args.policy_ref, "evidence": args.evidence,
            "reviewedAt": args.reviewed_at, "recheck": args.recheck}
@@ -486,13 +602,19 @@ def _sheet_xml(title, note, revision, columns, rows):
     row(3, ["Source revision: " + revision], 3, 24)
     row(5, columns, 1, 32)
     for number, item in enumerate(rows, 6):
-        row(number, [_xml_text(item[column]) for column in columns], 0, 30)
+        row(number, [item[column] for column in columns], 0, 30)
     ET.SubElement(worksheet, q("autoFilter"), {"ref": "A5:{}{}".format(last_column, max(5, 5 + len(rows)))})
     return ET.tostring(worksheet, encoding="utf-8", xml_declaration=True)
 
 
-def _xlsx_bytes(root, agenda, access):
+def _xlsx_bytes(root, agenda, access, roster=None):
     """Render one deterministic, formula-free OOXML view from canonical JSON."""
+    # Import here because ROOT is an optional read-only view. Its roster owns
+    # actor discovery; this module does not infer instances from role patterns.
+    import root_coordination
+
+    catalogs = _catalog_pair(root)
+    roster = root_coordination.roster(root) if roster is None else roster
     by_id = {row["id"]: row for row in access["decisions"]}
     options = []
     rules_state = []
@@ -505,7 +627,9 @@ def _xlsx_bytes(root, agenda, access):
                         "accessConflict": option["value"] == "include" and
                                           decision["decision"] != "reviewed-intent",
                         "rulesCurrent": current_digest == option["providerRulesSha256"]})
-    revision = records.fingerprint({"agenda": agenda, "access": access, "rulesState": rules_state})
+    revision = records.fingerprint({"agenda": agenda, "access": access,
+                                    "catalogs": catalogs, "rulesState": rules_state,
+                                    "rosterRevision": roster["sourceRevision"]})
     sheets = (
         ("Role defaults", "Fixed role catalog. No template grants or automatic instance permissions.",
          ROLE_COLUMNS, access.get("roleDefaults", [])),
@@ -513,6 +637,12 @@ def _xlsx_bytes(root, agenda, access):
          ACCESS_COLUMNS, access["decisions"]),
         ("Agenda options", "Advisory context selection only; no bot execution or permission change.",
          TABLE_COLUMNS, options),
+        ("Setting definitions", "Stock values are unset; no advisory context is selected until review.",
+         SETTING_COLUMNS, catalogs[SETTING_CATALOG]["settings"] if catalogs else []),
+        ("Decision rules", "No row means no grant; recorded decisions never verify external permission.",
+         DECISION_RULE_COLUMNS, catalogs[DECISION_CATALOG]["rules"] if catalogs else []),
+        ("Agent 0 roster", "Selected-scope actor inventory. Registration and reviewed intent do not verify external rights.",
+         ROSTER_COLUMNS, roster["rows"]),
     )
     content_types = ('<?xml version="1.0" encoding="UTF-8"?>'
                      '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
@@ -521,7 +651,7 @@ def _xlsx_bytes(root, agenda, access):
                      '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
                      '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
                      + ''.join('<Override PartName="/xl/worksheets/sheet{}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'.format(index)
-                               for index in range(1, 4)) + '</Types>').encode("utf-8")
+                               for index in range(1, len(sheets) + 1)) + '</Types>').encode("utf-8")
     rels = ('<?xml version="1.0" encoding="UTF-8"?>'
             '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
             '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
@@ -535,8 +665,8 @@ def _xlsx_bytes(root, agenda, access):
     workbook_rels = ('<?xml version="1.0" encoding="UTF-8"?>'
                      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
                      + ''.join('<Relationship Id="rId{}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet{}.xml"/>'.format(index, index)
-                               for index in range(1, 4)) +
-                     '<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+                               for index in range(1, len(sheets) + 1)) +
+                     '<Relationship Id="rId{}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'.format(len(sheets) + 1) +
                      '</Relationships>').encode("utf-8")
     styles = ('<?xml version="1.0" encoding="UTF-8"?>'
               '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
@@ -587,13 +717,20 @@ def workbook_check(root, output=None):
     agenda, access = _load(root)
     if agenda is None:
         raise ValueError("Initialize Agenda and Access Matrix in this scope first")
-    revision, expected = _xlsx_bytes(root, agenda, access)
+    catalogs = _catalog_pair(root)
+    import root_coordination
+    roster = root_coordination.roster(root)
+    revision, expected = _xlsx_bytes(root, agenda, access, roster)
     exists, current, actual_digest = _workbook_state(path, expected)
     return {"output": relative, "exists": exists, "current": current,
             "sourceRevision": revision, "expectedSha256": hashlib.sha256(expected).hexdigest(),
             "actualSha256": actual_digest, "agendaOptions": len(agenda["options"]),
             "accessDecisions": len(access["decisions"]),
             "roleDefaults": len(access.get("roleDefaults", [])),
+            "catalogsInstalled": catalogs is not None,
+            "settingDefinitions": len(catalogs[SETTING_CATALOG]["settings"]) if catalogs else 0,
+            "decisionRules": len(catalogs[DECISION_CATALOG]["rules"]) if catalogs else 0,
+            "rosterActors": len(roster["rows"]), "rosterSourceRevision": roster["sourceRevision"],
             "executed": False, "accessGranted": False}
 
 
@@ -677,9 +814,10 @@ def add_cli(subparsers, scope=None):
     scope = scope or (lambda parser: parser)
     parent = subparsers.add_parser("agenda", help=__doc__)
     commands = parent.add_subparsers(dest="agenda_action", required=True)
-    command = scope(commands.add_parser("init", help="preview or add blank Agenda and Access Matrix records"))
+    command = scope(commands.add_parser("init", help="preview or add blank records and fixed catalogs"))
     command.add_argument("--apply", action="store_true")
     scope(commands.add_parser("status", help="read-only option and access summary"))
+    scope(commands.add_parser("catalog", help="read-only stock settings, values, and decision rules"))
     command = scope(commands.add_parser("table", help="read-only Agenda/Access Matrix table export"))
     command.add_argument("--format", choices=("json", "csv"), default="json")
     command = scope(commands.add_parser("set", help="preview or record one advisory context-selection option"))
@@ -709,7 +847,8 @@ def add_cli(subparsers, scope=None):
     command.add_argument("--id", required=True)
     command.add_argument("--actor", required=True)
     command.add_argument("--resource", required=True)
-    command.add_argument("--action", required=True)
+    # Keep the top-level CLI action ('agenda') separate from this matrix field.
+    command.add_argument("--action", dest="decision_action", required=True)
     command.add_argument("--environment", required=True)
     command.add_argument("--decision", choices=DECISIONS, required=True)
     command.add_argument("--owner", required=True)
@@ -727,6 +866,8 @@ def dispatch(root, defaults, args):
         result = initialize(root, defaults, args.apply)
     elif action == "status":
         result = status(root)
+    elif action == "catalog":
+        result = catalog(root, defaults)
     elif action == "table":
         result = table(root, args.format)
     elif action == "set":

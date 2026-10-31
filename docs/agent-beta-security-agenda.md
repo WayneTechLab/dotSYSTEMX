@@ -1,6 +1,6 @@
 # Agent Beta, Agent1, and Agenda
 
-**Specification for `1.11.0-beta.1`.** These three names have separate jobs.
+**Specification for `1.11.0-beta.2`.** These three names have separate jobs.
 Beta packaging and local checks do not establish every host or provider outcome.
 A role record or a
 document does not authenticate an agent, grant access, launch a model, or start
@@ -12,7 +12,7 @@ an operating-system service.
 | --- | --- | --- |
 | Agent Beta (`agent.b`) | Optional local **BOT/DOT workspace metadata** under `AGENTB/`, including an opt-in `online-reference` with a nonsecret provider identity alias and selected-scope access-decision reference. | No credential broker, security assessment, provider process, task coordination, or automatic online sync. Current metadata marks each BOT/DOT `online: false`. |
 | Agent1 (`agent.1`, `security-access`) | Opt-in **security and access assessment**, safe `.env` inventory/migration planning, and a bounded read-only local session service. | No secret-value collection in shared records, automatic upload/rotation, GitHub IAM grant, task acceptance, or always-on daemon. `agent.1` can be selected only when that numeric ID is not already assigned to another worker role. |
-| Agent Alpha Agenda | A blank **settings and access-matrix view** within the existing Agent Alpha/AUTOBOT reference tier. | No scheduler, recurrence engine, notification delivery, or second event ledger. Agent X owns events and due items. |
+| Agent Alpha Agenda | A **settings and access-matrix view** with stock value/rule definitions and empty project-specific selections. | No scheduler, recurrence engine, notification delivery, or second event ledger. Agent X owns events and due items. |
 
 Agent 0 remains the selected project's coordinator and accepts work in
 `WORK/TASKS.json`. Agent X records observed events and due items; its `due`
@@ -39,15 +39,19 @@ output size, not a billed-token or latency measurement.
 The beta release adds file and CLI surfaces for these roles. The concrete
 commands and schema must be read from the selected release's help before an
 operator applies a change. Agent1's first service transport is the explicitly
-started, unprivileged **stdio** session described in
+started **stdio** session described in
 [SERVICE.md](../.SYSTEMX/Setup/SERVICE.md): `service status` inspects capability;
 `service start --stdio` handles bounded read-only requests and exits at `stop`,
 EOF, or its request limit. It does not install a daemon, open a listening port,
 persist after the client exits, or provide a secret vault. The protocol methods
-are `ping`, `capabilities`, `assess`, and `stop`. A successful service process
+are `ping`, `capabilities`, `assess`, `roster`, `settings`, `onboard`, and
+`stop`. The last three expose selected-scope Agent 0, compact settings, and
+unset provider setup views through custom JSON-lines, not MCP or ACP.
+A successful service process
 means a local protocol response was observed; it does not prove a GitHub account,
 secret, workflow, or external permission works. Native macOS test results do
-not establish Windows or Linux installation/runtime support.
+not establish Windows or Linux installation/runtime support. The process
+inherits its launcher's OS permissions; run it as a normal user.
 
 An Agent1 assessment is advisory and based on visible local evidence. The
 current result identifies the selected project root, profile, warning codes,
@@ -63,15 +67,47 @@ answer coverage and syntax without opening or authenticating evidence paths.
 The bounded `agent-1 check` answers zero catalog questions, so a filename
 warning must never be reported as a control pass or a clean device.
 
-## Access Matrix defaults
+## Template settings and Access Matrix rules
 
 `GLOBAL/ACCESS-MATRIX.json` is the canonical selected-scope table. A new beta
 scope ships 20 standard role rows: Agent 0, X, Y, Z, Alpha, Beta, Agent1;
 numeric worker, native-subagent, and Agent Beta BOT/DOT instance patterns;
 and ten fixed AUTOBOT references. All rows have `templateGrant: none` and
 `requiresReview: true`. The `decisions` array is empty in the public template.
-The checked-in XLSX presents the same stock rows for human review; it does
-not synchronize live changes or enforce access.
+The [Access Decision Rules catalog](../.SYSTEMX/GLOBAL/ACCESS-DECISION-RULES.json)
+defines the supported outcomes and required review fields. The
+[Agenda Settings catalog](../.SYSTEMX/AUTOBOT/AGENDA-SETTINGS.json) defines
+the ten fixed AUTOBOT `context_selection` choices, allowed values, and safe
+effective defaults. The selected-scope `AUTOBOT/AGENDA.json` still has
+`options: []`. These catalogs set up the reusable template without inventing
+an adopter's user, resource, evidence, approval, or permission.
+
+| Area | Stock setting or rule | Effective value until project review |
+| --- | --- | --- |
+| Agenda context selection | One fixed AUTOBOT Rules path per ID; allowed recorded values `include` or `exclude` | `unset` when no option row exists; no reference is loaded automatically |
+| Role entry | `templateGrant: none`; `requiresReview: true` | No template grant, including for future BOT/DOT and subagent instances |
+| Access decision | Allowed outcomes `gap`, `denied`, `reviewed-intent` | No row and no reviewed permission intent |
+| Reviewed intent | Actor, resource, action, environment, owner, evidence, review time, nonsecret policy reference | Recorded plan only; external identity and permission remain unverified |
+
+The checked-in five-sheet XLSX presents the stock rules, role rows, and Agent 0
+roster for human review;
+it does not synchronize live changes or enforce access. Use the project-local
+launcher to see the same definitions and current selected-scope state:
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh agenda catalog
+bash .SYSTEMX/SYSTEMX.sh agenda status
+bash .SYSTEMX/SYSTEMX.sh agenda decision-add --help
+bash .SYSTEMX/SYSTEMX.sh agenda set --help
+```
+
+On Windows, the catalog command is
+`pwsh -File .SYSTEMX/SYSTEMX.ps1 agenda catalog`. A real decision first previews with the `accessRevision` from
+`agenda status` as `--expected-revision`; applying requires the same reviewed
+fields plus `--apply`. A real context choice uses `agendaRevision` in the same
+preview/apply pattern. `include` requires a selected-scope `reviewed-intent`
+decision and a Rules file whose digest remains current. The CLI rejects a
+stale revision or changed Rules file. Neither command changes provider IAM.
 
 Use `agenda status` to read `accessRevision`, then `agenda decision-add` with
 that revision to preview or apply one `ACC-` decision. It accepts a registered
@@ -79,9 +115,11 @@ agent, fixed AUTOBOT, registered numeric worker, `native-subagent:HOST:ID`,
 or `agentb:BOT_NAME` recorded in this scope. A `reviewed-intent` record needs
 a nonsecret policy reference. The result reports `identityVerified: false`
 and `accessGranted: false` because the CLI does not query or change IAM.
-`agenda table --format csv` returns three CSV strings inside JSON. An explicit
+`agenda table --format csv` returns five CSV strings inside JSON, including
+the fixed setting and decision-rule catalogs. An explicit
 `agenda workbook-export --expected-revision SOURCE_REV --apply` writes a
-formula-free XLSX under ignored `local/`; `agenda workbook-check` compares it
+formula-free six-sheet XLSX under ignored `local/`; `agenda workbook-check`
+compares it
 with current JSON. Upgrades retain an adopted scope's older matrix bytes,
 which may have no role catalog until `agenda roles-upgrade` is explicitly
 previewed and applied with its observed access revision.
@@ -112,7 +150,7 @@ reference to actual remote access; and a saved due item to a scheduler.
 | `.env` is mistaken for a vault or imported in bulk. | Treat it as plaintext source material; inventory key names only, classify each key, choose each destination, and require explicit import. No setup side effect uploads or deletes the file. |
 | BOT/DOT provider alias or access row is treated as proof. | Record the selected source and nonsecret alias; verify any real provider connection separately. A label or matrix decision is not an authenticated session or IAM grant. |
 | Process is alive but assessment or external outcome failed. | Separate process/protocol status from the assessment result and from external consumer health. Show stale or inaccessible evidence as `unknown`. |
-| Agenda is interpreted as an executor. | Agenda is blank settings and access context only. Agent X's due ledger does not execute; an external scheduler needs its own explicit setup and verification. |
+| Agenda is interpreted as an executor. | Stock setting definitions are present, but selected options start empty; Agenda is access context, not a scheduler. Agent X's due ledger does not execute; an external scheduler needs its own explicit setup and verification. |
 | Local uninstall leaves external resources active. | Inventory every separately installed scheduler, provider job, worktree, cloud copy, or secret. Verify removal through its owner. The core folder uninstall only archives `.SYSTEMX`. |
 
 This design reduces accidental disclosure and authority confusion; it is not a
@@ -228,7 +266,7 @@ onboarding. They are **not** fields captured by the current setup command:
 | Credentials | Which **names** are needed locally, in CI, or both? Is OIDC available? Was any value tracked or shared? Never place values in this review record. |
 | Actions | Does project policy permit Actions? Which workflows/environments consume each name and what reviewer/branch controls are verified? Treat absence of a policy decision as disabled. |
 | Beta | Is a BOT/DOT workspace needed? Is its source `local` or `online-reference`? If online-reference, what nonsecret provider and identity aliases and existing Access Matrix decision identify the planned boundary? Default absent. |
-| Agenda | Which context choices and access rows are reviewed intent, denial, or gaps? Default blank; no schedule execution. |
+| Agenda | Which context choices and access rows are reviewed intent, denial, or gaps? Stock choices are defined, but selected options and decisions start empty; no schedule execution. |
 | Operations | Which external resources, if any, need separate removal and provider readback? Warnings remain on by default. |
 
 ## Session and platform status

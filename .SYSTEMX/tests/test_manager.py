@@ -101,7 +101,8 @@ class ManagerTests(unittest.TestCase):
         self.assertFalse(self.root.exists())
         self.assertFalse(preview["applied"])
         onboarding = manager.first_run(self.root, source=self.source, apply=False)
-        self.assertIn(".SYSTEMX/GLOBAL/ACCESS-MATRIX.md", " ".join(onboarding["nextSteps"]))
+        self.assertIn("agenda decision-add", " ".join(onboarding["nextSteps"]))
+        self.assertIn(".SYSTEMX/GLOBAL/ACCESS-MATRIX.json", " ".join(onboarding["nextSteps"]))
         self.assertIn(".SYSTEMX/PLAN/MAP.md", " ".join(onboarding["nextSteps"]))
         self.assertFalse(self.root.exists())
         result = self.install()
@@ -823,6 +824,37 @@ class ManagerTests(unittest.TestCase):
                 self.write_manifest()
                 with self.assertRaisesRegex(manager.InstallError, "default-deny roles and no decisions|malformed or permissive"):
                     manager.read_bundle(self.source)
+
+    def test_beta_two_bundle_rejects_rehashed_permissive_catalogs(self):
+        pairs = (("AUTOBOT/AGENDA-SETTINGS.json", "templates/agenda/AGENDA-SETTINGS.json"),
+                 ("GLOBAL/ACCESS-DECISION-RULES.json", "templates/agenda/ACCESS-DECISION-RULES.json"))
+        for mutation in ("agenda-include", "access-grant"):
+            with self.subTest(mutation=mutation):
+                for current, template in pairs:
+                    for name in (current, template):
+                        shutil.copy2(SOURCE / name, self.source / name)
+                selected = pairs[0] if mutation == "agenda-include" else pairs[1]
+                catalog = json.loads((self.source / selected[0]).read_text())
+                if mutation == "agenda-include":
+                    catalog["settings"][0]["defaultValue"] = "include"
+                else:
+                    catalog["templateGrant"] = "read"
+                raw = json.dumps(catalog, indent=2).encode() + b"\n"
+                for name in selected:
+                    (self.source / name).write_bytes(raw)
+                self.write_manifest("1.11.0-beta.2")
+                with self.assertRaisesRegex(manager.InstallError, "malformed or activates a default|default-deny"):
+                    manager.read_bundle(self.source)
+
+    def test_beta_one_bundle_without_catalogs_remains_valid(self):
+        for name in ("AUTOBOT/AGENDA-SETTINGS.json", "templates/agenda/AGENDA-SETTINGS.json",
+                     "GLOBAL/ACCESS-DECISION-RULES.json", "templates/agenda/ACCESS-DECISION-RULES.json"):
+            (self.source / name).unlink()
+        self.write_manifest("1.11.0-beta.1")
+        self.assertEqual(manager.read_bundle(self.source)["version"], "1.11.0-beta.1")
+        preview = manager.first_run(self.root, source=self.source)
+        self.assertNotIn("onboard status", " ".join(preview["nextSteps"]))
+        self.assertIn(".SYSTEMX/GLOBAL/ACCESS-MATRIX.md", " ".join(preview["nextSteps"]))
 
     def test_implicit_downgrade_rejected_but_compatible_explicit_rollback_allowed(self):
         self.write_manifest("1.8.7-alpha.10")

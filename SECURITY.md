@@ -1,6 +1,6 @@
 # Security reporting
 
-.SYSTEMX is experimental alpha software, provided under the [MIT License](LICENSE)
+.SYSTEMX is prerelease beta software, provided under the [MIT License](LICENSE)
 without warranty. It is not a production-readiness or security certification.
 
 As of 11 October 2026, this public repository has GitHub secret scanning,
@@ -17,7 +17,7 @@ platform, expected boundary, and minimal sanitized reproduction. Never include
 credentials, customer information, or private project records in a public issue.
 
 Reports are reviewed as maintainer capacity permits. There is no guaranteed
-response time, supported-version window, or backport commitment during alpha.
+response time, supported-version window, or backport commitment during prerelease development.
 Report issues in older releases too and identify the affected versions; do not
 assume an older numeric version is security-supported. Corrections will identify
 their affected and fixed versions when known.

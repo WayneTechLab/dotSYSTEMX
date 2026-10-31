@@ -1,7 +1,8 @@
-"""Explicit, unprivileged stdio session for read-only SYSTEMX checks.
+"""Explicit stdio session for read-only SYSTEMX checks.
 
 The invoking CLI or IDE owns this process. It has no listener, daemon install,
 shell execution, credential store, or writable state. EOF ends the session.
+This fixed JSON-lines protocol is not MCP or ACP.
 """
 
 import json
@@ -16,7 +17,7 @@ MAX_LINE_BYTES = 16 * 1024
 MAX_RESPONSE_BYTES = 512 * 1024
 MAX_REQUESTS = 64
 REQUEST_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
-METHODS = ("ping", "capabilities", "assess", "stop")
+METHODS = ("ping", "capabilities", "assess", "roster", "settings", "onboard", "stop")
 
 
 def add_cli(subparsers, scope=None):
@@ -51,7 +52,8 @@ def status(root):
     return {"schemaVersion": 1, "kind": "systemx-session-service",
             "scope": str(selected), "transport": "stdio-json-lines",
             "state": "available-on-explicit-start", "persistentInstall": False,
-            "networkListener": False, "privileged": False, "writes": False,
+            "networkListener": False, "requiresElevation": False,
+            "hostPrivileges": "inherited-from-launcher", "writes": False,
             "methods": list(METHODS), "maxRequestBytes": MAX_LINE_BYTES,
             "maxRequests": MAX_REQUESTS,
             "platform": "Python 3.9+ on macOS, Windows, or Linux; host integration not asserted"}
@@ -115,6 +117,25 @@ def _assess(root, defaults):
     return security_agent1.assess(root, defaults, profile="all-in-one")
 
 
+def _roster(root):
+    # Agent 0 owns this local, bounded role/instance view. It reports recorded
+    # decisions but never verifies an external permission or starts a worker.
+    import root_coordination
+    return root_coordination.roster(root)
+
+
+def _settings(root, defaults):
+    # The compact form carries rule hashes and revision rather than rule text.
+    import session_settings
+    return session_settings.status(root, defaults, compact=True)
+
+
+def _onboard(root):
+    # No provider, dotenv file, account, or credential is selected by a packet.
+    import onboarding
+    return onboarding.view(root)
+
+
 def serve(root, defaults, input_stream, output_stream):
     """Serve bounded requests. No session file, listening socket, or process spawn."""
     selected = _scope(root)
@@ -139,6 +160,12 @@ def serve(root, defaults, input_stream, output_stream):
                 result = status(selected)
             elif method == "assess":
                 result = _assess(selected, defaults)
+            elif method == "roster":
+                result = _roster(selected)
+            elif method == "settings":
+                result = _settings(selected, defaults)
+            elif method == "onboard":
+                result = _onboard(selected)
             else:
                 result = {"ended": "requested"}
             _respond(output_stream, identifier, result=result)
@@ -146,7 +173,7 @@ def serve(root, defaults, input_stream, output_stream):
             # Exceptions from local checks may include private path details.
             # Return a bounded generic failure; the direct CLI has diagnostics.
             _respond(output_stream, identifier,
-                     error="Read-only assessment unavailable; run the direct Agent1 CLI for diagnostics")
+                     error="Read-only method unavailable; run the selected direct CLI for diagnostics")
         if method == "stop":
             return {"ended": "requested", "requestsHandled": handled}
     return {"ended": "request-limit", "requestsHandled": handled}

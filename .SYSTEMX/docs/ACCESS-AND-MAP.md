@@ -32,6 +32,42 @@ and ten fixed AUTOBOT references. Every row has `templateGrant: none` and
 shows those same stock rows. Neither file gives a user, process or provider
 access. The JSON `decisions` array starts empty; reviewed records use stable
 `ACC-` IDs and `reviewed-intent`, `denied`, or `gap` outcomes.
+The [decision-rules catalog](../GLOBAL/ACCESS-DECISION-RULES.json) defines
+those outcomes, required fields, and review conditions without inserting a
+project decision. Agent Alpha's [Agenda settings catalog](../AUTOBOT/AGENDA-SETTINGS.json)
+defines the fixed AUTOBOT context choices and their `unset` defaults. The
+[selected Agenda JSON](../AUTOBOT/AGENDA.json) still has an
+empty `options` array. Stock definitions are configured; an adopter's choices,
+identities, approvals, and permissions are not.
+
+| Stock rule | Effective template value | Project-specific action |
+| --- | --- | --- |
+| AUTOBOT `context_selection` | `unset` when no option is recorded; no automatic inclusion | Review one fixed Rules file and selected-scope access decision before `include`; `exclude` is an explicit recorded choice. |
+| Role access | `templateGrant: none`, `requiresReview: true` | Verify the real actor and provider/OS permission separately. |
+| Access decision | No row, so no reviewed intent or grant | Record `gap`, `denied`, or `reviewed-intent` with actor, resource, action, environment, owner, evidence, review time, and any required policy reference. |
+
+From the containing project directory, inspect the catalogs and selected
+scope before making a change:
+
+```bash
+bash .SYSTEMX/SYSTEMX.sh agenda catalog
+bash .SYSTEMX/SYSTEMX.sh agenda status
+bash .SYSTEMX/SYSTEMX.sh agenda decision-add --help
+bash .SYSTEMX/SYSTEMX.sh agenda set --help
+```
+
+Windows PowerShell uses `pwsh -File .SYSTEMX/SYSTEMX.ps1 agenda catalog`.
+For a real project decision, take `accessRevision` from `agenda status`, fill
+the exact actor/resource/action/environment/owner/evidence fields in
+`agenda decision-add`, and preview with `--expected-revision ACCESS_REV`.
+Apply the same reviewed command with `--apply` while that revision is still
+current. `reviewed-intent` additionally needs a nonsecret `--policy-ref`; the
+result still reports `identityVerified: false` and `accessGranted: false`.
+For a context choice, `agenda set` uses `agendaRevision`, a fixed AUTOBOT ID,
+its exact Rules path, and a separate preview/apply. `include` requires a
+same-scope reviewed-intent decision; the Rules digest is checked again at
+apply time. A revision mismatch or changed Rules file calls for a fresh review.
+
 Agent Alpha's [Agenda JSON](../AUTOBOT/AGENDA.json) can refer to one of those IDs
 when selecting advisory context. `agenda status` and `agenda table --format csv`
 read the canonical JSON and report whether referenced Rules files still match
@@ -42,7 +78,12 @@ instance uses `agentb:BOT_NAME`; a native worker uses
 `native-subagent:HOST:ID`. The command validates the actor and record shape,
 but `identityVerified` and `accessGranted` remain false until checked at the
 actual provider. In a child scope, `agenda init` previews and adds the stock
-role catalog with empty decisions and settings only after explicit selection.
+role and rule catalogs with empty decisions and selected settings only after
+explicit selection. An adopted beta.1 scope may show `agenda catalog` as a
+`distribution-preview` with `installed: false`; review `agenda init`, activate
+Agent Alpha if needed, then apply `agenda init --apply` to add the missing
+catalog pair without replacing existing options or decisions. Recheck
+`agenda status` for `catalogsInstalled: true`.
 For a new BOT/DOT instance, create its blank Agent Beta record first. After
 recording a same-actor `reviewed-intent` decision, `agent-beta access-link
 BOT_NAME --access-decision-id ACC-001` previews the link; repeat it with the
@@ -56,8 +97,10 @@ default-deny rows.
 The distributed workbook is a human-readable default catalog. It is not a
 live editor of scoped JSON decisions or an authorization source. For a live
 Excel-readable view, `agenda table --format csv` returns JSON containing
-separate `roleCsv`, `accessCsv`, and `agendaCsv` text. To make a current XLSX,
-preview `agenda workbook-export`, take its `sourceRevision`, then apply with
+separate `roleCsv`, `accessCsv`, `agendaCsv`, `settingCsv`, and
+`decisionRuleCsv` text. The checked-in stock XLSX has five sheets, including an
+Agent 0 roster. To make a current six-sheet selected-scope XLSX, preview
+`agenda workbook-export`, take its `sourceRevision`, then apply with
 `agenda workbook-export --expected-revision SHA256 --apply`. The generated
 formula-free workbook is written only under the selected scope's ignored
 `local/` directory. `agenda workbook-check` compares it with current JSON and

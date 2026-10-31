@@ -12,6 +12,15 @@ repository identity, root or project scope, owner/operator/guest role, intended
 GitHub Actions secret target, local runtime secret store choice, and whether
 tracked `.env` history and rotation have been reviewed. Missing answers are
 reported. Setup does not install a service or grant cloud access.
+The read-only `onboard plan` command pairs these questions with a selected
+provider surface and credential consumer. Its selections are navigation, not
+saved Agent1 answers; complete `agent-1 setup` separately in the exact scope.
+
+```sh
+bash .SYSTEMX/SYSTEMX.sh onboard plan --account-context personal \
+  --surface cli --provider codex-cli --credential-consumer local-cli \
+  --credential-class new
+```
 
 From the repository root, the standalone commands are:
 
@@ -99,6 +108,17 @@ the provider scopes and name-only listing.
 The GitHub CLI [secret set documentation](https://cli.github.com/manual/gh_secret_set)
 describes standard-input entry and local encryption. GitHub Secrets are remote
 provider records, not filesystem links or a symlink replacement for `.env`.
+The [GitHub secret types](https://docs.github.com/en/code-security/reference/secret-security/secret-types)
+have different consumers: Actions workflows, Codespaces, and Dependabot do
+not receive the same secret automatically. [Copilot cloud agent](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/configure-secrets-and-variables)
+uses its own Agents secret type. The `onboard plan --credential-consumer`
+choice makes this boundary visible, but it does not provision any destination.
+This Agent1 beta command writes **Actions** secrets only. The dotSYSTEMX
+repository currently has Actions disabled; that is a repository policy, not a
+default imposed on projects adopting this template. A local Codex, Grok, Muse,
+or Copilot CLI and a VS Code extension need their own reviewed sign-in or
+local runtime secret path. A newly issued credential is the preferred setup;
+`existing-test` labels reuse without claiming rotation.
 
 For host integration, `security_agent1.add_cli(subparsers, scope=None)` adds
 `agent-1` and `security_agent1.dispatch(root, defaults, args)` returns JSON-ready

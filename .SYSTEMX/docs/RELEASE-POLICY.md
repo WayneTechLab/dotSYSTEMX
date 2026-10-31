@@ -29,8 +29,8 @@ automatic release every day.
 
 Prior numeric versions and GitHub release labels are retained for compatibility.
 Those historical labels are not a production-readiness certification. The current
-`1.11.0-beta.1` version is a GitHub prerelease; the Python package spells it
-`1.11.0b1`. There is no stable-release date, support SLA, or promise of
+`1.11.0-beta.2` version is a GitHub prerelease; the Python package spells it
+`1.11.0b2`. There is no stable-release date, support SLA, or promise of
 compatibility throughout beta.
 Changes should document migrations and preserve project-owned data.
 
@@ -83,14 +83,14 @@ tool environment first, from outside the project's `.SYSTEMX` folder. Use the
 interpreter belonging to that environment; the example assumes it is activated:
 
 ```bash
-python -m pip --log dotsystemx-beta-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.1"
+python -m pip --log dotsystemx-beta-install.log install --upgrade "git+https://github.com/WayneTechLab/dotSYSTEMX.git@v1.11.0-beta.2"
 systemx --version
 systemx status --target "/path/to/project"
-systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.1
-systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.1 --apply
+systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.2
+systemx bootstrap-refresh --target "/path/to/project" --version 1.11.0-beta.2 --apply
 systemx policy --target "/path/to/project" --pin none --auto manual
-systemx update --target "/path/to/project" --version 1.11.0-beta.1 --dry-run
-systemx update --target "/path/to/project" --version 1.11.0-beta.1
+systemx update --target "/path/to/project" --version 1.11.0-beta.2 --dry-run
+systemx update --target "/path/to/project" --version 1.11.0-beta.2
 systemx policy --target "/path/to/project" --pin current
 systemx run --target "/path/to/project" --offline -- validate
 systemx run --target "/path/to/project" --offline -- context --agent agent.0
@@ -147,9 +147,14 @@ refresh that stock bootstrap with a reviewed external tool before enabling
 
 The previous alpha series and the unpublished local alpha.8 draft are not
 silently relabeled. New beta defaults include 20 default-deny Access Matrix
-role rows with no access decisions; an adopted project's existing matrix and
-other records remain owned by that project. Review any scoped migration
-explicitly; `agenda roles-upgrade` provides a revision-guarded additive path.
+role rows with no access decisions. Beta.2 adds fixed descriptions of the ten
+Agenda settings and the access decision rules; those descriptions do not add
+an option, decision, or grant. An adopted project's existing matrix and other
+records remain owned by that project. `agenda init` previews adding absent
+stock catalog files to a selected scope without replacing its reviewed option
+or decision rows. Review any scoped migration explicitly; `agenda
+roles-upgrade` remains a revision-guarded additive path for an older matrix
+without role defaults.
 A template release is a distribution event, not evidence of an
 application deployment. The optional [release counter](RELEASE-COUNTERS.md)
 reads GitHub release and deployment records separately and reports unknown when

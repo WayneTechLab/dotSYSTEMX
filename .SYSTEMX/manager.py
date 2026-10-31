@@ -336,6 +336,12 @@ def verified_bundle(files):
                          "SECURITY/AGENT1/questions.json", "SECURITY/AGENT1/event_buckets.json",
                          "SECURITY/AGENT1/README.md", "Setup/README.md",
                          "Setup/SERVICE.md", "Uninstall/README.md"})
+    if version_key(manifest["version"]) >= version_key("1.11.0-beta.2"):
+        required.update({"AUTOBOT/AGENDA-SETTINGS.json", "GLOBAL/ACCESS-DECISION-RULES.json",
+                         "templates/agenda/AGENDA-SETTINGS.json",
+                         "templates/agenda/ACCESS-DECISION-RULES.json",
+                         "scripts/onboarding.py", "tests/test_onboarding.py",
+                         "scripts/agent_guide_bridge.py", "tests/test_agent_guide_bridge.py"})
     if not required.issubset(inventory):
         raise InstallError("Distribution is missing core files")
     folded = set()
@@ -419,6 +425,68 @@ def verified_bundle(files):
         for name, expected_seed in blank_tables.items():
             if decode(files[name]) != expected_seed:
                 raise InstallError("Distribution contains a populated optional seed: " + name)
+    if version_key(manifest["version"]) >= version_key("1.11.0-beta.2"):
+        settings = decode(files["AUTOBOT/AGENDA-SETTINGS.json"])
+        rules = decode(files["GLOBAL/ACCESS-DECISION-RULES.json"])
+        if (settings != decode(files["templates/agenda/AGENDA-SETTINGS.json"]) or
+                rules != decode(files["templates/agenda/ACCESS-DECISION-RULES.json"])):
+            raise InstallError("Distribution Agenda and access-rule catalogs must match their templates")
+        if (not isinstance(settings, dict) or
+                set(settings) != {"schemaVersion", "defaultState", "settings"} or
+                type(settings["schemaVersion"]) is not int or settings["schemaVersion"] != 1 or
+                settings["defaultState"] != "unset" or
+                not isinstance(settings["settings"], list) or len(settings["settings"]) != 10):
+            raise InstallError("Distribution Agenda settings catalog must be unset and fixed")
+        slots = ("design", "soul", "memory", "rules", "research", "brand", "media",
+                 "tokens", "data", "archive")
+        for index, (row, slot) in enumerate(zip(settings["settings"], slots), 1):
+            expected_path = "AUTOBOT/" + slot.title() + ".MD"
+            expected_question = ("Should " + slot.title() +
+                                 " reference context be included or excluded for this selected scope?")
+            if (not isinstance(row, dict) or
+                    set(row) != {"id", "botId", "setting", "defaultValue", "allowedValues",
+                                 "providerRulesPath", "reviewRequired", "includeRequiresAccessDecision",
+                                 "reviewQuestion", "effect"} or
+                    row["id"] != "SETTING-{:03d}".format(index) or
+                    row["botId"] != "autobot." + slot or
+                    row["setting"] != "context_selection" or row["defaultValue"] != "unset" or
+                    row["allowedValues"] != ["include", "exclude"] or
+                    row["providerRulesPath"] != expected_path or
+                    row["reviewRequired"] is not True or row["includeRequiresAccessDecision"] is not True or
+                    row["reviewQuestion"] != expected_question or
+                    row["effect"] != "Advisory context only; no worker, schedule, or permission starts."):
+                raise InstallError("Distribution Agenda setting is malformed or activates a default")
+        if (not isinstance(rules, dict) or
+                set(rules) != {"schemaVersion", "defaultState", "templateGrant",
+                               "decisionScope", "newRecordRequiredFields", "rules"} or
+                type(rules["schemaVersion"]) is not int or rules["schemaVersion"] != 1 or
+                rules["defaultState"] != "no-row" or rules["templateGrant"] != "none" or
+                rules["decisionScope"] != ["actor", "resource", "action", "environment"] or
+                rules["newRecordRequiredFields"] != ["id", "actor", "resource", "action",
+                                                     "environment", "decision", "owner", "evidence",
+                                                     "reviewedAt"] or
+                not isinstance(rules["rules"], list) or len(rules["rules"]) != 4):
+            raise InstallError("Distribution access decision rules must be fixed and default-deny")
+        meanings = (
+            "No reviewed decision exists; no access is inferred.",
+            "An access question remains open; resolve it before relying on this path.",
+            "A reviewer recorded denial; do not use this access path.",
+            "A reviewer recorded intended access; verify real identity and permission at the external boundary.",
+        )
+        for row, state, meaning in zip(rules["rules"],
+                                       ("no-row", "gap", "denied", "reviewed-intent"), meanings):
+            if (not isinstance(row, dict) or
+                    set(row) != {"state", "recorded", "meaning", "policyRefRequiredForNewRecord",
+                                 "ownerRequired", "evidenceRequired", "identityVerifiedByTemplate",
+                                 "accessGrantedByTemplate"} or
+                    row["state"] != state or row["recorded"] is not (state != "no-row") or
+                    row["policyRefRequiredForNewRecord"] is not (state == "reviewed-intent") or
+                    row["ownerRequired"] is not (state != "no-row") or
+                    row["evidenceRequired"] is not (state != "no-row") or
+                    row["identityVerifiedByTemplate"] is not False or
+                    row["accessGrantedByTemplate"] is not False or
+                    row["meaning"] != meaning):
+                raise InstallError("Distribution access decision rule is malformed or grants access")
     if base_version >= (1, 7, 0):
         if decode(files["Projects/REGISTRY.json"]) != {"schemaVersion": 1, "projects": []}:
             raise InstallError("Distribution project registry must be empty")
@@ -1196,13 +1264,23 @@ def first_run(target, *, source=None, version=None, profile="project", lowercase
     else:
         result = install(root, source=source, version=version, profile=profile,
                          lowercase_alias=lowercase_alias, archive_sha256=archive_sha256, dry_run=not apply)
+    next_steps = ["Fill .SYSTEMX/GLOBAL/CONTEXT.md with approved project facts",
+                  "Define outcomes and acceptance in .SYSTEMX/PLAN/MASTER-PLAN.md",
+                  "When relevant, record reviewed access intent in .SYSTEMX/GLOBAL/ACCESS-MATRIX.md and source/data-flow boundaries in .SYSTEMX/PLAN/MAP.md; verify actual rights externally",
+                  "Configure only real project checks in .SYSTEMX/project.json"]
+    selected_version = result.get("activeVersion", result.get("version"))
+    if selected_version and version_key(selected_version) >= version_key("1.11.0-beta.2"):
+        next_steps[2] = (
+            "Record reviewed access intent with agenda decision-add in .SYSTEMX/GLOBAL/ACCESS-MATRIX.json; "
+            "verify actual rights externally and map source/data flow in .SYSTEMX/PLAN/MAP.md")
+        next_steps += [
+            "Run bash .SYSTEMX/SYSTEMX.sh onboard status, then onboard plan for the selected provider and CLI, VS Code, or harness surface",
+            "Review Agent1 setup and dotenv key names with agent-1 setup and agent-1 env-inventory; do not put values in project records or assume GitHub Secrets supply a local runtime",
+            "Preview onboard bridge before creating a project-root AGENTS.md pointer; preserve an existing file"]
+    next_steps.append("Run validate, then load context --agent agent.0")
     result = {"action": "first-run", "applied": apply, "installation": result,
               "config": "preserve" if safe_path(root / ".SYSTEMX", "project.json").exists() else "create-empty",
-              "nextSteps": ["Fill .SYSTEMX/GLOBAL/CONTEXT.md with approved project facts",
-                            "Define outcomes and acceptance in .SYSTEMX/PLAN/MASTER-PLAN.md",
-                            "When relevant, record verified access decisions in .SYSTEMX/GLOBAL/ACCESS-MATRIX.md and source/data-flow boundaries in .SYSTEMX/PLAN/MAP.md",
-                            "Configure only real project checks in .SYSTEMX/project.json",
-                            "Run validate, then load context --agent agent.0"],
+              "nextSteps": next_steps,
               "guide": "https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup"}
     if not apply:
         return result
