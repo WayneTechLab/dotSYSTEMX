@@ -245,6 +245,11 @@ class AgendaAccessTests(unittest.TestCase):
         self.assertFalse(preview["applied"])
         self.assertEqual(preview["action"], "read")
         self.assertEqual(agenda.status(root)["accessDecisions"], 0)
+        empty = command.copy()
+        empty[empty.index("read")] = ""
+        with self.assertRaises(ValueError):
+            agenda.dispatch(root, DEFAULTS, parser.parse_args(empty + ["--apply"]))
+        self.assertEqual(agenda.status(root)["accessDecisions"], 0)
         applied = agenda.dispatch(root, DEFAULTS, parser.parse_args(command + ["--apply"]))
         self.assertTrue(applied["applied"])
         self.assertEqual(agenda.status(root)["accessDecisions"], 1)

@@ -472,7 +472,12 @@ def add_decision(root, args):
     if args.expected_revision != before:
         raise ValueError("Access Matrix changed since the observed revision; inspect current status")
     actor_kind = _decision_actor(root, args.actor)
-    decision_action = getattr(args, "decision_action", None) or args.action
+    decision_action = getattr(args, "decision_action", None)
+    if decision_action is None:
+        # Direct callers from older code used ``action`` for this field.
+        # An explicitly supplied empty CLI value must reach validation, not
+        # fall back to the top-level argparse command name.
+        decision_action = args.action
     row = {"id": args.id, "actor": args.actor, "resource": args.resource,
            "action": decision_action, "environment": args.environment,
            "decision": args.decision, "owner": args.owner,

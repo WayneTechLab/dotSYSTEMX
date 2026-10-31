@@ -91,33 +91,37 @@ tests on both Python 3.14 and 3.11. In an isolated copied scope,
 reported `applied: false` and `applied: true` respectively, and kept
 `accessGranted: false`. Only the fixture received one `gap` decision row.
 This functional check does not establish an external permission grant.
+The subsequent security review closed an empty-value fallback: an explicit
+`agenda decision-add --action ''` now fails validation and writes zero decisions,
+rather than treating the empty value as an omitted action. A regression test
+covers this case; the focused Agenda suite again passed 26 of 26 on both
+interpreters. The full-suite and wheel receipts below use this exact source
+change.
 
 ## Source qualification
 
 | Boundary | Required evidence | Verified local state |
 | --- | --- | --- |
-| Version and manifest | VERSION, SOURCE.json, pyproject.toml, and the regenerated exact-file manifest agree; `release.py --check` passes after all edits. | Current `.SYSTEMX/config/distribution.json`: 28,332 bytes, SHA-256 `29c02255b3dbac36844d040becd8b12c58e381094dc20a0d584614b919a2bf96`. `python3.14 -I -B .SYSTEMX/scripts/release.py --check` passed: 282 distributed files and 158 Markdown documents after the service capabilities fix. |
-| Local suites | Full source-matched tests on available interpreters, plus catalog migration, manager compatibility, workbook, and roster checks. Record host, command, counts, skips, and duration. | On this macOS host, Python 3.14.5: `python3.14 -I -B -m unittest discover -s .SYSTEMX/tests -q`, 406 tests, OK, 6 skipped, 490.572 s. Python 3.11.15: `python3.11 -I -B -m unittest discover -s .SYSTEMX/tests -q`, 406 tests, OK, 6 skipped, 410.044 s. Both ran against final manifest `29c02255...` after the privilege fix. |
+| Version and manifest | VERSION, SOURCE.json, pyproject.toml, and the regenerated exact-file manifest agree; `release.py --check` passes after all edits. | Current `.SYSTEMX/config/distribution.json`: 28,332 bytes, SHA-256 `579bfe2ec555ef424a7be492c166839f6813bc8d90f2e19e1d123671543a1804`. `python3.14 -I -B .SYSTEMX/scripts/release.py --check` passed: 282 distributed files and 158 Markdown documents after the empty-action validation fix. |
+| Local suites | Full source-matched tests on available interpreters, plus catalog migration, manager compatibility, workbook, and roster checks. Record host, command, counts, skips, and duration. | On this macOS host, Python 3.14.5: `python3.14 -I -B -m unittest discover -s .SYSTEMX/tests -q`, 406 tests, OK, 6 skipped, 450.154 s. Python 3.11.15: `python3.11 -I -B -m unittest discover -s .SYSTEMX/tests -q`, 406 tests, OK, 6 skipped, 403.082 s. Both ran against manifest `579bfe2e...` after the empty-action validation fix. |
 | Access Matrix XLSX | Twenty role rows, ten unset settings, four decision rules, empty active decisions/options, no formulas, and canonical JSON row comparison. | Local `ACCESS-MATRIX.xlsx` asset is 14,195 bytes, SHA-256 `ef94cdcf73ddcdf37f3927c50b8fdcaf5745e2eb219fddf5ee4bb5de8c6fcb0d`. Five sheets pass ZIP integrity and no-formula/external-link/VBA checks; ten settings, four rules, and 20 roster rows with all 13 fields match canonical JSON row by row. All 160 original nonempty cells in the first two sheets are preserved. |
-| Wheel | Build from frozen source, compare every `.SYSTEMX` payload file byte for byte, install in isolation, and read `systemx --version`. | Locally qualified staged `dotsystemx-1.11.0b2-py3-none-any.whl`: 12,992,809 bytes, SHA-256 `f33c82ade9ff08641d5a0b128846a272c71df22d2e97f31d718a1c1ec4c0d8ca`. All 282 package payload files exactly match final source/manifest. Force-reinstalled in isolated Python 3.14 and 3.11 environments; each `python -I -B -m systemx --version` returned beta.2. |
+| Wheel | Build from frozen source, compare every `.SYSTEMX` payload file byte for byte, install in isolation, and read `systemx --version`. | Replacement `dotsystemx-1.11.0b2-py3-none-any.whl`: 12,992,978 bytes, SHA-256 `6f93e871e0f0c96a5f360fd1f828fe85fc7dcf8153d180a9fcbbf00bd7b2eb45`; all 282 `.SYSTEMX` payload files match the current source byte for byte. Fresh Python 3.14 and 3.11 isolated installs reported beta.2 and passed installed-wheel smoke. The prior wheel digest is superseded. |
 | Docs and media | Check local links, public/private paths, and exact `.SYSTEMX/MEDIA/**` byte identity against beta.1. | `validate --template` checked 158 packaged Markdown documents. A separate root/changed-guide pass checked 218 local links in 12 files with no missing target. `git diff --exit-code v1.11.0-beta.1 -- .SYSTEMX/MEDIA` passed, and scoped status found no changed/untracked media or workflow file. |
 
-The staged `ACCESS-MATRIX.xlsx` matches the workbook digest above.
+The staged `ACCESS-MATRIX.xlsx` matches the workbook digest above. The replacement
 `SHA256SUMS` is 188 bytes, SHA-256
-`b3b3c16bc1eb64afd51a4401c2fd90a6416f1493528567831795df088e2deebf`.
-`shasum -a 256 -c SHA256SUMS` passed for both staged assets.
-These local hashes and byte comparisons qualify the prepared assets; GitHub
-upload and downloaded asset bytes still need independent readback. The wheel
-applied `first-run` to a fresh project on each interpreter, installing 282
-files. Each added a `Demo` child and ran child `onboard plan` with surface
-`sdk`, provider `codex-sdk`, and consumer `server-application`. Ordinary installed
-`validate` passed 274 files and 149 Markdown documents per target. The
-managed direct-I/O service also answered five of five requests in each
-environment, advertised seven methods, showed 20 stock roster rows and
-compact settings, and left the default provider unset. These are local
-source/package checks, not a live provider or IDE integration. Earlier
-install/suite attempts on superseded revisions remain development feedback and
-are excluded from final source qualification.
+`526f6d80dc757aa1b41cca22e7036ffe7088505ca954c226fa2079da4cd7bca4`.
+Independent `shasum -a 256 -c SHA256SUMS` passed for both staged assets. The
+prior wheel's installed receipts are superseded. On fresh final-wheel targets
+with Python 3.14 and 3.11, `first-run` preview made no change and apply installed
+all 282 packaged files. Root roster readback listed 20 roles; the Codex SDK
+onboarding plan selected the `server-application` consumer. Each target added a
+`Demo` child and passed a child SDK plan. Ordinary installed `validate` checked
+274 files and 149 Markdown documents per target. The managed direct-I/O service
+answered all seven fixed string-ID methods and reported
+`hostPrivileges: inherited-from-launcher`. These are local package checks, not
+a live provider or IDE integration. GitHub upload and downloaded asset bytes
+still need independent readback.
 
 The previous
 [beta.1 release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-beta.1)
