@@ -71,6 +71,24 @@ The PDF has selectable text but is not tagged PDF/UA.
 examined beta.1; edition 2.0 remains in
 [immutable alpha.5 history](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-alpha.5).
 
+## Current hosted beta video
+
+[Watch .SYSTEMX Beta.4 Explained](https://www.youtube.com/watch?v=5A3k_sLzovU) ·
+[Chapter and source guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Beta-Video-Guide) ·
+[Media release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-beta-explainer-v1.0) ·
+[Transcript](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Transcript.md) ·
+[English captions](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Captions.en.srt) ·
+[Poster](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Poster.jpg).
+
+The film uses the current twelve-graphic library to explain the immutable
+`v1.11.0-beta.4` software baseline and white-paper edition 2.2. The graphic
+sources retain their beta.3 art provenance. The illustrated TASK-001 and host
+toolchain routes are teaching examples, not live provider or deployment receipts.
+The public template continues to contain no video, Blender project, narration,
+or render cache; production masters remain in the separately managed owner
+archive. Verify release asset bytes against the published checksums before
+calling a download current.
+
 ## Previous visual editions and hosted films
 
 The four original JPEG maps, beta.1 feature graphics, role cards, and
