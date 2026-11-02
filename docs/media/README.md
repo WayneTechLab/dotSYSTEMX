@@ -71,23 +71,38 @@ The PDF has selectable text but is not tagged PDF/UA.
 examined beta.1; edition 2.0 remains in
 [immutable alpha.5 history](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/v1.11.0-alpha.5).
 
+
 ## Current hosted beta video
 
-[Watch .SYSTEMX Beta.4 Explained](https://www.youtube.com/watch?v=5A3k_sLzovU) ·
+[Watch .SYSTEMX Beta.4 — The Complete Project Workflow](https://www.youtube.com/watch?v=uCJ_o-3BsRg) ·
 [Chapter and source guide](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Beta-Video-Guide) ·
-[Media release](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-beta-explainer-v1.0) ·
-[Transcript](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Transcript.md) ·
-[English captions](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Captions.en.srt) ·
-[Poster](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Poster.jpg).
+[Media edition 2.0](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-beta-explainer-v2.0) ·
+[Descriptive transcript](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film-Descriptive-Transcript.md) ·
+[English SRT](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film.en.srt) · [English VTT](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film.en.vtt) ·
+[Poster](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film-Poster.jpg) · [Checksums](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SHA256SUMS.txt).
 
-The film uses the current twelve-graphic library to explain the immutable
-`v1.11.0-beta.4` software baseline and white-paper edition 2.2. The graphic
-sources retain their beta.3 art provenance. The illustrated TASK-001 and host
-toolchain routes are teaching examples, not live provider or deployment receipts.
-The public template continues to contain no video, Blender project, narration,
-or render cache; production masters remain in the separately managed owner
-archive. Verify release asset bytes against the published checksums before
-calling a download current.
+The **10:55.333, 3840 × 2160, 30 fps** remake adds an eight-second Blender
+opening to the retained beta.4 narration. It uses the original four maps as
+full-screen source views, focused details of the current graphic library,
+large captured local CLI excerpts, animated work/review paths, and eleven
+chapters. Its 133 English caption cues are also included as a selectable
+track in the external MP4.
+
+The new [7680 × 4320 engineering master PNG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map-8K.png),
+[editable SVG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map.svg), and [reading-order text](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map-Text.md) form a separate
+media companion. Exact labels and connected process paths cover the canonical
+records, seven roles, twenty Access Matrix rows, ten unset Agenda entries,
+host tools, rework, and returned evidence. This companion does not replace the
+twelve canonical template SVGs or change their beta.3 provenance.
+
+Software `v1.11.0-beta.4` and white-paper edition 2.2 retain their published
+identities. The fictional TASK-001 and isolated local CLI captures do not prove
+provider authentication/execution, device security, deployment, or owner
+acceptance. Production MP4, Blender, narration and render masters remain in the
+separately managed owner archive. Verify downloads against the release checksums.
+
+The [earlier 10:47 beta film](https://www.youtube.com/watch?v=5A3k_sLzovU) and
+[media edition 1.0](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-beta-explainer-v1.0) retain their original publication identity.
 
 ## Previous visual editions and hosted films
 

@@ -305,21 +305,34 @@ beta.1 diagrams, role cards, and detail sheets remain in the
 [immutable beta.2 source archive](https://github.com/WayneTechLab/dotSYSTEMX/tree/v1.11.0-beta.2/.SYSTEMX/MEDIA/Infographics)
 and the verified external media archive; they are no longer current embeds.
 
+
 ## Current beta video guide
 
-[Watch .SYSTEMX Beta.4 Explained on YouTube](https://www.youtube.com/watch?v=5A3k_sLzovU) ·
+[Watch .SYSTEMX Beta.4 — The Complete Project Workflow on YouTube](https://www.youtube.com/watch?v=uCJ_o-3BsRg) ·
 [Film guide and chapter map](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Beta-Video-Guide) ·
-[Media release and verified downloads](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-beta-explainer-v1.0).
+[Media edition 2.0 and verified downloads](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-beta-explainer-v2.0).
 
-The hosted film explains software `1.11.0-beta.4` through a fictional task,
-first-run preview, the canonical task and evidence cycle, seven agent roles,
-Agenda and Access Matrix defaults, Agent1's advisory checks, and host-owned CLI
-and IDE routes. [Read the timed transcript](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Transcript.md) or
-[download English captions](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v1.0/SYSTEMX-Beta-Explainer-Captions.en.srt). The film is an
-illustration of the tagged source, not a recorded provider run, installed IDE
-extension, security certification, deployment, or measured token-savings study.
-The exact beta.4 source, wheel, and white-paper edition 2.2 retain their
-published identities; this hosted media does not change the installer version.
+The **10:55 4K film** follows one fictional task through first-run setup,
+canonical task and evidence records, seven agent roles, Agenda and Access
+Matrix defaults, Agent1 advice, and host-owned CLI/IDE routes. It opens with a
+Blender folder sequence, reuses the original four system maps as full-screen
+source views, and moves into readable commands and animated process details.
+Eleven chapters and 133 English caption cues accompany the narration.
+[Read the descriptive transcript](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film-Descriptive-Transcript.md) or
+[download English captions](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film.en.srt).
+
+The new [8K engineering master map](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map-8K.png) is a separate
+media companion with [editable SVG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map.svg) and
+[reading-order text](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map-Text.md). It connects the work loop, exact files,
+seven roles, governance, and returned evidence. The twelve canonical template
+graphics retain their beta.3 art provenance.
+
+The film explains the immutable `v1.11.0-beta.4` source and white-paper edition
+2.2. Local CLI excerpts were captured in an isolated fictional example;
+provider execution, device security, deployment, and owner acceptance require
+their own evidence. This media edition does not change the installer version.
+The [earlier 10:47 beta film](https://www.youtube.com/watch?v=5A3k_sLzovU) and
+[media edition 1.0](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-beta-explainer-v1.0) remain historical.
 
 ## Historical video guide: The Guided Folder
 
