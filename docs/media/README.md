@@ -1,5 +1,46 @@
 # Published reference library
 
+## Latest all-in-one synergy map
+
+The [complete synergy map](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Synergy-Map)
+is a separate beta.4 engineering companion with **49 blocks, 120 directed
+connections, 92 vector icon instances**, and native **7680 × 4320** artwork.
+It connects inputs, canonical records, Agent 0 and specialist lanes,
+processing tools, original evidence, accepted outputs, and resumable feedback.
+
+[![Seven-stage .SYSTEMX map connecting inputs, context, coordination, specialist roles, processing, evidence and delivery.](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Preview.jpg)](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Synergy-Map)
+
+[Download the interactive ZIP](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Package.zip),
+extract it, and open `SYSTEMX-Synergy-Map.html` locally. Select a block to trace
+its inputs/outputs and inspect exact paths, command routes and source links.
+The searchable reference includes 400 Agent1 and 100 Agent Z questions,
+twenty provider/navigation targets, ten AUTOBOT functions, twenty stock access
+rows, ten Agenda settings and ten security event buckets. The standalone HTML
+is also a download; GitHub does not execute it inside a README or wiki page.
+
+[8K PNG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-8K.png) ·
+[Editable SVG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map.svg) ·
+[Reading guide](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Reading-Guide.md) ·
+[Deep reference](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Deep-Reference.md) ·
+[Graph JSON](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Graph.json) ·
+[Source catalog](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Source-Catalog.json) ·
+[Media release and checksums](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-synergy-map-v1.0).
+
+The graph was reviewed at source `3db12866e552a3cdc190d0a23c8f89a87ba3d3b9`.
+Its 43 source-file hashes, connection endpoints, routes and catalog counts
+were checked. Fourteen DOM functional checks passed; the native raster was
+visually inspected. Native browser visual verification was unavailable during
+production, so this evidence does not establish cross-browser or accessibility
+conformance. Local records, external execution, permission, review and actual
+publication retain distinct boundaries.
+
+Software stays `1.11.0-beta.4`; the white paper stays edition 2.2. The twelve
+canonical template graphics below retain their beta.3 provenance. Production
+masters remain external, and the public repository links the release assets.
+For a first project, use [Getting Started Easy Mode](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started-Easy-Mode).
+
+## Canonical template graphic set
+
 The beta.4 source distribution retains twelve current infographic SVGs from
 the beta.3 visual edition: four system maps, seven detailed agent guides, and
 one atlas built from the final individual guides. Each topic has one current file in
@@ -7,7 +48,7 @@ one atlas built from the final individual guides. Each topic has one current fil
 [complete text alternative](../../.SYSTEMX/MEDIA/Reference/visual-guide.md)
 for the reading order, exact commands, paths, flow, and role boundaries.
 
-## Current graphics
+### Four system maps and seven agents
 
 | System map | SVG |
 | --- | --- |

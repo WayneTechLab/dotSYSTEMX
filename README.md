@@ -13,6 +13,7 @@ application framework, or cloud provider.
 **Template version:** `1.11.0-beta.4` · **Python package metadata:** `1.11.0b4`
 
 [Use this template](https://github.com/WayneTechLab/dotSYSTEMX/generate) ·
+[Getting Started Easy Mode](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started-Easy-Mode) ·
 [First-time setup](https://github.com/WayneTechLab/dotSYSTEMX/wiki/First-Time-Setup) ·
 [Getting Started](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started) ·
 [Agent 0 and subagents](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Agent-0-and-Subagents) ·
@@ -20,6 +21,7 @@ application framework, or cloud provider.
 [Manual](https://github.com/WayneTechLab/dotSYSTEMX/wiki) ·
 [Current release report](docs/RELEASE-REPORT.md) ·
 [White paper](.SYSTEMX/MEDIA/White-Paper/SYSTEMX-White-Paper.pdf) ·
+[Complete synergy map](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Synergy-Map) ·
 [Current visual guide](#current-visual-guide)
 
 > **BETA — USE AT YOUR OWN RISK.** The format may change and is provided without
@@ -36,6 +38,10 @@ projects retain their adopted files and update policy; a
 template update does not start an agent or service or upload a secret.
 
 ## Add the folder to a project
+
+Start with [Getting Started Easy Mode](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Getting-Started-Easy-Mode)
+for a no-command folder workflow, a paste-ready assistant prompt, and optional
+pinned CLI setup for macOS, Linux, and Windows.
 
 The canonical name is exactly **`.SYSTEMX`**, including the leading dot and
 uppercase letters. Install it inside the containing project directory. New
@@ -268,6 +274,32 @@ before switching sessions; a local lock is not a distributed lock.
 
 ## Current visual guide
 
+The [complete synergy map](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Synergy-Map)
+is the newest detailed engineering companion: **49 system blocks, 120 directed
+connections, and 92 vector icon instances** on a native **7680 × 4320** canvas.
+It follows inputs, selected scope/context, Agent 0 coordination, specialist
+roles, tools/processing, original evidence, accepted outputs, and feedback.
+
+[![Complete .SYSTEMX synergy map: seven stages connect input signals, canonical records, Agent 0, specialist roles, tools, evidence, delivery and continuity. Open the guide for the full-resolution and interactive versions.](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Preview.jpg)](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Synergy-Map)
+
+[Download the interactive package](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Package.zip),
+extract it, and open `SYSTEMX-Synergy-Map.html` in a browser to trace each block's
+inputs and outputs, inspect paths/commands, search the catalogs, and follow
+three worked routes. The offline viewer includes all 400 Agent1 questions,
+100 Agent Z questions, and twenty provider/navigation targets. GitHub provides
+the HTML as a download; it does not run the interactive viewer inside the wiki.
+
+[Full 8K PNG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-8K.png) ·
+[Editable SVG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map.svg) ·
+[Connection reading guide](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-synergy-map-v1.0/SYSTEMX-Synergy-Map-Reading-Guide.md) ·
+[Media release and checksums](https://github.com/WayneTechLab/dotSYSTEMX/releases/tag/media-synergy-map-v1.0).
+Local synchronization, generated views, references, selected external actions,
+review, and rework have separate labeled connection types. This companion
+examines the beta.4 source; software remains `1.11.0-beta.4` and the white paper
+remains edition 2.2.
+
+### Canonical template graphics
+
 The beta.3 current set has **twelve distinct SVGs**: four system maps, one detailed
 graphic for each of seven agent roles, and one combined atlas assembled after
 the individual guides. Each agent graphic shows its folder, example prompt,
@@ -276,7 +308,8 @@ on the 7680 × 4320 canvas; the generated illustration inside has its own native
 resolution. See the [full text alternative](.SYSTEMX/MEDIA/Reference/visual-guide.md)
 and [media library](docs/media/README.md) for reading order and provenance.
 
-[![.SYSTEMX atlas connecting four system maps and seven agent roles.](.SYSTEMX/MEDIA/Infographics/systemx-atlas.svg)](.SYSTEMX/MEDIA/Reference/visual-guide.md#combined-atlas)
+[Open the canonical combined atlas](.SYSTEMX/MEDIA/Infographics/systemx-atlas.svg) ·
+[Atlas text alternative](.SYSTEMX/MEDIA/Reference/visual-guide.md#combined-atlas)
 
 For print or offline review, the [beta.3 8K PNG export pack](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/v1.11.0-beta.3/dotsystemx-1.11.0-beta.3-current-graphics-8k.zip) contains all twelve current images, a source-bound manifest, checksums, and the text alternative. It is a release download, not a second source copy in this template.
 
@@ -321,11 +354,12 @@ Eleven chapters and 133 English caption cues accompany the narration.
 [Read the descriptive transcript](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film-Descriptive-Transcript.md) or
 [download English captions](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Beta-Product-Film.en.srt).
 
-The new [8K engineering master map](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map-8K.png) is a separate
+The film’s original [8K engineering master map](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map-8K.png) is a separate
 media companion with [editable SVG](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map.svg) and
 [reading-order text](https://github.com/WayneTechLab/dotSYSTEMX/releases/download/media-beta-explainer-v2.0/SYSTEMX-Master-Map-Text.md). It connects the work loop, exact files,
 seven roles, governance, and returned evidence. The twelve canonical template
-graphics retain their beta.3 art provenance.
+graphics retain their beta.3 art provenance. For the expanded 49-block
+companion and searchable connection tracing, use the [synergy map](https://github.com/WayneTechLab/dotSYSTEMX/wiki/Synergy-Map).
 
 The film explains the immutable `v1.11.0-beta.4` source and white-paper edition
 2.2. Local CLI excerpts were captured in an isolated fictional example;
